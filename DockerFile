@@ -1,0 +1,21 @@
+FROM php:8.1-fpm
+
+# Menyalin kode aplikasi Laravel ke dalam image
+COPY . /var/www/html
+
+# Menetapkan direktori kerja ke direktori aplikasi Laravel
+WORKDIR /var/www/html
+
+# Instal dependensi PHP dan modul yang diperlukan
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip pdo pdo_mysql
+
+# Mengatur izin untuk penyimpanan cache dan log
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Mengatur perintah yang akan dijalankan saat container dijalankan
+CMD php artisan serve --host=0.0.0.0 --port=8000

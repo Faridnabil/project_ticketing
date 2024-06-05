@@ -1,0 +1,10 @@
+.github
+docs/
+github-contents/
+tests/
+.gitattributes
+.gitignore
+buildDocker.sh
+docker-compose.yml
+readme-logo.png
+README.md
