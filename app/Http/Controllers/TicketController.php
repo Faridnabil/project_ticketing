@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Notifications\CommentEmailNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -30,35 +31,44 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'author_name' => 'required',
-            'author_email' => 'required|email',
-            'ticket_id' => 'required|string|unique:tickets,ticket_id|max:255|regex:/^TICK-\d{6}$/',
-        ]);
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'title' => 'required',
+                'content' => 'required',
+                'author_name' => 'required',
+                'author_email' => 'required|email',
+                // 'ticket_id' => 'required|string|unique:tickets,ticket_id|max:255|regex:/^TICK-\d{6}$/', // Hapus validasi ini
+            ]);
 
+            // Generate ticket_id baru
+            $lastTicket = Ticket::orderBy('id', 'desc')->first();
+            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
+            $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
-        // Generate ticket_id baru
-        $lastTicket = Ticket::orderBy('id', 'desc')->first();
-        $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
-        $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            // Tambahkan kategori, status, dan prioritas secara default
+            $request->request->add([
+                'category_id' => 1,
+                'status_id' => 1,
+                'priority_id' => 1,
+                'ticket_id' => $newTicketId,
+            ]);
 
-        // Tambahkan kategori, status, dan prioritas secara default
-        $request->request->add([
-            'category_id' => 1,
-            'status_id' => 1,
-            'priority_id' => 1,
-            'ticket_id' => $newTicketId,
-        ]);
+            $ticket = Ticket::create($request->all());
 
-        $ticket = Ticket::create($request->all());
+            foreach ($request->input('attachments', []) as $file) {
+                $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            }
 
-        foreach ($request->input('attachments', []) as $file) {
-            $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            DB::commit();
+
+            return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="' . route('tickets.show', $ticket->id) . '">here</a>');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            // Log the error or handle it as needed
+            return redirect()->back()->withStatus('Your ticket has not been submitted. Please try again.');
         }
-
-        return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="' . route('tickets.show', $ticket->id) . '">here</a>');
     }
 
 
