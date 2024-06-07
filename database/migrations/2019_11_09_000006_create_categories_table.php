@@ -13,8 +13,6 @@ class CreateCategoriesTable extends Migration
 
             $table->string('name');
 
-            $table->string('color')->nullable();
-
             $table->timestamps();
 
             $table->softDeletes();

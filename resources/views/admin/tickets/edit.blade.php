@@ -10,6 +10,22 @@
         <form action="{{ route("admin.tickets.update", [$ticket->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+
+            <div class="form-group {{ $errors->has('ticket_id') ? 'has-error' : '' }}">
+                <label for="ticket_id">{{ trans('cruds.ticket.fields.ticket_id') }}*</label>
+                <input type="text" id="ticket_id" name="ticket_id" class="form-control"
+                    value="{{ old('ticket_id', isset($ticket) ? $ticket->ticket_id : '') }}" required
+                    pattern="TICK-\d{6}" placeholder="TICK-123456" title="TICK-123456">
+                @if ($errors->has('ticket_id'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('ticket_id') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.ticket.fields.ticket_id_helper') }}
+                </p>
+            </div>
+
             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                 <label for="title">{{ trans('cruds.ticket.fields.title') }}*</label>
                 <input type="text" id="title" name="title" class="form-control" value="{{ old('title', isset($ticket) ? $ticket->title : '') }}" required>

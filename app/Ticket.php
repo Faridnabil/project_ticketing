@@ -36,6 +36,7 @@ class Ticket extends Model implements HasMedia
         'updated_at',
         'deleted_at',
         'priority_id',
+        'ticket_id',
         'category_id',
         'author_name',
         'author_email',

@@ -19,12 +19,14 @@ class CreateHelpdesksTable extends Migration
             $table->string('email_address');
             $table->text('message');
             $table->unsignedInteger('priority_id'); // Pastikan tipe data sesuai
+            $table->string('ticket_id'); // Pastikan tipe data sesuai
             // $table->unsignedInteger('category_id'); // Pastikan tipe data sesuai
             $table->unsignedInteger('user_id'); // Pastikan tipe data sesuai
             $table->unsignedInteger('status_id'); // Pastikan tipe data sesuai
             $table->timestamps();
 
             $table->foreign('priority_id')->references('id')->on('priorities')->onDelete('cascade');
+            $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
             // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');

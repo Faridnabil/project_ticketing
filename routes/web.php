@@ -1,6 +1,8 @@
 <?php
 
+
 Route::get('/', 'TicketController@create');
+
 Route::get('/home', function () {
     $route = Gate::denies('dashboard_access') ? 'admin.tickets.index' : 'admin.home';
     if (session('status')) {
@@ -56,8 +58,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('helpdesks/destroy', 'HelpdeskController@massDestroy')->name('helpdesks.massDestroy');
     Route::patch('helpdesks/{id}/close', [App\Http\Controllers\Admin\HelpdeskController::class, 'close'])->name('admin.helpdesks.close');
     Route::resource('helpdesks', 'HelpdeskController');
-
-
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 });

@@ -125,8 +125,12 @@ class TicketsController extends Controller
 
     public function store(StoreTicketRequest $request)
     {
-        $ticket = Ticket::create($request->all());
+        $validated = $request->validated();
+        
+        // Create the ticket with all the validated fields
+        $ticket = Ticket::create($validated);
 
+        // Handle attachments
         foreach ($request->input('attachments', []) as $file) {
             $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
         }

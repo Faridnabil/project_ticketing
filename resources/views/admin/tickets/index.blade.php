@@ -25,14 +25,17 @@
                         {{ trans('cruds.ticket.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.ticket.fields.title') }}
+                        {{ trans('cruds.ticket.fields.ticket_id') }}
                     </th>
                     <th>
+                        {{ trans('cruds.ticket.fields.title') }}
+                    </th>
+                    {{-- <th>
                         {{ trans('cruds.ticket.fields.status') }}
                     </th>
                     <th>
                         {{ trans('cruds.ticket.fields.priority') }}
-                    </th>
+                    </th> --}}
                     <th>
                         {{ trans('cruds.ticket.fields.category') }}
                     </th>
@@ -138,6 +141,15 @@ $('.card-body').on('change', 'select', function() {
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
+
+{
+    data: 'ticket_id',
+    name: 'ticket_id', 
+    render: function ( data, type, row) {
+        return   '<strong>'+data+'</strong>';
+    }
+},
+
 {
     data: 'title',
     name: 'title', 
@@ -145,38 +157,39 @@ $('.card-body').on('change', 'select', function() {
         return '<a href="'+row.view_link+'" style="text-decoration: underline;">'+data+' ('+row.comments_count+')</a>';
     }
 },
-{ 
-  data: 'status_name', 
-  name: 'status.name', 
-  render: function ( data, type, row) {
-      if (data == 'On Progress') {
-          return '<button class="btn btn-primary">'+data+'</button>';
-      } else if (data == 'Open') {
-          return '<button class="btn btn-success">'+data+'</button>';
-      } else if (data == 'Closed') {
-          return '<button class="btn btn-danger">'+data+'</button>';
-      } else {
-          return data;
-      }
-  }
-},
-{ 
-  data: 'priority_name', 
-  name: 'priority.name', 
-  render: function ( data, type, row) {
-      if (data == 'Critical') {
-          return '<button class="btn btn-danger">'+data+'</button>';
-      } else if (data == 'High') {
-          return '<button class="btn btn-primary">'+data+'</button>';
-      } else if (data == 'Medium') {
-          return '<button class="btn btn-warning">'+data+'</button>';
-      } else if (data == 'Low') {
-          return '<button class="btn btn-warning">'+data+'</button>';
-      } else {
-          return data;
-      }
-  }
-},
+
+// { 
+//   data: 'status_name', 
+//   name: 'status.name', 
+//   render: function ( data, type, row) {
+//       if (data == 'On Progress') {
+//           return '<button class="btn btn-primary">'+data+'</button>';
+//       } else if (data == 'Open') {
+//           return '<button class="btn btn-success">'+data+'</button>';
+//       } else if (data == 'Closed') {
+//           return '<button class="btn btn-danger">'+data+'</button>';
+//       } else {
+//           return data;
+//       }
+//   }
+// },
+// { 
+//   data: 'priority_name', 
+//   name: 'priority.name', 
+//   render: function ( data, type, row) {
+//       if (data == 'Critical') {
+//           return '<button class="btn btn-danger">'+data+'</button>';
+//       } else if (data == 'High') {
+//           return '<button class="btn btn-primary">'+data+'</button>';
+//       } else if (data == 'Medium') {
+//           return '<button class="btn btn-warning">'+data+'</button>';
+//       } else if (data == 'Low') {
+//           return '<button class="btn btn-warning">'+data+'</button>';
+//       } else {
+//           return data;
+//       }
+//   }
+// },
 { 
   data: 'category_name', 
   name: 'category.name', 

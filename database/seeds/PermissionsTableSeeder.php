@@ -204,6 +204,14 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => '49',
                 'title' => 'helpdesk_show',
             ],
+            [
+                'id'    => '50',
+                'title' => 'helpdesk_complete',
+            ],
+            [
+                'id'    => '51',
+                'title' => 'helpdesk_cannot_complete',
+            ],
         ];
 
         Permission::insert($permissions);

@@ -26,13 +26,13 @@
                             {{ trans('cruds.category.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.name') }}
+                          Divisi Name
                         </th>
-                        <th>
+                        {{-- <th>
                             {{ trans('cruds.category.fields.color') }}
-                        </th>
+                        </th> --}}
                         <th>
-                            &nbsp;
+                          Action
                         </th>
                     </tr>
                 </thead>
@@ -48,7 +48,7 @@
                             <td>
                                 {{ $category->name ?? '' }}
                             </td>
-                            <td style="background-color:{{ $category->color ?? '#FFFFFF' }}"></td>
+                            {{-- <td style="background-color:{{ $category->color ?? '#FFFFFF' }}"></td> --}}
                             <td>
                                 @can('category_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.categories.show', $category->id) }}">

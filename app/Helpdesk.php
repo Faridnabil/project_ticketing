@@ -16,6 +16,7 @@ class Helpdesk extends Model
         'message',
         'user_id',
         'priority_id',
+        'ticket_id',
         // 'category_id',
         'status_id',
     ];
@@ -27,6 +28,10 @@ class Helpdesk extends Model
     public function priority()
     {
         return $this->belongsTo(Priority::class);
+    }
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
     }
     // public function category()
     // {

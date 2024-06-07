@@ -31,7 +31,7 @@ class Priority extends Model
             'High' => 4,
             'Critical' => 2,
             'Medium' => 8,
-            'Low' => 16,
+            'Low' => "unlimated",
             default => 0,
         };
     }

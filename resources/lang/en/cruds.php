@@ -125,6 +125,8 @@ return [
         'fields'         => [
             'id'                      => 'ID',
             'id_helper'               => '',
+            'ticket_id'               => 'TICKET ID',
+            'ticket_id_helper'               => '',
             'title'                   => 'Title',
             'title_helper'            => '',
             'content'                 => 'Content',
@@ -183,6 +185,8 @@ return [
         'fields'         => [
             'id'                  => 'ID',
             'id_helper'           => '',
+            'ticket_id'               => 'TICKET ID',
+            'ticket_id_helper'               => '',
             'subject'              => 'Subject',
             'ticket_helper'       => '',
             'message'         => 'Message',

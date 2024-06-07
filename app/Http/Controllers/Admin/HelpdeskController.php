@@ -10,6 +10,7 @@ use App\Helpdesk;
 
 
 use App\Http\Requests\MassDestroyCommentRequest;
+use App\Http\Requests\MassDestroyHelpdeskRequest;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Priority;
@@ -26,6 +27,7 @@ class HelpdeskController extends Controller
     public function index()
     {
         $helpdesks = Helpdesk::All();
+        // $tickets = Ticket::All();
         return view('admin.helpdesks.index', compact('helpdesks'));
     }
 
@@ -34,12 +36,12 @@ class HelpdeskController extends Controller
         abort_if(Gate::denies('helpdesk_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $priorities = Priority::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-        // $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $tickets = Ticket::all();
         $statuses = Status::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.helpdesks.create', compact('priorities','statuses', 'users'));
+        return view('admin.helpdesks.create', compact('priorities','tickets','statuses', 'users'));
     }
 
     public function store(Request $request)
@@ -51,6 +53,7 @@ class HelpdeskController extends Controller
         'email_address' => 'required|string|max:255',
         'message' => 'required|string',
         'priority_id' => 'required',
+        'ticket_id' => 'required',
         // 'category_id' => 'required',
         'user_id' => 'required',
         'status_id' => 'required',
@@ -76,11 +79,12 @@ class HelpdeskController extends Controller
     {
         $priorities = Priority::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         // $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $tickets = Ticket::all();
         $statuses = Status::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.helpdesks.edit', compact('helpdesk','priorities','statuses', 'users'));
+        return view('admin.helpdesks.edit', compact('helpdesk','priorities','statuses','tickets', 'users'));
     }
 
     public function update(Request $request, Helpdesk $helpdesk)
@@ -90,6 +94,7 @@ class HelpdeskController extends Controller
             'email_address' => 'required|string|max:255',
             'message' => 'required|string',
             'priority_id' => 'required',
+            'ticket_id' => 'required',
             // 'category_id' => 'required',
             'user_id' => 'required',
             'status_id' => 'required',
@@ -126,4 +131,12 @@ class HelpdeskController extends Controller
 
         return response()->json(['success' => false], 400);
     }
+    public function massDestroy(MassDestroyHelpdeskRequest $request)
+    {
+        Priority::whereIn('id', request('ids'))->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    
 }

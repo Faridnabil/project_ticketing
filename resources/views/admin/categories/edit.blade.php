@@ -22,7 +22,7 @@
                     {{ trans('cruds.category.fields.name_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('color') ? 'has-error' : '' }}">
+            {{-- <div class="form-group {{ $errors->has('color') ? 'has-error' : '' }}">
                 <label for="color">{{ trans('cruds.category.fields.color') }}</label>
                 <input type="text" id="color" name="color" class="form-control colorpicker" value="{{ old('color', isset($category) ? $category->color : '') }}">
                 @if($errors->has('color'))
@@ -33,7 +33,7 @@
                 <p class="helper-block">
                     {{ trans('cruds.category.fields.color_helper') }}
                 </p>
-            </div>
+            </div> --}}
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>

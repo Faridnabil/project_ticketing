@@ -17,6 +17,14 @@
                         <tbody>
                             <tr>
                                 <th>
+                                    {{ trans('cruds.ticket.fields.ticket_id') }}
+                                </th>
+                                <td>
+                                    {{ $ticket->ticket_id }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
                                     {{ trans('cruds.ticket.fields.title') }}
                                 </th>
                                 <td>

@@ -4,7 +4,7 @@
         <ul class="nav">
             @can('dashboard_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.home") }}" class="nav-link">
+                    <a href="{{ route('admin.home') }}" class="nav-link">
                         <i class="nav-icon fas fa-fw fa-tachometer-alt" style="color: #ffffff;">
 
                         </i>
@@ -23,7 +23,8 @@
                     <ul class="nav-dropdown-items">
                         @can('permission_access')
                             <li class="nav-item">
-                                <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.permissions.index') }}"
+                                    class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                                     <i class="fa-fw fas fa-unlock-alt nav-icon" style="color: #ffffff;">
 
                                     </i>
@@ -33,7 +34,8 @@
                         @endcan
                         @can('role_access')
                             <li class="nav-item">
-                                <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.roles.index') }}"
+                                    class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                                     <i class="fa-fw fas fa-briefcase nav-icon" style="color: #ffffff;">
 
                                     </i>
@@ -43,7 +45,8 @@
                         @endcan
                         @can('user_access')
                             <li class="nav-item">
-                                <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.users.index') }}"
+                                    class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                                     <i class="fa-fw fas fa-user nav-icon" style="color: #ffffff;">
 
                                     </i>
@@ -66,7 +69,8 @@
             @endcan
             @can('status_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.statuses.index") }}" class="nav-link {{ request()->is('admin/statuses') || request()->is('admin/statuses/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.statuses.index') }}"
+                        class="nav-link {{ request()->is('admin/statuses') || request()->is('admin/statuses/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-cogs nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -76,7 +80,8 @@
             @endcan
             @can('priority_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.priorities.index") }}" class="nav-link {{ request()->is('admin/priorities') || request()->is('admin/priorities/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.priorities.index') }}"
+                        class="nav-link {{ request()->is('admin/priorities') || request()->is('admin/priorities/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-cogs nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -86,7 +91,8 @@
             @endcan
             @can('category_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.categories.index") }}" class="nav-link {{ request()->is('admin/categories') || request()->is('admin/categories/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="nav-link {{ request()->is('admin/categories') || request()->is('admin/categories/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-tags nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -96,7 +102,8 @@
             @endcan
             @can('ticket_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.tickets.index") }}" class="nav-link {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.tickets.index') }}"
+                        class="nav-link {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-question-circle nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -106,7 +113,8 @@
             @endcan
             @can('comment_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.comments.index") }}" class="nav-link {{ request()->is('admin/comments') || request()->is('admin/comments/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.comments.index') }}"
+                        class="nav-link {{ request()->is('admin/comments') || request()->is('admin/comments/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-comment nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -116,7 +124,8 @@
             @endcan
             @can('helpdesk_access')
                 <li class="nav-item">
-                    <a href="{{ route("admin.helpdesks.index") }}" class="nav-link {{ request()->is('helpdesks') || request()->is('admin/helpdesks/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.helpdesks.index') }}"
+                        class="nav-link {{ request()->is('helpdesks') || request()->is('admin/helpdesks/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-info nav-icon" style="color: #ffffff;">
 
                         </i>
@@ -125,7 +134,8 @@
                 </li>
             @endcan
             <li class="nav-item">
-                <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                <a href="#" class="nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                     <i class="nav-icon fas fa-fw fa-sign-out-alt" style="color: #ffffff;">
 
                     </i>
