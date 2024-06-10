@@ -96,28 +96,30 @@
                         </em>
                     @endif
                 </div>
-                <div class="form-group {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                <div class="form-group {{ $errors->has('status_id') ? 'has-error' : '' }}" style="display: none;">
                     <label for="status_id">{{ trans('cruds.helpdesk.fields.status') }}</label>
-                    <select name="status_id" id="user" class="form-control select2">
+                    <select name="status_id" id="status_id" class="form-control select2" disabled>
                         @foreach ($statuses as $id => $status)
                             <option value="{{ $id }}"
-                                {{ (isset($helpdesk) && $helpdesk->status_id ? $helpdesk->status_id : old('user_id')) == $id ? 'selected' : '' }}>
-                                {{ $status }}</option>
+                                {{ ($id == $openStatusId) ? 'selected' : '' }}>
+                                {{ $status }}
+                            </option>
                         @endforeach
                     </select>
-                    @if ($errors->has('user_id'))
+                    @if ($errors->has('status_id'))
                         <em class="invalid-feedback">
-                            {{ $errors->first('user_id') }}
+                            {{ $errors->first('status_id') }}
                         </em>
                     @endif
                 </div>
-
+                
+                <!-- Tambahkan input tersembunyi -->
+                <input type="hidden" name="status_id" value="{{ $openStatusId }}">
+                              
                 <div>
                     <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
                 </div>
             </form>
-
-
         </div>
     </div>
 @endsection

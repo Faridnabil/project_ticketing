@@ -22,6 +22,9 @@ class StorePriorityRequest extends FormRequest
             'name' => [
                 'required',
             ],
+            // 'max_time' => [
+            //     'required',
+            // ],
         ];
     }
 }

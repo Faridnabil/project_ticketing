@@ -53,19 +53,21 @@
                         @foreach (config('panel.available_languages') as $langLocale => $langName)
                             <a class="dropdown-item"
                                 href="{{ url()->current() }}?change_language={{ $langLocale }}">{{ strtoupper($langLocale) }}
-                                ({{ $langName }})
-                            </a>
+                                ({{ $langName }})</a>
                         @endforeach
                     </div>
                 </li>
             @endif
+
+
         </ul>
     </header>
 
     <div class="app-body">
         @include('partials.menu')
-
         <main class="main">
+
+
             <div style="padding-top: 20px" class="container-fluid">
                 @if (session('message'))
                     <div class="row mb-2">

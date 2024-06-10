@@ -28,9 +28,11 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.priority.fields.color') }}
+                            {{ trans('cruds.priority.fields.max_time') }}
                         </th>
-                        <td style="background-color:{{ $priority->color ?? '#FFFFFF' }}"></td>
+                        <td>
+                            {{ $priority->max_time }}
+                        </td>
                     </tr>
                 </tbody>
             </table>

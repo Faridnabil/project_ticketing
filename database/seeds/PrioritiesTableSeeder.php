@@ -12,17 +12,38 @@ class PrioritiesTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        // Define the priorities
         $priorities = [
-            'Low', 'Medium', 'High'
+            [
+                'id'    => 1,
+                'name' => 'Low / Level 1',
+                'max_time' => '-',
+            ],
+            [
+                'id'    => 2,
+                'name' => 'Low / Level 2',
+                'max_time' => '16 Jam',
+            ],
+            [
+                'id'    => 3,
+                'name' => 'Critical / Level 2',
+                'max_time' => '2 Jam',
+            ],
+            [
+                'id'    => 4,
+                'name' => 'Medium / Level 2',
+                'max_time' => '8 Jam',
+            ],
+            [
+                'id'    => 5,
+                'name' => 'High / Level 2',
+                'max_time' => '4 Jam',
+            ],
         ];
 
-        foreach($priorities as $priority)
-        {
-            Priority::create([
-                'name'  => $priority,
-                // 'color' => $faker->hexcolor
-            ]);
+        // Insert the priorities into the database
+        foreach ($priorities as $priority) {
+            Priority::create($priority);
         }
     }
 }

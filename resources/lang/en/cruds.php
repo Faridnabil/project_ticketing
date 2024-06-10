@@ -91,6 +91,8 @@ return [
             'id_helper'         => '',
             'name'              => 'Name',
             'name_helper'       => '',
+            'max_time'              => 'Max Time',
+            'max_time_helper'       => '',
             'level'             => 'Level',
             'color_helper'      => '',
             'created_at'        => 'Created at',

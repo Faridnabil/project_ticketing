@@ -44,7 +44,6 @@ class Helpdesk extends Model
     public function getEscalationDetailsAttribute()
     {
         return [
-            'level' => $this->priority->level,
             'escalation_time' => $this->priority->escalation_time
         ];
     }

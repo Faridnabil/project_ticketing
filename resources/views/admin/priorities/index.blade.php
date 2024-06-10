@@ -29,7 +29,7 @@
                             {{ trans('cruds.priority.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.priority.fields.level') }}
+                            {{ trans('cruds.priority.fields.max_time') }}
                         </th>
                         <th>
                             &nbsp;
@@ -46,20 +46,20 @@
                                 {{ $priority->id ?? '' }}
                             </td>
                             <td>
-                                @if($priority->name == 'Critical')
+                                @if($priority->name == 'Critical / Level 2')
                                     <button class="btn btn-danger">{{ $priority->name ?? '' }}</button>
-                                @elseif($priority->name == 'High')
+                                @elseif($priority->name == 'High / Level 2')
                                     <button class="btn btn-primary">{{ $priority->name ?? '' }}</button>
-                                @elseif($priority->name == 'Medium')
+                                @elseif($priority->name == 'Medium / Level 2')
                                     <button class="btn btn-warning">{{ $priority->name ?? '' }}</button>
-                                @elseif($priority->name == 'Low')
+                                @elseif($priority->name == 'Low / Level 2')
                                     <button class="btn btn-warning">{{ $priority->name ?? '' }}</button>
                                 @else
                                     {{ $priority->name ?? '' }}
                                 @endif
                             </td>
                             <td>
-                                {{ $priority->level ?? '' }}
+                                {{ $priority->max_time ?? '' }}
                             </td>
                             <td>
                                 @can('priority_show')

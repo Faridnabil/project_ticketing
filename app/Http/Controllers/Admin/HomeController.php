@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Ticket;
+use App\Helpdesk;
 
 class HomeController
 {
@@ -12,12 +13,12 @@ class HomeController
     {
         abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $totalTickets = Ticket::count();
-        $openTickets = Ticket::whereHas('status', function($query) {
-            $query->whereName('Open');
+        $totalTickets = Helpdesk::count();
+        $openTickets = Helpdesk::whereHas('status', function($query) {
+            $query->whereId('1');
         })->count();
-        $closedTickets = Ticket::whereHas('status', function($query) {
-            $query->whereName('Closed');
+        $closedTickets = Helpdesk::whereHas('status', function($query) {
+            $query->whereId('2');
         })->count();
 
         return view('home', compact('totalTickets', 'openTickets', 'closedTickets'));

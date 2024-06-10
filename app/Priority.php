@@ -19,7 +19,7 @@ class Priority extends Model
 
     protected $fillable = [
         'name',
-        'level',
+        'max_time',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -28,10 +28,11 @@ class Priority extends Model
     public function getEscalationTimeAttribute()
     {
         return match ($this->name) {
-            'High' => 4,
-            'Critical' => 2,
-            'Medium' => 8,
-            'Low' => "unlimated",
+            'High / Level 2' => 4,
+            'Critical / Level 2' => 2,
+            'Medium / Level 2' => 8,
+            'Low / Level 2' => 16,
+            'Low / Level 1' => "-",
             default => 0,
         };
     }

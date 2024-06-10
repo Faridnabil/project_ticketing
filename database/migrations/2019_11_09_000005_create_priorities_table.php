@@ -13,7 +13,7 @@ class CreatePrioritiesTable extends Migration
 
             $table->string('name');
 
-            $table->string('level');
+            $table->string('max_time')->nullable();
 
             // $table->string('color')->nullable();
 

@@ -26,7 +26,6 @@
                             <th>{{ trans('cruds.helpdesk.fields.emailAddress') }}</th>
                             <th>{{ trans('cruds.helpdesk.fields.message') }}</th>
                             <th>{{ trans('cruds.helpdesk.fields.priority') }}</th>
-                            <th>Level</th>
                             <th>Eskalasi (Jam)</th>
                             <th>Hitungan Mundur</th>
                             {{-- <th>{{ trans('cruds.helpdesk.fields.category') }}</th> --}}
@@ -58,16 +57,33 @@
                                         {{ $helpdesk->priority->name ?? '' }}
                                     @endif
                                 </td>
-                                <td>{{ $helpdesk->priority->level ?? '' }}</td>
-                                <td>{{ $helpdesk->priority->escalation_time ?? '' }} Jam</td>
                                 <td>
-                                    @if ($helpdesk->priority->escalation_time != 'unlimated')
+                                    @if (isset($helpdesk->priority->escalation_time) &&
+                                            $helpdesk->priority->escalation_time != '-' &&
+                                            $helpdesk->priority->escalation_time != 0.0013888888888889)
+                                        {{ $helpdesk->priority->escalation_time }} Jam
+                                    @else
+                                        {{ $helpdesk->priority->escalation_time ?? '' }}
+                                    @endif
+                                    @php
+                                        $isLowLevel1 = $helpdesk->priority->name == 'Low / Level 1';
+                                    @endphp
+
+                                    @if ($isLowLevel1)
+                                        @php
+                                            $helpdesk->status->name = 'Closed';
+                                        @endphp
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if ($helpdesk->priority->escalation_time != '-' && $helpdesk->priority->escalation_time != 0.0013888888888889)
                                         <span class="countdown" data-entry-id="{{ $helpdesk->id }}"
                                             data-created-at="{{ $helpdesk->created_at }}"
                                             data-escalation-time="{{ $helpdesk->priority->escalation_time }}"></span>
                                     @endif
                                 </td>
-                                <td>{{ $helpdesk->category->name ?? '' }}</td>
+                                {{-- <td>{{ $helpdesk->category->name ?? '' }}</td> --}}
                                 <td>{{ $helpdesk->user->name ?? '' }}</td>
                                 <td>
                                     @if ($helpdesk->status->name == 'Open')
@@ -116,6 +132,7 @@
 @section('scripts')
     @parent
     <script>
+        // Fungsi tables tab Start
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('helpdesk_delete')
@@ -172,8 +189,9 @@
                     .columns.adjust();
             });
         })
+        // Fungsi tables tab End
 
-        ///function countdown
+        // Fungsi countdown
         function calculateTimeDifference(createdAt, escalationHours) {
             const createdDate = new Date(createdAt);
             const escalationTime = createdDate.getTime() + (escalationHours * 60 * 60 * 1000);

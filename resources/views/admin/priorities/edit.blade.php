@@ -22,6 +22,18 @@
                     {{ trans('cruds.priority.fields.name_helper') }}
                 </p>
             </div>
+            <div class="form-group {{ $errors->has('max_time') ? 'has-error' : '' }}">
+                <label for="max_time">{{ trans('cruds.priority.fields.max_time') }}*</label>
+                <input type="text" id="max_time" name="max_time" class="form-control" value="{{ old('max_time', isset($priority) ? $priority->max_time : '') }}" >
+                @if($errors->has('max_time'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('max_time') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.priority.fields.max_time_helper') }}
+                </p>
+            </div>
             {{-- <div class="form-group {{ $errors->has('color') ? 'has-error' : '' }}">
                 <label for="color">{{ trans('cruds.priority.fields.color') }}</label>
                 <input type="text" id="color" name="color" class="form-control colorpicker" value="{{ old('color', isset($priority) ? $priority->color : '') }}">

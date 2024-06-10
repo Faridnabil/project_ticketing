@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Symfony\Component\HttpFoundation\Request;
+use session;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -32,6 +34,14 @@ class LoginController extends Controller
      *
      * @return void
      */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login'); // Arahkan ke halaman login setelah logout
+    }
     public function __construct()
     {
         $this->middleware('guest')->except('logout');

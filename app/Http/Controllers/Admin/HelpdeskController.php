@@ -38,37 +38,75 @@ class HelpdeskController extends Controller
         $priorities = Priority::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $tickets = Ticket::all();
         $statuses = Status::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
+        $statuses = Status::all()->pluck('name', 'id');
+        // $openStatusId = Status::where('name', 'Open')->first()->id;
+        $openStatusId = Status::where('name', 'Open')->first()->id; // Ambil ID status "Open"
+        $closedStatusId = Status::where('name', 'Closed')->first()->id; // Ambil ID status "Closed"
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.helpdesks.create', compact('priorities','tickets','statuses', 'users'));
+        return view('admin.helpdesks.create', compact('priorities', 'tickets', 'statuses', 'users', 'openStatusId', 'closedStatusId'));
     }
 
     public function store(Request $request)
     {
-        
-         // Validasi data
-    $validatedData = $request->validate([
-        'subject' => 'required|string|max:255',
-        'email_address' => 'required|string|max:255',
-        'message' => 'required|string',
-        'priority_id' => 'required',
-        'ticket_id' => 'required',
-        // 'category_id' => 'required',
-        'user_id' => 'required',
-        'status_id' => 'required',
-        // tambahkan validasi untuk user_id jika diperlukan
-    ]);
+        // Validasi data
+        $validatedData = $request->validate([
+            'subject' => 'required|string|max:255',
+            'email_address' => 'required|string|max:255',
+            'message' => 'required|string',
+            'priority_id' => 'required',
+            'ticket_id' => 'required',
+            // 'category_id' => 'required',
+            'user_id' => 'required',
+            // tambahkan validasi untuk user_id jika diperlukan
+        ]);
+        $helpdesk = new Helpdesk();
+        $lowLevel1PriorityId = Priority::where('name', 'Low / Level 1')->value('id');
+        // Get the ID of the "Closed" status
+        $closedStatusId = Status::where('name', 'Closed')->value('id');
+        $openStatusId = Status::where('name', 'Open')->value('id');
+        // Set the status to "Closed" if the priority is "Low / Level 1"
+        if ($request->input('priority_id') == $lowLevel1PriorityId) {
+            $helpdesk->status_id = $closedStatusId;
+        } else {
+            $helpdesk->status_id = $openStatusId;
+        }
 
-    // Tambahkan user_id ke data yang akan disimpan
-    $validatedData['user_id'] = auth()->id();
+        // Tetapkan status_id ke ID dari status "Open"
+        // Misalnya, kita asumsikan ID dari status "Open" adalah 1
+        $openStatusId = Status::where('name', 'Open')->first()->id;
+        $validatedData['status_id'] = $openStatusId;
 
-    // Simpan data ke database
-    Helpdesk::create($validatedData);
-
+        // Simpan data ke database
+        Helpdesk::create($validatedData);
 
         return redirect()->route('admin.helpdesks.index')->with('success', 'Helpdesk created successfully');
     }
+
+//     public function store(Request $request)
+// {
+//     $helpdesk = new Helpdesk();
+//     $helpdesk->subject = $request->input('subject');
+//     $helpdesk->email_address = $request->input('email_address');
+//     $helpdesk->message = $request->input('message');
+//     $helpdesk->priority_id = $request->input('priority_id');
+//     $helpdesk->user_id = $request->input('user_id');
+//     $lowLevel1PriorityId = Priority::where('name', 'Low / Level 1')->value('id');
+//     // Get the ID of the "Closed" status
+//     $closedStatusId = Status::where('name', 'Closed')->value('id');
+//     $openStatusId = Status::where('name', 'Open')->value('id');
+//     // Set the status to "Closed" if the priority is "Low / Level 1"
+//     if ($request->input('priority_id') == $lowLevel1PriorityId) {
+//         $helpdesk->status_id = $closedStatusId;
+//     } else {
+//         $helpdesk->status_id = $openStatusId;
+//     }
+//     $helpdesk->create();
+
+//     return redirect()->route('admin.helpdesks.index');
+// }
+
+
 
     public function show(Helpdesk $helpdesk)
     {
@@ -84,7 +122,7 @@ class HelpdeskController extends Controller
 
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.helpdesks.edit', compact('helpdesk','priorities','statuses','tickets', 'users'));
+        return view('admin.helpdesks.edit', compact('helpdesk', 'priorities', 'statuses', 'tickets', 'users'));
     }
 
     public function update(Request $request, Helpdesk $helpdesk)
@@ -100,10 +138,10 @@ class HelpdeskController extends Controller
             'status_id' => 'required',
             // tambahkan validasi untuk user_id jika diperlukan
         ]);
-    
+
         // Tambahkan user_id ke data yang akan disimpan
-        $validatedData['user_id'] = auth()->id();
-    
+        // $validatedData['user_id'] = auth()->id();
+
 
         $helpdesk->update($request->all());
 
@@ -137,6 +175,4 @@ class HelpdeskController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
-    
 }
