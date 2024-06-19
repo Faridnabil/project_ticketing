@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('content')
     @can('helpdesk_create')
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.helpdesks.create') }}">
+        <div style="padding-top: 20px" class="row">
+            <div style="margin-bottom: 10px;" class="col-lg-12">
+                <a class="btn btn-success" style="color: white" href="{{ route('admin.helpdesks.create') }}">
                     {{ trans('global.add') }} {{ trans('cruds.helpdesk.title_singular') }}
                 </a>
             </div>
@@ -17,6 +17,10 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class=" table table-bordered table-striped table-hover datatable datatable-Comment">
+                
+                        <a href="admin/helpdesks/export" class="btn btn-primary btn-md target="_blank"">Export Excel</a>
+                        <a href="admin/helpdesk/cetak_pdf" class="btn btn-primary" btn-md target="_blank">Export PDF</a>
+                    
                     <thead>
                         <tr>
                             <th width="10"></th>
@@ -32,7 +36,7 @@
                             <th>{{ trans('cruds.helpdesk.fields.user') }}</th>
                             <th>{{ trans('cruds.helpdesk.fields.status') }}</th>
                             <th>{{ trans('cruds.helpdesk.fields.created_at') }}</th>
-                            <th>&nbsp;</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,19 +48,52 @@
                                 <td>{{ $helpdesk->subject ?? '' }}</td>
                                 <td>{{ $helpdesk->email_address ?? '' }}</td>
                                 <td>{{ $helpdesk->message ?? '' }}</td>
+                                <style>
+                                    .btn-custom {
+                                        border: none;
+                                        color: white;
+                                        padding: 10px 20px;
+                                        text-align: center;
+                                        text-decoration: none;
+                                        display: inline-block;
+                                        font-size: 14px;
+                                        margin: 4px 2px;
+                                        cursor: pointer;
+                                        border-radius: 15px;
+                                    }
+                                    .btn-critical {
+                                        background-color: #dc3545; /* Warna merah */
+                                    }
+                                    .btn-high {
+                                        background-color: #007bff; /* Warna biru */
+                                    }
+                                    .btn-medium {
+                                        background-color: #ffc107; /* Warna kuning */
+                                    }
+                                    .btn-low {
+                                        background-color: #FFA500; /* Warna hijau */
+                                    }.btn-low-lvl1 {
+                                        background-color: #28A7A7; /* Warna hijau */
+                                        /* color: black;  */
+                                    }
+                                </style>
+                                
                                 <td>
-                                    @if ($helpdesk->priority->name == 'Critical')
-                                        <button class="btn btn-danger">{{ $helpdesk->priority->name ?? '' }}</button>
-                                    @elseif($helpdesk->priority->name == 'High')
-                                        <button class="btn btn-primary">{{ $helpdesk->priority->name ?? '' }}</button>
-                                    @elseif($helpdesk->priority->name == 'Medium')
-                                        <button class="btn btn-warning">{{ $helpdesk->priority->name ?? '' }}</button>
-                                    @elseif($helpdesk->priority->name == 'Low')
-                                        <button class="btn btn-success">{{ $helpdesk->priority->name ?? '' }}</button>
+                                    @if ($helpdesk->priority->name == 'Critical / Level 2')
+                                        <button class="btn-custom btn-critical">{{ $helpdesk->priority->name ?? '' }}</button>
+                                    @elseif($helpdesk->priority->name == 'High / Level 2')
+                                        <button class="btn-custom btn-high">{{ $helpdesk->priority->name ?? '' }}</button>
+                                    @elseif($helpdesk->priority->name == 'Medium / Level 2')
+                                        <button class="btn-custom btn-medium">{{ $helpdesk->priority->name ?? '' }}</button>
+                                    @elseif($helpdesk->priority->name == 'Low / Level 2')
+                                        <button class="btn-custom btn-low">{{ $helpdesk->priority->name ?? '' }}</button>
+                                    @elseif($helpdesk->priority->name == 'Low / Level 1')
+                                        <button class="btn-custom btn-low-lvl1">{{ $helpdesk->priority->name ?? '' }}</button>
                                     @else
                                         {{ $helpdesk->priority->name ?? '' }}
                                     @endif
                                 </td>
+                                
                                 <td>
                                     @if (isset($helpdesk->priority->escalation_time) &&
                                             $helpdesk->priority->escalation_time != '-' &&

@@ -14,6 +14,7 @@ use App\Ticket;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -33,18 +34,21 @@ class TicketsController extends Controller
             $table->addColumn('actions', '&nbsp;');
 
             $table->editColumn('actions', function ($row) {
-                $viewGate      = 'ticket_show';
-                $editGate      = 'ticket_edit';
-                $deleteGate    = 'ticket_delete';
+                $viewGate = 'ticket_show';
+                $editGate = 'ticket_edit';
+                $deleteGate = 'ticket_delete';
                 $crudRoutePart = 'tickets';
 
-                return view('partials.datatablesActions', compact(
-                    'viewGate',
-                    'editGate',
-                    'deleteGate',
-                    'crudRoutePart',
-                    'row'
-                ));
+                return view(
+                    'partials.datatablesActions',
+                    compact(
+                        'viewGate',
+                        'editGate',
+                        'deleteGate',
+                        'crudRoutePart',
+                        'row'
+                    )
+                );
             });
 
             $table->editColumn('id', function ($row) {
@@ -114,9 +118,9 @@ class TicketsController extends Controller
 
         $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $assigned_to_users = User::whereHas('roles', function($query) {
-                $query->whereId(2);
-            })
+        $assigned_to_users = User::whereHas('roles', function ($query) {
+            $query->whereId(2);
+        })
             ->pluck('name', 'id')
             ->prepend(trans('global.pleaseSelect'), '');
 
@@ -125,18 +129,35 @@ class TicketsController extends Controller
 
     public function store(StoreTicketRequest $request)
     {
-        $validated = $request->validated();
-        
-        // Create the ticket with all the validated fields
-        $ticket = Ticket::create($validated);
+        DB::beginTransaction();
+        try {
+            $validated = $request->validated();
 
-        // Handle attachments
-        foreach ($request->input('attachments', []) as $file) {
-            $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            $lastTicket = Ticket::orderBy('id', 'desc')->first();
+            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
+            $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+
+            // Merge the new ticket_id with the validated data
+            $validated['ticket_id'] = $newTicketId;
+
+            // Create the ticket with all the validated fields
+            $ticket = Ticket::create($validated);
+
+            // Handle attachments
+            foreach ($request->input('attachments', []) as $file) {
+                $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            }
+
+            DB::commit();
+            return redirect()->route('admin.tickets.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            //throw $th;
+            dd($th->getMessage());
+            return back()->with('error', $th->getMessage());
         }
-
-        return redirect()->route('admin.tickets.index');
     }
+
 
     public function edit(Ticket $ticket)
     {
@@ -148,9 +169,9 @@ class TicketsController extends Controller
 
         $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $assigned_to_users = User::whereHas('roles', function($query) {
-                $query->whereId(2);
-            })
+        $assigned_to_users = User::whereHas('roles', function ($query) {
+            $query->whereId(2);
+        })
             ->pluck('name', 'id')
             ->prepend(trans('global.pleaseSelect'), '');
 
@@ -214,10 +235,10 @@ class TicketsController extends Controller
         ]);
         $user = auth()->user();
         $comment = $ticket->comments()->create([
-            'author_name'   => $user->name,
-            'author_email'  => $user->email,
-            'user_id'       => $user->id,
-            'comment_text'  => $request->comment_text
+            'author_name' => $user->name,
+            'author_email' => $user->email,
+            'user_id' => $user->id,
+            'comment_text' => $request->comment_text
         ]);
 
         $ticket->sendCommentNotification($comment);

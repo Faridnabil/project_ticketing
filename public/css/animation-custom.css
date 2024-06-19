@@ -1,197 +1,27 @@
-* {
+body-building {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --bird-body: #ff533e;
-    --bird-mouth: #000000;
-    --bird-feather: #939393;
-    --bird-beak-top: #e9581a;
-    --bird-beak-down: #aa4c21;
-    --bird-leg: #00adef;
-    --bird-body-color: #e3edf7;
-}
-
-body-bird {
-    background: var(--bird-body-color);
-    font-family: sans-serif;
-    height: 100vh;
-    width: 100vw;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: center;
+    height: 100vh;
+    background-color: #F1FAEE;
 }
 
-.bird-wrapper {
+.svg-container {
     display: flex;
     justify-content: center;
-    margin-top: -20px; /* Adjust as needed to position bird closer to text */
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
-.bird-container {
-    width: 150px;
-    height: 150px;
-    position: relative;
+svg {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    max-height: 600px;
 }
 
-.bird-body, .bird-mouth, .bird-feather, .bird-tail, .bird-beak, .bird-mouth::before, .bird-mouth::after, .bird-leg, .bird-leg::after, .bird-leg::before {
-    position: absolute;
-}
 
-.bird-body, .bird-mouth, .bird-feather, .bird-beak, .bird-mouth::before, .bird-mouth::after {
-    border-radius: 50%;
-}
-
-.bird-body {
-    top: 20px;
-    left: 25px;
-    height: 60px;
-    width: 80px;
-    transform: rotate(-17deg);
-    background: linear-gradient(to bottom, transparent 0%, transparent 20%, var(--bird-body) 20%);
-    z-index: 2;
-}
-
-.bird-mouth {
-    background: var(--bird-mouth);
-    top: 10px;
-    left: -45px;
-    width: 40px;
-    height: 40px;
-    transform: rotate(-17deg);
-    z-index: 5;
-    animation: bird-animate-mouth 1.5s forwards;
-    animation-delay: 2s;
-}
-
-@keyframes bird-animate-mouth {
-    100% {
-        left: 70px;
-    }
-}
-
-.bird-mouth::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background: white;
-    position: absolute;
-    top: 8px;
-    left: 16px;
-}
-
-.bird-mouth::after {
-    content: "";
-    width: 4px;
-    height: 4px;
-    background: black;
-    position: absolute;
-    top: 12px;
-    left: 22px;
-    animation: bird-animate-eye 1s infinite;
-    animation-delay: 4s;
-}
-
-@keyframes bird-animate-eye {
-    50% {
-        height: 2px;
-    }
-}
-
-.bird-feather {
-    z-index: 4;
-    left: 22px;
-    top: -45px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent 0%, transparent 50%, var(--bird-feather) 50%);
-    transform: rotate(-17deg);
-    animation: bird-animate-feather 1.5s forwards;
-    animation-delay: 2s;
-}
-
-@keyframes bird-animate-feather {
-    100% {
-        top: -6px;
-    }
-}
-
-.bird-tail {
-    width: 60px;
-    height: 24px;
-    background-color: var(--bird-mouth);
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
-    top: 36px;
-    left: 130px;
-    transform: rotate(-17deg);
-    z-index: 3;
-    animation: bird-animate-tail 1.5s forwards;
-    animation-delay: 2s;
-}
-
-@keyframes bird-animate-tail {
-    100% {
-        left: -12px;
-    }
-}
-
-.bird-beak {
-    height: 40px;
-    width: 40px;
-    background: linear-gradient(to bottom, var(--bird-beak-top) 0%, var(--bird-beak-top) 15%, transparent 15%);
-    left: 90px;
-    top: 96px;
-    z-index: -1;
-    transform: rotate(-17deg);
-    animation: bird-animate-beak 1.5s forwards;
-    animation-delay: 2s;
-}
-
-@keyframes bird-animate-beak {
-    100% {
-        top: 16px;
-    }
-}
-
-.bird-leg {
-    background: var(--bird-leg);
-    height: 20px;
-    width: 4px;
-    border-radius: 5px;
-    top: 103px;
-    left: 50px;
-    transform: rotate(-15deg);
-    z-index: 1;
-    animation: bird-animate-leg 1.5s forwards;
-    animation-delay: 2s;
-}
-
-@keyframes bird-animate-leg {
-    100% {
-        top: 86px;
-    }
-}
-
-.bird-leg::before {
-    bottom: -4px;
-    content: "";
-    width: 16px;
-    height: 4px;
-    background: var(--bird-leg);
-    border-radius: 5px;
-    transform: rotate(15deg);
-    z-index: -1;
-}
-
-.bird-leg::after {
-    top: -4px;
-    content: "";
-    width: 12px;
-    height: 4px;
-    background: var(--bird-leg);
-    border-radius: 5px;
-    transform: rotate(-15deg);
-    z-index: -1;
-}

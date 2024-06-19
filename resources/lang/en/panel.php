@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'SIAK DUKCAPIL',
+    'site_title' => 'Support Ticketing',
 ];

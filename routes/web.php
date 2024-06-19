@@ -30,6 +30,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('roles', 'RolesController');
 
     // Users
+    Route::get('admin/users/export', 'UsersController@export')->name('users.export');
+    Route::get('admin/users/cetak_pdf', 'UsersController@cetak_pdf');
+
+
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
 
@@ -59,6 +63,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('helpdesks/destroy', 'HelpdeskController@massDestroy')->name('helpdesks.massDestroy');
     Route::patch('helpdesks/{id}/close', [App\Http\Controllers\Admin\HelpdeskController::class, 'close'])->name('admin.helpdesks.close');
     Route::resource('helpdesks', 'HelpdeskController');
+    Route::get('admin/helpdesks/export', 'HelpdeskController@export')->name('helpdesks.export');
+    Route::get('admin/helpdesk/cetak_pdf', 'HelpdeskController@cetak_pdf');
+
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 

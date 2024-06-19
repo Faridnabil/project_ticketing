@@ -8,7 +8,7 @@
                 </div>
                 <div class="col-md-6 text-md-right">
                     <span style="color: hsl(218, 81%, 75%);">
-                        <img class="img-fluid" src="{{ asset('img/logos/logo.png') }}" width="90" alt="Logo Company">
+                        <img class="img-fluid" src="img/logos/logos 2.svg" height="100" alt="Phone image">
                     </span>
                 </div>
             </div>
@@ -80,5 +80,7 @@
                 </div>
             </form>
         </div>
+    </div>
+    </div>
     </div>
 @endsection

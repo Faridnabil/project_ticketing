@@ -17,6 +17,7 @@
     <link rel="icon" type="image" href="{{ asset('img/logos/dev-icon.jpeg') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/logos/dev-icon.jpeg') }}">
     <link rel="manifest" href="{{ asset('img/favicons/manifest.json') }}">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
     <meta name="msapplication-TileImage" content="{{ asset('img/favicons/mstile-150x150.png') }}">
     <meta name="theme-color" content="#ffffff">
 
@@ -43,8 +44,8 @@
             <nav class="navbar navbar-expand-md fixed-top" id="navbar"
                 data-navbar-soft-on-scroll="data-navbar-soft-on-scroll">
                 <div class="container-fluid px-0">
-                    <a href="/">
-                        <img class="img-fluid" src="{{ asset('img/logos/logoss.png') }}" alt="logo" width="430" />
+                    <a  class="navbar-brand d-flex align-items-center" href="#home" style="color:rgb(255, 251, 0); text-shadow: 2px 2px #7c7a7a;">Support Ticketing
+                     {{-- <img class="img-fluid" src="img/logos/logo-petir.png" alt="logo" /> --}}
                     </a>
                     <a class="navbar-brand fw-bold d-none d-md-block" href="/"></a>
                     @auth
@@ -75,10 +76,10 @@
                         data-navbar-collapse="data-navbar-collapse">
                         <ul class="navbar-nav gap-md-2 gap-lg-3 pt-x1 pb-1 pt-md-0 pb-md-0"
                             data-navbar-nav="data-navbar-nav">
-                            <li class="nav-item"> <a class="nav-link lh-xl" href="#home">Beranda</a></li>
-                            <li class="nav-item"> <a class="nav-link lh-xl" href="#about">Tentang Kami</a></li>
-                            <li class="nav-item"> <a class="nav-link lh-xl" href="#service">Support</a></li>
-                            <li class="nav-item"> <a class="nav-link lh-xl" href="#contact">Kontak</a></li>
+                            <li class="nav-item"><a class="nav-link lh-xl" href="#home">Beranda</a></li>
+                            <li class="nav-item"><a class="nav-link lh-xl" href="#about">Tentang Ticketing</a></li>
+                            <li class="nav-item"><a class="nav-link lh-xl" href="#service">Support</a></li>
+                            <li class="nav-item"><a class="nav-link lh-xl" href="#contact">Kontak</a></li>
                         </ul>
                     </div>
                 </div>
@@ -91,15 +92,15 @@
                                 <div class="col-lg-6 text-center text-lg-start">
                                     <h1 class="fs-2 fs-lg-1 text-white fw-bold mb-2 mb-lg-x1 lh-base mt-3 mt-lg-0">
                                         Ticketing System</h1>
-                                    <p class="fs-8 text-white mb-3 mb-lg-4 lh-lg">membantu menangani permintaan layanan
-                                        dengan lebih teratur dan efektif.
+                                    <p class="fs-8 text-white mb-3 mb-lg-4 lh-lg">Membantu Menangani Permintaan Layanan
+                                        Sengan Lebih Teratur Dan Efektif.
                                     </p>
                                 </div>
                                 <div class="col-lg-6 position-lg-relative">
                                     <div class="position-lg-absolute z-1 mt-5 text-right" style="right: 0%"><img
-                                            class="img-fluid" src="{{ asset('img/logos/logo.png') }}"
-                                            alt="logos" width="150" />
-                                        <div class="position-absolute dots d-none d-md-block"> <img
+                                            class="img-fluid" src="img/logos/logos.png" alt="" height="400"
+                                            width="400" />
+                                        <div class="position-absolute dots d-none d-md-block"><img
                                                 class="img-fluid w-50 w-lg-75" src="img/illustrations/Dots.webp"
                                                 alt="" /></div>
                                     </div>
@@ -112,7 +113,7 @@
                         <div class="bg-white py-2 py-md-5"></div>
                     </div>
                 </section>
-                <section class="container border-bottom mb-8 mb-lg-10">
+                {{-- <section class="container border-bottom mb-8 mb-lg-10">
                     <div class="row pb-6 pb-lg-8 g-3 g-lg-8 px-3">
                         <div class="col-12 col-md-4">
                             <h2 class="fs-3 fw-bold lh-sm mb-2 text-center"
@@ -132,8 +133,8 @@
                                 spaces right now</h5>
                         </div>
                     </div>
-                </section>
-                <section class="container mb-8 mb-lg-13" id="about">
+                </section> --}}
+                {{-- <section class="container mb-8 mb-lg-13" id="about">
                     <div class="row align-items-center">
                         <div class="col-12 col-lg-6 col-xl-7"><img class="img-fluid" src="img/Hero/Team.webp"
                                 alt="" /></div>
@@ -151,34 +152,32 @@
                                         <p class="lh-xl mb-0">Conduct unlimited video meetings with us for better
                                             business operations.</p>
                                     </div> --}}
-                                </div>
+                                {{-- </div>
                             </div>
                         </div>
                     </div>
-                </section>
-                <section class="container mb-8 mb-lg-13">
+                </section> --}}
+                <section class="container mb-8 mb-lg-13" id="about">
                     <div class="row align-items-center">
                         <div class="col-12 col-lg-6 col-xl-5 order-lg-1"><img class="img-fluid"
                                 src="img/Hero/Collaborator.webp" alt="" /></div>
                         <div class="col-12 col-lg-6 col-xl-7">
                             <div class="row justify-content-center justify-content-lg-start">
                                 <div class="col-sm-10 col-md-8 col-lg-11">
-                                    <h2 class="fs-4 fs-lg-3 fw-bold mb-2 text-center text-lg-start"> Organize remote
-                                        team fast & easily.</h2>
-                                    <p class="fs-8 mb-4 mb-lg-5 lh-lg text-center text-lg-start fw-normal">Organizing
-                                        and managing your remote teams has never been this easy!</p>
+                                    <h2 class="fs-4 fs-lg-3 fw-bold mb-2 text-center text-lg-start">Apa itu Ticketing?</h2>
+                                    <p class="fs-8 mb-4 mb-lg-5 lh-lg text-center text-lg-start fw-normal">Ticketing adalah salah satu fitur dalam sistem CRM yang digunakan oleh bisnis untuk mengelola tiket pelanggan yang masuk ke bisnis Anda. Dengan menggunakan ticketing, bisnis dapat lebih efisien dalam menangani permintaan pelanggan dan meningkatkan kepuasan pelanggan. Selain itu, juga membantu bisnis dalam mengelola tiket pelanggan secara lebih efektif dan efisien.</p>
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-x1 mb-lg-3">
-                                        <h5 class="fs-8 fw-bold lh-lg mb-1">Create Unlimited Teams </h5>
-                                        <p class="b-0 lh-xl">Create unlimited teams and boost productivity with
-                                            efficient collaboration.</p>
+                                        <h5 class="fs-8 fw-bold lh-lg mb-1">Apa Manfaat Ticketing</h5>
+                                        <p class="b-0 lh-xl">Dengan sistem ticketing, bisnis tidak perlu mengeluarkan banyak waktu dan tenaga untuk mengelola tiket secara manual.</p>
                                     </div>
-                                    <div>
+                                    
+                                    {{-- <div>
                                         <h5 class="fs-8 fw-bold lh-lg mb-1"> Hasslefree Chat with Everyone</h5>
                                         <p class="lh-xl mb-0">With unique and simple UIs, keep yourself connected
                                             across all the teams.</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -191,7 +190,7 @@
                                 <div class="position-relative z-1 text-center mb-8 mb-lg-9 video-player-paused"
                                     data-video-player-container="data-video-player-container"><video
                                         class="w-100 h-100 rounded-4" src="video/Video_Icon.mp4"
-                                        poster="img/Hero/experiences.webp" type="video/mp4"
+                                        poster="img/Hero/logoIcon.png" type="video/mp4"
                                         data-video-player="data-video-player"></video>
                                     <div class="overlay position-absolute top-0 bottom-0 start-0 end-0 rounded-4 bg-1100 object-cover"
                                         data-overlay="data-overlay"> </div><button
@@ -206,65 +205,71 @@
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-7">
-                                <h2 class="fs-4 fs-lg-3 fw-bold text-center text-white mb-5 mb-lg-9 lh-sm">We made this
-                                    app to solve your problems.</h2>
+                                {{-- <h2 class="fs-4 fs-lg-3 fw-bold text-center text-white mb-5 mb-lg-9 lh-sm">We made this
+                                    app to solve your problems.</h2> --}}
                             </div>
                             <div class="col-12">
                                 <div class="row gy-4 g-md-3 pb-8 pb-lg-11 px-1">
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/roadmap.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/roadmap.svg" alt="" /> --}}
                                         <div>
-                                            <h5 class="fs-8 text-white lh-lg fw-bold">Unlimited Projects</h5>
+                                            {{-- <h5 class="fs-8 text-white lh-lg fw-bold">Unlimited Projects</h5>
                                             <p class="text-white text-opacity-50 lh-xl mb-0">Manage multiple projects
-                                                at once and for seamless business operation.</p>
+                                                at once and for seamless business operation.</p> --}}
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/users-wm.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/users-wm.svg" alt="" /> --}}
                                         <div>
-                                            <h5 class="fs-8 text-white lh-lg fw-bold">Team Management</h5>
+                                            {{-- <h5 class="fs-8 text-white lh-lg fw-bold">Team Management</h5>
                                             <p class="text-white text-opacity-50 lh-xl mb-0">Manage your
                                                 cross-functional teams better than ever with our easily manageable app.
-                                            </p>
+                                            </p> --}}
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/share-91.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/share-91.svg" alt="" /> --}}
                                         <div>
-                                            <h5 class="fs-8 text-white lh-lg fw-bold">File Sharing</h5>
-                                            <p class="text-white text-opacity-50 lh-xl mb-0">Easily share files where
-                                                necessary and keep them safe with enhanced security and protection.</p>
+                                            {{-- <h5 class="fs-8 text-white lh-lg fw-bold">File Sharing</h5>
+                                            <p class="text-white text-opacity-50 lh-xl mb-0">Easily share files where --}}
+                                                {{-- necessary and keep them safe with enhanced security and protection.</p> --}}
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/video_meeting.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/video_meeting.svg" alt="" /> --}}
 
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/opening-times.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/opening-times.svg" alt="" /> --}}
                                         <div>
-                                            <h5 class="fs-8 text-white lh-lg fw-bold">Time Tracking</h5>
+                                            {{-- <h5 class="fs-8 text-white lh-lg fw-bold">Time Tracking</h5>
                                             <p class="text-white text-opacity-50 lh-xl mb-0">Track time to ensure
                                                 meeting all the deadlines and never lag behind managing multiple
-                                                projects.</p>
+                                                projects.</p> --}}
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2"><img
-                                            src="img/icons/card-favorite.svg" alt="" />
+                                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
+                                        {{-- <img
+                                            src="img/icons/card-favorite.svg" alt="" /> --}}
                                         <div>
-                                            <h5 class="fs-8 text-white lh-lg fw-bold">Payment System</h5>
+                                            {{-- <h5 class="fs-8 text-white lh-lg fw-bold">Payment System</h5>
                                             <p class="text-white text-opacity-50 lh-xl mb-0">With its easy payment
-                                                system create invoices and get paid all at the same place.</p>
+                                                system create invoices and get paid all at the same place.</p> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="position-absolute top-0 start-0 end-0">
-                        <div class="bg-white py-3 py-md-9 py-xl-10"> </div><img class="wave"
-                            src="img/illustrations/Wave_2.svg" alt="" />
-                    </div>
+                    <div class="position-absolute bottom-0 start-0 end-0 z-1"><img class="wave mb-md-n2"
+                        src="img/illustrations/Wave.svg" alt="" />
+                    <div class="bg-white py-2 py-md-5"></div>
+                </div>
                 </section>
                 {{-- Start  Contact  --}}
                 <section class="bg-300 position-relative z-0" id="contact">
@@ -356,21 +361,21 @@
                     class="uil uil-angle-up"></span></button>
             <footer class="pt-7 pt-lg-8">
                 <div class="container">
-                    <div class="row gy-2 py-3 justify-content-center justify-content-md-between">
-                        <div class="col-auto ps-0">
-                            <p class="text-center text-md-start lh-xl text-1100"> © 2024 Copyright, All Right Reserved,
-                                Made by <a class="fw-semi-bold" href="https://dukcapil.kemendagri.go.id/" target="_blank">
-                                    SIAK DUKCAPIL</a>
+                    <div class="row gy-2 py-3 justify-content-center align-items-center">
+                        <div class="col-auto ps-0 copyright">
+                                <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
+                                    <span class="uil uil-instagram"></span>
+                                </a>
+                                <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
+                                    <span class="uil uil-whatsapp"> </span>
+                                </a>
+                            </div>
+                            <p class="text-center lh-xl text-1100"> © 2024 Copyright, All Right Reserved,
+                                Made by <a class="fw-semi-bold" href="https://plniconplus.co.id/" target="_blank">
+                                    PLN Icon Plus</a>
                             </p>
                         </div>
-                        <div class="col-auto pe-0">
-                            <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
-                                <span class="uil uil-instagram"></span>
-                            </a>
-                            <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
-                                <span class="uil uil-whatsapp"> </span>
-                            </a>
-                        </div>
+                        
                     </div>
                 </div>
             </footer>

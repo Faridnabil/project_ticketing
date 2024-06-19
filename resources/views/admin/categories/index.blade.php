@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('content')
 @can('category_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.categories.create") }}">
+<div style="padding-top: 20px" class="row">
+    <div style="margin-bottom: 10px;" class="col-lg-12">
+        <a class="btn btn-success" style="color: white" href="{{ route("admin.categories.create") }}">
                 {{ trans('global.add') }} {{ trans('cruds.category.title_singular') }}
             </a>
         </div>

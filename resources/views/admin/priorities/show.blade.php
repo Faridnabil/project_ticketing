@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
-
-<div class="card">
+<div style="padding-top: 20px" class="content">
+    <div style="margin-top: 50px" class="card">
     <div class="card-header">
         {{ trans('global.show') }} {{ trans('cruds.priority.title') }}
     </div>
@@ -36,7 +36,7 @@
                     </tr>
                 </tbody>
             </table>
-            <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
+            <a style="margin-top:20px;" class="btn btn-secondary" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}
             </a>
         </div>

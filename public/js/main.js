@@ -82,3 +82,13 @@ const showHiddenPass = (loginPass, loginEye) =>{
 }
 
 showHiddenPass('login-pass','login-eye')
+
+document.addEventListener('DOMContentLoaded', () => {
+  const svgElement = document.querySelector('svg');
+
+  // Example interaction: Change color on click
+  svgElement.addEventListener('click', () => {
+      const rect = svgElement.querySelector('#background');
+      rect.setAttribute('fill', rect.getAttribute('fill') === '#A8DADC' ? '#E63946' : '#A8DADC');
+  });
+});

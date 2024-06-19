@@ -19,27 +19,22 @@ class StoreTicketRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'       => [
+            'title' => [
                 'required',
+                'string',
+                'max:255',
             ],
             'category_id' => [
                 'required',
                 'integer',
             ],
-            'ticket_id' =>
-            'required|string|unique:tickets,ticket_id|max:255|regex:/^TICK-\d{6}$/',
-            'title' => 'required|string|max:255',
             'content' => 'nullable|string',
             'author_name' => 'nullable|string|max:255',
             'author_email' => 'nullable|string|email|max:255',
-            'ticket_id' => 'required|string|unique:tickets,ticket_id|max:255|regex:/^TICK-\d{6}$/',
-            // 'status_id' => 'required|integer',
-            // 'priority_id' => 'required|integer',
-            'category_id' => 'required|integer',
-            'assigned_to_user_id' => 'required|integer',
-
+            // 'assigned_to_user_id' => 'required|integer',
         ];
     }
+
     public function messages()
     {
         return [

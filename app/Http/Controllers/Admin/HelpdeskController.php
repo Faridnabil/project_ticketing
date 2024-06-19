@@ -7,7 +7,9 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpdesk;
-
+use App\Exports\HelpdesksExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Http\Requests\MassDestroyCommentRequest;
 use App\Http\Requests\MassDestroyHelpdeskRequest;
@@ -31,6 +33,18 @@ class HelpdeskController extends Controller
         return view('admin.helpdesks.index', compact('helpdesks'));
     }
 
+    public function export()
+    {
+        return Excel::download(new HelpdesksExport(), 'helpdesks.xlsx');
+    }
+
+    public function cetak_pdf()
+    {
+    	$helpdesks = Helpdesk::all();
+ 
+    	$pdf = PDF::loadview('admin.helpdesks.helpdesk_pdf',['helpdesks'=>$helpdesks])->setPaper('a4', 'landscape');
+    	return $pdf->stream();
+    }
     public function create()
     {
         abort_if(Gate::denies('helpdesk_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');

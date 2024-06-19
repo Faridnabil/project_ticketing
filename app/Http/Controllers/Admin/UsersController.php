@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -10,6 +11,8 @@ use App\Role;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -21,6 +24,19 @@ class UsersController extends Controller
         $users = User::all();
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport(), 'users.xlsx');
+    }
+
+    public function cetak_pdf()
+    {
+    	$users = User::all();
+ 
+    	$pdf = PDF::loadview('admin.users.user_pdf',['users'=>$users])->setPaper('a4', 'landscape');
+    	return $pdf->stream();
     }
 
     public function create()
