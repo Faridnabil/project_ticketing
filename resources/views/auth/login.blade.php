@@ -64,7 +64,8 @@
                 <div class="row">
                     <div class="col-6 text-left">
                         <button type="submit" class="btn btn-primary px-4" style="color: #ffffff;text;font-weight: bold;">
-                            {{-- {{ trans('global.login') }} --}}Masuk
+                            {{-- {{ trans('global.login') }} --}}
+                            Masuk
                         </button>
                     </div>
                     <div class="col-6 text-right">
@@ -80,7 +81,5 @@
                 </div>
             </form>
         </div>
-    </div>
-    </div>
     </div>
 @endsection

@@ -14,13 +14,13 @@ class HomeController
         abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $totalTickets = Helpdesk::count();
-        $openTickets = Helpdesk::whereHas('status', function($query) {
+        $openTickets = Helpdesk::whereHas('status', function ($query) {
             $query->whereId('1');
         })->count();
-        $closedTickets = Helpdesk::whereHas('status', function($query) {
+        $closedTickets = Helpdesk::whereHas('status', function ($query) {
             $query->whereId('2');
         })->count();
 
-        return view('home', compact('totalTickets', 'openTickets', 'closedTickets'));
+        return view('admin.dashboard.index', compact('totalTickets', 'openTickets', 'closedTickets'));
     }
 }
