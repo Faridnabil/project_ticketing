@@ -38,8 +38,8 @@ class StoreTicketRequest extends FormRequest
     public function messages()
     {
         return [
-            'ticket_id.unique' => 'The ticket ID must be unique. Please use a different ID.',
-            'ticket_id.regex' => 'The ticket ID format is invalid. Use the format TICK-123456.',
+            // 'ticket_id.unique' => 'The ticket ID must be unique. Please use a different ID.',
+            // 'ticket_id.regex' => 'The ticket ID format is invalid. Use the format TICK-123456.',
         ];
     }
 }

@@ -14,8 +14,8 @@
     <!-- ===============================================-->
     <!--    Favicons-->
     <!-- ===============================================-->
-    <link rel="icon" type="image" href="{{ asset('img/logos/dev-icon.jpeg') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/logos/dev-icon.jpeg') }}">
+    <link rel="icon" type="image" href="{{ asset('img/logos/logo-kemendagri.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/logos/logo-kemendagri.png') }}">
     <link rel="manifest" href="{{ asset('img/favicons/manifest.json') }}">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
     <meta name="msapplication-TileImage" content="{{ asset('img/favicons/mstile-150x150.png') }}">
@@ -44,8 +44,9 @@
             <nav class="navbar navbar-expand-md fixed-top" id="navbar"
                 data-navbar-soft-on-scroll="data-navbar-soft-on-scroll">
                 <div class="container-fluid px-0">
-                    <a  class="navbar-brand d-flex align-items-center" href="#home" style="color:rgb(255, 251, 0); text-shadow: 2px 2px #7c7a7a;">Support Ticketing
-                     {{-- <img class="img-fluid" src="img/logos/logo-petir.png" alt="logo" /> --}}
+                    <a class="navbar-brand d-flex align-items-center" href="#home">
+                        <img class="img-fluid" src="{{ asset('img/logos/logos-kemendagri.png') }}" alt="logo"
+                            width="380" />
                     </a>
                     <a class="navbar-brand fw-bold d-none d-md-block" href="/"></a>
                     @auth
@@ -97,12 +98,13 @@
                                     </p>
                                 </div>
                                 <div class="col-lg-6 position-lg-relative">
-                                    <div class="position-lg-absolute z-1 mt-5 text-right" style="right: 0%"><img
-                                            class="img-fluid" src="img/logos/logos.png" alt="" height="400"
-                                            width="400" />
+                                    <div class="position-lg-absolute z-1 text-right" style="right: 0%"><img
+                                            class="img-fluid" src="{{ asset('img/logos/logo-kemendagri.png') }}"
+                                            alt="" width="160" />
                                         <div class="position-absolute dots d-none d-md-block"><img
                                                 class="img-fluid w-50 w-lg-75" src="img/illustrations/Dots.webp"
-                                                alt="" /></div>
+                                                alt="" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -113,50 +115,6 @@
                         <div class="bg-white py-2 py-md-5"></div>
                     </div>
                 </section>
-                {{-- <section class="container border-bottom mb-8 mb-lg-10">
-                    <div class="row pb-6 pb-lg-8 g-3 g-lg-8 px-3">
-                        <div class="col-12 col-md-4">
-                            <h2 class="fs-3 fw-bold lh-sm mb-2 text-center"
-                                data-countup='{"endValue":6,"prefix":"0"}'>0</h2>
-                            <h6 class="fs-8 fw-normal lh-lg mb-0 opacity-70 text-center">Offices are available on
-                                different countries</h6>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <h2 class="fs-3 fw-bold lh-sm mb-2 text-center" data-countup='{"endValue":238}'>0</h2>
-                            <h6 class="opacity-70 fs-8 fw-normal lh-lg mb-0 text-center">Seats are available right now
-                                with support</h6>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <h2 class="fs-3 fw-bold lh-sm mb-2 text-center"
-                                data-countup='{"endValue":1395,"autoIncreasing":true}'>0</h2>
-                            <h5 class="opacity-70 fs-8 fw-normal lh-lg mb-0 text-center">People are using our co-work
-                                spaces right now</h5>
-                        </div>
-                    </div>
-                </section> --}}
-                {{-- <section class="container mb-8 mb-lg-13" id="about">
-                    <div class="row align-items-center">
-                        <div class="col-12 col-lg-6 col-xl-7"><img class="img-fluid" src="img/Hero/Team.webp"
-                                alt="" /></div>
-                        <div class="col-12 col-lg-6 col-xl-5">
-                            <div class="row justify-content-center justify-content-lg-start">
-                                <div class="col-sm-10 col-md-8 col-lg-12">
-                                    <h2 class="fs-4 fs-lg-3 fw-bold mb-2 text-center text-lg-start">Kolaborasi penuh
-                                        dengan anggota team</h2>
-                                    <p class="fs-8 mb-4 mb-lg-5 lh-lg text-center text-lg-start fw-normal">
-                                        Berkolaborasi dalam satu platform. Menyelesaikan issue dengan cepat.</p>
-                                </div>
-                                <div class="col-12">
-                                    {{-- <div>
-                                        <h5 class="fs-8 fw-bold lh-lg mb-1"> Unlimited Video Meetings</h5>
-                                        <p class="lh-xl mb-0">Conduct unlimited video meetings with us for better
-                                            business operations.</p>
-                                    </div> --}}
-                                {{-- </div>
-                            </div>
-                        </div>
-                    </div>
-                </section> --}}
                 <section class="container mb-8 mb-lg-13" id="about">
                     <div class="row align-items-center">
                         <div class="col-12 col-lg-6 col-xl-5 order-lg-1"><img class="img-fluid"
@@ -164,20 +122,24 @@
                         <div class="col-12 col-lg-6 col-xl-7">
                             <div class="row justify-content-center justify-content-lg-start">
                                 <div class="col-sm-10 col-md-8 col-lg-11">
-                                    <h2 class="fs-4 fs-lg-3 fw-bold mb-2 text-center text-lg-start">Apa itu Ticketing?</h2>
-                                    <p class="fs-8 mb-4 mb-lg-5 lh-lg text-center text-lg-start fw-normal">Ticketing adalah salah satu fitur dalam sistem CRM yang digunakan oleh bisnis untuk mengelola tiket pelanggan yang masuk ke bisnis Anda. Dengan menggunakan ticketing, bisnis dapat lebih efisien dalam menangani permintaan pelanggan dan meningkatkan kepuasan pelanggan. Selain itu, juga membantu bisnis dalam mengelola tiket pelanggan secara lebih efektif dan efisien.</p>
+                                    <h2 class="fs-4 fs-lg-3 fw-bold mb-2 text-center text-lg-start">Apa itu Ticketing?
+                                    </h2>
+                                    <p class="fs-8 mb-4 mb-lg-5 lh-lg text-center text-lg-start fw-normal">Ticketing
+                                        adalah salah satu fitur dalam sistem CRM yang digunakan oleh bisnis untuk
+                                        mengelola tiket pelanggan yang masuk ke bisnis Anda. Dengan menggunakan
+                                        ticketing, bisnis dapat lebih efisien dalam menangani permintaan pelanggan dan
+                                        meningkatkan kepuasan pelanggan. Selain itu, juga membantu bisnis dalam
+                                        mengelola tiket pelanggan secara lebih efektif dan efisien.
+                                    </p>
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-x1 mb-lg-3">
                                         <h5 class="fs-8 fw-bold lh-lg mb-1">Apa Manfaat Ticketing</h5>
-                                        <p class="b-0 lh-xl">Dengan sistem ticketing, bisnis tidak perlu mengeluarkan banyak waktu dan tenaga untuk mengelola tiket secara manual.</p>
+                                        <p class="b-0 lh-xl">
+                                            Dengan sistem ticketing, bisnis tidak perlu mengeluarkan
+                                            banyak waktu dan tenaga untuk mengelola tiket secara manual.
+                                        </p>
                                     </div>
-                                    
-                                    {{-- <div>
-                                        <h5 class="fs-8 fw-bold lh-lg mb-1"> Hasslefree Chat with Everyone</h5>
-                                        <p class="lh-xl mb-0">With unique and simple UIs, keep yourself connected
-                                            across all the teams.</p>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -190,18 +152,22 @@
                                 <div class="position-relative z-1 text-center mb-8 mb-lg-9 video-player-paused"
                                     data-video-player-container="data-video-player-container"><video
                                         class="w-100 h-100 rounded-4" src="video/Video_Icon.mp4"
-                                        poster="img/Hero/logoIcon.png" type="video/mp4"
+                                        poster="{{ asset('img/Hero/thumbnail-kemendagri.jpg') }}" type="video/mp4"
                                         data-video-player="data-video-player"></video>
                                     <div class="overlay position-absolute top-0 bottom-0 start-0 end-0 rounded-4 bg-1100 object-cover"
-                                        data-overlay="data-overlay"> </div><button
+                                        data-overlay="data-overlay">
+                                    </div>
+                                    <button
                                         class="btn play-button position-absolute justify-content-center align-items-center bg-white rounded-circle cursor-pointer"
-                                        data-play-button="data-play-button"> <img class="play-icon w-25"
-                                            src="img/illustrations/play-solid.svg" alt=""
-                                            data-play-icon="data-play-icon" /><img class="pause-icon w-25"
-                                            src="img/illustrations/pause-solid.svg" alt=""
-                                            data-pause-icon="data-pause-icon" /></button>
+                                        data-play-button="data-play-button">
+                                        <img class="play-icon w-25" src="img/illustrations/play-solid.svg"
+                                            alt="" data-play-icon="data-play-icon" />
+                                        <img class="pause-icon w-25" src="img/illustrations/pause-solid.svg"
+                                            alt="" data-pause-icon="data-pause-icon" />
+                                    </button>
                                     <div class="position-absolute dots d-none d-sm-block"><img class="img-fluid w-100"
-                                            src="img/illustrations/Dots.webp" alt="" /></div>
+                                            src="img/illustrations/Dots.webp" alt="" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-7">
@@ -235,7 +201,7 @@
                                         <div>
                                             {{-- <h5 class="fs-8 text-white lh-lg fw-bold">File Sharing</h5>
                                             <p class="text-white text-opacity-50 lh-xl mb-0">Easily share files where --}}
-                                                {{-- necessary and keep them safe with enhanced security and protection.</p> --}}
+                                            {{-- necessary and keep them safe with enhanced security and protection.</p> --}}
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-4 d-flex align-items-start gap-2">
@@ -267,9 +233,9 @@
                         </div>
                     </div>
                     <div class="position-absolute bottom-0 start-0 end-0 z-1"><img class="wave mb-md-n2"
-                        src="img/illustrations/Wave.svg" alt="" />
-                    <div class="bg-white py-2 py-md-5"></div>
-                </div>
+                            src="img/illustrations/Wave.svg" alt="" />
+                        <div class="bg-white py-2 py-md-5"></div>
+                    </div>
                 </section>
                 {{-- Start  Contact  --}}
                 <section class="bg-300 position-relative z-0" id="contact">
@@ -288,12 +254,15 @@
                                                 <div style="display: flex; align-items: center;">
                                                     <img src="/img/icons/phone-call.png" alt="Phone Icon"
                                                         style="width: 16px; height: 16px; margin-right: 8px; margin-bottom:10px">
-                                                    <p style="font-weight: bold; font-size: 16px; margin: 0;">Phone
-                                                        Number
+                                                    <p style="font-weight: bold; font-size: 16px; margin: 0;">
+                                                        Phone Number
                                                     </p>
                                                 </div>
                                                 <div class="mb-2 w-100" style="margin-left: 25px">
-                                                    <p><i class="fas fa-envelope"></i> 021-5253019</p>
+                                                    <p>
+                                                        <i class="fas fa-envelope"></i>
+                                                        (021) 79194075
+                                                    </p>
                                                 </div>
                                             </div>
 
@@ -302,12 +271,15 @@
                                                 <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                                     <img src="/img/icons/whatsapp.png" alt="WhatsApp Icon"
                                                         style="width: 16px; height: 16px; margin-right: 8px;">
-                                                    <p style="font-weight: bold; font-size: 16px; margin: 0;">Fax
-                                                        Number</p>
+                                                    <p style="font-weight: bold; font-size: 16px; margin: 0;">
+                                                        Fax Number
+                                                    </p>
                                                 </div>
                                                 <div class="mb-2 w-100" style="display: flex; align-items: center;">
-                                                    <p style="margin-left: 25px;"><i class="fas fa-envelope"></i>
-                                                        021-5253659</p>
+                                                    <p style="margin-left: 25px;">
+                                                        <i class="fas fa-envelope"></i>
+                                                        (021) 7980655, 7949770
+                                                    </p>
                                                 </div>
 
                                             </div>
@@ -323,7 +295,7 @@
                                             </div>
                                             <div class="mb-2 w-100" style="margin-left: 25px;">
                                                 <p>
-                                                    <i class="fas fa-envelope"></i>humas@iconpln.co.id
+                                                    <i class="fas fa-envelope"></i>humas@siakdukcapil.co.id
                                                 </p>
                                             </div>
 
@@ -363,27 +335,24 @@
                 <div class="container">
                     <div class="row gy-2 py-3 justify-content-center align-items-center">
                         <div class="col-auto ps-0 copyright">
-                                <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
-                                    <span class="uil uil-instagram"></span>
-                                </a>
-                                <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
-                                    <span class="uil uil-whatsapp"> </span>
-                                </a>
-                            </div>
-                            <p class="text-center lh-xl text-1100"> © 2024 Copyright, All Right Reserved,
-                                Made by <a class="fw-semi-bold" href="https://plniconplus.co.id/" target="_blank">
-                                    PLN Icon Plus</a>
-                            </p>
+                            <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
+                                <span class="uil uil-instagram"></span>
+                            </a>
+                            <a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!">
+                                <span class="uil uil-whatsapp"> </span>
+                            </a>
                         </div>
-                        
+                        <p class="text-center lh-xl text-1100"> © 2024 Copyright, All Right Reserved,
+                            Made by <a class="fw-semi-bold" href="https://plniconplus.co.id/" target="_blank">
+                                PLN Icon Plus</a>
+                        </p>
                     </div>
+
                 </div>
             </footer>
         </div>
     </main>
     <!-- ===============================================--><!--    End of Main Content--><!-- ===============================================-->
-
-
 
     <!-- ===============================================--><!--    JavaScripts--><!-- ===============================================-->
     <script src="{{ asset('js/popper/popper.min.js') }}"></script>

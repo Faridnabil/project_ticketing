@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Notifications\CommentEmailNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -30,6 +31,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        try {
         $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -47,11 +49,20 @@ class TicketController extends Controller
 
         $ticket = Ticket::create($request->all());
 
-        foreach ($request->input('attachments', []) as $file) {
-            $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
-        }
+            foreach ($request->input('attachments', []) as $file) {
+                $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            }
 
-        return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="' . route('tickets.show', $ticket->id) . '">here</a>');
+            DB::commit();
+
+            return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="' . route('tickets.show', $ticket->id) . '">here</a>');
+
+        } catch (\Throwable $th) {
+            dd(''. $th->getMessage());
+            DB::rollBack();
+            // Log the error or handle it as needed
+            return redirect()->back()->withStatus('Your ticket has not been submitted. Please try again.');
+        }
     }
 
     /**

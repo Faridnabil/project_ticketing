@@ -8,7 +8,8 @@
                 </div>
                 <div class="col-md-6 text-md-right">
                     <span style="color: hsl(218, 81%, 75%);">
-                        <img class="img-fluid" src="img/logos/logos 2.svg" height="100" alt="Phone image">
+                        <img class="img-fluid" src="{{ asset('img/logos/logo-kemendagri.png') }}" width="80"
+                            alt="Logo Kemendagri">
                     </span>
                 </div>
             </div>
