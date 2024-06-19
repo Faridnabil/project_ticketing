@@ -26,6 +26,9 @@
     <!--begin::Header-->
     @can('role_create')
     <div class="card-header border-0 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+
+        </h3>
         <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Click to add a user">
             <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-light-primary">
             <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
@@ -44,12 +47,9 @@
     <div class="card-body py-3">
         <!--begin::Table container-->
         <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover datatable datatable-Role">
+            <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                 <thead>
                     <tr>
-                        <th width="10">
-
-                        </th>
                         <th>
                             {{ trans('cruds.role.fields.id') }}
                         </th>
@@ -68,9 +68,6 @@
                     @foreach ($roles as $key => $role)
                         <tr data-entry-id="{{ $role->id }}">
                             <td>
-
-                            </td>
-                            <td>
                                 {{ $role->id ?? '' }}
                             </td>
                             <td>
@@ -83,13 +80,13 @@
                             </td>
                             <td>
                                 @can('role_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.roles.show', $role->id) }}">
+                                    <a class="btn btn-xs btn-primary mb-2" href="{{ route('admin.roles.show', $role->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('role_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.roles.edit', $role->id) }}">
+                                    <a class="btn btn-xs btn-info mb-2" href="{{ route('admin.roles.edit', $role->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
@@ -117,66 +114,4 @@
     </div>
     <!--begin::Body-->
 </div>
-@endsection
-
-@section('scripts')
-    @parent
-    <script>
-        $(function() {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('role_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-                let deleteButton = {
-                    text: deleteButtonTrans,
-                    url: "{{ route('admin.roles.massDestroy') }}",
-                    className: 'btn-danger',
-                    action: function(e, dt, node, config) {
-                        var ids = $.map(dt.rows({
-                            selected: true
-                        }).nodes(), function(entry) {
-                            return $(entry).data('entry-id')
-                        });
-
-                        if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
-
-                            return
-                        }
-
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
-                            $.ajax({
-                                    headers: {
-                                        'x-csrf-token': _token
-                                    },
-                                    method: 'POST',
-                                    url: config.url,
-                                    data: {
-                                        ids: ids,
-                                        _method: 'DELETE'
-                                    }
-                                })
-                                .done(function() {
-                                    location.reload()
-                                })
-                        }
-                    }
-                }
-                dtButtons.push(deleteButton)
-            @endcan
-
-            $.extend(true, $.fn.dataTable.defaults, {
-                order: [
-                    [1, 'desc']
-                ],
-                pageLength: 100,
-            });
-            $('.datatable-Role:not(.ajaxTable)').DataTable({
-                buttons: dtButtons
-            })
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-                $($.fn.dataTable.tables(true)).DataTable()
-                    .columns.adjust();
-            });
-        })
-    </script>
 @endsection
