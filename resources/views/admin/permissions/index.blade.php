@@ -24,13 +24,14 @@
 </div>
 <div class="card mb-5 mb-xl-8">
     <!--begin::Header-->
-    @can('role_create')
     <div class="card-header border-0 pt-5">
         <h3 class="card-title align-items-start flex-column">
 
         </h3>
-        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Click to add a user">
-            <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-light-primary">
+        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+            title="Click to add a user">
+            @can('permission_create')
+            <a href="{{ route('admin.permissions.create') }}" class="btn btn-sm btn-light-primary">
                 <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
                 <span class="svg-icon svg-icon-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -38,10 +39,10 @@
                         <path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
                     </svg>
                 </span>
-                <!--end::Svg Icon-->  {{ trans('global.add') }} {{ trans('cruds.role.title_singular') }}</a>
+                <!--end::Svg Icon-->  {{ trans('global.add') }} {{ trans('cruds.permission.title_singular') }}</a>
+            @endcan
         </div>
     </div>
-    @endcan
     <!--end::Header-->
     <!--begin::Body-->
     <div class="card-body py-3">
@@ -50,9 +51,6 @@
             <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                 <thead>
                     <tr>
-                        <th width="10">
-
-                        </th>
                         <th>
                             {{ trans('cruds.permission.fields.id') }}
                         </th>
@@ -67,9 +65,6 @@
                 <tbody>
                     @foreach ($permissions as $key => $permission)
                         <tr data-entry-id="{{ $permission->id }}">
-                            <td>
-
-                            </td>
                             <td>
                                 {{ $permission->id ?? '' }}
                             </td>

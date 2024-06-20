@@ -46,10 +46,10 @@
 
     {{-- Baru --}}
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
-    {{-- <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <!--end::Global Stylesheets Bundle-->
     <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"
         type="text/css" />
 
 </head>
@@ -137,18 +137,13 @@
 
     {{-- JS Tambahan --}}
     <!--begin::Global Javascript Bundle(used by all pages)-->
-    {{-- <script src="{{ asset('template/dist/assets/plugins/global/plugins.bundle.js') }}"></script> --}}
     <script src="{{ asset('template/dist/assets/js/scripts.bundle.js') }}"></script>
-    <!--end::Global Javascript Bundle-->
-    <!--begin::Page Custom Javascript(used by this page)-->
-    {{-- <script src="{{ asset('template/dist/assets/js/custom/widgets.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/chat/chat.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script> --}}
+    <script src="{{ asset('template/dist/assets/plugins/global/plugins.bundle.js') }}"></script>
     <!--end::Page Custom Javascript-->
 
     <script src="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
 
+    {{-- DataTables --}}
     <script>
         $("#kt_datatable_example_5").DataTable({
             "language": {
@@ -167,6 +162,8 @@
                 ">"
         });
     </script>
+
+
 
     @yield('scripts')
 </body>
