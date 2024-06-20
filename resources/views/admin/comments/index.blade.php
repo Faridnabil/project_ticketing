@@ -27,17 +27,13 @@
     <div class="card mb-5 mb-xl-8">
         <!--begin::Header-->
         <div class="card-header border-0 pt-5">
-            {{-- <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-3 mb-1"> <a href=" admin/users/export"
-                    class="btn btn-primary btn-md mr-1">Export Excel</a>
-                <a href="admin/users/cetak_pdf" class="btn btn-primary" btn-md target="_blank">Export PDF</a>
-            </span>
-        </h3> --}}
+            <h3 class="card-title align-items-start flex-column">
+
+            </h3>
             <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
-                title="Click to add a comment">
+                title="Click to add a user">
                 @can('comment_create')
-                    <a href="{{ route('admin.comments.create') }}" class="btn btn-sm btn-light-primary" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_invite_friends">
+                    <a href="{{ route('admin.comments.create') }}" class="btn btn-sm btn-light-primary">
                         <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
                         <span class="svg-icon svg-icon-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
@@ -50,8 +46,7 @@
                                     fill="#000000" fill-rule="nonzero" />
                             </svg>
                         </span>
-                        <!--end::Svg Icon--> {{ trans('global.add') }} {{ trans('cruds.comment.title_singular') }}
-                    </a>
+                        <!--end::Svg Icon--> {{ trans('global.add') }} {{ trans('cruds.comment.title_singular') }}</a>
                 @endcan
             </div>
         </div>

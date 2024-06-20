@@ -127,36 +127,42 @@ class TicketsController extends Controller
         return view('admin.tickets.create', compact('statuses', 'priorities', 'categories', 'assigned_to_users'));
     }
 
-    public function store(StoreTicketRequest $request)
+    public function store(Request $request)
     {
         DB::beginTransaction();
         try {
-            $validated = $request->validated();
+            $input = $request->all();
 
+            // Generate new ticket ID
             $lastTicket = Ticket::orderBy('id', 'desc')->first();
             $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            $input['ticket_id'] = $newTicketId;
 
-            // Merge the new ticket_id with the validated data
-            $validated['ticket_id'] = $newTicketId;
-
-            // Create the ticket with all the validated fields
-            $ticket = Ticket::create($validated);
-
-            // Handle attachments
-            foreach ($request->input('attachments', []) as $file) {
-                $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            // Check for file uploads
+            if ($request->hasFile('attachments')) {
+                $attachments = [];
+                foreach ($request->file('attachments') as $file) {
+                    $fileName = time() . "_" . $file->getClientOriginalName();
+                    $folder = 'file/tickets/attachments';
+                    $file->move($folder, $fileName);
+                    $attachments[] = $folder . "/" . $fileName;
+                }
+                $input['attachments'] = json_encode($attachments);
             }
 
+            // Create the ticket with all the input data
+            $ticket = Ticket::create($input);
+
             DB::commit();
-            return redirect()->route('admin.tickets.index');
-        } catch (\Throwable $th) {
+            return redirect()->route('admin.tickets.index')->with('success', 'Ticket created successfully');
+        } catch (\Exception $e) {
             DB::rollBack();
-            //throw $th;
-            dd($th->getMessage());
-            return back()->with('error', $th->getMessage());
+            Log::error('Ticket Store Error: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while creating the ticket: ' . $e->getMessage());
         }
     }
+
 
 
     public function edit(Ticket $ticket)

@@ -274,7 +274,7 @@
                     </div>
                 @endcan
 
-                <div class="menu-item">
+                {{-- <div class="menu-item">
                     <a class="menu-link" href="#"
                         onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                         <span class="menu-icon">
@@ -297,7 +297,7 @@
                 </div>
                 <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
-                </form>
+                </form> --}}
 
             </div>
             <!--end::Menu-->
