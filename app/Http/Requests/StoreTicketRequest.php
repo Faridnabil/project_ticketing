@@ -31,7 +31,7 @@ class StoreTicketRequest extends FormRequest
             'content' => 'nullable|string',
             'author_name' => 'nullable|string|max:255',
             'author_email' => 'nullable|string|email|max:255',
-            // 'assigned_to_user_id' => 'required|integer',
+            'assigned_to_user_id' => 'required|integer',
         ];
     }
 
