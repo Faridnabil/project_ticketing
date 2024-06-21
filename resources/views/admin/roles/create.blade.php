@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
+<!--begin::Content-->
 <div class="toolbar" id="kt_toolbar">
     <!--begin::Container-->
     <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -23,23 +24,26 @@
     </div>
     <!--end::Container-->
 </div>
-<div class="card mb-5 mb-xl-8">
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <!--end::Toolbar-->
-        <!--begin::Post-->
-        <div class="post d-flex flex-column-fluid" id="kt_post">
-            <!--begin::Container-->
-            <div id="kt_content_container" class="container">
-                <!--begin::Contact-->
-                <div class="card">
-                    <!--begin::Body-->
-                    <div class="card-body p-lg-17">
-                        <!--begin::Row-->
-                        <div class="row mb-3">
-                            <!--begin::Col-->
-                            <div class="col-md-12 pe-lg-10">
-                                <div class="row mb-3">
-                                    <div class="card-body">
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container">
+            <div class="card mb-5 mb-xl-8">
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <!--end::Toolbar-->
+                    <!--begin::Post-->
+                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                        <!--begin::Container-->
+                        <div id="kt_content_container" class="container">
+                            <!--begin::Contact-->
+                            <div class="card">
+                                <!--begin::Body-->
+                                <div class="card-body p-lg-17">
+                                    <!--begin::Row-->
+                                    <div class="row mb-3">
+                                        <!--begin::Col-->
                                         <form action="{{ route("admin.roles.store") }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
@@ -77,26 +81,22 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <!--end::Row-->
+
                                 </div>
-
+                                <!--end::Body-->
                             </div>
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-md-6 ps-lg-10">
-
-                            </div>
-                            <!--end::Col-->
+                            <!--end::Contact-->
                         </div>
-                        <!--end::Row-->
-
+                        <!--end::Container-->
                     </div>
-                    <!--end::Body-->
+                    <!--end::Post-->
                 </div>
-                <!--end::Contact-->
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::Post-->
+        <!--end::Container-->
     </div>
+    <!--end::Post-->
 </div>
+<!--end::Content-->
 @endsection
