@@ -88,7 +88,7 @@
                                             </div>
                                             <div class="form-group {{ $errors->has('priority_id') ? 'has-error' : '' }}">
                                                 <label for="priority_id">{{ trans('cruds.helpdesk.fields.priority') }}</label>
-                                                <select name="priority_id" id="priority_id" class="form-control form-control-solid">
+                                                <select name="priority_id" id="priority_id" class="form-select" data-control="select2">
                                                     @foreach ($priorities as $id => $priority)
                                                         <option value="{{ $id }}"
                                                             {{ (isset($helpdesk) && $helpdesk->priorities->name ? $helpdesk->priorities->name : old('priority_id')) == $id ? 'selected' : '' }}>
@@ -105,7 +105,7 @@
 
                                             <div class="form-group {{ $errors->has('ticket_id') ? 'has-error' : '' }}">
                                                 <label for="ticket_id">{{ trans('cruds.helpdesk.fields.ticket_id') }}</label>
-                                                <select name="ticket_id" id="ticket_id" class="form-control form-control-solid">
+                                                <select name="ticket_id" id="ticket_id" class="form-select" data-control="select2">
                                                     @foreach ($tickets as $ticket_id => $ticket_name)
                                                         <option value="{{ $ticket_name->ticket_id }}"
                                                             {{ old('ticket_id') == $ticket_id ? 'selected' : '' }}>
@@ -122,7 +122,7 @@
 
                                             <div class="form-group {{ $errors->has('user_id') ? 'has-error' : '' }}">
                                                 <label for="user">{{ trans('cruds.helpdesk.fields.user') }}</label>
-                                                <select name="user_id" id="user" class="form-control form-control-solid">
+                                                <select name="user_id" id="user"  class="form-select" data-control="select2">
                                                     @foreach ($users as $id => $user)
                                                         <option value="{{ $id }}"
                                                             {{ (isset($helpdesk) && $helpdesk->user ? $helpdesk->user->id : old('user_id')) == $id ? 'selected' : '' }}>

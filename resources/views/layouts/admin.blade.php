@@ -37,8 +37,8 @@
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
         type="text/css" />
-    {{-- <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"
-        type="text/css" /> --}}
+    <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
 </head>
 
 <body id="kt_body"
@@ -98,7 +98,7 @@
     {{-- JS Tambahan --}}
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('template/dist/assets/js/scripts.bundle.js') }}"></script>
-    {{-- <script src="{{ asset('template/dist/assets/plugins/global/plugins.bundle.js') }}"></script> --}}
+    <script src="{{ asset('template/dist/assets/plugins/global/plugins.bundle.js') }}"></script>
     <!--end::Page Custom Javascript-->
 
     <script src="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>

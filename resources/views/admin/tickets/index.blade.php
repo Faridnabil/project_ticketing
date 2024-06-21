@@ -109,14 +109,14 @@
                                         <td>{{ $ticket->assigned_to_user->name }}</td>
                                         <td>
                                             @can('ticket_show')
-                                                <a class="btn btn-xs btn-primary"
+                                                <a class="btn btn-xs btn-primary mb-2"
                                                     href="{{ route('admin.tickets.show', $ticket->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan
 
                                             @can('ticket_edit')
-                                                <a class="btn btn-xs btn-info" href="{{ route('admin.tickets.edit', $ticket->id) }}">
+                                                <a class="btn btn-xs btn-info mb-2" href="{{ route('admin.tickets.edit', $ticket->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                             @endcan

@@ -1,56 +1,56 @@
 @extends('layouts.admin')
 @section('content')
-    <!--begin::Content-->
-<div class="toolbar" id="kt_toolbar">
-    <!--begin::Container-->
-    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-        <!--begin::Page title-->
-        <div data-kt-place="true" data-kt-place-mode="prepend"
-            data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-            class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
-            <!--begin::Title-->
-            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Menu
-                <!--begin::Separator-->
-                <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-                <!--end::Separator-->
-                <!--begin::Description-->
-                <small class="text-muted fs-7 fw-bold my-1 ms-1">   {{ trans('global.create') }} {{ trans('cruds.ticket.title_singular') }}</small>
-                <!--end::Description-->
-            </h1>
-            <!--end::Title-->
-        </div>
-        <!--end::Page title-->
-    </div>
-    <!--end::Container-->
-</div>
 
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    <!--begin::Post-->
-    <div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Content-->
+    <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
-        <div id="kt_content_container" class="container">
-            <div class="card mb-5 mb-xl-8">
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                    <!--end::Toolbar-->
-                    <!--begin::Post-->
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
-                        <!--begin::Container-->
-                        <div id="kt_content_container" class="container">
-                            <!--begin::Contact-->
-                            <div class="card">
-                                <!--begin::Body-->
-                                <div class="card-body p-lg-17">
-                                    <!--begin::Row-->
-                                    <div class="row mb-3">
-                                        <!--begin::Col-->
-                                        <form action="{{ route('admin.tickets.store') }}" method="POST" enctype="multipart/form-data">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-place="true" data-kt-place-mode="prepend"
+                data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Menu
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1"> {{ trans('global.create') }}
+                        {{ trans('cruds.ticket.title_singular') }}</small>
+                    <!--end::Description-->
+                </h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Post-->
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+            <!--begin::Container-->
+            <div id="kt_content_container" class="container">
+                <div class="card mb-5 mb-xl-8">
+                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                        <!--end::Toolbar-->
+                        <!--begin::Post-->
+                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                            <!--begin::Container-->
+                            <div id="kt_content_container" class="container">
+                                <!--begin::Contact-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="{{ route('admin.tickets.store') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <input type="text" id="ticket_id" name="ticket_id" hidden>
 
                                             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                                 <label for="title">{{ trans('cruds.ticket.fields.title') }}*</label>
-                                                <input type="text" id="title" name="title" class="form-control form-control-solid"
-                                                    value="{{ old('title', isset($ticket) ? $ticket->title : '') }}" required>
+                                                <input type="text" id="title" name="title" class="form-control"
+                                                    value="{{ old('title', isset($ticket) ? $ticket->title : '') }}"
+                                                    required>
                                                 @if ($errors->has('title'))
                                                     <em class="invalid-feedback">
                                                         {{ $errors->first('title') }}
@@ -63,7 +63,7 @@
 
                                             <div class="form-group {{ $errors->has('content') ? 'has-error' : '' }}">
                                                 <label for="content">{{ trans('cruds.ticket.fields.content') }}</label>
-                                                <textarea id="content" name="content" class="form-control form-control-solid">{{ old('content', isset($ticket) ? $ticket->content : '') }}</textarea>
+                                                <textarea id="content" name="content" class="form-control ">{{ old('content', isset($ticket) ? $ticket->content : '') }}</textarea>
                                                 @if ($errors->has('content'))
                                                     <em class="invalid-feedback">
                                                         {{ $errors->first('content') }}
@@ -74,24 +74,62 @@
                                                 </p>
                                             </div>
 
-                                            <div class="form-group {{ $errors->has('attachments') ? 'has-error' : '' }}">
-                                                <label for="attachments">{{ trans('cruds.ticket.fields.attachments') }}</label>
-                                                <div class="needsclick dropzone" id="attachments-dropzone">
+                                            {{-- <div class="form-group {{ $errors->has('attachments') ? 'has-error' : '' }}">
+                                                    <label for="attachments">{{ trans('cruds.ticket.fields.attachments') }}</label>
+                                                    <div class="needsclick dropzone" id="attachments-dropzone">
 
+                                                    </div>
+                                                    @if ($errors->has('attachments'))
+                                                        <em class="invalid-feedback">
+                                                            {{ $errors->first('attachments') }}
+                                                        </em>
+                                                    @endif
+                                                    <p class="helper-block">
+                                                        {{ trans('cruds.ticket.fields.attachments_helper') }}
+                                                    </p>
+                                                </div> --}}
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row">
+                                                <!--begin::Dropzone-->
+                                                <div
+                                                    class="form-group {{ $errors->has('attachments') ? 'has-error' : '' }}">
+                                                    <label
+                                                        for="attachments">{{ trans('cruds.ticket.fields.attachments') }}</label>
+                                                    <div class="needsclick dropzone" id="attachments-dropzone">
+                                                        <!--begin::Message-->
+                                                        <div class="dz-message needsclick">
+                                                            <!--begin::Icon-->
+                                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                                            <!--end::Icon-->
+
+                                                            <!--begin::Info-->
+                                                            <div class="ms-4">
+                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Drop files
+                                                                    here or click to upload.</h3>
+                                                                <span class="fs-7 fw-bold text-gray-400">Upload up to 10
+                                                                    files</span>
+                                                            </div>
+                                                            <!--end::Info-->
+                                                        </div>
+                                                    </div>
+                                                    @if ($errors->has('attachments'))
+                                                        <em class="invalid-feedback">
+                                                            {{ $errors->first('attachments') }}
+                                                        </em>
+                                                    @endif
+                                                    <p class="helper-block">
+                                                        {{ trans('cruds.ticket.fields.attachments_helper') }}
+                                                    </p>
                                                 </div>
-                                                @if ($errors->has('attachments'))
-                                                    <em class="invalid-feedback">
-                                                        {{ $errors->first('attachments') }}
-                                                    </em>
-                                                @endif
-                                                <p class="helper-block">
-                                                    {{ trans('cruds.ticket.fields.attachments_helper') }}
-                                                </p>
+                                                <!--end::Dropzone-->
                                             </div>
+                                            <!--end::Input group-->
 
                                             <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
                                                 <label for="category">{{ trans('cruds.ticket.fields.category') }}*</label>
-                                                <select name="category_id" id="category" class="form-control select2" required>
+                                                <select name="category_id" id="category"  class="form-select" data-control="select2"
+                                                    required>
                                                     @foreach ($categories as $id => $category)
                                                         <option value="{{ $id }}"
                                                             {{ (isset($ticket) && $ticket->category ? $ticket->category->id : old('category_id')) == $id ? 'selected' : '' }}>
@@ -106,8 +144,10 @@
                                             </div>
 
                                             <div class="form-group {{ $errors->has('author_name') ? 'has-error' : '' }}">
-                                                <label for="author_name">{{ trans('cruds.ticket.fields.author_name') }}</label>
-                                                <input type="text" id="author_name" name="author_name" class="form-control form-control-solid"
+                                                <label
+                                                    for="author_name">{{ trans('cruds.ticket.fields.author_name') }}</label>
+                                                <input type="text" id="author_name" name="author_name"
+                                                    class="form-control"
                                                     value="{{ old('author_name', isset($ticket) ? $ticket->author_name : '') }}">
                                                 @if ($errors->has('author_name'))
                                                     <em class="invalid-feedback">
@@ -120,8 +160,10 @@
                                             </div>
 
                                             <div class="form-group {{ $errors->has('author_email') ? 'has-error' : '' }}">
-                                                <label for="author_email">{{ trans('cruds.ticket.fields.author_email') }}</label>
-                                                <input type="text" id="author_email" name="author_email" class="form-control form-control-solid"
+                                                <label
+                                                    for="author_email">{{ trans('cruds.ticket.fields.author_email') }}</label>
+                                                <input type="text" id="author_email" name="author_email"
+                                                    class="form-control"
                                                     value="{{ old('author_email', isset($ticket) ? $ticket->author_email : '') }}">
                                                 @if ($errors->has('author_email'))
                                                     <em class="invalid-feedback">
@@ -134,9 +176,12 @@
                                             </div>
 
                                             @if (auth()->user()->isAdmin())
-                                                <div class="form-group {{ $errors->has('assigned_to_user_id') ? 'has-error' : '' }}">
-                                                    <label for="assigned_to_user">{{ trans('cruds.ticket.fields.assigned_to_user') }}</label>
-                                                    <select name="assigned_to_user_id" id="assigned_to_user" class="form-control select2">
+                                                <div
+                                                    class="form-group {{ $errors->has('assigned_to_user_id') ? 'has-error' : '' }}">
+                                                    <label
+                                                        for="assigned_to_user">{{ trans('cruds.ticket.fields.assigned_to_user') }}</label>
+                                                    <select name="assigned_to_user_id" id="assigned_to_user"
+                                                    class="form-select" data-control="select2">
                                                         @foreach ($assigned_to_users as $id => $assigned_to_user)
                                                             <option value="{{ $id }}"
                                                                 {{ (isset($ticket) && $ticket->assigned_to_user ? $ticket->assigned_to_user->id : old('assigned_to_user_id')) == $id ? 'selected' : '' }}>
@@ -152,28 +197,86 @@
                                             @endif
 
                                             <div>
-                                                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
+                                                <input class="btn btn-danger" type="submit"
+                                                    value="{{ trans('global.save') }}">
                                             </div>
                                         </form>
 
-                                    </div>
-                                    <!--end::Row-->
 
+                                    </div>
                                 </div>
-                                <!--end::Body-->
+                                <!--end::Contact-->
                             </div>
-                            <!--end::Contact-->
+                            <!--end::Container-->
                         </div>
-                        <!--end::Container-->
+                        <!--end::Post-->
                     </div>
-                    <!--end::Post-->
                 </div>
             </div>
+            <!--end::Container-->
         </div>
-        <!--end::Container-->
+        <!--end::Post-->
     </div>
-    <!--end::Post-->
-</div>
-<!--end::Content-->
-
+    <!--end::Content-->
 @endsection
+
+@section('scripts')
+
+    <script>
+        var uploadedAttachmentsMap = {}
+        Dropzone.options.attachmentsDropzone = {
+            url: '{{ route('admin.tickets.storeMedia') }}',
+            maxFilesize: 2, // MB
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            params: {
+                size: 2
+            },
+            success: function(file, response) {
+                $('form').append('<input type="hidden" name="attachments[]" value="' + response.name + '">')
+                uploadedAttachmentsMap[file.name] = response.name
+            },
+            removedfile: function(file) {
+                file.previewElement.remove()
+                var name = ''
+                if (typeof file.file_name !== 'undefined') {
+                    name = file.file_name
+                } else {
+                    name = uploadedAttachmentsMap[file.name]
+                }
+                $('form').find('input[name="attachments[]"][value="' + name + '"]').remove()
+            },
+            init: function() {
+                @if (isset($ticket) && $ticket->attachments)
+                    var files =
+                        {!! json_encode($ticket->attachments) !!}
+                    for (var i in files) {
+                        var file = files[i]
+                        this.options.addedfile.call(this, file)
+                        file.previewElement.classList.add('dz-complete')
+                        $('form').append('<input type="hidden" name="attachments[]" value="' + file.file_name +
+                            '">')
+                    }
+                @endif
+            },
+            error: function(file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
+            }
+        }
+    </script>
+@stop

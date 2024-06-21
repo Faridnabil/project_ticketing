@@ -50,7 +50,7 @@
                                             @method('PUT')
                                             <div class="form-group {{ $errors->has('ticket_id') ? 'has-error' : '' }}">
                                                 <label for="ticket">{{ trans('cruds.comment.fields.ticket') }}</label>
-                                                <select name="ticket_id" id="ticket" class="form-control select2">
+                                                <select name="ticket_id" id="ticket"  class="form-select" data-control="select2">
                                                     @foreach ($tickets as $id => $ticket)
                                                         <option value="{{ $id }}"
                                                             {{ (isset($comment) && $comment->ticket ? $comment->ticket->id : old('ticket_id')) == $id ? 'selected' : '' }}>
@@ -91,7 +91,7 @@
                                             </div>
                                             <div class="form-group {{ $errors->has('user_id') ? 'has-error' : '' }}">
                                                 <label for="user">{{ trans('cruds.comment.fields.user') }}</label>
-                                                <select name="user_id" id="user" class="form-control select2">
+                                                <select name="user_id" id="user"  class="form-select" data-control="select2">
                                                     @foreach ($users as $id => $user)
                                                         <option value="{{ $id }}"
                                                             {{ (isset($comment) && $comment->user ? $comment->user->id : old('user_id')) == $id ? 'selected' : '' }}>
