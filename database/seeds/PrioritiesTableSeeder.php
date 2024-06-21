@@ -26,18 +26,18 @@ class PrioritiesTableSeeder extends Seeder
             ],
             [
                 'id'    => 3,
-                'name' => 'Critical / Level 2',
-                'max_time' => '2 Jam',
-            ],
-            [
-                'id'    => 4,
                 'name' => 'Medium / Level 2',
                 'max_time' => '8 Jam',
             ],
             [
-                'id'    => 5,
+                'id'    => 4,
                 'name' => 'High / Level 2',
                 'max_time' => '4 Jam',
+            ],
+            [
+                'id'    => 5,
+                'name' => 'Critical / Level 2',
+                'max_time' => '2 Jam',
             ],
         ];
 

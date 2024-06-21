@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // Seeder untuk tabel statuses
         DB::table('statuses')->insert([
             ['name' => 'Open', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Progress', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Closed', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
