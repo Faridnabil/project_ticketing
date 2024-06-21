@@ -61,6 +61,21 @@
                                                     {{ trans('cruds.status.fields.name_helper') }}
                                                 </p>
                                             </div>
+
+                                            <div class="form-group {{ $errors->has('color') ? 'has-error' : '' }}">
+                                                <label for="color">{{ trans('cruds.status.fields.color') }}</label>
+                                                <input type="color" id="color" name="color" class="form-control form-control-solid"
+                                                    value="{{ old('color', isset($status) ? $status->color : '#000000') }}">
+                                                @if ($errors->has('color'))
+                                                    <em class="invalid-feedback">
+                                                        {{ $errors->first('color') }}
+                                                    </em>
+                                                @endif
+                                                <p class="helper-block">
+                                                    {{ trans('cruds.status.fields.color_helper') }}
+                                                </p>
+                                            </div>
+
                                             <div>
                                                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
                                             </div>

@@ -97,15 +97,7 @@
                                                             {{ $status->id ?? '' }}
                                                         </td>
                                                         <td>
-                                                            @if ($status->name == 'On Progress')
-                                                                <button class="btn btn-primary">{{ $status->name ?? '' }}</button>
-                                                            @elseif($status->name == 'Open')
-                                                                <button class="btn btn-success">{{ $status->name ?? '' }}</button>
-                                                            @elseif($status->name == 'Closed')
-                                                                <button class="btn btn-danger">{{ $status->name ?? '' }}</button>
-                                                            @else
-                                                                {{ $status->name ?? '' }}
-                                                            @endif
+                                                            <button class="btn" style="background-color:{{ $status->color ?? '' }} ;pointer-events: none;color:white; font-weight: bold">{{ $status->name ?? '' }}</button>
                                                         </td>
                                                         {{-- <td style="background-color:{{ $status->color ?? '#FFFFFF' }}"></td> --}}
                                                         <td>

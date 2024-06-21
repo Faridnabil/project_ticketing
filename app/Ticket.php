@@ -41,6 +41,7 @@ class Ticket extends Model implements HasMedia
         'author_name',
         'author_email',
         'assigned_to_user_id',
+        'color',
     ];
 
     public static function boot()
@@ -118,7 +119,7 @@ class Ticket extends Model implements HasMedia
                     })
                     ->orWhereHas('tickets', function ($q) {
                         return $q->whereId($this->id);
-                    }); 
+                    });
                 });
             })
             ->when(!$comment->user_id && !$this->assigned_to_user_id, function ($q) {
