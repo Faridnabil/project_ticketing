@@ -3,10 +3,14 @@
 /public/storage
 /storage/*.key
 /vendor
+/.idea
 .env
 .env.backup
 .phpunit.result.cache
+.phpstorm.meta.php
+.DS_Store
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+_ide_helper.php
