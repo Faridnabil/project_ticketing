@@ -13,7 +13,9 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        $tickets = Ticket::with('status', 'category', 'priority', 'user');
+
+        return view('ticket.index', compact('tickets'));
     }
 
     /**

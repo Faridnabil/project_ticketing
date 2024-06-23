@@ -1,47 +1,67 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.auth.app')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('title')
+    Login | SIAK DUCAPIL
+@endsection
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('content')
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+<!--begin::Logo-->
+<a href="#" class="mb-12">
+    <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="h-60px mb-10" />
+</a>
+<!--end::Logo-->
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+<form method="POST" action="{{ route('login') }}" class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
+    @csrf
+    <!--begin::Heading-->
+    <!--begin::Input group-->
+    <div class="fv-row mb-10">
+        <!--begin::Label-->
+        <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <input class="form-control form-control-lg form-control-solid" type="text" name="email" autocomplete="off"
+        id="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+        <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
+        <!--end::Input-->
+    </div>
+    <!--end::Input group-->
+    <!--begin::Input group-->
+    <div class="fv-row mb-10">
+        <!--begin::Wrapper-->
+        <label class="form-label fs-6 fw-bolder text-dark">Password</label>
+        <!--end::Wrapper-->
+        <!--begin::Input-->
+        <input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off"
+        id="password" name="password"required autocomplete="current-password"/>
+        <!--end::Input-->
+        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
+        <div class="d-flex flex-stack mb-2">
+            <!--begin::Label-->
+            <label for="remember_me" class="inline-flex items-center mt-5 ">
                 <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
                 <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
             </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
+            <!--end::Label-->
+            <!--begin::Link-->
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder mt-5">Forgot Password ?</a>
             @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <!--end::Link-->
         </div>
-    </form>
-</x-guest-layout>
+
+    <!--end::Input group-->
+    <!--begin::Actions-->
+    <div class="text-center">
+        <!--begin::Submit button-->
+        <x-primary-button class="btn btn-lg btn-primary w-100 mt-5">
+            {{ __('Log in') }}
+        </x-primary-button>
+    </div>
+</form>
+
+@endsection
