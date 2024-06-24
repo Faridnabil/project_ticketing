@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Solution;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class SolutionController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+
+        return view("dashboard.admin.category.index", compact("categories"));
     }
 
     /**
@@ -34,7 +37,7 @@ class SolutionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Solution $solution)
+    public function show(Category $category)
     {
         //
     }
@@ -42,7 +45,7 @@ class SolutionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Solution $solution)
+    public function edit(Category $category)
     {
         //
     }
@@ -50,7 +53,7 @@ class SolutionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Solution $solution)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -58,7 +61,7 @@ class SolutionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Solution $solution)
+    public function destroy(Category $category)
     {
         //
     }

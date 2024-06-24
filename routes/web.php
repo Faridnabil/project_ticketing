@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\PriorityController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StatusController;
-use App\Http\Controllers\TicketController;
+use App\Http\Controllers\Admin\PriorityController;
+use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,4 +42,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('ticket', TicketController::class);
     Route::resource('priority', PriorityController::class);
     Route::resource('status', StatusController::class);
+    Route::resource('category', CategoryController::class);
 });

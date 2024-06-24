@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Prioritas | SIAK Ducapil
+    Status | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Prioritas
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Status
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Prioritas</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Status</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -58,7 +58,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" data-kt-customer-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-15" placeholder="Cari Prioritas" />
+                                class="form-control form-control-solid w-250px ps-15" placeholder="Cari Status" />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -136,7 +136,7 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="min-w-125px">Prioritas</th>
+                                <th class="min-w-125px">Status</th>
                                 <th class="text-end min-w-70px">Actions</th>
                             </tr>
                             <!--end::Table row-->
@@ -144,8 +144,8 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
-                            @if ($priorities->count())
-                                @foreach ($priorities as $priority)
+                            @if ($statuses->count())
+                                @foreach ($statuses as $status)
                                     <tr>
                                         <!--begin::Checkbox-->
                                         <td>
@@ -156,7 +156,7 @@
                                         <!--end::Checkbox-->
                                         <!--begin::Name=-->
                                         <td>
-                                            {{ $priority->priority_name }}
+                                            {{ $status->status_name }}
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Action=-->

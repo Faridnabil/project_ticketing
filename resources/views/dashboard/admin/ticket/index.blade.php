@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Prioritas | SIAK Ducapil
+    Ticket | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Prioritas
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Prioritas</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -58,7 +58,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" data-kt-customer-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-15" placeholder="Cari Prioritas" />
+                                class="form-control form-control-solid w-250px ps-15" placeholder="Cari Tiket" />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -136,16 +136,22 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
+                                <th class="min-w-125px">Nomor Tiket</th>
+                                <th class="min-w-125px">Judul</th>
+                                <th class="min-w-125px">Pemilik</th>
+                                <th class="min-w-125px">Tetapkan Ke</th>
                                 <th class="min-w-125px">Prioritas</th>
-                                <th class="text-end min-w-70px">Actions</th>
+                                <th class="min-w-125px">Dibuat Tanggal</th>
+                                <th class="min-w-125px">Status</th>
+                                <th class="text-end min-w-70px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
-                            @if ($priorities->count())
-                                @foreach ($priorities as $priority)
+                            @if ($tickets->count())
+                                @foreach ($tickets as $ticket)
                                     <tr>
                                         <!--begin::Checkbox-->
                                         <td>
@@ -154,11 +160,39 @@
                                             </div>
                                         </td>
                                         <!--end::Checkbox-->
-                                        <!--begin::Name=-->
+                                        <!--begin::Nomor Ticket=-->
                                         <td>
-                                            {{ $priority->priority_name }}
+                                            {{ $ticket->no_ticket }}
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Nomor Ticket=-->
+                                        <!--begin::Title=-->
+                                        <td>
+                                            {{ $ticket->title }}
+                                        </td>
+                                        <!--end::Title=-->
+                                        <!--begin::Owner Name=-->
+                                        <td>
+                                            {{ $ticket->owner->name }}
+                                        </td>
+                                        <!--end::Owner Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#"
+                                                class="text-gray-600 text-hover-primary mb-1">e.smith@kpmg.com.au</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Company=-->
+                                        <td>-</td>
+                                        <!--end::Company=-->
+                                        <!--begin::Payment method=-->
+                                        <td data-filter="mastercard">
+                                            <img src="assets/media/svg/card-logos/mastercard.svg" class="w-35px me-3"
+                                                alt="" />**** 5741
+                                        </td>
+                                        <!--end::Payment method=-->
+                                        <!--begin::Date=-->
+                                        <td>14 Dec 2020, 8:43 pm</td>
+                                        <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td class="text-end">
                                             <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
@@ -200,7 +234,6 @@
                                         <!--end::Action=-->
                                     </tr>
                                 @endforeach
-                            @else
                             @endif
                         </tbody>
                         <!--end::Table body-->

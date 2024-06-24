@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Priority;
+use App\Http\Controllers\Controller;
+use App\Models\ChangeOwner;
 use Illuminate\Http\Request;
 
-class PriorityController extends Controller
+class ChangeOwnerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $priorities = Priority::orderBy("created_at", "desc")
-            ->paginate(10);
-
-        return view("dashboard.admin.priority.index", compact("priorities"));
+        //
     }
 
     /**
@@ -37,7 +35,7 @@ class PriorityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Priority $priority)
+    public function show(ChangeOwner $changeOwner)
     {
         //
     }
@@ -45,7 +43,7 @@ class PriorityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Priority $priority)
+    public function edit(ChangeOwner $changeOwner)
     {
         //
     }
@@ -53,7 +51,7 @@ class PriorityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Priority $priority)
+    public function update(Request $request, ChangeOwner $changeOwner)
     {
         //
     }
@@ -61,7 +59,7 @@ class PriorityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Priority $priority)
+    public function destroy(ChangeOwner $changeOwner)
     {
         //
     }

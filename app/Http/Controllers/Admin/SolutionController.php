@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\ChangeOwner;
+use App\Http\Controllers\Controller;
+use App\Models\Solution;
 use Illuminate\Http\Request;
 
-class ChangeOwnerController extends Controller
+class SolutionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class ChangeOwnerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ChangeOwner $changeOwner)
+    public function show(Solution $solution)
     {
         //
     }
@@ -42,7 +43,7 @@ class ChangeOwnerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ChangeOwner $changeOwner)
+    public function edit(Solution $solution)
     {
         //
     }
@@ -50,7 +51,7 @@ class ChangeOwnerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ChangeOwner $changeOwner)
+    public function update(Request $request, Solution $solution)
     {
         //
     }
@@ -58,7 +59,7 @@ class ChangeOwnerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChangeOwner $changeOwner)
+    public function destroy(Solution $solution)
     {
         //
     }

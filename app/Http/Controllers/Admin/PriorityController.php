@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Ticket;
-use App\Http\Requests\StoreTicketRequest;
-use App\Http\Requests\UpdateTicketRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Priority;
+use Illuminate\Http\Request;
 
-class TicketController extends Controller
+class PriorityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'user');
+        $priorities = Priority::all();
 
-        return view('ticket.index', compact('tickets'));
+        return view("dashboard.admin.priority.index", compact("priorities"));
     }
 
     /**
@@ -23,13 +23,13 @@ class TicketController extends Controller
      */
     public function create()
     {
-        return view('ticket.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTicketRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -37,7 +37,7 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket)
+    public function show(Priority $priority)
     {
         //
     }
@@ -45,7 +45,7 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ticket $ticket)
+    public function edit(Priority $priority)
     {
         //
     }
@@ -53,7 +53,7 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function update(Request $request, Priority $priority)
     {
         //
     }
@@ -61,7 +61,7 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ticket $ticket)
+    public function destroy(Priority $priority)
     {
         //
     }

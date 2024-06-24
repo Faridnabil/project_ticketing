@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class StatusController extends Controller
      */
     public function index()
     {
-        //
+        $statuses = Status::all();
+
+        return view("dashboard.admin.status.index", compact("statuses"));
     }
 
     /**
