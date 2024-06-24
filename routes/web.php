@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\PriorityController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,11 +39,24 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
 
-    // using resouce controller
-    Route::resource('ticket', TicketController::class);
-    Route::resource('priority', PriorityController::class);
-    Route::resource('status', StatusController::class);
-    Route::resource('category', CategoryController::class);
+//     // using resouce controller
+//     Route::resource('ticket', TicketController::class);
+//     Route::resource('priority', PriorityController::class);
+//     Route::resource('status', StatusController::class);
+//     Route::resource('category', CategoryController::class);
+// });
+
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Manager|Project Manager|Vice President|Direksi|Staff'])->group(function () {
+
+    Route::resources([
+        '/role'                                     => RoleController::class,
+        '/permission'                               => PermissionController::class,
+        '/user'                                     => UserController::class,
+        '/ticket'                                   => TicketController::class,
+        '/priority'                                 => PriorityController::class,
+        '/status'                                   => StatusController::class,
+        '/category'                                 => CategoryController::class,
+    ]);
 });

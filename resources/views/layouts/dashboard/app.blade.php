@@ -20,6 +20,7 @@
         type="text/css" />
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
+
 </head>
 
 <body id="kt_body"
@@ -1336,7 +1337,7 @@
                 </g>
             </svg>
         </span>
-            <!--end::Svg Icon-->
+        <!--end::Svg Icon-->
     </div>
     <!--end::Scrolltop-->
 
@@ -1363,7 +1364,25 @@
     <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
 
-    {{-- DATATABLES JAVASCRIPT --}}
+    {{-- Javascript Data Pengguna --}}
+    <script>
+        $("#kt_datatable_example_5").DataTable({
+            "language": {
+                "lengthMenu": "Show _MENU_",
+            },
+            "dom": "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+        });
+    </script>
 
 </body>
 

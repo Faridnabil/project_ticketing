@@ -34,6 +34,8 @@
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
                 </div>
             </div>
+
+            {{-- @can('View User Management') --}}
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
                     <span class="menu-icon">
@@ -59,7 +61,7 @@
                 </span>
                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                     <div class="menu-item">
-                        <a class="menu-link" href="account/overview.html">
+                        <a class="menu-link" href="{{ route('user.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -84,6 +86,8 @@
                     </div>
                 </div>
             </div>
+            {{-- @endcan --}}
+
             <div class="menu-item">
                 <a class="menu-link {{ Request::is('category') ? 'active' : '' }}" href="{{ route('category.index') }}">
                     <span class="menu-icon">
