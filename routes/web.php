@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,13 +36,9 @@ require __DIR__ . '/auth.php';
 
 
 Route::middleware('auth')->group(function () {
+
     // using resouce controller
-
     Route::resource('ticket', TicketController::class);
-
-
-    // using simpe route
-    // Route::get('/ticket/create', [TicketController::class,'create'])->name('ticket.create');
-    // Route::post('/ticket/create', [TicketController::class,'store'])->name('ticket.store');
-
+    Route::resource('priority', PriorityController::class);
+    Route::resource('status', StatusController::class);
 });

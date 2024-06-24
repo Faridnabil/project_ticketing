@@ -8,7 +8,8 @@
         <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
             id="#kt_aside_menu" data-kt-menu="true">
             <div class="menu-item">
-                <a class="menu-link active" href="{{ route('dashboard.index') }}">
+                <a class="menu-link {{ Request::is('dashboard') ? 'active' : '' }}"
+                    href="{{ route('dashboard.index') }}">
                     <span class="menu-icon">
                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                         <span class="svg-icon svg-icon-2">
@@ -84,7 +85,7 @@
                 </div>
             </div>
             <div class="menu-item">
-                <a class="menu-link active" href="index.html">
+                <a class="menu-link {{ Request::is('priority') ? 'active' : '' }}" href="{{ route('priority.index') }}">
                     <span class="menu-icon">
                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                         <span class="svg-icon svg-icon-2">

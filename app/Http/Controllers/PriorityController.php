@@ -12,7 +12,10 @@ class PriorityController extends Controller
      */
     public function index()
     {
-        //
+        $priorities = Priority::orderBy("created_at", "desc")
+            ->paginate(10);
+
+        return view("dashboard.admin.priority.index", compact("priorities"));
     }
 
     /**
