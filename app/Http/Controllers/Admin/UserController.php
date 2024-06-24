@@ -164,15 +164,19 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
         try {
-            $user = User::find($id);
-            // Log activity
-            return redirect('user')->with('success', 'User deleted successfully');
+            if (!$user) {
+                // Jika principle tidak ditemukan, kembalikan pesan kesalahan
+                return back()->with(['error' => 'user not found.']);
+            }
+
+            $user->delete(); // Hapus principle
+            return redirect()->route('user.index')->with('success', 'user deleted successfully');
         } catch (\Throwable $th) {
             // Log activity
-            return back()->with('error', 'User deleted failed');
+            return back()->with('error', 'user deleted failed');
         }
     }
 }

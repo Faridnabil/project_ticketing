@@ -234,15 +234,15 @@
                         </div><!--end row-->
                     </div><!--end modal-body-->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-de-secondary btn-sm"
+                            data-bs-dismiss="modal">
                             Close
                         </button>
-                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('user.destroy', $user->id) }}"
+                            method="POST" class="d-inline">
                             @method('delete')
                             @csrf
-                            <button type="submit" class="btn btn-de-danger btn-sm">
-                                Delete
-                            </button>
+                            <button class="btn btn-danger" type="submit">Submit</button>
                         </form>
                     </div><!--end modal-footer-->
                 </div>
