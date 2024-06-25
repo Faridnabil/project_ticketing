@@ -192,55 +192,24 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <!--begin::Label-->
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
-
-                                    <!--begin::Image input-->
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url(assets/media/avatars/blank.png)">
-                                        <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url(assets/media/avatars/150-1.jpg);">
-                                        </div>
-                                        <!--end::Preview existing avatar-->
-                                        <!--begin::Label-->
-                                        <label
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                            title="Ganti lampiran">
+                                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(assets/media/avatars/blank.png)">
+                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url(assets/media/avatars/150-1.jpg);"></div>
+                                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Ganti lampiran">
                                             <i class="bi bi-pencil-fill fs-7"></i>
-                                            <!--begin::Inputs-->
                                             <input type="file" name="attachment" accept=".png, .jpg, .jpeg" />
                                             <input type="hidden" name="attachment" />
-                                            <!--end::Inputs-->
                                         </label>
-                                        <!--end::Label-->
-                                        <!--begin::Cancel-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                            title="Batalkan lampiran">
+                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Batalkan lampiran">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
-                                        <!--end::Cancel-->
-                                        <!--begin::Remove-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                            title="Hapus lampiran">
+                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Hapus lampiran">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
-                                        <!--end::Remove-->
                                     </div>
-                                    <!--end::Image input-->
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
+                                    <div class="valid-feedback">Looks good!</div>
                                     @error('attachment')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 

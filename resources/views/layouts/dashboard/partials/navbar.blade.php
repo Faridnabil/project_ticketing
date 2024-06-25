@@ -3854,7 +3854,15 @@
                 <!--begin::Menu wrapper-->
                 <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                    <img src="assets/media/avatars/150-2.jpg" alt="metronic" />
+                    @if (Auth::user()->gender == 'Pria')
+                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-1.png') }}"
+                            class="rounded me-2 thumb-sm" alt="profile-user"
+                            style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
+                    @else
+                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-12.jpg') }}"
+                            class="rounded-circle me-2 thumb-sm" alt="profile-user"
+                            style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
+                    @endif
                 </div>
                 <!--begin::Menu-->
                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold py-4 fs-6 w-275px"
@@ -3892,13 +3900,13 @@
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="{{ route('profile.edit', Auth::user()->id) }}" class="menu-link px-5">My
-                            Profile</a>
+                        <a href="{{ route('profile.edit', Auth::user()->id) }}" class="menu-link px-5">Profil</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                             class="menu-link px-5">Sign Out</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

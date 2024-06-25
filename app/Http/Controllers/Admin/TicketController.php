@@ -65,18 +65,27 @@ class TicketController extends Controller
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
             $validate = $request->all();
+            $file = $request->file('attachment'); // pastikan nama file sesuai dengan yang di form
             $validate['no_ticket'] = $newTicketId;
 
-            $ticket = Ticket::create($validate);
+            if ($file) {
+                // Proses file
+                $nama_file = time() . "_" . $file->getClientOriginalName();
+                $nama_folder = 'file/ticket';
+                $file->move(public_path($nama_folder), $nama_file);
+                $validate['attachment'] = $nama_folder . "/" . $nama_file;
+            }
+
+            Ticket::create($validate);
 
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -91,7 +100,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $customer = User::role('Customer')
+        $customers = User::role('Customer')
             ->get();
 
         $assignTo = User::role('Department')
@@ -107,7 +116,7 @@ class TicketController extends Controller
             'dashboard.admin.ticket.edit',
             compact(
                 'ticket',
-                'customer',
+                'customers',
                 'assignTo',
                 'priorities',
                 'statuses',
@@ -122,9 +131,36 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        $request->validate([
+            'title' => 'required',
+            'customer' => 'required',
+            'assign_to' => 'required',
+            'priority_id' => 'required',
+            'due_date' => 'nullable|date',
+            'status_id' => 'required',
+            'category_id' => 'required',
+            'description' => 'nullable',
+            'attachment' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
         DB::beginTransaction();
         try {
-            $ticket->update($request->all());
+            $validate = $request->all();
+            if ($request->hasFile('attachment')) {
+                // Proses file baru
+                $file = $request->file('attachment');
+                $nama_file = time() . "_" . $file->getClientOriginalName();
+                $nama_folder = 'file/ticket';
+                $file->move(public_path($nama_folder), $nama_file);
+                $validate['attachment'] = $nama_folder . "/" . $nama_file;
+
+                // Hapus file lama jika ada
+                if ($ticket->attachment && file_exists(public_path($ticket->attachment))) {
+                    unlink(public_path($ticket->attachment));
+                }
+            }
+
+            $ticket->update($validate);
 
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dirubah');
@@ -134,20 +170,23 @@ class TicketController extends Controller
         }
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Ticket $ticket)
     {
-        DB::beginTransaction();
         try {
-            $ticket->delete();
+            if (!$ticket) {
+                // Jika principle tidak ditemukan, kembalikan pesan kesalahan
+                return back()->with(['error' => 'Tiket Tidak ada.']);
+            }
 
-            DB::commit();
-            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dihapus.');
+            $ticket->delete(); // Hapus principle
+            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil dihapus');
         } catch (\Throwable $th) {
-            DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            // Log activity
+            return back()->with('error', 'Tiket gagal dihapus');
         }
     }
 }

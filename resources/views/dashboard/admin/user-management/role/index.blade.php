@@ -179,7 +179,7 @@
                             method="POST" class="d-inline">
                             @method('delete')
                             @csrf
-                            <button class="btn btn-danger" type="submit">Submit</button>
+                            <button class="btn btn-danger" type="submit">Hapus</button>
                         </form>
                     </div><!--end modal-footer-->
                 </div>
