@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Priority;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PriorityController extends Controller
 {
@@ -23,7 +24,7 @@ class PriorityController extends Controller
      */
     public function create()
     {
-        //
+        return view("dashboard.admin.priority.create");
     }
 
     /**
@@ -31,7 +32,17 @@ class PriorityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $priority = Priority::create($request->all());
+
+            DB::commit();
+            return redirect()->route("priority.index")->with("success", "Prioritas Berhasil Ditambahkan.");
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 
     /**
@@ -47,7 +58,7 @@ class PriorityController extends Controller
      */
     public function edit(Priority $priority)
     {
-        //
+        return view("dashboard.admin.priority.edit", compact("priority"));
     }
 
     /**
@@ -55,7 +66,16 @@ class PriorityController extends Controller
      */
     public function update(Request $request, Priority $priority)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $priority->update($request->all());
+
+            DB::commit();
+            return redirect()->route("priority.index")->with("success", "Prioritas Berhasil Di Perbarui.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 
     /**
@@ -63,6 +83,15 @@ class PriorityController extends Controller
      */
     public function destroy(Priority $priority)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $priority->delete();
+
+            DB::commit();
+            return redirect()->route("dashboard.admin.priority.index")->with("success", "Prioritas Berhasil Di Hapus.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 }

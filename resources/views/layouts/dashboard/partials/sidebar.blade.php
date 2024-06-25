@@ -56,7 +56,7 @@
                         </span>
                         <!--end::Svg Icon-->
                     </span>
-                    <span class="menu-title">User Management</span>
+                    <span class="menu-title">Manajemen Pengguna</span>
                     <span class="menu-arrow"></span>
                 </span>
                 <div class="menu-sub menu-sub-accordion menu-active-bg">
@@ -65,7 +65,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Users</span>
+                            <span class="menu-title">Pengguna</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -73,7 +73,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Roles</span>
+                            <span class="menu-title">Peran</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -81,7 +81,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Permissions</span>
+                            <span class="menu-title">Ijin Akses</span>
                         </a>
                     </div>
                 </div>

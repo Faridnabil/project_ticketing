@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StatusController extends Controller
 {
@@ -23,7 +24,7 @@ class StatusController extends Controller
      */
     public function create()
     {
-        //
+        return view("dashboard.admin.status.create");
     }
 
     /**
@@ -31,7 +32,16 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $status = Status::create($request->all());
+
+            DB::commit();
+            return redirect()->route("status.index")->with("success", "Status Berhasil Dibuat.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 
     /**
@@ -47,7 +57,7 @@ class StatusController extends Controller
      */
     public function edit(Status $status)
     {
-        //
+        return view("dashboard.admin.status.edit", compact("status"));
     }
 
     /**
@@ -55,7 +65,16 @@ class StatusController extends Controller
      */
     public function update(Request $request, Status $status)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $status->update($request->all());
+
+            DB::commit();
+            return redirect()->route("status.index")->with("success", "Status Berhasil Di Rubah.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 
     /**
@@ -63,6 +82,15 @@ class StatusController extends Controller
      */
     public function destroy(Status $status)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $status->delete();
+
+            DB::commit();
+            return redirect()->route("status.index")->with("success", "Status Berhasil Dihapus.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
 }

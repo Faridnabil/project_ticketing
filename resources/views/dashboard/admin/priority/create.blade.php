@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Create Prioritas | SIAK Ducapil
+    Tambah Prioritas | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -31,11 +31,60 @@
     <!--end::Toolbar-->
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
-        <!--begin::Container-->
         <div id="kt_content_container" class="container">
+            <!--begin::Row-->
+            <div class="row g-5 g-xl-12">
+                <div class="col-xl-12">
+                    <!--begin::List Widget 1-->
+                    <div class="card card-xl-stretch mb-xl-8">
+                        <!--begin::Body-->
+                        <div class="card-body pt-5">
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('priority.store') }}"
+                                enctype="multipart/form-data" novalidate>
+                                @csrf
+                                <div class="col-md-12">
+                                    <label for="validationCustom01" class="form-label">Nama Prioritas</label>
+                                    <input type="text" class="form-control @error('priority_name') is-invalid @enderror"
+                                        id="priority_name" name="priority_name" autofocus required>
 
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('priority_name')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="validationCustom01" class="form-label">Warna Label</label>
+                                    <input type="color" class="form-control @error('color') is-invalid @enderror"
+                                        id="color" name="color" value="#ff0000" autofocus required>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('color')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                    <a href="{{ route('priority.index') }}" class="btn btn-danger">Cancel</a>
+                                </div>
+                            </form>
+                            <!--end form-->
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::List Widget 1-->
+                </div>
+            </div>
         </div>
-        <!--end::Container-->
     </div>
     <!--end::Post-->
 @endsection

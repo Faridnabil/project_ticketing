@@ -38,16 +38,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-
-// Route::middleware('auth')->group(function () {
-
-//     // using resouce controller
-//     Route::resource('ticket', TicketController::class);
-//     Route::resource('priority', PriorityController::class);
-//     Route::resource('status', StatusController::class);
-//     Route::resource('category', CategoryController::class);
-// });
-
 Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Manager|Project Manager|Vice President|Direksi|Staff'])->group(function () {
 
     Route::resources([
