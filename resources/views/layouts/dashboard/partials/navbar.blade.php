@@ -393,8 +393,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
@@ -478,8 +478,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Interface/Lock.svg-->
@@ -532,7 +532,8 @@
                                             </a>
                                         </div>
                                         <div class="menu-item">
-                                            <a class="menu-link py-3" href="authentication/flows/basic/two-steps.html">
+                                            <a class="menu-link py-3"
+                                                href="authentication/flows/basic/two-steps.html">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -587,7 +588,8 @@
                                             </a>
                                         </div>
                                         <div class="menu-item">
-                                            <a class="menu-link py-3" href="authentication/flows/aside/two-steps.html">
+                                            <a class="menu-link py-3"
+                                                href="authentication/flows/aside/two-steps.html">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -815,8 +817,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Design/Substract.svg-->
@@ -1016,8 +1018,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks.svg-->
@@ -1027,7 +1029,8 @@
                                             viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
-                                                <rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
+                                                <rect fill="#000000" x="4" y="4" width="7" height="7"
+                                                    rx="1.5" />
                                                 <path
                                                     d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z"
                                                     fill="#000000" opacity="0.3" />
@@ -1101,8 +1104,8 @@
                     </span>
                     <div
                         class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/General/Shield-protected.svg-->
@@ -1194,8 +1197,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
@@ -1309,8 +1312,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
@@ -1358,8 +1361,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Shopping/Cart4.svg-->
@@ -1429,8 +1432,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Communication/Group-chat.svg-->
@@ -1478,22 +1481,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Shopping/Credit-card.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
-                                                <rect fill="#000000" opacity="0.3" x="2" y="5" width="20" height="14"
-                                                    rx="2" />
+                                                <rect fill="#000000" opacity="0.3" x="2" y="5" width="20"
+                                                    height="14" rx="2" />
                                                 <rect fill="#000000" x="2" y="8" width="20" height="3" />
-                                                <rect fill="#000000" opacity="0.3" x="16" y="14" width="4" height="2"
-                                                    rx="1" />
+                                                <rect fill="#000000" opacity="0.3" x="16" y="14" width="4"
+                                                    height="2" rx="1" />
                                             </g>
                                         </svg>
                                     </span>
@@ -1553,16 +1557,17 @@
                     </span>
                     <div
                         class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-down-accordion">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Shopping/Box2.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
                                                 <path
                                                     d="M4,9.67471899 L10.880262,13.6470401 C10.9543486,13.689814 11.0320333,13.7207107 11.1111111,13.740321 L11.1111111,21.4444444 L4.49070127,17.526473 C4.18655139,17.3464765 4,17.0193034 4,16.6658832 L4,9.67471899 Z M20,9.56911707 L20,16.6658832 C20,17.0193034 19.8134486,17.3464765 19.5092987,17.526473 L12.8888889,21.4444444 L12.8888889,13.6728275 C12.9050191,13.6647696 12.9210067,13.6561758 12.9368301,13.6470401 L20,9.56911707 Z"
@@ -1622,16 +1627,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start"
-                            class="menu-item menu-lg-dropdown">
+                        <div data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+                            data-kt-menu-placement="right-start" class="menu-item menu-lg-dropdown">
                             <span class="menu-link py-3">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Home/Cupboard.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
                                                 <path
                                                     d="M3.5,3 L9.5,3 C10.3284271,3 11,3.67157288 11,4.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L3.5,20 C2.67157288,20 2,19.3284271 2,18.5 L2,4.5 C2,3.67157288 2.67157288,3 3.5,3 Z M9,9 C8.44771525,9 8,9.44771525 8,10 L8,12 C8,12.5522847 8.44771525,13 9,13 C9.55228475,13 10,12.5522847 10,12 L10,10 C10,9.44771525 9.55228475,9 9,9 Z"
@@ -1700,9 +1706,10 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-arrange.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
                                                 <path
                                                     d="M5.5,4 L9.5,4 C10.3284271,4 11,4.67157288 11,5.5 L11,6.5 C11,7.32842712 10.3284271,8 9.5,8 L5.5,8 C4.67157288,8 4,7.32842712 4,6.5 L4,5.5 C4,4.67157288 4.67157288,4 5.5,4 Z M14.5,16 L18.5,16 C19.3284271,16 20,16.6715729 20,17.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,17.5 C13,16.6715729 13.6715729,16 14.5,16 Z"
@@ -1724,16 +1731,18 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Home/Library.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24" />
                                                 <path
                                                     d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
                                                     fill="#000000" />
                                                 <rect fill="#000000" opacity="0.3"
                                                     transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-                                                    x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                                                    x="16.3255682" y="2.94551858" width="3" height="18"
+                                                    rx="1" />
                                             </g>
                                         </svg>
                                     </span>
@@ -1775,15 +1784,18 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Files/File.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <path
                                                     d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z"
                                                     fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <rect fill="#000000" x="6" y="11" width="9" height="2" rx="1" />
-                                                <rect fill="#000000" x="6" y="15" width="5" height="2" rx="1" />
+                                                <rect fill="#000000" x="6" y="11" width="9" height="2"
+                                                    rx="1" />
+                                                <rect fill="#000000" x="6" y="15" width="5" height="2"
+                                                    rx="1" />
                                             </g>
                                         </svg>
                                     </span>
@@ -1963,7 +1975,8 @@
                     data-kt-menu-trigger="auto" data-kt-menu-overflow="false" data-kt-menu-permanent="true"
                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
                     <!--begin::Search toggle-->
-                    <div class="d-flex align-items-center" data-kt-search-element="toggle" id="kt_header_search_toggle">
+                    <div class="d-flex align-items-center" data-kt-search-element="toggle"
+                        id="kt_header_search_toggle">
                         <div class="btn btn-icon btn-active-light-primary">
                             <!--begin::Svg Icon | path: icons/duotone/General/Search.svg-->
                             <span class="svg-icon svg-icon-1">
@@ -1990,13 +2003,15 @@
                         <!--begin::Wrapper-->
                         <div data-kt-search-element="wrapper">
                             <!--begin::Form-->
-                            <form data-kt-search-element="form" class="w-100 position-relative mb-3" autocomplete="off">
+                            <form data-kt-search-element="form" class="w-100 position-relative mb-3"
+                                autocomplete="off">
                                 <!--begin::Icon-->
                                 <!--begin::Svg Icon | path: icons/duotone/General/Search.svg-->
                                 <span
                                     class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 translate-middle-y ms-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <rect x="0" y="0" width="24" height="24" />
                                             <path
@@ -2011,8 +2026,8 @@
                                 <!--end::Svg Icon-->
                                 <!--end::Icon-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-flush ps-10" name="search" value=""
-                                    placeholder="Search..." data-kt-search-element="input" />
+                                <input type="text" class="form-control form-control-flush ps-10" name="search"
+                                    value="" placeholder="Search..." data-kt-search-element="input" />
                                 <!--end::Input-->
                                 <!--begin::Spinner-->
                                 <span class="position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-1"
@@ -2027,11 +2042,12 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Close.svg-->
                                     <span class="svg-icon svg-icon-2 svg-icon-lg-1 me-0">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
                                             <g transform="translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)"
                                                 fill="#000000">
-                                                <rect fill="#000000" x="0" y="7" width="16" height="2" rx="1" />
+                                                <rect fill="#000000" x="0" y="7" width="16" height="2"
+                                                    rx="1" />
                                                 <rect fill="#000000" opacity="0.5"
                                                     transform="translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000)"
                                                     x="0" y="7" width="16" height="2" rx="1" />
@@ -2070,9 +2086,10 @@
                                         <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
                                         <span class="svg-icon svg-icon-2">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none"
+                                                    fill-rule="evenodd">
                                                     <polygon points="0 0 24 0 24 24 0 24" />
                                                     <path
                                                         d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
@@ -2096,11 +2113,13 @@
                                 <!--begin::Items-->
                                 <div class="scroll-y mh-200px mh-lg-325px">
                                     <!--begin::Category title-->
-                                    <h3 class="fs-5 text-muted m-0 pb-5" data-kt-search-element="category-title">Users
+                                    <h3 class="fs-5 text-muted m-0 pb-5" data-kt-search-element="category-title">
+                                        Users
                                     </h3>
                                     <!--end::Category title-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <img src="assets/media/avatars/150-1.jpg" alt="" />
@@ -2116,7 +2135,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <img src="assets/media/avatars/150-3.jpg" alt="" />
@@ -2132,7 +2152,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <img src="assets/media/avatars/150-8.jpg" alt="" />
@@ -2148,7 +2169,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <img src="assets/media/avatars/150-11.jpg" alt="" />
@@ -2164,7 +2186,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <img src="assets/media/avatars/150-12.jpg" alt="" />
@@ -2180,16 +2203,19 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Category title-->
-                                    <h3 class="fs-5 text-muted m-0 pt-5 pb-5" data-kt-search-element="category-title">
+                                    <h3 class="fs-5 text-muted m-0 pt-5 pb-5"
+                                        data-kt-search-element="category-title">
                                         Customers</h3>
                                     <!--end::Category title-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
                                                 <img class="w-20px h-20px"
-                                                    src="assets/media/svg/brand-logos/volicity-9.svg" alt="" />
+                                                    src="assets/media/svg/brand-logos/volicity-9.svg"
+                                                    alt="" />
                                             </span>
                                         </div>
                                         <!--end::Symbol-->
@@ -2204,12 +2230,13 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
-                                                <img class="w-20px h-20px" src="assets/media/svg/brand-logos/tvit.svg"
-                                                    alt="" />
+                                                <img class="w-20px h-20px"
+                                                    src="assets/media/svg/brand-logos/tvit.svg" alt="" />
                                             </span>
                                         </div>
                                         <!--end::Symbol-->
@@ -2224,12 +2251,13 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
-                                                <img class="w-20px h-20px" src="assets/media/svg/misc/infography.svg"
-                                                    alt="" />
+                                                <img class="w-20px h-20px"
+                                                    src="assets/media/svg/misc/infography.svg" alt="" />
                                             </span>
                                         </div>
                                         <!--end::Symbol-->
@@ -2243,12 +2271,13 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
-                                                <img class="w-20px h-20px" src="assets/media/svg/brand-logos/leaf.svg"
-                                                    alt="" />
+                                                <img class="w-20px h-20px"
+                                                    src="assets/media/svg/brand-logos/leaf.svg" alt="" />
                                             </span>
                                         </div>
                                         <!--end::Symbol-->
@@ -2262,12 +2291,13 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
-                                                <img class="w-20px h-20px" src="assets/media/svg/brand-logos/tower.svg"
-                                                    alt="" />
+                                                <img class="w-20px h-20px"
+                                                    src="assets/media/svg/brand-logos/tower.svg" alt="" />
                                             </span>
                                         </div>
                                         <!--end::Symbol-->
@@ -2282,36 +2312,38 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Category title-->
-                                    <h3 class="fs-5 text-muted m-0 pt-5 pb-5" data-kt-search-element="category-title">
+                                    <h3 class="fs-5 text-muted m-0 pt-5 pb-5"
+                                        data-kt-search-element="category-title">
                                         Projects</h3>
                                     <!--end::Category title-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Communication/Clipboard-list.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z"
                                                             fill="#000000" opacity="0.3" />
                                                         <path
                                                             d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z"
                                                             fill="#000000" />
-                                                        <rect fill="#000000" opacity="0.3" x="10" y="9" width="7"
-                                                            height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.3" x="7" y="9" width="2"
-                                                            height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.3" x="7" y="13" width="2"
-                                                            height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.3" x="10" y="13" width="7"
-                                                            height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.3" x="7" y="17" width="2"
-                                                            height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.3" x="10" y="17" width="7"
-                                                            height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="10" y="9"
+                                                            width="7" height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="7" y="9"
+                                                            width="2" height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="7" y="13"
+                                                            width="2" height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="10" y="13"
+                                                            width="7" height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="7" y="17"
+                                                            width="2" height="2" rx="1" />
+                                                        <rect fill="#000000" opacity="0.3" x="10" y="17"
+                                                            width="7" height="2" rx="1" />
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
@@ -2328,7 +2360,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
@@ -2340,14 +2373,14 @@
                                                         <g stroke="none" stroke-width="1" fill="none"
                                                             fill-rule="evenodd">
                                                             <rect x="0" y="0" width="24" height="24" />
-                                                            <rect fill="#000000" opacity="0.3" x="13" y="4" width="3"
-                                                                height="16" rx="1.5" />
-                                                            <rect fill="#000000" x="8" y="9" width="3" height="11"
-                                                                rx="1.5" />
-                                                            <rect fill="#000000" x="18" y="11" width="3" height="9"
-                                                                rx="1.5" />
-                                                            <rect fill="#000000" x="3" y="13" width="3" height="7"
-                                                                rx="1.5" />
+                                                            <rect fill="#000000" opacity="0.3" x="13" y="4"
+                                                                width="3" height="16" rx="1.5" />
+                                                            <rect fill="#000000" x="8" y="9" width="3"
+                                                                height="11" rx="1.5" />
+                                                            <rect fill="#000000" x="18" y="11" width="3"
+                                                                height="9" rx="1.5" />
+                                                            <rect fill="#000000" x="3" y="13" width="3"
+                                                                height="7" rx="1.5" />
                                                         </g>
                                                     </svg>
                                                 </span>
@@ -2365,14 +2398,15 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Communication/Group-chat.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M16,15.6315789 L16,12 C16,10.3431458 14.6568542,9 13,9 L6.16183229,9 L6.16183229,5.52631579 C6.16183229,4.13107011 7.29290239,3 8.68814808,3 L20.4776218,3 C21.8728674,3 23.0039375,4.13107011 23.0039375,5.52631579 L23.0039375,13.1052632 L23.0206157,17.786793 C23.0215995,18.0629336 22.7985408,18.2875874 22.5224001,18.2885711 C22.3891754,18.2890457 22.2612702,18.2363324 22.1670655,18.1421277 L19.6565168,15.6315789 L16,15.6315789 Z"
                                                             fill="#000000" />
@@ -2395,7 +2429,8 @@
                                     </a>
                                     <!--end::Item-->
                                     <!--begin::Item-->
-                                    <a href="#" class="d-flex text-dark text-hover-primary align-items-center mb-5">
+                                    <a href="#"
+                                        class="d-flex text-dark text-hover-primary align-items-center mb-5">
                                         <!--begin::Symbol-->
                                         <div class="symbol symbol-40px me-4">
                                             <span class="symbol-label bg-light">
@@ -2409,7 +2444,8 @@
                                                             <polygon points="0 0 24 0 24 24 0 24" />
                                                             <path
                                                                 d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
-                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                opacity="0.3" />
                                                             <path
                                                                 d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
                                                                 fill="#000000" fill-rule="nonzero" />
@@ -2452,8 +2488,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Monitor.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <g opacity="0.25">
                                                             <path
                                                                 d="M2 15C2 16.6569 3.34315 18 5 18L19 18C20.6569 18 22 16.6569 22 15V5C22 3.34315 20.6569 2 19 2H5C3.34315 2 2 3.34315 2 5V15Z"
@@ -2476,7 +2512,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">BoomApp
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">BoomApp
                                                 by Keenthemes</a>
                                             <span class="fs-7 text-muted fw-bold">#45789</span>
                                         </div>
@@ -2490,8 +2527,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Scatter-Up.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <g opacity="0.25">
                                                             <path
                                                                 d="M20 13C20.5523 13 21 12.5523 21 12C21 11.4477 20.5523 11 20 11C19.4477 11 19 11.4477 19 12C19 12.5523 19.4477 13 20 13Z"
@@ -2529,7 +2566,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">"Kept
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">"Kept
                                                 API Project Meeting</a>
                                             <span class="fs-7 text-muted fw-bold">#84050</span>
                                         </div>
@@ -2543,9 +2581,10 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
-                                                        <path opacity="0.25" fill-rule="evenodd" clip-rule="evenodd"
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path opacity="0.25" fill-rule="evenodd"
+                                                            clip-rule="evenodd"
                                                             d="M11 4.25769C11 3.07501 9.9663 2.13515 8.84397 2.50814C4.86766 3.82961 2 7.57987 2 11.9999C2 13.6101 2.38057 15.1314 3.05667 16.4788C3.58731 17.5363 4.98303 17.6028 5.81966 16.7662L5.91302 16.6728C6.60358 15.9823 6.65613 14.9011 6.3341 13.9791C6.11766 13.3594 6 12.6934 6 11.9999C6 9.62064 7.38488 7.56483 9.39252 6.59458C10.2721 6.16952 11 5.36732 11 4.39046V4.25769ZM16.4787 20.9434C17.5362 20.4127 17.6027 19.017 16.7661 18.1804L16.6727 18.087C15.9822 17.3964 14.901 17.3439 13.979 17.6659C13.3594 17.8823 12.6934 17.9999 12 17.9999C11.3066 17.9999 10.6406 17.8823 10.021 17.6659C9.09899 17.3439 8.01784 17.3964 7.3273 18.087L7.23392 18.1804C6.39728 19.017 6.4638 20.4127 7.52133 20.9434C8.86866 21.6194 10.3899 21.9999 12 21.9999C13.6101 21.9999 15.1313 21.6194 16.4787 20.9434Z"
                                                             fill="#12131A" />
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -2559,7 +2598,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">"KPI
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">"KPI
                                                 Monitoring App Launch</a>
                                             <span class="fs-7 text-muted fw-bold">#84250</span>
                                         </div>
@@ -2573,8 +2613,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Stacked-Area-Down.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <path opacity="0.25"
                                                             d="M2 13.8857C2 13.1875 2.69737 12.7042 3.35112 12.9493L8.14677 14.7477C8.64016 14.9327 9.17357 14.9845 9.69334 14.8979L14.6354 14.0742C14.8087 14.0453 14.9865 14.0626 15.151 14.1243L21.3511 16.4493C21.7414 16.5957 22 16.9688 22 17.3857V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V13.8857Z"
                                                             fill="#12131A" />
@@ -2589,7 +2629,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Project
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">Project
                                                 Reference FAQ</a>
                                             <span class="fs-7 text-muted fw-bold">#67945</span>
                                         </div>
@@ -2603,8 +2644,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Envelope.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <path opacity="0.25"
                                                             d="M1 6C1 4.34315 2.34315 3 4 3H20C21.6569 3 23 4.34315 23 6V18C23 19.6569 21.6569 21 20 21H4C2.34315 21 1 19.6569 1 18V6Z"
                                                             fill="#191213" />
@@ -2619,7 +2660,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">"FitPro
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">"FitPro
                                                 App Development</a>
                                             <span class="fs-7 text-muted fw-bold">#84250</span>
                                         </div>
@@ -2633,8 +2675,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Bank.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <path opacity="0.25"
                                                             d="M4 10H8V17H10V10H14V17H16V10H20V17C21.1046 17 22 17.8954 22 19V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V19C2 17.8954 2.89543 17 4 17V10Z"
                                                             fill="#12131A" />
@@ -2649,7 +2691,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Shopix
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">Shopix
                                                 Mobile App</a>
                                             <span class="fs-7 text-muted fw-bold">#45690</span>
                                         </div>
@@ -2663,8 +2706,8 @@
                                             <span class="symbol-label bg-light">
                                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Line-03-Up.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
                                                         <path opacity="0.25"
                                                             d="M1 5C1 3.89543 1.89543 3 3 3H21C22.1046 3 23 3.89543 23 5V19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V5Z"
                                                             fill="#12131A" />
@@ -2679,7 +2722,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="d-flex flex-column">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">"Landing
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">"Landing
                                                 UI Design" Launch</a>
                                             <span class="fs-7 text-muted fw-bold">#24005</span>
                                         </div>
@@ -2762,7 +2806,8 @@
                                     <!--end::Option-->
                                     <!--begin::Option-->
                                     <label>
-                                        <input type="radio" class="btn-check" name="type" value="projects" />
+                                        <input type="radio" class="btn-check" name="type"
+                                            value="projects" />
                                         <span
                                             class="btn btn-sm btn-color-muted btn-active btn-active-primary px-4">Projects</span>
                                     </label>
@@ -2774,15 +2819,15 @@
                             <!--begin::Input group-->
                             <div class="mb-5">
                                 <input type="text" name="assignedto"
-                                    class="form-control form-control-sm form-control-solid" placeholder="Assigned to"
-                                    value="" />
+                                    class="form-control form-control-sm form-control-solid"
+                                    placeholder="Assigned to" value="" />
                             </div>
                             <!--end::Input group-->
                             <!--begin::Input group-->
                             <div class="mb-5">
                                 <input type="text" name="collaborators"
-                                    class="form-control form-control-sm form-control-solid" placeholder="Collaborators"
-                                    value="" />
+                                    class="form-control form-control-sm form-control-solid"
+                                    placeholder="Collaborators" value="" />
                             </div>
                             <!--end::Input group-->
                             <!--begin::Input group-->
@@ -2799,7 +2844,8 @@
                                     <!--end::Option-->
                                     <!--begin::Option-->
                                     <label>
-                                        <input type="radio" class="btn-check" name="attachment" value="any" />
+                                        <input type="radio" class="btn-check" name="attachment"
+                                            value="any" />
                                         <span
                                             class="btn btn-sm btn-color-muted btn-active btn-active-primary px-4">Any</span>
                                     </label>
@@ -2811,7 +2857,8 @@
                             <!--begin::Input group-->
                             <div class="mb-5">
                                 <select name="timezone" aria-label="Select a Timezone" data-control="select2"
-                                    data-placeholder="date_period" class="form-select form-select-sm form-select-solid">
+                                    data-placeholder="date_period"
+                                    class="form-select form-select-sm form-select-solid">
                                     <option value="next">Within the next</option>
                                     <option value="last">Within the last</option>
                                     <option value="between">Between</option>
@@ -2830,8 +2877,9 @@
                                 <!--end::Col-->
                                 <!--begin::Col-->
                                 <div class="col-6">
-                                    <select name="date_typer" aria-label="Select a Timezone" data-control="select2"
-                                        data-placeholder="Period" class="form-select form-select-sm form-select-solid">
+                                    <select name="date_typer" aria-label="Select a Timezone"
+                                        data-control="select2" data-placeholder="Period"
+                                        class="form-select form-select-sm form-select-solid">
                                         <option value="days">Days</option>
                                         <option value="weeks">Weeks</option>
                                         <option value="months">Months</option>
@@ -2861,8 +2909,10 @@
                             <div class="pb-4 border-bottom">
                                 <label
                                     class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
-                                    <span class="form-check-label text-gray-700 fs-6 fw-bold ms-0 me-2">Projects</span>
-                                    <input class="form-check-input" type="checkbox" value="1" checked="checked" />
+                                    <span
+                                        class="form-check-label text-gray-700 fs-6 fw-bold ms-0 me-2">Projects</span>
+                                    <input class="form-check-input" type="checkbox" value="1"
+                                        checked="checked" />
                                 </label>
                             </div>
                             <!--end::Input group-->
@@ -2871,7 +2921,8 @@
                                 <label
                                     class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
                                     <span class="form-check-label text-gray-700 fs-6 fw-bold ms-0 me-2">Targets</span>
-                                    <input class="form-check-input" type="checkbox" value="1" checked="checked" />
+                                    <input class="form-check-input" type="checkbox" value="1"
+                                        checked="checked" />
                                 </label>
                             </div>
                             <!--end::Input group-->
@@ -2889,8 +2940,10 @@
                             <div class="py-4 border-bottom">
                                 <label
                                     class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
-                                    <span class="form-check-label text-gray-700 fs-6 fw-bold ms-0 me-2">Referrals</span>
-                                    <input class="form-check-input" type="checkbox" value="1" checked="checked" />
+                                    <span
+                                        class="form-check-label text-gray-700 fs-6 fw-bold ms-0 me-2">Referrals</span>
+                                    <input class="form-check-input" type="checkbox" value="1"
+                                        checked="checked" />
                                 </label>
                             </div>
                             <!--end::Input group-->
@@ -2927,14 +2980,17 @@
                     id="kt_activities_toggle">
                     <!--begin::Svg Icon | path: icons/duotone/Media/Equalizer.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24" />
-                                <rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5" />
+                                <rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16"
+                                    rx="1.5" />
                                 <rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5" />
-                                <rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5" />
-                                <rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5" />
+                                <rect fill="#000000" x="18" y="11" width="3" height="9"
+                                    rx="1.5" />
+                                <rect fill="#000000" x="3" y="13" width="3" height="7"
+                                    rx="1.5" />
                             </g>
                         </svg>
                     </span>
@@ -2951,8 +3007,8 @@
                     data-kt-menu-flip="bottom">
                     <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24" />
                                 <rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
@@ -2985,8 +3041,9 @@
                                 class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end border-bottom">
                                 <!--begin::Svg Icon | path: icons/duotone/Shopping/Euro.svg-->
                                 <span class="svg-icon svg-icon-3x svg-icon-success mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <rect x="0" y="0" width="24" height="24" />
                                             <path
@@ -3032,8 +3089,9 @@
                                 class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end">
                                 <!--begin::Svg Icon | path: icons/duotone/Shopping/Box2.svg-->
                                 <span class="svg-icon svg-icon-3x svg-icon-success mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <rect x="0" y="0" width="24" height="24" />
                                             <path
@@ -3110,8 +3168,8 @@
                     id="kt_drawer_chat_toggle">
                     <!--begin::Svg Icon | path: icons/duotone/Communication/Group-chat.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                            version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                            viewBox="0 0 24 24" version="1.1">
                             <path
                                 d="M16,15.6315789 L16,12 C16,10.3431458 14.6568542,9 13,9 L6.16183229,9 L6.16183229,5.52631579 C6.16183229,4.13107011 7.29290239,3 8.68814808,3 L20.4776218,3 C21.8728674,3 23.0039375,4.13107011 23.0039375,5.52631579 L23.0039375,13.1052632 L23.0206157,17.786793 C23.0215995,18.0629336 22.7985408,18.2875874 22.5224001,18.2885711 C22.3891754,18.2890457 22.2612702,18.2363324 22.1670655,18.1421277 L19.6565168,15.6315789 L16,15.6315789 Z"
                                 fill="#000000" />
@@ -3135,8 +3193,8 @@
                     data-kt-menu-flip="bottom">
                     <!--begin::Svg Icon | path: icons/duotone/Code/Compiling.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                            version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                            viewBox="0 0 24 24" version="1.1">
                             <path
                                 d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
                                 fill="#000000" opacity="0.3" />
@@ -3160,16 +3218,16 @@
                         <!--begin::Tabs-->
                         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
                             <li class="nav-item">
-                                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab"
-                                    href="#kt_topbar_notifications_1">Alerts</a>
+                                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4"
+                                    data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active"
                                     data-bs-toggle="tab" href="#kt_topbar_notifications_2">Updates</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab"
-                                    href="#kt_topbar_notifications_3">Logs</a>
+                                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4"
+                                    data-bs-toggle="tab" href="#kt_topbar_notifications_3">Logs</a>
                             </li>
                         </ul>
                         <!--end::Tabs-->
@@ -3190,8 +3248,8 @@
                                             <span class="symbol-label bg-light-primary">
                                                 <!--begin::Svg Icon | path: icons/duotone/Clothes/Crown.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M11.2600599,5.81393408 L2,16 L22,16 L12.7399401,5.81393408 C12.3684331,5.40527646 11.7359848,5.37515988 11.3273272,5.7466668 C11.3038503,5.7680094 11.2814025,5.79045722 11.2600599,5.81393408 Z"
                                                             fill="#000000" opacity="0.3" />
@@ -3206,7 +3264,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
                                                 Alice</a>
                                             <div class="text-gray-400 fs-7">Phase 1
                                                 development</div>
@@ -3228,14 +3287,15 @@
                                             <span class="symbol-label bg-light-danger">
                                                 <!--begin::Svg Icon | path: icons/duotone/Code/Warning-2.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-danger">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M11.1669899,4.49941818 L2.82535718,19.5143571 C2.557144,19.9971408 2.7310878,20.6059441 3.21387153,20.8741573 C3.36242953,20.9566895 3.52957021,21 3.69951446,21 L21.2169432,21 C21.7692279,21 22.2169432,20.5522847 22.2169432,20 C22.2169432,19.8159952 22.1661743,19.6355579 22.070225,19.47855 L12.894429,4.4636111 C12.6064401,3.99235656 11.9909517,3.84379039 11.5196972,4.13177928 C11.3723594,4.22181902 11.2508468,4.34847583 11.1669899,4.49941818 Z"
                                                             fill="#000000" opacity="0.3" />
-                                                        <rect fill="#000000" x="11" y="9" width="2" height="7" rx="1" />
-                                                        <rect fill="#000000" x="11" y="17" width="2" height="2"
-                                                            rx="1" />
+                                                        <rect fill="#000000" x="11" y="9" width="2"
+                                                            height="7" rx="1" />
+                                                        <rect fill="#000000" x="11" y="17" width="2"
+                                                            height="2" rx="1" />
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
@@ -3244,7 +3304,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">HR
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">HR
                                                 Confidential</a>
                                             <div class="text-gray-400 fs-7">Confidential staff
                                                 documents</div>
@@ -3266,8 +3327,8 @@
                                             <span class="symbol-label bg-light-warning">
                                                 <!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-warning">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
                                                             fill="#000000" fill-rule="nonzero" opacity="0.3" />
@@ -3282,7 +3343,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Company
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Company
                                                 HR</a>
                                             <div class="text-gray-400 fs-7">Corporeate staff
                                                 profiles</div>
@@ -3322,7 +3384,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
                                                 Redux</a>
                                             <div class="text-gray-400 fs-7">New frontend admin
                                                 theme</div>
@@ -3344,8 +3407,8 @@
                                             <span class="symbol-label bg-light-primary">
                                                 <!--begin::Svg Icon | path: icons/duotone/Communication/Flag.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M3.5,3 L5,3 L5,19.5 C5,20.3284271 4.32842712,21 3.5,21 L3.5,21 C2.67157288,21 2,20.3284271 2,19.5 L2,4.5 C2,3.67157288 2.67157288,3 3.5,3 Z"
                                                             fill="#000000" />
@@ -3360,7 +3423,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
                                                 Breafing</a>
                                             <div class="text-gray-400 fs-7">Product launch
                                                 status update</div>
@@ -3382,8 +3446,8 @@
                                             <span class="symbol-label bg-light-info">
                                                 <!--begin::Svg Icon | path: icons/duotone/Design/Image.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-info">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none"
                                                             fill-rule="evenodd">
                                                             <polygon points="0 0 24 0 24 24 0 24" />
@@ -3399,7 +3463,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Banner
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Banner
                                                 Assets</a>
                                             <div class="text-gray-400 fs-7">Collection of
                                                 banner images</div>
@@ -3421,8 +3486,8 @@
                                             <span class="symbol-label bg-light-warning">
                                                 <!--begin::Svg Icon | path: icons/duotone/Design/Component.svg-->
                                                 <span class="svg-icon svg-icon-2 svg-icon-warning">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <path
                                                             d="M12.7442084,3.27882877 L19.2473374,6.9949025 C19.7146999,7.26196679 20.003129,7.75898194 20.003129,8.29726722 L20.003129,15.7027328 C20.003129,16.2410181 19.7146999,16.7380332 19.2473374,17.0050975 L12.7442084,20.7211712 C12.2830594,20.9846849 11.7169406,20.9846849 11.2557916,20.7211712 L4.75266256,17.0050975 C4.28530007,16.7380332 3.99687097,16.2410181 3.99687097,15.7027328 L3.99687097,8.29726722 C3.99687097,7.75898194 4.28530007,7.26196679 4.75266256,6.9949025 L11.2557916,3.27882877 C11.7169406,3.01531506 12.2830594,3.01531506 12.7442084,3.27882877 Z M12,14.5 C13.3807119,14.5 14.5,13.3807119 14.5,12 C14.5,10.6192881 13.3807119,9.5 12,9.5 C10.6192881,9.5 9.5,10.6192881 9.5,12 C9.5,13.3807119 10.6192881,14.5 12,14.5 Z"
                                                             fill="#000000" />
@@ -3434,7 +3499,8 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">Icon
+                                            <a href="#"
+                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">Icon
                                                 Assets</a>
                                             <div class="text-gray-400 fs-7">Collection of SVG
                                                 icons</div>
@@ -3457,13 +3523,15 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
                                     <span class="svg-icon svg-icon-5">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <rect fill="#000000" opacity="0.5"
                                                     transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)"
-                                                    x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                    x="7.5" y="7.5" width="2" height="9"
+                                                    rx="1" />
                                                 <path
                                                     d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z"
                                                     fill="#000000" fill-rule="nonzero"
@@ -3493,7 +3561,8 @@
                                     <!--end::Text-->
                                     <!--begin::Action-->
                                     <div class="text-center mt-5 mb-9">
-                                        <a href="#" class="btn btn-sm btn-primary px-6" data-bs-toggle="modal"
+                                        <a href="#" class="btn btn-sm btn-primary px-6"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#kt_modal_upgrade_plan">Upgrade</a>
                                     </div>
                                     <!--end::Action-->
@@ -3712,7 +3781,8 @@
                                             ERR</span>
                                         <!--end::Code-->
                                         <!--begin::Title-->
-                                        <a href="#" class="text-gray-800 text-hover-primary fw-bold">Withdrawal
+                                        <a href="#"
+                                            class="text-gray-800 text-hover-primary fw-bold">Withdrawal
                                             process</a>
                                         <!--end::Title-->
                                     </div>
@@ -3751,13 +3821,15 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
                                     <span class="svg-icon svg-icon-5">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <rect fill="#000000" opacity="0.5"
                                                     transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)"
-                                                    x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                    x="7.5" y="7.5" width="2" height="9"
+                                                    rx="1" />
                                                 <path
                                                     d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z"
                                                     fill="#000000" fill-rule="nonzero"
@@ -3792,16 +3864,24 @@
                         <div class="menu-content d-flex align-items-center px-3">
                             <!--begin::Avatar-->
                             <div class="symbol symbol-50px me-5">
-                                <img alt="Logo" src="assets/media/avatars/150-2.jpg" />
+                                @if (Auth::user()->gender == 'Pria')
+                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-1.png') }}"
+                                        class="rounded me-2 thumb-sm" alt="profile-user"
+                                        style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
+                                @else
+                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-12.jpg') }}"
+                                        class="rounded-circle me-2 thumb-sm" alt="profile-user"
+                                        style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
+                                @endif
                             </div>
                             <!--end::Avatar-->
                             <!--begin::Username-->
                             <div class="d-flex flex-column">
-                                <div class="fw-bolder d-flex align-items-center fs-5">Max
-                                    Smith
+                                <div class="fw-bolder d-flex align-items-center fs-5">{{ Auth::user()->name }}
                                     <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Pro</span>
                                 </div>
-                                <a href="#" class="fw-bold text-muted text-hover-primary fs-7">max@kt.com</a>
+                                <a href="#"
+                                    class="fw-bold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
                             </div>
                             <!--end::Username-->
                         </div>
@@ -3812,144 +3892,17 @@
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="account/overview.html" class="menu-link px-5">My
+                        <a href="{{ route('profile.edit', Auth::user()->id) }}" class="menu-link px-5">My
                             Profile</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="pages/projects/list.html" class="menu-link px-5">
-                            <span class="menu-text">My Projects</span>
-                            <span class="menu-badge">
-                                <span class="badge badge-light-danger badge-circle fw-bolder fs-7">3</span>
-                            </span>
-                        </a>
-                    </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu item-->
-                    <div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start"
-                        data-kt-menu-flip="bottom">
-                        <a href="#" class="menu-link px-5">
-                            <span class="menu-title">My Subscription</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <!--begin::Menu sub-->
-                        <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/referrals.html" class="menu-link px-5">Referrals</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/billing.html" class="menu-link px-5">Billing</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/statements.html" class="menu-link px-5">Payments</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/statements.html" class="menu-link d-flex flex-stack px-5">Statements
-                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
-                                        title="View your statements"></i></a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu separator-->
-                            <div class="separator my-2"></div>
-                            <!--end::Menu separator-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <div class="menu-content px-3">
-                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                        <input class="form-check-input w-30px h-20px" type="checkbox" value="1"
-                                            checked="checked" name="notifications" />
-                                        <span class="form-check-label text-muted fs-7">Notifications</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <!--end::Menu item-->
-                        </div>
-                        <!--end::Menu sub-->
-                    </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu item-->
-                    <div class="menu-item px-5">
-                        <a href="account/statements.html" class="menu-link px-5">My
-                            Statements</a>
-                    </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu separator-->
-                    <div class="separator my-2"></div>
-                    <!--end::Menu separator-->
-                    <!--begin::Menu item-->
-                    <div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start"
-                        data-kt-menu-flip="bottom">
-                        <a href="#" class="menu-link px-5">
-                            <span class="menu-title position-relative">Language
-                                <span
-                                    class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">English
-                                    <img class="w-15px h-15px rounded-1 ms-2" src="assets/media/flags/united-states.svg"
-                                        alt="metronic" /></span></span>
-                        </a>
-                        <!--begin::Menu sub-->
-                        <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/settings.html" class="menu-link d-flex px-5 active">
-                                    <span class="symbol symbol-20px me-4">
-                                        <img class="rounded-1" src="assets/media/flags/united-states.svg"
-                                            alt="metronic" />
-                                    </span>English</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/settings.html" class="menu-link d-flex px-5">
-                                    <span class="symbol symbol-20px me-4">
-                                        <img class="rounded-1" src="assets/media/flags/spain.svg" alt="metronic" />
-                                    </span>Spanish</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/settings.html" class="menu-link d-flex px-5">
-                                    <span class="symbol symbol-20px me-4">
-                                        <img class="rounded-1" src="assets/media/flags/germany.svg" alt="metronic" />
-                                    </span>German</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/settings.html" class="menu-link d-flex px-5">
-                                    <span class="symbol symbol-20px me-4">
-                                        <img class="rounded-1" src="assets/media/flags/japan.svg" alt="metronic" />
-                                    </span>Japanese</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="account/settings.html" class="menu-link d-flex px-5">
-                                    <span class="symbol symbol-20px me-4">
-                                        <img class="rounded-1" src="assets/media/flags/france.svg" alt="metronic" />
-                                    </span>French</a>
-                            </div>
-                            <!--end::Menu item-->
-                        </div>
-                        <!--end::Menu sub-->
-                    </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu item-->
-                    <div class="menu-item px-5 my-1">
-                        <a href="account/settings.html" class="menu-link px-5">Account
-                            Settings</a>
-                    </div>
-                    <!--end::Menu item-->
-                    <!--begin::Menu item-->
-                    <div class="menu-item px-5">
-                        <a href="authentication/flows/basic/sign-in.html" class="menu-link px-5">Sign Out</a>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            class="menu-link px-5">Sign Out</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </div>
                     <!--end::Menu item-->
                 </div>
@@ -3962,8 +3915,8 @@
                 <div class="btn btn-icon btn-active-light-primary" id="kt_header_menu_mobile_toggle">
                     <!--begin::Svg Icon | path: icons/duotone/Text/Toggle-Right.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24" />
                                 <path fill-rule="evenodd" clip-rule="evenodd"

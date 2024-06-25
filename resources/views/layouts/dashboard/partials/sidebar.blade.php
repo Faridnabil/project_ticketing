@@ -29,13 +29,12 @@
                     <span class="menu-title">Dashboard</span>
                 </a>
             </div>
+            @can('View User Management')
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-2">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
                 </div>
             </div>
-
-            {{-- @can('View User Management') --}}
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
                     <span class="menu-icon">
@@ -86,8 +85,9 @@
                     </div>
                 </div>
             </div>
-            {{-- @endcan --}}
+            @endcan
 
+            @can('View Category')
             <div class="menu-item">
                 <a class="menu-link {{ Request::is('category') ? 'active' : '' }}" href="{{ route('category.index') }}">
                     <span class="menu-icon">
@@ -108,6 +108,8 @@
                     <span class="menu-title">Kategori</span>
                 </a>
             </div>
+            @endcan
+            @can('View Priority')
             <div class="menu-item">
                 <a class="menu-link {{ Request::is('priority') ? 'active' : '' }}" href="{{ route('priority.index') }}">
                     <span class="menu-icon">
@@ -128,6 +130,8 @@
                     <span class="menu-title">Prioritas</span>
                 </a>
             </div>
+            @endcan
+            @can('View Status')
             <div class="menu-item">
                 <a class="menu-link {{ Request::is('status') ? 'active' : '' }}" href="{{ route('status.index') }}">
                     <span class="menu-icon">
@@ -148,6 +152,8 @@
                     <span class="menu-title">Status</span>
                 </a>
             </div>
+            @endcan
+            @can('View Ticket')
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-2">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Aplikasi</span>
@@ -173,6 +179,7 @@
                     <span class="menu-title">Tiket</span>
                 </a>
             </div>
+            @endcan
         </div>
         <!--end::Menu-->
     </div>
