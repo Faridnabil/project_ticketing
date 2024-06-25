@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Manager|Project Manager|Vice President|Direksi|Staff'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department|Customer'])->group(function () {
 
     Route::resources([
         '/role'                                     => RoleController::class,
