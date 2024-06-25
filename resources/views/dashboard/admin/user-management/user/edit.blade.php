@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Pengguna | SIAK Dukcapil
+    Ubah Pengguna | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Pengguna</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Ubah Pengguna</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -192,7 +192,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('user.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('user.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form><!--end form-->
                         </div>

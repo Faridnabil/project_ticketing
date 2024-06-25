@@ -69,7 +69,7 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link" href="account/overview.html">
+                        <a class="menu-link" href="{{ route('role.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -77,7 +77,7 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link" href="account/overview.html">
+                        <a class="menu-link" href="{{ route('permission.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
