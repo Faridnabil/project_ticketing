@@ -38,7 +38,7 @@ class Ticket extends Model
         return $this->belongsTo(Priority::class, 'priority_id');
     }
 
-    public function customer()
+    public function customers()
     {
         return $this->belongsTo(User::class, 'customer');
     }

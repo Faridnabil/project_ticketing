@@ -19,7 +19,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'customer', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
             ->get();
 
         return view('dashboard.admin.ticket.index', compact('tickets'));
