@@ -141,15 +141,29 @@ class UsersSeeder extends Seeder
         $user->assignRole($adminRole);
 
         $user = User::factory()->create([
-            'name' => 'Customer',
-            'email' => 'Customer@gmail.com',
+            'name' => 'Customer1',
+            'email' => 'Customer1@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($CustomerRole);
 
         $user = User::factory()->create([
-            'name' => 'Departement',
-            'email' => 'Departement@gmail.com',
+            'name' => 'Customer2',
+            'email' => 'Customer2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($CustomerRole);
+
+        $user = User::factory()->create([
+            'name' => 'Departement1',
+            'email' => 'Departement1@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($DepartmentRole);
+
+        $user = User::factory()->create([
+            'name' => 'Departement2',
+            'email' => 'Departement2@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DepartmentRole);

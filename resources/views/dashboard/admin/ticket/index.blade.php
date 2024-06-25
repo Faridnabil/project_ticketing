@@ -138,6 +138,12 @@
                                         <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td>
+                                            @can('Show Ticket')
+                                                <a href="{{ route('ticket.show', $ticket->id) }}"
+                                                    class="btn btn-success px-6 align-self-center text-nowrap mb-2">
+                                                    Lihat
+                                                </a>
+                                            @endcan
                                             @can('Edit Ticket')
                                                 <a href="{{ route('ticket.edit', $ticket->id) }}"
                                                     class="btn btn-primary px-6 align-self-center text-nowrap mb-2">

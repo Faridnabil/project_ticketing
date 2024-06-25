@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Priority;
@@ -92,7 +93,35 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        return view('dashboard.admin.ticket.show', compact('ticket'));
+        $customers = User::role('Customer')
+            ->get();
+
+        $assignTo = User::role('Department')
+            ->get();
+
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+
+        $statusChangedBy = Auth::user();
+
+        $logs = ActivityLog::where('model_type', Status::class)
+            ->where('model_id', $ticket)
+            ->get();
+
+        return view(
+            'dashboard.admin.ticket.show',
+            compact(
+                'ticket',
+                'logs',
+                'customers',
+                'assignTo',
+                'priorities',
+                'statuses',
+                'categories',
+                'statusChangedBy'
+            )
+        );
     }
 
     /**
@@ -112,6 +141,10 @@ class TicketController extends Controller
 
         $statusChangedBy = Auth::user();
 
+        $logs = ActivityLog::where('model_type', Ticket::class)
+            ->where('model_id', $ticket->id)
+            ->get();
+
         return view(
             'dashboard.admin.ticket.edit',
             compact(
@@ -121,7 +154,8 @@ class TicketController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'statusChangedBy'
+                'statusChangedBy',
+                'logs',
             )
         );
     }
@@ -141,6 +175,7 @@ class TicketController extends Controller
             'category_id' => 'required',
             'description' => 'nullable',
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'reason' => 'required|string|max:255',
         ]);
 
         DB::beginTransaction();

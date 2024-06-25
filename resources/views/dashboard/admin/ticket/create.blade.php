@@ -120,21 +120,22 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
-                                    <input type="date" name="due_date" class="form-control">
+                                    <input type="date" name="due_date"
+                                        class="form-control @error('due_date') is-invalid @enderror" required autofocus>
 
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
 
-                                    @error('priority_id')
+                                    @error('due_date')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-control @error('status_id') is-invalid @enderror"
                                         required autofocus>
@@ -154,8 +155,7 @@
                                         </div>
                                     @enderror
                                 </div>
-
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-control @error('category_id') is-invalid @enderror" required autofocus>
@@ -175,10 +175,11 @@
                                         </div>
                                     @enderror
                                 </div>
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="10"></textarea>
+                                        cols="10" rows="3"></textarea>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -191,19 +192,30 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
-                                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(assets/media/avatars/blank.png)">
-                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url(assets/media/avatars/150-1.jpg);"></div>
-                                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Ganti lampiran">
+                                    <div class="image-input image-input-outline" data-kt-image-input="true"
+                                        style="background-image: url(assets/media/avatars/blank.png)">
+                                        <div class="image-input-wrapper w-125px h-125px"
+                                            style="background-image: url(assets/media/avatars/150-1.jpg);"></div>
+                                        <label
+                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
+                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                            title="Ganti lampiran">
                                             <i class="bi bi-pencil-fill fs-7"></i>
                                             <input type="file" name="attachment" accept=".png, .jpg, .jpeg" />
                                             <input type="hidden" name="attachment" />
                                         </label>
-                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Batalkan lampiran">
+                                        <span
+                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
+                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
+                                            title="Batalkan lampiran">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
-                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Hapus lampiran">
+                                        <span
+                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
+                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
+                                            title="Hapus lampiran">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
                                     </div>

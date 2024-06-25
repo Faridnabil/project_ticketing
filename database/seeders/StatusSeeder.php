@@ -14,22 +14,22 @@ class StatusSeeder extends Seeder
     public function run(): void
     {
         $status = Status::create([
-            'status_name' => 'Open',
+            'status_name' => 'Buka',
             'color' => '#ff0000',
         ]);
 
         $status = Status::create([
-            'status_name' => 'Pending',
+            'status_name' => 'Tertunda',
             'color' => '#ff0000',
         ]);
 
         $status = Status::create([
-            'status_name' => 'Progress',
+            'status_name' => 'Berlangsung',
             'color' => '#ff0000',
         ]);
 
         $status = Status::create([
-            'status_name' => 'Closed',
+            'status_name' => 'Tutup',
             'color' => '#ff0000',
         ]);
     }

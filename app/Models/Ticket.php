@@ -20,8 +20,30 @@ class Ticket extends Model
         'category_id',
         'description',
         'attachment',
-        'status_changed_by_id'
+        'status_changed_by_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($model) {
+            $changes = $model->getDirty();
+            foreach ($changes as $attribute => $newValue) {
+                $oldValue = $model->getOriginal($attribute);
+
+                ActivityLog::create([
+                    'model_type' => get_class($model),
+                    'model_id' => $model->id,
+                    'attribute' => $attribute,
+                    'old_value' => $oldValue,
+                    'new_value' => $newValue,
+                    'reason' => request()->input('reason'), // Ambil reason dari request
+                    'user_id' => auth()->id(),
+                ]);
+            }
+        });
+    }
 
     public function status()
     {
