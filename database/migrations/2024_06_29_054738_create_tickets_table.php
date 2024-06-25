@@ -13,13 +13,15 @@ return new class extends Migration {
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->string('no_tikcet');
             $table->string('title');
-            $table->foreignId('owner')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('assign_to')->nullable()->constrained('users');
+            $table->foreignId('priority_id')->constrained()->cascadeOnDelete();
             $table->string('due_date');
             $table->foreignId('status_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
-            $table->foreignId('priority_id')->constrained()->cascadeOnDelete();
             $table->string('attachment')->nullable();
             $table->foreignId('status_changed_by_id')->nullable()->constrained('users');
             $table->timestamps();

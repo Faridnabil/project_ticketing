@@ -13,4 +13,9 @@ class Priority extends Model
     protected $fillable = [
         'priority_name', 'color'
     ] ;
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class, 'priority_id');
+    }
 }

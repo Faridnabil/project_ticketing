@@ -4,10 +4,11 @@
     <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
         <!--begin::Copyright-->
         <div class="text-dark order-2 order-md-1">
-            <span class="text-muted fw-bold me-1">Copyright © </span>
+            <span class="text-muted fw-bold me-1">Hak Cipta © </span>
             2024
-            <a href="" target="_blank" class="text-gray-800 text-hover-primary">PLN Indonesia Comnets Plus</a>
-            All Right Reserved
+            <a href="" target="_blank" class="text-gray-800 text-hover-primary">
+                Direktorat Jenderal Kependudukan dan Pencatatan Sipil Kementerian Dalam Negeri.
+            </a>
         </div>
         <!--end::Copyright-->
         <!--begin::Menu-->

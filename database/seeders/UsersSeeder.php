@@ -58,7 +58,7 @@ class UsersSeeder extends Seeder
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
         $CustomerRole = Role::create(['name' => 'Customer']);
-        $DepartementRole = Role::create(['name' => 'Departement']);
+        $DepartmentRole = Role::create(['name' => 'Department']);
 
         //Admin
         $adminRole->givePermissionTo('View User Management');
@@ -109,29 +109,29 @@ class UsersSeeder extends Seeder
         $CustomerRole->givePermissionTo('Show Ticket');
 
         //Department
-        $DepartementRole->givePermissionTo('View Category');
-        $DepartementRole->givePermissionTo('Create Category');
-        $DepartementRole->givePermissionTo('Edit Category');
-        $DepartementRole->givePermissionTo('Delete Category');
-        $DepartementRole->givePermissionTo('Show Category');
+        $DepartmentRole->givePermissionTo('View Category');
+        $DepartmentRole->givePermissionTo('Create Category');
+        $DepartmentRole->givePermissionTo('Edit Category');
+        $DepartmentRole->givePermissionTo('Delete Category');
+        $DepartmentRole->givePermissionTo('Show Category');
 
-        $DepartementRole->givePermissionTo('View Priority');
-        $DepartementRole->givePermissionTo('Create Priority');
-        $DepartementRole->givePermissionTo('Edit Priority');
-        $DepartementRole->givePermissionTo('Delete Priority');
-        $DepartementRole->givePermissionTo('Show Priority');
+        $DepartmentRole->givePermissionTo('View Priority');
+        $DepartmentRole->givePermissionTo('Create Priority');
+        $DepartmentRole->givePermissionTo('Edit Priority');
+        $DepartmentRole->givePermissionTo('Delete Priority');
+        $DepartmentRole->givePermissionTo('Show Priority');
 
-        $DepartementRole->givePermissionTo('View Status');
-        $DepartementRole->givePermissionTo('Create Status');
-        $DepartementRole->givePermissionTo('Edit Status');
-        $DepartementRole->givePermissionTo('Delete Status');
-        $DepartementRole->givePermissionTo('Show Status');
+        $DepartmentRole->givePermissionTo('View Status');
+        $DepartmentRole->givePermissionTo('Create Status');
+        $DepartmentRole->givePermissionTo('Edit Status');
+        $DepartmentRole->givePermissionTo('Delete Status');
+        $DepartmentRole->givePermissionTo('Show Status');
 
-        $DepartementRole->givePermissionTo('View Ticket');
-        $DepartementRole->givePermissionTo('Create Ticket');
-        $DepartementRole->givePermissionTo('Edit Ticket');
-        $DepartementRole->givePermissionTo('Delete Ticket');
-        $DepartementRole->givePermissionTo('Show Ticket');
+        $DepartmentRole->givePermissionTo('View Ticket');
+        $DepartmentRole->givePermissionTo('Create Ticket');
+        $DepartmentRole->givePermissionTo('Edit Ticket');
+        $DepartmentRole->givePermissionTo('Delete Ticket');
+        $DepartmentRole->givePermissionTo('Show Ticket');
 
         $user = User::factory()->create([
             'name' => 'Admin',
@@ -152,6 +152,6 @@ class UsersSeeder extends Seeder
             'email' => 'Departement@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($DepartementRole);
+        $user->assignRole($DepartmentRole);
     }
 }

@@ -10,13 +10,15 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
+        'no_ticket',
         'title',
-        'owner',
+        'customer',
+        'assign_to',
+        'priority_id',
         'due_date',
         'status_id',
         'category_id',
         'description',
-        'priority_id',
         'attachments',
         'status_changed_by_id'
     ];
@@ -36,9 +38,14 @@ class Ticket extends Model
         return $this->belongsTo(Priority::class, 'priority_id');
     }
 
-    public function owner()
+    public function customer()
     {
-        return $this->belongsTo(User::class, 'owner');
+        return $this->belongsTo(User::class, 'customer');
+    }
+
+    public function assignTo()
+    {
+        return $this->belongsTo(User::class, 'assign_to');
     }
 
     public function statusChangedByUser()
