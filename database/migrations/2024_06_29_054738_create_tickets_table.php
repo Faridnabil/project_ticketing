@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->string('title');
             $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
-            $table->foreignId('priority_id')->constrained()->cascadeOnDelete();
-            $table->string('due_date');
-            $table->foreignId('status_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('due_date')->nullable();
+            $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
             $table->string('attachment')->nullable();

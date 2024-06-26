@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PriorityController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\User\TicketUserController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
@@ -48,6 +49,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department|Custom
         '/permission'                               => PermissionController::class,
         '/user'                                     => UserController::class,
         '/ticket'                                   => TicketController::class,
+        '/ticketUser'                               => TicketUserController::class,
         '/priority'                                 => PriorityController::class,
         '/status'                                   => StatusController::class,
         '/category'                                 => CategoryController::class,
