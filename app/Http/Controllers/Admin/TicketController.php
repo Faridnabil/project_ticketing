@@ -18,13 +18,39 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
-            ->get();
+        $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser');
 
-        return view('dashboard.admin.ticket.index', compact('tickets'));
+        if ($request->has('customer') && $request->customer) {
+            $query->where('customer', $request->customer);
+        }
+
+        if ($request->has('assign_to') && $request->assign_to) {
+            $query->where('assign_to', $request->assign_to);
+        }
+
+        if ($request->has('priority_id') && $request->priority_id) {
+            $query->where('priority_id', $request->priority_id);
+        }
+
+        if ($request->has('status_id') && $request->status_id) {
+            $query->where('status_id', $request->status_id);
+        }
+
+        $tickets = $query->get();
+
+        // Fetch necessary data for filters
+        $customers = User::role('Customer')
+            ->get();
+        $assign_to = User::role('Department')
+            ->get();
+        $priorities = Priority::all();
+        $statuses = Status::all();
+
+        return view('dashboard.admin.ticket.index', compact('tickets', 'customers', 'assign_to', 'priorities', 'statuses'));
     }
+
 
     /**
      * Show the form for creating a new resource.

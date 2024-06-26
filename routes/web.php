@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignedTicketController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PriorityController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\UnassignedTicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,4 +52,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department|Custom
         '/status'                                   => StatusController::class,
         '/category'                                 => CategoryController::class,
     ]);
+
+    Route::get('/assignedTicket', [AssignedTicketController::class, 'index'])->name('assignedTicket.index');
+    Route::get('/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
 });

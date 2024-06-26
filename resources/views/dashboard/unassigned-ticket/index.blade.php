@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket | SIAK Ducapil
+    Ticket yang Belum Ditetapkan | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Ticket yang Belum Ditetapkan
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Ticket yang Belum Ditetapkan</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -39,43 +39,10 @@
                 <div class="card-header border-0 pt-6">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        <!--begin::Form-->
-                        <form method="GET" action="{{ route('ticket.index') }}" class="d-flex">
-                            <select name="customer_id" class="form-select me-2">
-                                <option value="">Pilih Customer</option>
-                                @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="assign_to" class="form-select me-2">
-                                <option value="">Pilih Ditujukan Ke</option>
-                                @foreach ($assign_to as $assign)
-                                    <option value="{{ $assign->id }}">{{ $assign->name }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="priority_id" class="form-select me-2">
-                                <option value="">Pilih Prioritas</option>
-                                @foreach ($priorities as $priority)
-                                    <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="status_id" class="form-select me-2">
-                                <option value="">Pilih Status</option>
-                                @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                @endforeach
-                            </select>
-
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                        </form>
-                        <!--end::Form-->
                     </div>
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
-                    @can('Create Ticket')
+                    {{-- @can('Create Ticket')
                         <div class="card-toolbar">
                             <!--begin::Add Ticket-->
                             <a href="{{ route('ticket.create') }}" class="btn btn-primary mb-4">
@@ -92,7 +59,7 @@
                                 <!--end::Svg Icon-->Tambah Tiket</a>
                             <!--end::Add Ticket-->
                         </div>
-                    @endcan
+                    @endcan --}}
                     <!--end::Card toolbar-->
                 </div>
                 <!--end::Card header-->

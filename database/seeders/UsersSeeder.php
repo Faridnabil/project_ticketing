@@ -155,15 +155,15 @@ class UsersSeeder extends Seeder
         $user->assignRole($CustomerRole);
 
         $user = User::factory()->create([
-            'name' => 'Departement1',
-            'email' => 'Departement1@gmail.com',
+            'name' => 'Department1',
+            'email' => 'Department1@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DepartmentRole);
 
         $user = User::factory()->create([
-            'name' => 'Departement2',
-            'email' => 'Departement2@gmail.com',
+            'name' => 'Department2',
+            'email' => 'Department2@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DepartmentRole);
