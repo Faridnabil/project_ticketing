@@ -118,8 +118,8 @@ class TicketUserController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Status::class)
-            ->where('model_id', $ticket)
+        $logs = ActivityLog::where('model_type', Ticket::class)
+            ->where('model_id', $ticket->id)
             ->get();
 
         $comments = Comment::where('ticket_id', $id)->with('user')->get();
