@@ -44,21 +44,30 @@ require __DIR__ . '/auth.php';
 
 
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department|Customer'])->group(function () {
-
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(function () {
     Route::resources([
         '/role'                                     => RoleController::class,
         '/permission'                               => PermissionController::class,
         '/user'                                     => UserController::class,
         '/ticket'                                   => TicketController::class,
-        '/ticketUser'                               => TicketUserController::class,
         '/priority'                                 => PriorityController::class,
         '/status'                                   => StatusController::class,
         '/category'                                 => CategoryController::class,
+    ]);
+});
+
+Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
+    Route::resources([
+        '/ticketUser'                               => TicketUserController::class,
+    ]);
+});
+
+Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
+    Route::resources([
         '/assignedTicket'                           => AssignedTicketController::class,
     ]);
 
     Route::get('/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
     Route::get('/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
-
 });
+
