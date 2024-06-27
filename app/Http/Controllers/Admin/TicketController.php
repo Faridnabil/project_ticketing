@@ -120,23 +120,20 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $customers = User::role('Customer')
-            ->get();
-
-        $assignTo = User::role('Department')
-            ->get();
-
+        $customers = User::role('Customer')->get();
+        $assignTo = User::role('Department')->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
-
         $statusChangedBy = Auth::user();
 
         $logs = ActivityLog::where('model_type', Status::class)
-            ->where('model_id', $ticket)
+            ->where('model_id', $ticket->id) // Menggunakan ID tiket
             ->get();
 
-        $comments = Comment::where('ticket_id', $ticket)->with('user')->get();
+        $comments = Comment::where('ticket_id', $ticket->id) // Menggunakan ID tiket
+            ->with('user')
+            ->get();
 
         return view(
             'dashboard.admin.ticket.show',
@@ -153,6 +150,7 @@ class TicketController extends Controller
             )
         );
     }
+
 
     /**
      * Show the form for editing the specified resource.

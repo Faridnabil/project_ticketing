@@ -63,32 +63,35 @@ class AssignedTicketController extends Controller
         $comment->ticket_id = $request->ticket_id;
         $comment->user_id = auth()->id();
         $comment->message = $request->message;
-        $comment->status_comment = $request->status_comment;
+        $comment->created_at = now();
+        $comment->updated_at = null;
         $comment->save();
 
         return redirect()->back()->with('success', 'Comment added successfully!');
     }
 
     public function update(Request $request, $id)
-{
-    // Cari komentar berdasarkan ID
-    $comment = Comment::find($id);
+    {
+        // Cari komentar berdasarkan ID
+        $comment = Comment::find($id);
 
-    // Pastikan komentar ditemukan
-    if (!$comment) {
-        return redirect()->back()->with('error', 'Comment not found.');
+        // Pastikan komentar ditemukan
+        if (!$comment) {
+            return redirect()->back()->with('error', 'Comment not found.');
+        }
+
+        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
+        $ticket = Ticket::find($request->ticket_id);
+        if (!$ticket) {
+            return redirect()->back()->with('error', 'Ticket not found.');
+        }
+
+        // Perbarui atribut-atribut komentar
+        $comment->ticket_id = $request->ticket_id;
+        $comment->user_id = auth()->id();
+        $comment->message = $request->message;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment updated successfully!');
     }
-
-    // Perbarui atribut-atribut komentar
-    $comment->ticket_id = $request->ticket_id;
-    $comment->user_id = auth()->id();
-    $comment->message = $request->message;
-    $comment->status_comment = $request->status_comment;
-    $comment->save();
-
-    return redirect()->back()->with('success', 'Comment updated successfully!');
-}
-
-
-
 }
