@@ -139,24 +139,24 @@
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
-                                                <a href="{{ route('ticket.show', $ticket->id) }}"
+                                                <a href="{{ route('assignedTicket.show', $ticket->id) }}"
                                                     class="btn btn-success px-6 align-self-center text-nowrap mb-2">
                                                     Lihat
                                                 </a>
                                             @endcan
-                                            @can('Edit Ticket')
-                                                <a href="{{ route('ticket.edit', $ticket->id) }}"
+                                            {{-- @can('Edit Ticket')
+                                                <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
                                                     class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
                                                     Ubah
                                                 </a>
-                                            @endcan
-                                            @can('Delete Ticket')
+                                            @endcan --}}
+                                            {{-- @can('Delete Ticket')
                                                 <button type="reset" class="btn btn-danger px-6 align-self-center text-nowrap"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
                                                     Hapus
                                                 </button>
-                                            @endcan
+                                            @endcan --}}
                                         </td>
                                         <!--end::Action=-->
                                     </tr>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
@@ -135,10 +136,13 @@ class TicketController extends Controller
             ->where('model_id', $ticket)
             ->get();
 
+        $comments = Comment::where('ticket_id', $ticket)->with('user')->get();
+
         return view(
             'dashboard.admin.ticket.show',
             compact(
                 'ticket',
+                'comments',
                 'logs',
                 'customers',
                 'assignTo',

@@ -79,7 +79,7 @@
                                 <th class="min-w-125px">Prioritas</th>
                                 <th class="min-w-125px">Dibuat Tanggal</th>
                                 <th class="min-w-125px">Status</th>
-                                <th class="text-end min-w-70px">Aksi</th>
+                                <th class="min-w-125px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -107,19 +107,19 @@
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
-                                            @if ($ticket->assignTo->name != null)
+                                            @if ($ticket->assignTo != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
-                                                Belum ditetapkan
+                                                -
                                             @endif
                                         </td>
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
-                                            @if ($ticket->priority->priority_name != null)
+                                            @if ($ticket->priority_id != null)
                                                 {{ $ticket->priority->priority_name }}
                                             @else
-                                                Belum ditetapkan
+                                                -
                                             @endif
                                         </td>
                                         <!--end::Priority=-->
@@ -130,32 +130,23 @@
                                         <!--end::Payment method=-->
                                         <!--begin::Date=-->
                                         <td>
+                                            @if ($ticket->status_id != null)
                                             <span class="badge"
                                                 style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
                                                 {{ $ticket->status->status_name }}
                                             </span>
+                                            @else
+                                            -
+                                            @endif
                                         </td>
                                         <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
-                                                <a href="{{ route('ticket.show', $ticket->id) }}"
+                                                <a href="{{ route('unassignedTicket.show', $ticket->id) }}"
                                                     class="btn btn-success px-6 align-self-center text-nowrap mb-2">
                                                     Lihat
                                                 </a>
-                                            @endcan
-                                            @can('Edit Ticket')
-                                                <a href="{{ route('ticket.edit', $ticket->id) }}"
-                                                    class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
-                                                    Ubah
-                                                </a>
-                                            @endcan
-                                            @can('Delete Ticket')
-                                                <button type="reset" class="btn btn-danger px-6 align-self-center text-nowrap"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                    Hapus
-                                                </button>
                                             @endcan
                                         </td>
                                         <!--end::Action=-->

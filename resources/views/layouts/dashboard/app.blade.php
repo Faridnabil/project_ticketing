@@ -22,6 +22,9 @@
     <!--end::Global Stylesheets Bundle-->
 
     <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css"/>
+
+        <!-- Include CKEditor script -->
+        <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
 </head>
 
 <body id="kt_body"

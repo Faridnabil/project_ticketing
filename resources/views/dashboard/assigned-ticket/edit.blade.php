@@ -17,13 +17,15 @@
             </div>
         </div>
     </div>
+
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row g-5 g-xl-12">
                 <div class="col-xl-12">
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('ticketUser.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
+                            <form class="row g-3 needs-validation" method="POST"
+                                action="{{ route('ticket.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
@@ -40,7 +42,7 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
                                     <select name="customer" class="form-control @error('customer') is-invalid @enderror"
-                                        required autofocus style="pointer-events: none">
+                                        required autofocus>
                                         <option value="" disabled>Pilih Pemilik</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}"
@@ -53,19 +55,64 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3">{{ old('description', $ticket->description) }}</textarea>
+                                    <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
+                                    <select name="assign_to" class="form-control @error('assign_to') is-invalid @enderror"
+                                        required autofocus>
+                                        <option value="" disabled>Pilih Departemen</option>
+                                        @foreach ($assignTo as $assign)
+                                            <option value="{{ $assign->id }}"
+                                                {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
+                                                {{ $assign->name }}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="valid-feedback">Looks good!</div>
-                                    @error('description')
+                                    @error('assign_to')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-
                                 <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">Prioritas</label>
+                                    <select name="priority_id"
+                                        class="form-control @error('priority_id') is-invalid @enderror" required autofocus>
+                                        <option value="" disabled>Pilih Prioritas</option>
+                                        @foreach ($priorities as $priority)
+                                            <option value="{{ $priority->id }}"
+                                                {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
+                                                {{ $priority->priority_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('priority_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
+                                    <input type="date" name="due_date" class="form-control"
+                                        value="{{ old('due_date', $ticket->due_date) }}">
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('due_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="validationCustom01" class="form-label">Status</label>
+                                    <select name="status_id" class="form-control @error('status_id') is-invalid @enderror"
+                                        required autofocus>
+                                        <option value="" disabled>Pilih Status</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status->id }}"
+                                                {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                {{ $status->status_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('status_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-control @error('category_id') is-invalid @enderror" required autofocus>
@@ -79,6 +126,31 @@
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('category_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                        cols="10" rows="3">{{ old('description', $ticket->description) }}</textarea>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="reason" class="form-label">Alasan Perubahan</label>
+                                    <textarea name="reason" class="form-control @error('reason') is-invalid @enderror" id="reason" cols="10"
+                                        rows="3">{{ old('reason') }}</textarea>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('reason')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
 
@@ -116,8 +188,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
-                                    <a href="{{ route('ticketUser.index') }}" class="btn btn-danger">Batal</a>
+                                    <button class="btn btn-primary" type="submit">Update</button>
+                                    <a href="{{ route('ticket.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                             <hr>

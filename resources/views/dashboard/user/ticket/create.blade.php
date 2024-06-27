@@ -82,7 +82,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
                                         cols="10" rows="3"></textarea>
 
                                     <div class="valid-feedback">
@@ -165,4 +165,13 @@
         </div>
     </div>
     <!--end::Post-->
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
@@ -20,7 +21,11 @@ class TicketUserController extends Controller
      */
     public function index()
     {
+        $userId = auth()->user()->id;
         $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+             ->whereHas('customers', function ($query) use ($userId) {
+                $query->where('id', $userId);
+            })
             ->get();
 
         return view('dashboard.user.ticket.index', compact('tickets'));
@@ -67,6 +72,12 @@ class TicketUserController extends Controller
             $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
+            // Pastikan ticket_id unik
+            while (Ticket::where('no_ticket', $newTicketId)->exists()) {
+                $newTicketIdNumber++;
+                $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            }
+
             $validate = $request->all();
             $file = $request->file('attachment'); // pastikan nama file sesuai dengan yang di form
             $validate['no_ticket'] = $newTicketId;
@@ -88,7 +99,6 @@ class TicketUserController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -112,6 +122,8 @@ class TicketUserController extends Controller
             ->where('model_id', $ticket)
             ->get();
 
+        $comments = Comment::where('ticket_id', $id)->with('user')->get();
+
         return view(
             'dashboard.user.ticket.show',
             compact(
@@ -122,6 +134,7 @@ class TicketUserController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
+                'comments',
                 'statusChangedBy'
             )
         );

@@ -140,19 +140,19 @@
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
-                                            @if ($ticket->assignTo->name != null)
+                                            @if ($ticket->assignTo != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
-                                                Belum ditetapkan
+                                                -
                                             @endif
                                         </td>
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
-                                            @if ($ticket->priority->priority_name != null)
+                                            @if ($ticket->priority_id != null)
                                                 {{ $ticket->priority->priority_name }}
                                             @else
-                                                Belum ditetapkan
+                                                -
                                             @endif
                                         </td>
                                         <!--end::Priority=-->
@@ -163,12 +163,15 @@
                                         <!--end::Payment method=-->
                                         <!--begin::Date=-->
                                         <td>
-                                            <span class="badge"
-                                                style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
-                                                {{ $ticket->status->status_name }}
-                                            </span>
+                                            @if ($ticket->status_id != null)
+                                                <span class="badge"
+                                                    style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
+                                                    {{ $ticket->status->status_name }}
+                                                </span>
+                                            @else
+                                                -
+                                            @endif
                                         </td>
-                                        <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
