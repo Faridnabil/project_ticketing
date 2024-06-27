@@ -41,7 +41,7 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
                                     <select name="customer" class="form-control @error('customer') is-invalid @enderror"
-                                        required autofocus>
+                                        required autofocus style="pointer-events: none">
                                         <option value="" disabled>Pilih Pemilik</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}"

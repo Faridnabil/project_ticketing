@@ -42,7 +42,7 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
                                     <select name="customer" class="form-control @error('customer') is-invalid @enderror"
-                                        required autofocus>
+                                        required autofocus style="pointer-events: none">
                                         <option value="" disabled>Pilih Pemilik</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}"
@@ -219,6 +219,11 @@
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#reason'))
             .catch(error => {
                 console.error(error);
             });

@@ -58,10 +58,6 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department|Custom
         '/assignedTicket'                           => AssignedTicketController::class,
     ]);
 
-    Route::get('/assignedTicket', [AssignedTicketController::class, 'index'])->name('assignedTicket.index');
-    Route::get('/assignedTicketShow/{id}', [AssignedTicketController::class, 'show'])->name('assignedTicket.show');
-
-
     Route::get('/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
     Route::get('/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
 

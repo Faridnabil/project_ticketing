@@ -75,76 +75,56 @@
 
                                                     <!-- Display existing comments -->
                                                     @foreach ($comments as $comment)
-                                                        <div id="comment-{{ $comment->id }}">
-                                                            <form
-                                                                action="{{ route('assignedTicket.update', $comment->id) }}"
-                                                                method="POST" class="comment-form"
-                                                                data-comment-id="{{ $comment->id }}">
-                                                                @method('PUT')
-                                                                @csrf
-                                                                <div class="ms-9 mb-9">
-                                                                    <div class="card card-bordered w-100">
-                                                                        <div class="card-body">
-                                                                            <div class="d-flex flex-stack mb-8">
-                                                                                <div class="d-flex align-items-center f">
-                                                                                    <div class="symbol symbol-50px me-5">
-                                                                                        <div
-                                                                                            class="symbol-label fs-1 fw-bolder bg-light-success text-success">
-                                                                                            {{ substr($comment->user->name, 0, 1) }}
-                                                                                            <input type="hidden"
-                                                                                                name="ticket_id"
-                                                                                                value="{{ $ticket->id }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div
-                                                                                        class="d-flex flex-column fw-bold fs-5 text-gray-600 text-dark">
-                                                                                        <div
-                                                                                            class="d-flex align-items-center">
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 fw-bolder text-hover-primary fs-5 me-3">
-                                                                                                {{ $comment->user->name }}
-                                                                                            </a>
-                                                                                            @if ($comment->user_id == $comment->ticket->customer)
-                                                                                                <span
-                                                                                                    class="badge badge-light-danger">Pemilik</span>
-                                                                                            @endif
-                                                                                        </div>
-                                                                                        <span
-                                                                                            class="text-muted fw-bold fs-6">
-                                                                                            {{ $comment->created_at->locale('id')->diffForHumans() }}
-                                                                                        </span>
+                                                    <div id="comment-{{ $comment->id }}">
+                                                        <form action="{{ route('assignedTicket.update', $comment->id) }}" method="POST" class="comment-form" data-comment-id="{{ $comment->id }}">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <div class="ms-9 mb-9">
+                                                                <div class="card card-bordered w-100">
+                                                                    <div class="card-body">
+                                                                        <div class="d-flex flex-stack mb-8">
+                                                                            <div class="d-flex align-items-center f">
+                                                                                <div class="symbol symbol-50px me-5">
+                                                                                    <div class="symbol-label fs-1 fw-bolder bg-light-success text-success">
+                                                                                        {{ substr($comment->user->name, 0, 1) }}
+                                                                                        <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="m-0">
-                                                                                    @if ($comment->user_id == auth()->user()->id)
-                                                                                        <button type="button"
-                                                                                            class="btn btn-color-gray-400 btn-active-color-primary p-0 fw-bolder edit-button"
-                                                                                            data-comment-id="{{ $comment->id }}">Ubah</button>
-                                                                                    @endif
-                                                                                    @if ($comment->updated_at)
-                                                                                        <span
-                                                                                            class="badge badge-light-success">Dirubah</span>
-                                                                                    @endif
+                                                                                <div class="d-flex flex-column fw-bold fs-5 text-gray-600 text-dark">
+                                                                                    <div class="d-flex align-items-center">
+                                                                                        <a href="#" class="text-gray-800 fw-bolder text-hover-primary fs-5 me-3">
+                                                                                            {{ $comment->user->name }}
+                                                                                        </a>
+                                                                                        @if ($comment->user_id == $comment->ticket->customer)
+                                                                                            <span class="badge badge-light-danger">Pemilik</span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <span class="text-muted fw-bold fs-6">
+                                                                                        {{ $comment->created_at->locale('id')->diffForHumans() }}
+                                                                                    </span>
                                                                                 </div>
                                                                             </div>
-                                                                            <p class="fw-normal fs-5 text-gray-700 m-0"
-                                                                                id="message-display-{{ $comment->id }}">
-                                                                                {!! $comment->message !!}
-                                                                            </p>
-                                                                            <textarea name="message" class="form-control" id="message-{{ $comment->id }}" style="display: none">{{ $comment->message }}</textarea>
-                                                                            <button
-                                                                                class="btn btn-primary mt-2 update-button"
-                                                                                id="update-button-{{ $comment->id }}"
-                                                                                type="submit" style="display: none">Ubah
-                                                                                Komentar</button>
-                                                                            <input type="hidden" name="status_comment"
-                                                                                value="Dirubah">
+                                                                            <div class="m-0">
+                                                                                @if ($comment->user_id == auth()->user()->id)
+                                                                                    <button type="button" class="btn btn-color-gray-400 btn-active-color-primary p-0 fw-bolder edit-button" data-comment-id="{{ $comment->id }}">Ubah</button>
+                                                                                @endif
+                                                                                @if ($comment->updated_at)
+                                                                                    <span class="badge badge-light-success">Dirubah</span>
+                                                                                @endif
+                                                                            </div>
                                                                         </div>
+                                                                        <p class="fw-normal fs-5 text-gray-700 m-0" id="message-display-{{ $comment->id }}">
+                                                                            {!! $comment->message !!}
+                                                                        </p>
+                                                                        <textarea name="message" class="form-control" id="message-{{ $comment->id }}" style="display: none">{{ $comment->message }}</textarea>
+                                                                        <button class="btn btn-primary mt-2 update-button" id="update-button-{{ $comment->id }}" type="submit" style="display: none">Ubah Komentar</button>
+                                                                        <input type="hidden" name="status_comment" value="Dirubah">
                                                                     </div>
                                                                 </div>
-                                                            </form>
-                                                        </div>
-                                                    @endforeach
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                @endforeach
 
 
                                                     @if (session('success'))

@@ -144,12 +144,12 @@
                                                     Lihat
                                                 </a>
                                             @endcan
-                                            {{-- @can('Edit Ticket')
+                                            @can('Edit Ticket')
                                                 <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
                                                     class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
                                                     Ubah
                                                 </a>
-                                            @endcan --}}
+                                            @endcan
                                             {{-- @can('Delete Ticket')
                                                 <button type="reset" class="btn btn-danger px-6 align-self-center text-nowrap"
                                                     data-bs-toggle="modal"

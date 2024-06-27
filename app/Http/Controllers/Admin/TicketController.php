@@ -127,8 +127,8 @@ class TicketController extends Controller
         $categories = Category::all();
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Status::class)
-            ->where('model_id', $ticket->id) // Menggunakan ID tiket
+        $logs = ActivityLog::where('model_type', Ticket::class)
+            ->where('model_id', $ticket->id)
             ->get();
 
         $comments = Comment::where('ticket_id', $ticket->id) // Menggunakan ID tiket

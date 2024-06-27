@@ -168,12 +168,30 @@
                                                     <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
                                                     <div class="d-flex flex-column">
                                                         <h5 class="text-gray-800 fw-bolder">
-                                                            <strong>{{ $log->attribute }}</strong>:
+                                                            <strong>
+                                                                @if ($log->attribute == 'priority_id')
+                                                                    Prioritas
+                                                                @elseif($log->attribute == 'status_id')
+                                                                    Status
+                                                                @elseif($log->attribute == 'customer')
+                                                                    Customer
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'category_id')
+                                                                    Kategori
+                                                                @elseif($log->attribute == 'title')
+                                                                    Judul
+                                                                @else
+                                                                    {{ $log->attribute }}
+                                                                @endif
+                                                            </strong>:
                                                         </h5>
                                                         <div class="fw-bold">
-                                                            <span class="text-muted">Dari: {{ $log->old_value }}</span>
-                                                            <span>Untuk: {{ $log->new_value }}</span>
-                                                            <span>Alasan: {{ $log->reason }}</span>
+                                                            <span class="text-muted">Dari {{ $log->old_value }}</span>
+                                                            <span>Ke: {{ $log->new_value }}</span>
+                                                            <br><span>Dengan alasan: {!! $log->reason !!}</span>
                                                             <div class="text-muted">Dirubah oleh: {{ $log->user->name }}
                                                                 pada {{ $log->created_at }}</div>
                                                         </div>

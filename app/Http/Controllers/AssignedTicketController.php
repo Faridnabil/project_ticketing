@@ -70,6 +70,40 @@ class AssignedTicketController extends Controller
         return redirect()->back()->with('success', 'Comment added successfully!');
     }
 
+    public function edit($id)
+    {
+        $ticket = Ticket::find($id);
+        $customers = User::role('Customer')
+            ->get();
+
+        $assignTo = User::role('Department')
+            ->get();
+
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+
+        $statusChangedBy = Auth::user();
+
+        $logs = ActivityLog::where('model_type', Ticket::class)
+            ->where('model_id', $ticket)
+            ->get();
+
+        return view(
+            'dashboard.assigned-ticket.edit',
+            compact(
+                'ticket',
+                'customers',
+                'assignTo',
+                'priorities',
+                'statuses',
+                'categories',
+                'statusChangedBy',
+                'logs',
+            )
+        );
+    }
+
     public function update(Request $request, $id)
     {
         // Cari komentar berdasarkan ID
@@ -94,4 +128,6 @@ class AssignedTicketController extends Controller
 
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
+
+
 }
