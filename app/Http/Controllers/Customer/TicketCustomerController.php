@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class TicketUserController extends Controller
+class TicketCustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,12 +23,12 @@ class TicketUserController extends Controller
     {
         $userId = auth()->user()->id;
         $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
-             ->whereHas('customers', function ($query) use ($userId) {
+            ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
             ->get();
 
-        return view('dashboard.user.ticket.index', compact('tickets'));
+        return view('dashboard.customer.ticket.index', compact('tickets'));
     }
 
     /**
@@ -38,8 +38,8 @@ class TicketUserController extends Controller
     {
         $user = Auth::user();
         $customers = User::role('Customer')
-        ->where('id', $user->id)
-        ->get();
+            ->where('id', $user->id)
+            ->get();
 
         $assignTo = User::role('Department')
             ->get();
@@ -49,7 +49,7 @@ class TicketUserController extends Controller
         $categories = Category::all();
 
         return view(
-            'dashboard.user.ticket.create',
+            'dashboard.customer.ticket.create',
             compact(
                 'customers',
                 'assignTo',
@@ -93,7 +93,7 @@ class TicketUserController extends Controller
             Ticket::create($validate);
 
             DB::commit();
-            return redirect()->route('ticketUser.index')->with('success', 'Tiket Berhasil Dibuat.');
+            return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -120,12 +120,15 @@ class TicketUserController extends Controller
 
         $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket->id)
+            ->latest()
             ->get();
 
-        $comments = Comment::where('ticket_id', $id)->with('user')->get();
+        $comments = Comment::where('ticket_id', $id)
+            ->with('user')
+            ->get();
 
         return view(
-            'dashboard.user.ticket.show',
+            'dashboard.customer.ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -164,7 +167,7 @@ class TicketUserController extends Controller
             ->get();
 
         return view(
-            'dashboard.user.ticket.edit',
+            'dashboard.customer.ticket.edit',
             compact(
                 'ticket',
                 'customers',
@@ -213,7 +216,7 @@ class TicketUserController extends Controller
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('ticketUser.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -236,7 +239,7 @@ class TicketUserController extends Controller
             }
             DB::commit();
             $ticket->delete(); // Hapus principle
-            return redirect()->route('ticketUser.index')->with('success', 'Tiket Berhasil dihapus');
+            return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil dihapus');
         } catch (\Throwable $th) {
             // Log activity
             DB::rollBack();

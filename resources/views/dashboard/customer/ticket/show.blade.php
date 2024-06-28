@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket | SIAK Ducapil
+    Lihat Ticket Saya | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -69,7 +69,7 @@
                                                                 </div>
                                                             @enderror
                                                             <button class="btn btn-primary mb-8"
-                                                                type="submit">Submit</button>
+                                                                type="submit">Simpan</button>
                                                         </form>
                                                     </div>
 
@@ -165,74 +165,76 @@
                                     <div class="card-body p-12">
                                         <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
                                         @foreach ($logs as $log)
-                                            <div
-                                                class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
-                                                <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
-                                                <div class="d-flex flex-column">
-                                                    <h5 class="text-gray-800 fw-bolder">
-                                                        <strong>
-                                                            @if ($log->attribute == 'priority_id')
-                                                                Prioritas
-                                                            @elseif($log->attribute == 'status_id')
-                                                                Status
-                                                            @elseif($log->attribute == 'customer')
-                                                                Customer
-                                                            @elseif($log->attribute == 'assign_to')
-                                                                Ditugaskan Ke
-                                                            @elseif($log->attribute == 'assign_to')
-                                                                Ditugaskan Ke
-                                                            @elseif($log->attribute == 'category_id')
-                                                                Kategori
-                                                            @elseif($log->attribute == 'title')
-                                                                Judul
-                                                            @elseif($log->attribute == 'due_date')
-                                                                Tanggal Jatuh Tempo
-                                                            @elseif($log->attribute == 'description')
-                                                                Deskripsi
-                                                            @else
-                                                                {{ $log->attribute }}
-                                                            @endif
-                                                        </strong>:
-                                                    </h5>
-                                                    <div class="fw-bold">
-                                                        @if ($log->old_value == null)
-                                                            <span>
-                                                                @if (is_numeric($log->new_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                            @if ($log->user_id != 1)
+                                                <div
+                                                    class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
+                                                    <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
+                                                    <div class="d-flex flex-column">
+                                                        <h5 class="text-gray-800 fw-bolder">
+                                                            <strong>
+                                                                @if ($log->attribute == 'priority_id')
+                                                                    Prioritas
+                                                                @elseif($log->attribute == 'status_id')
+                                                                    Status
+                                                                @elseif($log->attribute == 'customer')
+                                                                    Customer
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'category_id')
+                                                                    Kategori
+                                                                @elseif($log->attribute == 'title')
+                                                                    Judul
+                                                                @elseif($log->attribute == 'due_date')
+                                                                    Tanggal Jatuh Tempo
+                                                                @elseif($log->attribute == 'description')
+                                                                    Deskripsi
                                                                 @else
-                                                                    {{ $log->new_value }}
+                                                                    {{ $log->attribute }}
                                                                 @endif
-                                                            </span><br>
-                                                            <span>Alasan: {!! $log->reason !!}</span>
-                                                            <div class="text-muted">Dirubah oleh:
-                                                                {{ $log->user->name }} pada
-                                                                {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                            </div>
-                                                        @else
-                                                            <span class="text-muted">Dari:
-                                                                @if (is_numeric($log->old_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                @elseif(is_string($log->old_value))
-                                                                    {!! $log->old_value !!}
-                                                                @endif
-                                                            </span>
+                                                            </strong>:
+                                                        </h5>
+                                                        <div class="fw-bold">
+                                                            @if ($log->old_value == null)
+                                                                <span>
+                                                                    @if (is_numeric($log->new_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @else
+                                                                        {{ $log->new_value }}
+                                                                    @endif
+                                                                </span><br>
+                                                                <span>Alasan: {!! $log->reason !!}</span>
+                                                                <div class="text-muted">Dirubah oleh:
+                                                                    {{ $log->user->name }} pada
+                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                </div>
+                                                            @else
+                                                                <span class="text-muted">Dari:
+                                                                    @if (is_numeric($log->old_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @elseif(is_string($log->old_value))
+                                                                        {!! $log->old_value !!}
+                                                                    @endif
+                                                                </span>
 
-                                                            <span>Untuk:
-                                                                @if (is_numeric($log->new_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                @elseif (is_string($log->new_value))
-                                                                    {!! $log->new_value !!}
-                                                                @endif
-                                                            </span>
-                                                            <span>Alasan: {!! $log->reason !!}</span>
-                                                            <div class="text-muted">Dirubah oleh:
-                                                                {{ $log->user->name }} pada
-                                                                {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                            </div>
-                                                        @endif
+                                                                <span>Untuk:
+                                                                    @if (is_numeric($log->new_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @elseif (is_string($log->new_value))
+                                                                        {!! $log->new_value !!}
+                                                                    @endif
+                                                                </span>
+                                                                <span>Alasan: {!! $log->reason !!}</span>
+                                                                <div class="text-muted">Dirubah oleh:
+                                                                    {{ $log->user->name }} pada
+                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>

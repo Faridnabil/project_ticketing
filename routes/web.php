@@ -6,11 +6,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PriorityController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\TicketController;
-use App\Http\Controllers\User\TicketUserController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\UnassignedTicketController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,7 +58,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
 
 Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
     Route::resources([
-        '/ticketUser'                               => TicketUserController::class,
+        '/myTicket'                               => TicketCustomerController::class,
     ]);
 });
 

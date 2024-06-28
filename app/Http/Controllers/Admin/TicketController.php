@@ -118,20 +118,27 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket)
+    public function show($id)
     {
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Department')->get();
+        $ticket = Ticket::find($id);
+        $customers = User::role('Customer')
+            ->get();
+
+        $assignTo = User::role('Department')
+            ->get();
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Status::class)
-            ->where('model_id', $ticket->id) // Menggunakan ID tiket
+        $logs = ActivityLog::where('model_type', Ticket::class)
+            ->where('model_id', $ticket->id)
+            ->latest()
             ->get();
 
-        $comments = Comment::where('ticket_id', $ticket->id) // Menggunakan ID tiket
+        $comments = Comment::where('ticket_id', $id)
             ->with('user')
             ->get();
 
@@ -139,13 +146,13 @@ class TicketController extends Controller
             'dashboard.admin.ticket.show',
             compact(
                 'ticket',
-                'comments',
                 'logs',
                 'customers',
                 'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
+                'comments',
                 'statusChangedBy'
             )
         );

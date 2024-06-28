@@ -38,9 +38,12 @@ class AssignedTicketController extends Controller
 
         $logs = ActivityLog::where('model_type', Status::class)
             ->where('model_id', $ticket)
+            ->latest()
             ->get();
 
-        $comments = Comment::where('ticket_id', $id)->with('user')->get();
+        $comments = Comment::where('ticket_id', $id)
+            ->with('user')
+            ->get();
 
         return view(
             'dashboard.assigned-ticket.show',

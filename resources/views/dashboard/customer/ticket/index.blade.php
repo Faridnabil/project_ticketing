@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket | SIAK Ducapil
+    Ticket Saya | SIAK Ducapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Saya
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket Saya</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -45,7 +45,7 @@
                     @can('Create Ticket')
                         <div class="card-toolbar">
                             <!--begin::Add Ticket-->
-                            <a href="{{ route('ticketUser.create') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('myTicket.create') }}" class="btn btn-primary mb-4">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -76,6 +76,8 @@
                                 <th class="min-w-125px">Judul</th>
                                 <th class="min-w-125px">Pemilik</th>
                                 <th class="min-w-125px">Tetapkan Ke</th>
+                                <th class="min-w-125px">Tanggal Dibuat</th>
+                                <th class="min-w-125px">Status</th>
                                 <th class="text-end min-w-70px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
@@ -103,46 +105,37 @@
                                         </td>
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
-                                        {{-- <td>
-                                            @if ($ticket->assignTo->name != null)
+                                        <td>
+                                            @if ($ticket->assign_to != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
-                                                Belum ditetapkan
+                                                -
                                             @endif
-                                        </td> --}}
+                                        </td>
                                         <!--end::Assign To=-->
-                                        <!--begin::Priority=-->
-                                        {{-- <td>
-                                            @if ($ticket->priority->priority_name != null)
-                                                {{ $ticket->priority->priority_name }}
-                                            @else
-                                                Belum ditetapkan
-                                            @endif
-                                        </td> --}}
-                                        <!--end::Priority=-->
                                         <!--begin::Payment method=-->
                                         <td>
                                             {{ date('d F Y', strtotime($ticket->created_at)) }}
                                         </td>
                                         <!--end::Payment method=-->
                                         <!--begin::Date=-->
-                                        {{-- <td>
+                                        <td>
                                             <span class="badge"
                                                 style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
                                                 {{ $ticket->status->status_name }}
                                             </span>
-                                        </td> --}}
+                                        </td>
                                         <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
-                                                <a href="{{ route('ticketUser.show', $ticket->id) }}"
+                                                <a href="{{ route('myTicket.show', $ticket->id) }}"
                                                     class="btn btn-success px-6 align-self-center text-nowrap mb-2">
                                                     Lihat
                                                 </a>
                                             @endcan
                                             @can('Edit Ticket')
-                                                <a href="{{ route('ticketUser.edit', $ticket->id) }}"
+                                                <a href="{{ route('myTicket.edit', $ticket->id) }}"
                                                     class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
                                                     Ubah
                                                 </a>
@@ -199,7 +192,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('ticketUser.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('myTicket.destroy', $ticket->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>

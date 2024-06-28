@@ -206,7 +206,7 @@
 
                 @role('Customer')
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('ticketUser') ? 'active' : '' }}" href="{{ route('ticketUser.index') }}">
+                        <a class="menu-link {{ Request::is('myTicket') ? 'active' : '' }}" href="{{ route('myTicket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">

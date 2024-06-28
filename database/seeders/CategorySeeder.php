@@ -17,5 +17,15 @@ class CategorySeeder extends Seeder
             'category_name' => 'Wifi Rusak',
             'color' => '#ff0000',
         ]);
+
+        $category = Category::create([
+            'category_name' => 'Internet Lemot',
+            'color' => '#ff0000',
+        ]);
+
+        $category = Category::create([
+            'category_name' => 'PC Blue Screen',
+            'color' => '#ff0000',
+        ]);
     }
 }
