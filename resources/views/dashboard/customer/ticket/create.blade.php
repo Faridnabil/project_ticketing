@@ -117,20 +117,53 @@
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
-                                    <div class="dropzone" id="dropzone">
-                                        <div class="dz-message needsclick">
-                                            <i class="bi bi-file-earmark-arrow-up fs-3x text-primary"></i>
-                                            <div class="ms-4">
-                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Letakkan file di sini atau klik untuk upload.</h3>
-                                                <span class="fs-7 fw-bold text-gray-400">Upload up to 10 files</span>
-                                            </div>
+                                    <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
+                                        <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                        <div class="dz-message">
+                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau klik untuk mengunggah.</h3>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                         </div>
+                                        <div class="preview"></div>
                                     </div>
+                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none" multiple>
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('attachments')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <div class="error-message" id="error-message"></div>
                                 </div>
+
+                                <script>
+                                    document.getElementById('attachments').addEventListener('change', function(event) {
+                                        const fileList = event.target.files;
+                                        const preview = document.querySelector('.preview');
+                                        const errorMessage = document.getElementById('error-message');
+                                        const maxFiles = 5;
+
+                                        if (fileList.length > maxFiles) {
+                                            errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
+                                            event.target.value = ''; // Clear the input
+                                            return;
+                                        }
+
+                                        errorMessage.textContent = ''; // Clear any existing error message
+                                        preview.innerHTML = ''; // Clear any existing previews
+
+                                        for (const file of fileList) {
+                                            const reader = new FileReader();
+                                            reader.onload = function(e) {
+                                                const img = document.createElement('img');
+                                                img.src = e.target.result;
+                                                preview.appendChild(img);
+                                            };
+
+                                            if (file.type.startsWith('image/')) {
+                                                reader.readAsDataURL(file); // Read file as Data URL for image preview
+                                            }
+                                        }
+                                    });
+                                </script>
+
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Simpan</button>

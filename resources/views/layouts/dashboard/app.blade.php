@@ -28,8 +28,35 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
 
     <!-- Dropzone CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css" rel="stylesheet">
 
+    <style>
+        .custom-dropzone {
+            border: 2px dashed #007bff;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .custom-dropzone .dz-message {
+            pointer-events: none;
+        }
+        .preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .preview img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body id="kt_body"
@@ -1372,53 +1399,6 @@
     <script src="{{ asset('template/dist/assets/js/custom/apps/chat/chat.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
-
-    <!-- Dropzone JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
-
-    <script>
-        Dropzone.options.dropzone = {
-            url: '{{ route('myTicket.store') }}',
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            parallelUploads: 10,
-            maxFiles: 10,
-            addRemoveLinks: true,
-            acceptedFiles: ".png,.jpg,.jpeg",
-            init: function() {
-                var myDropzone = this;
-
-                // Handle form submit
-                document.querySelector("form").addEventListener("submit", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (myDropzone.getQueuedFiles().length > 0) {
-                        myDropzone.processQueue();
-                    } else {
-                        this.submit();
-                    }
-                });
-
-                myDropzone.on("sendingmultiple", function(data, xhr, formData) {
-                    formData.append("_token", "{{ csrf_token() }}");
-                    formData.append("title", document.getElementById("title").value);
-                    formData.append("customer", document.querySelector("select[name=customer]").value);
-                    formData.append("category_id", document.querySelector("select[name=category_id]")
-                    .value);
-                    formData.append("description", document.getElementById("description").value);
-                    formData.append("status_id", "1");
-                });
-
-                myDropzone.on("successmultiple", function(files, response) {
-                    window.location.href = "{{ route('myTicket.index') }}";
-                });
-
-                myDropzone.on("errormultiple", function(files, response) {
-                    console.log(response);
-                });
-            }
-        };
-    </script>
 
     {{-- Javascript Data Pengguna --}}
     <script>

@@ -79,7 +79,7 @@ class TicketCustomerController extends Controller
             }
 
             $validate = $request->all();
-            $files = $request->file('file'); // Dropzone mengirim file dengan nama 'file'
+            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
             $validate['no_ticket'] = $newTicketId;
 
             $attachments = [];
@@ -96,7 +96,6 @@ class TicketCustomerController extends Controller
             $validate['attachments'] = json_encode($attachments);
 
             Ticket::create($validate);
-        dd($request->all());
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -104,6 +103,7 @@ class TicketCustomerController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
 
 
 
