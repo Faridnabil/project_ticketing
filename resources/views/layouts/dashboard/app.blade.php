@@ -21,10 +21,15 @@
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 
-    <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
 
-        <!-- Include CKEditor script -->
-        <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    <!-- Include CKEditor script -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+
+    <!-- Dropzone CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+
 </head>
 
 <body id="kt_body"
@@ -1367,6 +1372,53 @@
     <script src="{{ asset('template/dist/assets/js/custom/apps/chat/chat.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
+
+    <!-- Dropzone JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+
+    <script>
+        Dropzone.options.dropzone = {
+            url: '{{ route('myTicket.store') }}',
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 10,
+            maxFiles: 10,
+            addRemoveLinks: true,
+            acceptedFiles: ".png,.jpg,.jpeg",
+            init: function() {
+                var myDropzone = this;
+
+                // Handle form submit
+                document.querySelector("form").addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (myDropzone.getQueuedFiles().length > 0) {
+                        myDropzone.processQueue();
+                    } else {
+                        this.submit();
+                    }
+                });
+
+                myDropzone.on("sendingmultiple", function(data, xhr, formData) {
+                    formData.append("_token", "{{ csrf_token() }}");
+                    formData.append("title", document.getElementById("title").value);
+                    formData.append("customer", document.querySelector("select[name=customer]").value);
+                    formData.append("category_id", document.querySelector("select[name=category_id]")
+                    .value);
+                    formData.append("description", document.getElementById("description").value);
+                    formData.append("status_id", "1");
+                });
+
+                myDropzone.on("successmultiple", function(files, response) {
+                    window.location.href = "{{ route('myTicket.index') }}";
+                });
+
+                myDropzone.on("errormultiple", function(files, response) {
+                    console.log(response);
+                });
+            }
+        };
+    </script>
 
     {{-- Javascript Data Pengguna --}}
     <script>

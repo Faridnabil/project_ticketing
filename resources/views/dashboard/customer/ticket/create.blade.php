@@ -59,7 +59,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
                                     <select name="customer" class="form-control @error('customer') is-invalid @enderror"
                                         required autofocus style="pointer-events: none;">
@@ -77,24 +77,7 @@
                                     @enderror
                                 </div>
 
-
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
-                                        cols="10" rows="3"></textarea>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('description')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-control @error('category_id') is-invalid @enderror" required autofocus>
@@ -117,34 +100,34 @@
                                 <input type="hidden" name="status_id" value="1">
 
                                 <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
+                                        cols="10" rows="3"></textarea>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('description')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url(assets/media/avatars/blank.png)">
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url(assets/media/avatars/150-1.jpg);"></div>
-                                        <label
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                            title="Ganti lampiran">
-                                            <i class="bi bi-pencil-fill fs-7"></i>
-                                            <input type="file" name="attachment" accept=".png, .jpg, .jpeg" />
-                                            <input type="hidden" name="attachment" />
-                                        </label>
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                            title="Batalkan lampiran">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                            title="Hapus lampiran">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
+                                    <div class="dropzone" id="dropzone">
+                                        <div class="dz-message needsclick">
+                                            <i class="bi bi-file-earmark-arrow-up fs-3x text-primary"></i>
+                                            <div class="ms-4">
+                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Letakkan file di sini atau klik untuk upload.</h3>
+                                                <span class="fs-7 fw-bold text-gray-400">Upload up to 10 files</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="valid-feedback">Looks good!</div>
-                                    @error('attachment')
+                                    @error('attachments')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -172,4 +155,9 @@
                 console.error(error);
             });
     </script>
+
+
+
+
+
 @endsection

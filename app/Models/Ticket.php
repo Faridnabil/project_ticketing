@@ -19,7 +19,7 @@ class Ticket extends Model
         'status_id',
         'category_id',
         'description',
-        'attachment',
+        'attachments',
         'status_changed_by_id',
     ];
 

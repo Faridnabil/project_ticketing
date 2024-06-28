@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
-            $table->string('attachment')->nullable();
+            $table->string('attachments')->nullable();
             $table->foreignId('status_changed_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });
