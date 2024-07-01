@@ -133,38 +133,6 @@
                                     <div class="error-message" id="error-message"></div>
                                 </div>
 
-                                <script>
-                                    document.getElementById('attachments').addEventListener('change', function(event) {
-                                        const fileList = event.target.files;
-                                        const preview = document.querySelector('.preview');
-                                        const errorMessage = document.getElementById('error-message');
-                                        const maxFiles = 5;
-
-                                        if (fileList.length > maxFiles) {
-                                            errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
-                                            event.target.value = ''; // Clear the input
-                                            return;
-                                        }
-
-                                        errorMessage.textContent = ''; // Clear any existing error message
-                                        preview.innerHTML = ''; // Clear any existing previews
-
-                                        for (const file of fileList) {
-                                            const reader = new FileReader();
-                                            reader.onload = function(e) {
-                                                const img = document.createElement('img');
-                                                img.src = e.target.result;
-                                                preview.appendChild(img);
-                                            };
-
-                                            if (file.type.startsWith('image/')) {
-                                                reader.readAsDataURL(file); // Read file as Data URL for image preview
-                                            }
-                                        }
-                                    });
-                                </script>
-
-
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Simpan</button>
                                     <a href="{{ route('myTicket.index') }}" class="btn btn-danger">Batal</a>
@@ -188,9 +156,6 @@
                 console.error(error);
             });
     </script>
-
-
-
 
 
 @endsection

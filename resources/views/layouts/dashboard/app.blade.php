@@ -28,8 +28,6 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
 
     <!-- Dropzone CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css" rel="stylesheet">
-
     <style>
         .custom-dropzone {
             border: 2px dashed #007bff;
@@ -48,9 +46,27 @@
             margin-top: 10px;
             justify-content: center;
         }
+        .preview .image-container {
+            position: relative;
+            display: inline-block;
+        }
         .preview img {
             max-width: 100px;
             max-height: 100px;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            text-align: center;
         }
         .error-message {
             color: red;
@@ -1401,6 +1417,70 @@
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
 
     {{-- Javascript Data Pengguna --}}
+    <script>
+        let uploadedFiles = [];
+        let existingFiles = Array.from(document.querySelectorAll('.preview .image-container')).map(container => container.querySelector('img').src);
+
+        document.getElementById('attachments').addEventListener('change', function(event) {
+            const fileList = Array.from(event.target.files);
+            const preview = document.querySelector('.preview');
+            const errorMessage = document.getElementById('error-message');
+            const maxFiles = 10;
+
+            if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
+                errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
+                return;
+            }
+
+            errorMessage.textContent = ''; // Clear any existing error message
+
+            uploadedFiles = [...uploadedFiles, ...fileList];
+
+            fileList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const container = document.createElement('div');
+                    container.classList.add('image-container');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'x';
+                    removeBtn.classList.add('remove-btn');
+                    removeBtn.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        container.remove();
+                        uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                        updateFileList();
+                    });
+
+                    container.appendChild(img);
+                    container.appendChild(removeBtn);
+                    preview.appendChild(container);
+                };
+
+                if (file.type.startsWith('image/')) {
+                    reader.readAsDataURL(file); // Read file as Data URL for image preview
+                }
+            });
+
+            updateFileList();
+        });
+
+        function updateFileList() {
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('attachments').files = dataTransfer.files;
+        }
+
+        function removeExistingFile(filePath) {
+            existingFiles = existingFiles.filter(file => file !== filePath);
+            document.querySelector(`img[src="${filePath}"]`).parentElement.remove();
+        }
+    </script>
+
+
     <script>
         $("#kt_datatable_example_5").DataTable({
             "language": {

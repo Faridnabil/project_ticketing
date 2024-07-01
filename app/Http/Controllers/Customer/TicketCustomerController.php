@@ -104,9 +104,6 @@ class TicketCustomerController extends Controller
         }
     }
 
-
-
-
     /**
      * Display the specified resource.
      */
@@ -193,42 +190,42 @@ class TicketCustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
-
-        $request->validate([
-            'title' => 'required',
-            'customer' => 'required',
-            'category_id' => 'required',
-            'description' => 'nullable',
-            'attachment' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
         DB::beginTransaction();
         try {
-            $validate = $request->all();
-            if ($request->hasFile('attachment')) {
-                // Proses file baru
-                $file = $request->file('attachment');
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/ticket';
-                $file->move(public_path($nama_folder), $nama_file);
-                $validate['attachment'] = $nama_folder . "/" . $nama_file;
+            // Ambil tiket yang akan diupdate
+            $ticket = Ticket::findOrFail($id);
 
-                // Hapus file lama jika ada
-                if ($ticket->attachment && file_exists(public_path($ticket->attachment))) {
-                    unlink(public_path($ticket->attachment));
+            $validate = $request->all();
+            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+
+            $attachments = [];
+            if ($files) {
+                foreach ($files as $file) {
+                    // Proses setiap file
+                    $nama_file = time() . "_" . $file->getClientOriginalName();
+                    $nama_folder = 'file/ticket';
+                    $file->move(public_path($nama_folder), $nama_file);
+                    $attachments[] = $nama_folder . "/" . $nama_file;
                 }
+
+                // Tambahkan file baru ke file yang sudah ada
+                $existingAttachments = json_decode($ticket->attachments, true) ?? [];
+                $attachments = array_merge($existingAttachments, $attachments);
             }
 
+            $validate['attachments'] = json_encode($attachments);
+
+            // Update tiket dengan data baru
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Diupdate.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }
     }
+
 
 
     /**
