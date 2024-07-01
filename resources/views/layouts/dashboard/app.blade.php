@@ -11,7 +11,7 @@
         content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="{{ asset('template/dist/assets/media/logos.png') }}" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -36,9 +36,11 @@
             cursor: pointer;
             position: relative;
         }
+
         .custom-dropzone .dz-message {
             pointer-events: none;
         }
+
         .preview {
             display: flex;
             flex-wrap: wrap;
@@ -46,14 +48,17 @@
             margin-top: 10px;
             justify-content: center;
         }
+
         .preview .image-container {
             position: relative;
             display: inline-block;
         }
+
         .preview img {
             max-width: 100px;
             max-height: 100px;
         }
+
         .remove-btn {
             position: absolute;
             top: 5px;
@@ -68,6 +73,7 @@
             font-size: 12px;
             text-align: center;
         }
+
         .error-message {
             color: red;
             margin-top: 10px;
@@ -1419,13 +1425,14 @@
     {{-- Javascript Data Pengguna --}}
     <script>
         let uploadedFiles = [];
-        let existingFiles = Array.from(document.querySelectorAll('.preview .image-container')).map(container => container.querySelector('img').src);
+        let existingFiles = Array.from(document.querySelectorAll('.preview .image-container')).map(container => container
+            .querySelector('img').src);
 
         document.getElementById('attachments').addEventListener('change', function(event) {
             const fileList = Array.from(event.target.files);
             const preview = document.querySelector('.preview');
             const errorMessage = document.getElementById('error-message');
-            const maxFiles = 10;
+            const maxFiles = 5;
 
             if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
                 errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;

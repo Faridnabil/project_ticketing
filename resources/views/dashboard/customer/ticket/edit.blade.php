@@ -124,11 +124,11 @@
                                             <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau klik untuk mengunggah.</h3>
                                             <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
                                         </div>
-                                        <div class="preview">
+                                        <div class="preview" id="preview">
                                             @foreach(explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $attachment)
-                                                <div class="image-container">
+                                                <div class="image-container" data-path="{{ asset($attachment) }}">
                                                     <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}">
-                                                    <button type="button" class="remove-btn" onclick="removeExistingFile('{{ $attachment }}')">x</button>
+                                                    <button type="button" class="remove-btn" onclick="removeExistingFile('{{ asset($attachment) }}')">x</button>
                                                 </div>
                                             @endforeach
                                         </div>
