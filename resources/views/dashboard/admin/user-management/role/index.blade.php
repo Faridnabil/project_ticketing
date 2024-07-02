@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Data Peran | SIAK Ducapil
+    Data Peran | SIAK Dukcapil
 @endsection
 
 @section('content')

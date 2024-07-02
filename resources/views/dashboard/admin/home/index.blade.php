@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Dashboard | SIAK Ducapil
+    Dashboard | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -161,7 +161,7 @@
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="fw-bolder mb-2 text-dark">Monitoring Tiket</span>
                             </h3>
-                            <form action="{{ route('dashboard.index') }}" method="GET">
+                            <form action="{{ route('admin.dashboard.index') }}" method="GET">
                                 <div class="input-group">
                                     <select name="ticket_number" class="form-control mt-3">
                                         <option value="">Pilih Nomor Tiket</option>

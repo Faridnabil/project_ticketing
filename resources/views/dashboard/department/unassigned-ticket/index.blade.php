@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket yang Belum Ditetapkan | SIAK Ducapil
+    Ticket yang Belum Ditetapkan | SIAK Dukcapil
 @endsection
 
 @section('content')

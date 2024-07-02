@@ -15,6 +15,10 @@ class UsersSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+        Permission::create(['name' => 'View Dashboard Admin']);
+        Permission::create(['name' => 'View Dashboard Customer']);
+        Permission::create(['name' => 'View Dashboard Department']);
+
         Permission::create(['name' => 'View User Management']);
         Permission::create(['name' => 'Create User']);
         Permission::create(['name' => 'Edit User']);
@@ -61,6 +65,8 @@ class UsersSeeder extends Seeder
         $DepartmentRole = Role::create(['name' => 'Department']);
 
         //Admin
+        $adminRole->givePermissionTo('View Dashboard Admin');
+
         $adminRole->givePermissionTo('View User Management');
         $adminRole->givePermissionTo('Create User');
         $adminRole->givePermissionTo('Edit User');
@@ -102,6 +108,8 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Show Ticket');
 
         //Customer
+        $CustomerRole->givePermissionTo('View Dashboard Customer');
+
         $CustomerRole->givePermissionTo('View Ticket');
         $CustomerRole->givePermissionTo('Create Ticket');
         $CustomerRole->givePermissionTo('Edit Ticket');
@@ -109,6 +117,8 @@ class UsersSeeder extends Seeder
         $CustomerRole->givePermissionTo('Show Ticket');
 
         //Department
+        $DepartmentRole->givePermissionTo('View Dashboard Department');
+
         $DepartmentRole->givePermissionTo('View Category');
         $DepartmentRole->givePermissionTo('Create Category');
         $DepartmentRole->givePermissionTo('Edit Category');

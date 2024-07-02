@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class HomeAdminController extends Controller
 {
     public function index(Request $request)
     {

@@ -98,7 +98,7 @@
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                     <!--begin::Logo-->
                     <a href="index.html">
-                        <img alt="Logo" src="assets/media/logos/logo-1.svg" class="h-15px logo" />
+                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logo.png') }}" class="h-15px logo" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Aside toggler-->
@@ -164,7 +164,7 @@
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                             <a href="index.html" class="d-lg-none">
-                                <img alt="Logo" src="assets/media/logos/logo-3.svg" class="h-30px" />
+                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logo.png') }}" class="h-30px" />
                             </a>
                         </div>
                         <!--end::Mobile logo-->

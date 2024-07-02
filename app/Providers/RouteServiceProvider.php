@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -36,5 +37,25 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
+    }
+
+    /**
+     * Get the redirect path based on user role.
+     *
+     * @return string
+     */
+    public static function redirectTo()
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('Admin')) {
+            return '/admin/dashboard';
+        } elseif ($user->hasRole('Customer')) {
+            return '/customer/dashboard';
+        } elseif ($user->hasRole('Department')) {
+            return '/department/dashboard';
+        }
+
+        return self::HOME;
     }
 }

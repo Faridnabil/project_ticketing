@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class HomeDepartmentController extends Controller
 {
     public function index()
 {
@@ -21,7 +21,7 @@ class HomeController extends Controller
     $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
     $tiket_selesai = $tickets->where('status.status_name', 'Tutup')->count();
 
-    return view('dashboard.admin.home.index', compact(
+    return view('dashboard.department.home.index', compact(
         'tickets', 'total_tiket', 'tiket_proses', 'tiket_tertunda', 'tiket_selesai'
     ));
 }

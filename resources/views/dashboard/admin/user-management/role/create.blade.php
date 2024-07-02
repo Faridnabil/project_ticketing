@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Peran | SIAK Ducapil
+    Tambah Peran | SIAK Dukcapil
 @endsection
 
 @section('content')

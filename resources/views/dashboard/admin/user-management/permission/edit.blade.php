@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Izin | SIAK Ducapil
+    Ubah Izin | SIAK Dukcapil
 @endsection
 
 @section('content')

@@ -1,17 +1,19 @@
 <?php
 
-use App\Http\Controllers\AssignedTicketController;
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\PriorityController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\TicketController;
-use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Customer\HomeCustomerController;
 use App\Http\Controllers\Customer\TicketCustomerController;
-use App\Http\Controllers\UnassignedTicketController;
+use App\Http\Controllers\Department\AssignedTicketController;
+use App\Http\Controllers\Department\HomeDepartmentController;
+use App\Http\Controllers\Department\UnassignedTicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,10 +32,6 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.index');
-});
-
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -45,29 +43,35 @@ require __DIR__ . '/auth.php';
 
 
 Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(function () {
+    Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
+
     Route::resources([
-        '/role'                                     => RoleController::class,
-        '/permission'                               => PermissionController::class,
-        '/user'                                     => UserController::class,
-        '/ticket'                                   => TicketController::class,
-        '/priority'                                 => PriorityController::class,
-        '/status'                                   => StatusController::class,
-        '/category'                                 => CategoryController::class,
+        '/admin/role'                                     => RoleController::class,
+        '/admin/permission'                               => PermissionController::class,
+        '/admin/user'                                     => UserController::class,
+        '/admin/ticket'                                   => TicketController::class,
+        '/admin/priority'                                 => PriorityController::class,
+        '/admin/status'                                   => StatusController::class,
+        '/admin/category'                                 => CategoryController::class,
     ]);
 });
 
 Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
+    Route::get('/customer/dashboard', [HomeCustomerController::class, 'index'])->name('customer.dashboard.index');
+
     Route::resources([
-        '/myTicket'                               => TicketCustomerController::class,
+        '/customer/myTicket'                               => TicketCustomerController::class,
     ]);
 });
 
 Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
+    Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
+
     Route::resources([
-        '/assignedTicket'                           => AssignedTicketController::class,
+        '/department/assignedTicket'                       => AssignedTicketController::class,
     ]);
 
-    Route::get('/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
-    Route::get('/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
+    Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('department.unassignedTicket.index');
+    Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('department.unassignedTicket.show');
 });
 

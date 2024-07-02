@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Lihat Ticket Saya | SIAK Ducapil
+    Lihat Ticket Saya | SIAK Dukcapil
 @endsection
 
 @section('content')
