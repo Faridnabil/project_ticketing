@@ -50,6 +50,13 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
         '/admin/permission'                               => PermissionController::class,
         '/admin/user'                                     => UserController::class,
         '/admin/ticket'                                   => TicketController::class,
+    ]);
+});
+
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department'])->group(function () {
+    Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
+
+    Route::resources([
         '/admin/priority'                                 => PriorityController::class,
         '/admin/status'                                   => StatusController::class,
         '/admin/category'                                 => CategoryController::class,
@@ -71,7 +78,8 @@ Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
         '/department/assignedTicket'                       => AssignedTicketController::class,
     ]);
 
-    Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('department.unassignedTicket.index');
-    Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('department.unassignedTicket.show');
+    Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
+    Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
+    Route::put('/department/unassignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_attachment'])->name('unassignedTicket.update');
 });
 

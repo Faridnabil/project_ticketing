@@ -42,6 +42,77 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="mb-10">
+                                                    <!--begin::Product slider-->
+                                                    <div class="tns tns-default">
+                                                        <!--begin::Slider-->
+                                                        <div data-tns="true" data-tns-loop="true"
+                                                            data-tns-swipe-angle="false" data-tns-speed="2000"
+                                                            data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                                            data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                                            data-tns-center="false" data-tns-dots="false"
+                                                            data-tns-prev-button="#kt_team_slider_prev1"
+                                                            data-tns-next-button="#kt_team_slider_next1">
+
+                                                            @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                                                <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                                                    <img src="{{ asset($attachment) }}"
+                                                                        alt="{{ basename($attachment) }}"
+                                                                        class="card-rounded shadow mw-100"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        <!--end::Slider-->
+                                                        <!--begin::Slider button-->
+                                                        <button class="btn btn-icon btn-active-color-primary"
+                                                            id="kt_team_slider_prev1">
+                                                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-left.svg-->
+                                                            <span class="svg-icon svg-icon-3x">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                                        <path
+                                                                            d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                                            fill="#000000" fill-rule="nonzero"
+                                                                            transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </button>
+                                                        <!--end::Slider button-->
+                                                        <!--begin::Slider button-->
+                                                        <button class="btn btn-icon btn-active-color-primary"
+                                                            id="kt_team_slider_next1">
+                                                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
+                                                            <span class="svg-icon svg-icon-3x">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                                        <path
+                                                                            d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                                            fill="#000000" fill-rule="nonzero"
+                                                                            transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </button>
+                                                        <!--end::Slider button-->
+                                                    </div>
+                                                    <!--end::Product slider-->
+                                                </div>
+
                                                 <!-- Comments section -->
                                                 <div class="mb-5">
 
@@ -69,7 +140,7 @@
                                                                 </div>
                                                             @enderror
                                                             <button class="btn btn-primary mb-8"
-                                                                type="submit">Submit</button>
+                                                                type="submit">Simpan</button>
                                                         </form>
                                                     </div>
 
@@ -165,74 +236,78 @@
                                     <div class="card-body p-12">
                                         <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
                                         @foreach ($logs as $log)
-                                            <div
-                                                class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
-                                                <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
-                                                <div class="d-flex flex-column">
-                                                    <h5 class="text-gray-800 fw-bolder">
-                                                        <strong>
-                                                            @if ($log->attribute == 'priority_id')
-                                                                Prioritas
-                                                            @elseif($log->attribute == 'status_id')
-                                                                Status
-                                                            @elseif($log->attribute == 'customer')
-                                                                Customer
-                                                            @elseif($log->attribute == 'assign_to')
-                                                                Ditugaskan Ke
-                                                            @elseif($log->attribute == 'assign_to')
-                                                                Ditugaskan Ke
-                                                            @elseif($log->attribute == 'category_id')
-                                                                Kategori
-                                                            @elseif($log->attribute == 'title')
-                                                                Judul
-                                                            @elseif($log->attribute == 'due_date')
-                                                                Tanggal Jatuh Tempo
-                                                            @elseif($log->attribute == 'description')
-                                                                Deskripsi
-                                                            @else
-                                                                {{ $log->attribute }}
-                                                            @endif
-                                                        </strong>:
-                                                    </h5>
-                                                    <div class="fw-bold">
-                                                        @if ($log->old_value == null)
-                                                            <span>
-                                                                @if (is_numeric($log->new_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                            @if ($log->user_id != 1)
+                                                <div
+                                                    class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
+                                                    <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
+                                                    <div class="d-flex flex-column">
+                                                        <h5 class="text-gray-800 fw-bolder">
+                                                            <strong>
+                                                                @if ($log->attribute == 'priority_id')
+                                                                    Prioritas
+                                                                @elseif($log->attribute == 'status_id')
+                                                                    Status
+                                                                @elseif($log->attribute == 'customer')
+                                                                    Customer
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'assign_to')
+                                                                    Ditugaskan Ke
+                                                                @elseif($log->attribute == 'category_id')
+                                                                    Kategori
+                                                                @elseif($log->attribute == 'title')
+                                                                    Judul
+                                                                @elseif($log->attribute == 'due_date')
+                                                                    Tanggal Jatuh Tempo
+                                                                @elseif($log->attribute == 'description')
+                                                                    Deskripsi
+                                                                @elseif($log->attribute == 'attachments')
+                                                                    Foto
                                                                 @else
-                                                                    {{ $log->new_value }}
+                                                                    {{ $log->attribute }}
                                                                 @endif
-                                                            </span><br>
-                                                            <span>Alasan: {!! $log->reason !!}</span>
-                                                            <div class="text-muted">Dirubah oleh:
-                                                                {{ $log->user->name }} pada
-                                                                {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                            </div>
-                                                        @else
-                                                            <span class="text-muted">Dari:
-                                                                @if (is_numeric($log->old_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                @elseif(is_string($log->old_value))
-                                                                    {!! $log->old_value !!}
-                                                                @endif
-                                                            </span>
+                                                            </strong>:
+                                                        </h5>
+                                                        <div class="fw-bold">
+                                                            @if ($log->old_value == null)
+                                                                <span>
+                                                                    @if (is_numeric($log->new_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @else
+                                                                        {{ $log->new_value }}
+                                                                    @endif
+                                                                </span><br>
+                                                                <span>Alasan: {!! $log->reason !!}</span>
+                                                                <div class="text-muted">Dirubah oleh:
+                                                                    {{ $log->user->name }} pada
+                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                </div>
+                                                            @else
+                                                                <span class="text-muted">Dari:
+                                                                    @if (is_numeric($log->old_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @elseif(is_string($log->old_value))
+                                                                        {!! $log->old_value !!}
+                                                                    @endif
+                                                                </span>
 
-                                                            <span>Untuk:
-                                                                @if (is_numeric($log->new_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                @elseif (is_string($log->new_value))
-                                                                    {!! $log->new_value !!}
-                                                                @endif
-                                                            </span>
-                                                            <span>Alasan: {!! $log->reason !!}</span>
-                                                            <div class="text-muted">Dirubah oleh:
-                                                                {{ $log->user->name }} pada
-                                                                {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                            </div>
-                                                        @endif
+                                                                <span>Untuk:
+                                                                    @if (is_numeric($log->new_value))
+                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                    @elseif (is_string($log->new_value))
+                                                                        {!! $log->new_value !!}
+                                                                    @endif
+                                                                </span>
+                                                                <span>Alasan: {!! $log->reason !!}</span>
+                                                                <div class="text-muted">Dirubah oleh:
+                                                                    {{ $log->user->name }} pada
+                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
@@ -243,6 +318,38 @@
             </div>
         </div>
     </div>
+
+    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+    <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title m-0 text" id="exampleModalprimary1">
+                        Foto
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div><!--end modal-header-->
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="{{ asset($attachment) }}"
+                            alt="{{ basename($attachment) }}" />
+                    </div>
+                </div><!--end modal-body-->
+            </div>
+        </div>
+    </div>
+@endforeach
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.modal').on('click', function(e) {
+                if ($(e.target).hasClass('modal')) {
+                    $(this).modal('hide');
+                }
+            });
+        });
+    </script>
 
     <script>
         ClassicEditor

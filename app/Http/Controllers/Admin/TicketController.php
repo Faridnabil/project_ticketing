@@ -92,20 +92,30 @@ class TicketController extends Controller
             $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
-            $validate = $request->all();
-            $file = $request->file('attachment'); // pastikan nama file sesuai dengan yang di form
-            $validate['no_ticket'] = $newTicketId;
-
-            if ($file) {
-                // Proses file
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/ticket';
-                $file->move(public_path($nama_folder), $nama_file);
-                $validate['attachment'] = $nama_folder . "/" . $nama_file;
+            // Pastikan ticket_id unik
+            while (Ticket::where('no_ticket', $newTicketId)->exists()) {
+                $newTicketIdNumber++;
+                $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
             }
 
-            Ticket::create($validate);
+            $validate = $request->all();
+            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+            $validate['no_ticket'] = $newTicketId;
 
+            $attachments = [];
+            if ($files) {
+                foreach ($files as $file) {
+                    // Proses setiap file
+                    $nama_file = time() . "_" . $file->getClientOriginalName();
+                    $nama_folder = 'file/ticket';
+                    $file->move(public_path($nama_folder), $nama_file);
+                    $attachments[] = $nama_folder . "/" . $nama_file;
+                }
+            }
+
+            $validate['attachments'] = json_encode($attachments);
+
+            Ticket::create($validate);
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -198,38 +208,39 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'customer' => 'required',
-            'assign_to' => 'required',
-            'priority_id' => 'required',
-            'due_date' => 'nullable|date',
-            'status_id' => 'required',
-            'category_id' => 'required',
-            'description' => 'nullable',
-            'attachment' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'reason' => 'required|string|max:255',
-        ]);
-
         DB::beginTransaction();
         try {
-            $validate = $request->all();
-            if ($request->hasFile('attachment')) {
-                // Proses file baru
-                $file = $request->file('attachment');
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/ticket';
-                $file->move(public_path($nama_folder), $nama_file);
-                $validate['attachment'] = $nama_folder . "/" . $nama_file;
+            // Ambil tiket yang akan diupdate
+            $ticket = Ticket::findOrFail($id);
 
-                // Hapus file lama jika ada
-                if ($ticket->attachment && file_exists(public_path($ticket->attachment))) {
-                    unlink(public_path($ticket->attachment));
+            $validate = $request->all();
+            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+
+            // Ambil file yang dihapus
+            $removedAttachments = explode(',', $request->input('removed_attachments'));
+
+            // Ambil file yang masih ada
+            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
+            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+
+            $attachments = [];
+            if ($files) {
+                foreach ($files as $file) {
+                    // Proses setiap file
+                    $nama_file = time() . "_" . $file->getClientOriginalName();
+                    $nama_folder = 'file/ticket';
+                    $file->move(public_path($nama_folder), $nama_file);
+                    $attachments[] = $nama_folder . "/" . $nama_file;
                 }
             }
 
+            // Gabungkan file baru dengan file yang masih ada
+            $attachments = array_merge($remainingAttachments, $attachments);
+            $validate['attachments'] = json_encode($attachments);
+
+            // Update tiket dengan data baru
             $ticket->update($validate);
 
             DB::commit();

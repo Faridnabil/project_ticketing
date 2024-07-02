@@ -198,6 +198,13 @@ class TicketCustomerController extends Controller
             $validate = $request->all();
             $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
 
+            // Ambil file yang dihapus
+            $removedAttachments = explode(',', $request->input('removed_attachments'));
+
+            // Ambil file yang masih ada
+            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
+            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+
             $attachments = [];
             if ($files) {
                 foreach ($files as $file) {
@@ -207,12 +214,10 @@ class TicketCustomerController extends Controller
                     $file->move(public_path($nama_folder), $nama_file);
                     $attachments[] = $nama_folder . "/" . $nama_file;
                 }
-
-                // Tambahkan file baru ke file yang sudah ada
-                $existingAttachments = json_decode($ticket->attachments, true) ?? [];
-                $attachments = array_merge($existingAttachments, $attachments);
             }
 
+            // Gabungkan file baru dengan file yang masih ada
+            $attachments = array_merge($remainingAttachments, $attachments);
             $validate['attachments'] = json_encode($attachments);
 
             // Update tiket dengan data baru
@@ -225,8 +230,6 @@ class TicketCustomerController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
-
-
 
     /**
      * Remove the specified resource from storage.

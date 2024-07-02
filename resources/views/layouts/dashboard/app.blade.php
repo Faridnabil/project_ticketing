@@ -4,14 +4,14 @@
 <head>
     <base href="">
     <meta charset="utf-8" />
-    <title>SIAK Ducapil</title>
+    <title>@yield('title')</title>
     <meta name="description"
         content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
     <meta name="keywords"
         content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('template/dist/assets/media/logos.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('template/dist/assets/media/logos/logos.png') }}" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -97,8 +97,8 @@
                 <!--begin::Brand-->
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                     <!--begin::Logo-->
-                    <a href="index.html">
-                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logo.png') }}" class="h-15px logo" />
+                    <a href="">
+                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="h-30px logo" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Aside toggler-->
@@ -164,7 +164,7 @@
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                             <a href="index.html" class="d-lg-none">
-                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logo.png') }}" class="h-30px" />
+                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logos.png') }}" class="h-30px" />
                             </a>
                         </div>
                         <!--end::Mobile logo-->
@@ -1422,17 +1422,55 @@
     <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
 
-    {{-- Javascript Data Pengguna --}}
+    {{-- Javascript Dropzone --}}
     <script>
         let uploadedFiles = [];
-        let existingFiles = Array.from(document.querySelectorAll('.preview .image-container')).map(container => container
-            .querySelector('img').src);
+        let existingFiles = [];
+
+        @if (isset($ticket) && $ticket->attachments)
+            @php
+                $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
+            @endphp
+            @foreach ($attachments as $attachment)
+                existingFiles.push('{{ $attachment }}');
+            @endforeach
+        @endif
+
+        let removedFiles = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const preview = document.querySelector('.preview');
+            existingFiles.forEach(filePath => {
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+
+                const img = document.createElement('img');
+                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
+                img.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
+            });
+            updateExistingFileList(); // Update the list on page load
+        });
 
         document.getElementById('attachments').addEventListener('change', function(event) {
             const fileList = Array.from(event.target.files);
             const preview = document.querySelector('.preview');
             const errorMessage = document.getElementById('error-message');
-            const maxFiles = 5;
+            const maxFiles = 15;
 
             if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
                 errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
@@ -1441,39 +1479,52 @@
 
             errorMessage.textContent = ''; // Clear any existing error message
 
-            uploadedFiles = [...uploadedFiles, ...fileList];
+            fileList.forEach(file => {
+                if (!uploadedFiles.includes(file) && !existingFiles.includes(file.name)) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const container = document.createElement('div');
+                        container.classList.add('image-container');
 
-            fileList.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const container = document.createElement('div');
-                    container.classList.add('image-container');
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
 
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'x';
+                        removeBtn.classList.add('remove-btn');
+                        removeBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
 
-                    const removeBtn = document.createElement('button');
-                    removeBtn.textContent = 'x';
-                    removeBtn.classList.add('remove-btn');
-                    removeBtn.addEventListener('click', (event) => {
-                        event.stopPropagation();
-                        container.remove();
-                        uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                        updateFileList();
-                    });
+                        container.appendChild(img);
+                        container.appendChild(removeBtn);
+                        preview.appendChild(container);
+                    };
 
-                    container.appendChild(img);
-                    container.appendChild(removeBtn);
-                    preview.appendChild(container);
-                };
+                    if (file.type.startsWith('image/')) {
+                        reader.readAsDataURL(file); // Read file as Data URL for image preview
+                    }
 
-                if (file.type.startsWith('image/')) {
-                    reader.readAsDataURL(file); // Read file as Data URL for image preview
+                    uploadedFiles.push(file);
+                    updateFileList(); // Update file list after adding each file
                 }
             });
-
-            updateFileList();
         });
+
+        function uploadFile(event) {
+            if (!event.target.closest('.image-container')) {
+                document.getElementById('attachments').click();
+            }
+        }
 
         function updateFileList() {
             const dataTransfer = new DataTransfer();
@@ -1481,9 +1532,23 @@
             document.getElementById('attachments').files = dataTransfer.files;
         }
 
-        function removeExistingFile(filePath) {
-            existingFiles = existingFiles.filter(file => file !== filePath);
-            document.querySelector(`img[src="${filePath}"]`).parentElement.remove();
+        function updateExistingFileList() {
+            document.getElementById('remaining_attachments').value = existingFiles.join(',');
+        }
+
+        function removeExistingFile(event, filePath) {
+            event.stopPropagation();
+            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
+            if (imgElement && imgElement.parentElement) {
+                existingFiles = existingFiles.filter(file => file !== filePath);
+                removedFiles.push(filePath);
+                imgElement.parentElement.remove();
+                document.getElementById('removed_attachments').value = removedFiles.join(',');
+
+                updateExistingFileList(); // Update remaining files list
+            } else {
+                console.error('File not found:', filePath);
+            }
         }
     </script>
 

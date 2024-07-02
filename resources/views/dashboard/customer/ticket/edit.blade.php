@@ -39,15 +39,17 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('myTicket.update', $ticket->id) }}"
-                                enctype="multipart/form-data" novalidate>
+                            <form class="row g-3 needs-validation" method="POST"
+                                action="{{ route('myTicket.update', $ticket->id) }}" enctype="multipart/form-data"
+                                novalidate>
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Judul</label>
                                     <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        id="title" name="title" value="{{ old('title', $ticket->title) }}" autofocus required>
+                                        id="title" name="title" value="{{ old('title', $ticket->title) }}" autofocus
+                                        required>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -84,7 +86,9 @@
                                         class="form-control @error('category_id') is-invalid @enderror" required autofocus>
                                         <option value="" disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $ticket->category_id == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                            <option value="{{ $category->id }}"
+                                                {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->category_name }}</option>
                                         @endforeach
                                     </select>
 
@@ -121,19 +125,17 @@
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
-                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau klik untuk mengunggah.</h3>
+                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau
+                                                klik untuk mengunggah.</h3>
                                             <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
                                         </div>
-                                        <div class="preview" id="preview">
-                                            @foreach(explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $attachment)
-                                                <div class="image-container" data-path="{{ asset($attachment) }}">
-                                                    <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}">
-                                                    <button type="button" class="remove-btn" onclick="removeExistingFile('{{ asset($attachment) }}')">x</button>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        <div class="preview" id="preview"></div>
                                     </div>
-                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none" multiple>
+                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none"
+                                        multiple>
+
+                                    <input type="hidden" id="removed_attachments" name="removed_attachments">
+                                    <input type="hidden" id="remaining_attachments" name="remaining_attachments">
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('attachments')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -164,5 +166,4 @@
                 console.error(error);
             });
     </script>
-
 @endsection

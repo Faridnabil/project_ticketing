@@ -12,6 +12,7 @@ use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AssignedTicketController extends Controller
 {
@@ -24,7 +25,7 @@ class AssignedTicketController extends Controller
             })
             ->get();
 
-        return view('dashboard.assigned-ticket.index', compact('tickets'));
+        return view('dashboard.department.assigned-ticket.index', compact('tickets'));
     }
 
     public function show($id)
@@ -47,7 +48,7 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.assigned-ticket.show',
+            'dashboard.department.assigned-ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -63,15 +64,23 @@ class AssignedTicketController extends Controller
     }
     public function store(Request $request)
     {
-        $comment = new Comment();
-        $comment->ticket_id = $request->ticket_id;
-        $comment->user_id = auth()->id();
-        $comment->message = $request->message;
-        $comment->created_at = now();
-        $comment->updated_at = null;
-        $comment->save();
+        DB::beginTransaction();
+        try {
+            $comment = new Comment();
+            $comment->ticket_id = $request->ticket_id;
+            $comment->user_id = auth()->id();
+            $comment->message = $request->message;
+            $comment->created_at = now();
+            $comment->updated_at = null;
+            $comment->save();
 
-        return redirect()->back()->with('success', 'Comment added successfully!');
+            DB::commit();
+            return redirect()->back()->with('success', 'Komen telah terbuat!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return back()->with('error', 'Komentar anda tidak tersimpan!');
+        }
     }
 
     public function edit($id)
@@ -94,7 +103,7 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.assigned-ticket.edit',
+            'dashboard.department.assigned-ticket.edit',
             compact(
                 'ticket',
                 'customers',
@@ -133,5 +142,46 @@ class AssignedTicketController extends Controller
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
 
+    public function update_attachment(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            // Ambil tiket yang akan diupdate
+            $ticket = Ticket::findOrFail($id);
 
+            $validate = $request->all();
+            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+
+            // Ambil file yang dihapus
+            $removedAttachments = explode(',', $request->input('removed_attachments'));
+
+            // Ambil file yang masih ada
+            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
+            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+
+            $attachments = [];
+            if ($files) {
+                foreach ($files as $file) {
+                    // Proses setiap file
+                    $nama_file = time() . "_" . $file->getClientOriginalName();
+                    $nama_folder = 'file/ticket';
+                    $file->move(public_path($nama_folder), $nama_file);
+                    $attachments[] = $nama_folder . "/" . $nama_file;
+                }
+            }
+
+            // Gabungkan file baru dengan file yang masih ada
+            $attachments = array_merge($remainingAttachments, $attachments);
+            $validate['attachments'] = json_encode($attachments);
+
+            // Update tiket dengan data baru
+            $ticket->update($validate);
+
+            DB::commit();
+            return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
+    }
 }

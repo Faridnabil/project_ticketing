@@ -153,39 +153,29 @@
                                     @enderror
                                 </div>
 
-
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url({{ asset($ticket->attachment) }})">
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url({{ asset($ticket->attachment) }});"></div>
-                                        <label
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                            title="Ganti lampiran">
-                                            <i class="bi bi-pencil-fill fs-7"></i>
-                                            <input type="file" name="attachment" accept=".png, .jpg, .jpeg" />
-                                            <input type="hidden" name="attachment_remove" />
-                                        </label>
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                            title="Batalkan lampiran">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                            title="Hapus lampiran">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
+                                    <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
+                                        <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                        <div class="dz-message">
+                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau
+                                                klik untuk mengunggah.</h3>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
+                                        </div>
+                                        <div class="preview" id="preview"></div>
                                     </div>
+                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none"
+                                        multiple>
+
+                                    <input type="hidden" id="removed_attachments" name="removed_attachments">
+                                    <input type="hidden" id="remaining_attachments" name="remaining_attachments">
                                     <div class="valid-feedback">Looks good!</div>
-                                    @error('attachment')
+                                    @error('attachments')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <div class="error-message" id="error-message"></div>
                                 </div>
+
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Update</button>
                                     <a href="{{ route('ticket.index') }}" class="btn btn-danger">Cancel</a>
