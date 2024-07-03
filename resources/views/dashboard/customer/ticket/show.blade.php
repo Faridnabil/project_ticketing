@@ -119,7 +119,7 @@
                                                     <!-- Form to submit a new comment -->
                                                     <div class="mb-0">
                                                         <form class="row g-3 needs-validation" method="POST"
-                                                            action="{{ route('assignedTicket.store') }}"
+                                                            action="{{ route('myTickets.store') }}"
                                                             enctype="multipart/form-data" novalidate>
                                                             @csrf
                                                             <input type="hidden" name="user_id"
@@ -148,7 +148,7 @@
                                                     @foreach ($comments as $comment)
                                                         <div id="comment-{{ $comment->id }}">
                                                             <form
-                                                                action="{{ route('assignedTicket.update', $comment->id) }}"
+                                                                action="{{ route('myTickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -237,81 +237,81 @@
                                         <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
                                         @foreach ($logs as $log)
                                             @if ($log->user_id != 1)
-                                                <div
-                                                    class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
-                                                    <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
-                                                    <div class="d-flex flex-column">
-                                                        <h5 class="text-gray-800 fw-bolder">
-                                                            <strong>
-                                                                @if ($log->attribute == 'priority_id')
-                                                                    Prioritas
-                                                                @elseif($log->attribute == 'status_id')
-                                                                    Status
-                                                                @elseif($log->attribute == 'customer')
-                                                                    Customer
-                                                                @elseif($log->attribute == 'assign_to')
-                                                                    Ditugaskan Ke
-                                                                @elseif($log->attribute == 'assign_to')
-                                                                    Ditugaskan Ke
-                                                                @elseif($log->attribute == 'category_id')
-                                                                    Kategori
-                                                                @elseif($log->attribute == 'title')
-                                                                    Judul
-                                                                @elseif($log->attribute == 'due_date')
-                                                                    Tanggal Jatuh Tempo
-                                                                @elseif($log->attribute == 'description')
-                                                                    Deskripsi
-                                                                @elseif($log->attribute == 'attachments')
-                                                                    Foto
-                                                                @else
-                                                                    {{ $log->attribute }}
-                                                                @endif
-                                                            </strong>:
-                                                        </h5>
-                                                        <div class="fw-bold">
-                                                            @if ($log->old_value == null)
-                                                                <span>
-                                                                    @if (is_numeric($log->new_value))
-                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                @if ($log->attribute != 'attachments')
+                                                    <div
+                                                        class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
+                                                        <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
+                                                        <div class="d-flex flex-column">
+                                                            <h5 class="text-gray-800 fw-bolder">
+                                                                <strong>
+                                                                    @if ($log->attribute == 'priority_id')
+                                                                        Prioritas
+                                                                    @elseif($log->attribute == 'status_id')
+                                                                        Status
+                                                                    @elseif($log->attribute == 'customer')
+                                                                        Customer
+                                                                    @elseif($log->attribute == 'assign_to')
+                                                                        Ditugaskan Ke
+                                                                    @elseif($log->attribute == 'category_id')
+                                                                        Kategori
+                                                                    @elseif($log->attribute == 'title')
+                                                                        Judul
+                                                                    @elseif($log->attribute == 'due_date')
+                                                                        Tanggal Jatuh Tempo
+                                                                    @elseif($log->attribute == 'description')
+                                                                        Deskripsi
+                                                                    @elseif($log->attribute == 'attachments')
                                                                     @else
-                                                                        {{ $log->new_value }}
+                                                                        {{ $log->attribute }}
                                                                     @endif
-                                                                </span><br>
-                                                                <span>Alasan: {!! $log->reason !!}</span>
-                                                                <div class="text-muted">Dirubah oleh:
-                                                                    {{ $log->user->name }} pada
-                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                                </div>
-                                                            @else
-                                                                <span class="text-muted">Dari:
-                                                                    @if (is_numeric($log->old_value))
-                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                    @elseif(is_string($log->old_value))
-                                                                        {!! $log->old_value !!}
-                                                                    @endif
-                                                                </span>
+                                                                </strong>:
 
-                                                                <span>Untuk:
-                                                                    @if (is_numeric($log->new_value))
-                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                    @elseif (is_string($log->new_value))
-                                                                        {!! $log->new_value !!}
-                                                                    @endif
-                                                                </span>
-                                                                <span>Alasan: {!! $log->reason !!}</span>
-                                                                <div class="text-muted">Dirubah oleh:
-                                                                    {{ $log->user->name }} pada
-                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                                </div>
-                                                            @endif
+                                                            </h5>
+                                                            <div class="fw-bold">
+                                                                @if ($log->old_value == null)
+                                                                    <span>
+                                                                        @if (is_numeric($log->new_value))
+                                                                            {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                        @else
+                                                                            {{ $log->new_value }}
+                                                                        @endif
+                                                                    </span><br>
+                                                                    <span>Alasan: {!! $log->reason !!}</span>
+                                                                    <div class="text-muted">Dirubah oleh:
+                                                                        {{ $log->user->name }} pada
+                                                                        {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                    </div>
+                                                                @else
+                                                                    <span class="text-muted">Dari:
+                                                                        @if (is_numeric($log->old_value))
+                                                                            {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                        @elseif(is_string($log->old_value))
+                                                                            {!! $log->old_value !!}
+                                                                        @endif
+                                                                    </span>
+                                                                    <span>Untuk:
+                                                                        @if (is_numeric($log->new_value))
+                                                                            {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                        @elseif (is_string($log->new_value))
+                                                                            {!! $log->new_value !!}
+                                                                        @endif
+                                                                    </span>
+                                                                    <span>Alasan: {!! $log->reason !!}</span>
+                                                                    <div class="text-muted">Dirubah oleh:
+                                                                        {{ $log->user->name }} pada
+                                                                        {{ date('d F Y H:i', strtotime($log->created_at)) }}
+                                                                    </div>
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @endif
                                             @endif
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -320,25 +320,24 @@
     </div>
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-    <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title m-0 text" id="exampleModalprimary1">
-                        Foto
-                    </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div><!--end modal-header-->
-                <div class="modal-body">
-                    <div class="text-center">
-                        <img src="{{ asset($attachment) }}"
-                            alt="{{ basename($attachment) }}" />
-                    </div>
-                </div><!--end modal-body-->
+        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title m-0 text" id="exampleModalprimary1">
+                            Foto
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                        </div>
+                    </div><!--end modal-body-->
+                </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

@@ -37,7 +37,7 @@ class PermissionController extends Controller
         $input = $request->all();
         Permission::create($input);
 
-        return redirect('permission')->with('success', 'Permission created successfully');
+        return redirect('admin/permission')->with('success', 'Permission created successfully');
     }
 
     public function edit($id)
@@ -64,12 +64,12 @@ class PermissionController extends Controller
         $permission = Permission::find($id);
         $permission->update($input);
 
-        return redirect('permission')->with('success', 'Permission updated successfully');
+        return redirect('admin/permission')->with('success', 'Permission updated successfully');
     }
 
     public function destroy($id)
     {
         Permission::find($id)->delete();
-        return redirect('permission')->with('success', 'Permission deleted successfully');
+        return redirect('admin/permission')->with('success', 'Permission deleted successfully');
     }
 }

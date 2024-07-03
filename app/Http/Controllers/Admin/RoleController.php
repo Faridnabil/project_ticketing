@@ -43,7 +43,7 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions(array_map(fn($val)=>(int)$val, $request->input('permission')));
 
-        return redirect('role')->with('success', 'Role created successfully');
+        return redirect('admin/role')->with('success', 'Role created successfully');
     }
 
     public function edit($id)
@@ -77,12 +77,12 @@ class RoleController extends Controller
         // $role->syncPermissions($request->input('permission'));
         $role->syncPermissions(array_map(fn($val)=>(int)$val, $request->input('permission')));
 
-        return redirect('role')->with('success', 'Role updated successfully');
+        return redirect('admin/role')->with('success', 'Role updated successfully');
     }
 
     public function destroy($id)
     {
         DB::table("roles")->where('id', $id)->delete();
-        return redirect('role')->with('success', 'Role deleted successfully');
+        return redirect('admin/role')->with('success', 'Role deleted successfully');
     }
 }

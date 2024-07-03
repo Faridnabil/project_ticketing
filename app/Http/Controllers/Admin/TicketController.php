@@ -270,4 +270,50 @@ class TicketController extends Controller
             return back()->with('error', 'Tiket gagal dihapus');
         }
     }
+
+    public function store_comment(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $comment = new Comment();
+            $comment->ticket_id = $request->ticket_id;
+            $comment->user_id = auth()->id();
+            $comment->message = $request->message;
+            $comment->created_at = now();
+            $comment->updated_at = null;
+            $comment->save();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Komen telah terbuat!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return back()->with('error', 'Komentar anda tidak tersimpan!');
+        }
+    }
+
+    public function update_comment(Request $request, $id)
+    {
+        // Cari komentar berdasarkan ID
+        $comment = Comment::find($id);
+
+        // Pastikan komentar ditemukan
+        if (!$comment) {
+            return redirect()->back()->with('error', 'Comment not found.');
+        }
+
+        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
+        $ticket = Ticket::find($request->ticket_id);
+        if (!$ticket) {
+            return redirect()->back()->with('error', 'Ticket not found.');
+        }
+
+        // Perbarui atribut-atribut komentar
+        $comment->ticket_id = $request->ticket_id;
+        $comment->user_id = auth()->id();
+        $comment->message = $request->message;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment updated successfully!');
+    }
 }

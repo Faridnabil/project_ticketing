@@ -84,7 +84,7 @@ class UserController extends Controller
             $user->assignRole($request->input('roles'));
 
 
-            return redirect('user')->with('success', 'User created successfully');
+            return redirect('admin/user')->with('success', 'User created successfully');
         } catch (\Throwable $th) {
             dd($th->getMessage());
             return back()->with(['error' => 'User creation failed.']);
@@ -157,7 +157,7 @@ class UserController extends Controller
             DB::table('model_has_roles')->where('model_id', $user->id)->delete();
             $user->assignRole($request->input('roles'));
 
-            return redirect('user')->with('success', 'User updated successfully');
+            return redirect('admin/user')->with('success', 'User updated successfully');
         } catch (\Throwable $th) {
             dd($th->getMessage());
             return back()->with(['error' => 'Data gagal disimpan.']);
@@ -173,10 +173,10 @@ class UserController extends Controller
             }
 
             $user->delete(); // Hapus principle
-            return redirect()->route('user.index')->with('success', 'user deleted successfully');
+            return redirect()->route('admin/user')->with('success', 'user deleted successfully');
         } catch (\Throwable $th) {
             // Log activity
-            return back()->with('error', 'user deleted failed');
+            return back()->with('success', 'user deleted failed');
         }
     }
 }

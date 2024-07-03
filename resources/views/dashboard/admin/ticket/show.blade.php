@@ -119,7 +119,7 @@
                                                     <!-- Form to submit a new comment -->
                                                     <div class="mb-0">
                                                         <form class="row g-3 needs-validation" method="POST"
-                                                            action="{{ route('assignedTicket.store') }}"
+                                                            action="{{ route('tickets.create') }}"
                                                             enctype="multipart/form-data" novalidate>
                                                             @csrf
                                                             <input type="hidden" name="user_id"
@@ -148,7 +148,7 @@
                                                     @foreach ($comments as $comment)
                                                         <div id="comment-{{ $comment->id }}">
                                                             <form
-                                                                action="{{ route('assignedTicket.update', $comment->id) }}"
+                                                                action="{{ route('tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -237,6 +237,7 @@
                                         <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
                                         @foreach ($logs as $log)
                                             @if ($log->user_id != 1)
+                                            @if ($log->attribute != 'attachments')
                                                 <div
                                                     class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
                                                     <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
@@ -307,6 +308,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            @endif
                                             @endif
                                         @endforeach
                                     </div>
