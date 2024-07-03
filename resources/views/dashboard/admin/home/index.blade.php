@@ -253,10 +253,79 @@
                     <!--end: List Widget 5-->
                 </div>
                 <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xxl-12">
+                    <!--begin::List Widget 5-->
+                    <div class="card card-xxl-stretch">
+                        <!--begin::Header-->
+                        <div class="card-header align-items-center border-0 mt-4">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="fw-bolder mb-2 text-dark">Data Pertahun</span>
+                            </h3>
+                            {{-- <form action="{{ route('admin.dashboard.index') }}" method="GET">
+                                <div class="input-group">
+                                    <select name="ticket_number" class="form-control mt-3">
+                                        <option value="">Pilih Nomor Tiket</option>
+                                        @foreach ($tickets as $ticket)
+                                            <option value="{{ $ticket->id }}">{{ $ticket->id }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                                </div>
+                            </form> --}}
+                            <div class="container">
+                                <canvas id="ticketChart"></canvas>
+                            </div>
+                        </div>
+                        <!--end::Header-->
+                    </div>
+                    <!--end: List Widget 5-->
+                </div>
+                <!--end::Col-->
             </div>
             <!--end::Row-->
         </div>
         <!--end::Container-->
     </div>
     <!--end::Post-->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('ticketChart').getContext('2d');
+
+            fetch('{{ url('/admin/tickets/chart') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const ticketChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.months,
+                            datasets: [{
+                                    label: 'Tiket Masuk',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                    data: data.tickets
+                                },
+                                {
+                                    label: 'Tiket Selesai',
+                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    borderWidth: 1,
+                                    data: data.ticketsClosed
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
 @endsection

@@ -5,12 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
-use App\Models\Category;
 use App\Models\Comment;
-use App\Models\Priority;
-use App\Models\Status;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeAdminController extends Controller
@@ -34,9 +30,21 @@ class HomeAdminController extends Controller
 
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
-        $tiket_proses = $tickets->where('status.status_name', 'Berlangsung')->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Tutup')->count();
+        $tiket_belum = $tickets
+            ->where('status.status_name', null)
+            ->count();
+        $tiket_buka = $tickets
+            ->where('status.status_name', 'Buka')
+            ->count();
+        $tiket_proses = $tickets
+            ->where('status.status_name', 'Berlangsung')
+            ->count();
+        $tiket_tertunda = $tickets
+            ->where('status.status_name', 'Tertunda')
+            ->count();
+        $tiket_selesai = $tickets
+            ->where('status.status_name', 'Tutup')
+            ->count();
 
         // Mendapatkan data logs dan comments untuk setiap tiket
         $logs = collect();
@@ -54,15 +62,60 @@ class HomeAdminController extends Controller
             $comments = $comments->merge($ticketComments);
         }
 
-        return view('dashboard.admin.home.index', compact(
-            'tickets',
-            'total_tiket',
-            'tiket_proses',
-            'tiket_tertunda',
-            'tiket_selesai',
-            'logs',
-            'comments',
-            'allTickets'
-        ));
+        return view(
+            'dashboard.admin.home.index',
+            compact(
+                'tickets',
+                'total_tiket',
+                'tiket_belum',
+                'tiket_buka',
+                'tiket_proses',
+                'tiket_tertunda',
+                'tiket_selesai',
+                'logs',
+                'comments',
+                'allTickets'
+            )
+        );
     }
+
+    public function getTicketChartData(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->year);
+
+        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $year)
+            ->where(function ($query) {
+                $query->where('status_id', 1)
+                    ->orWhere('status_id', 2)
+                    ->orWhere('status_id', 3);
+            })
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month')
+            ->toArray();
+
+        $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
+            ->whereYear('updated_at', $year)
+            ->where('status_id', 4) // Assuming 4 is the ID for 'Tutup'
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month')
+            ->toArray();
+
+        $chartData = [
+            'months' => [],
+            'tickets' => [],
+            'ticketsClosed' => []
+        ];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $chartData['months'][] = Carbon::create()->month($i)->format('F');
+            $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
+            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+        }
+
+        return response()->json($chartData);
+    }
+
 }

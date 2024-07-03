@@ -213,11 +213,10 @@
                                                                             value="Dirubah">
                                                                     </div>
                                                                 </div>
+                                                            </form>
                                                         </div>
-                                                        </form>
+                                                    @endforeach
                                                 </div>
-                                                @endforeach
-
 
                                                 @if (session('success'))
                                                     <div class="alert alert-success">
@@ -322,25 +321,24 @@
     </div>
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-    <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title m-0 text" id="exampleModalprimary1">
-                        Foto
-                    </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div><!--end modal-header-->
-                <div class="modal-body">
-                    <div class="text-center">
-                        <img src="{{ asset($attachment) }}"
-                            alt="{{ basename($attachment) }}" />
-                    </div>
-                </div><!--end modal-body-->
+        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title m-0 text" id="exampleModalprimary1">
+                            Foto
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                        </div>
+                    </div><!--end modal-body-->
+                </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

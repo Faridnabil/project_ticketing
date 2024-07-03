@@ -44,6 +44,8 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
+
 
     Route::resources([
         '/admin/role'                                     => RoleController::class,
@@ -71,7 +73,7 @@ Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
     ]);
 });
 
-Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Department|Customer'])->group(function () {
     Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
 
     Route::resources([

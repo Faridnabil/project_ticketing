@@ -38,7 +38,7 @@ class AssignedTicketController extends Controller
         $categories = Category::all();
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Status::class)
+        $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket)
             ->latest()
             ->get();

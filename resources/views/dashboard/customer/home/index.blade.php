@@ -159,22 +159,31 @@
                         <!--begin::Header-->
                         <div class="card-header align-items-center border-0 mt-4">
                             <h3 class="card-title align-items-start flex-column">
-                                <span class="fw-bolder mb-2 text-dark">Monitoring Tiket</span>
+                                <span class="fw-bolder mb-2 text-dark">Monitoring Tiket
+                                    @if ($selectedTicketNumber)
+                                        ({{ $selectedTicketNumber }})
+                                    @endif
+                                </span>
                             </h3>
                             <form action="{{ route('customer.dashboard.index') }}" method="GET">
                                 <div class="input-group">
+                                    <!-- Dropdown untuk memilih nomor tiket -->
                                     <select name="ticket_number" class="form-control mt-3">
                                         <option value="">Pilih Nomor Tiket</option>
                                         @foreach ($tickets as $ticket)
-                                            <option value="{{ $ticket->id }}">{{ $ticket->id }}</option>
+                                            <option value="{{ $ticket->id }}"
+                                                {{ $selectedTicketId == $ticket->id ? 'selected' : '' }}>
+                                                {{ $ticket->no_ticket }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <button type="submit" class="btn btn-primary mt-3">Filter</button>
                                 </div>
                             </form>
+
                             <div class="card-toolbar">
                                 <div class="card-toolbar scrollable-card" style="max-height: 290px; overflow-y:auto;">
-                                    {{-- @foreach ($logs as $log)
+                                    @foreach ($logs as $log)
                                         <div
                                             class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
                                             <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
@@ -243,7 +252,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach --}}
+                                    @endforeach
                                 </div>
                                 <!--end::Menu-->
                             </div>

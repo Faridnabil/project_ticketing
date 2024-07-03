@@ -1,7 +1,7 @@
 @extends('layouts.auth.app')
 
 @section('title')
-    Login | SIAK DUCAPIL
+    Login | SIAK DUKCAPIL
 @endsection
 
 @section('content')
