@@ -88,7 +88,25 @@
                                         <tr>
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
                                             <td>
-                                                <span class="badge" style="background-color: {{ $status->color }}; color: white; font-weight:bold"> {{ $status->status_name }}</span>
+                                                @if ($status->status_name == 'Tertunda')
+                                                    <span class="badge"
+                                                        style="background-color:red ; color: white; font-weight:bold">
+                                                        Tertunda</span>
+                                                @elseif($status->status_name == 'Diterima')
+                                                    <span class="badge"
+                                                        style="background-color:blue ; color: white; font-weight:bold">
+                                                        Diterima</span>
+                                                @elseif($status->status_name == 'Proses')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                        Proses</span>
+                                                @elseif($status->status_name == 'Selesai')
+                                                    <span class="badge"
+                                                        style="background-color:green ; color: white; font-weight:bold">
+                                                        Selesai</span>
+                                                @else
+                                                    {{ $status->status_name }}
+                                                @endif
                                             </td>
                                             <!--end::Name=-->
                                             <td>

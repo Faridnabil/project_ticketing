@@ -14,12 +14,21 @@ class PrioritySeeder extends Seeder
     public function run(): void
     {
         $priority = Priority::create([
-            'priority_name' => 'Low / Level 1',
+            'priority_name' => 'Low',
             'color' => '#ff0000',
         ]);
 
         $priority = Priority::create([
-            'priority_name' => 'Low / Level 2',
+            'priority_name' => 'Hight',
+            'color' => '#ff0000',
+        ]);
+
+        $priority = Priority::create([
+            'priority_name' => 'Medium',
+            'color' => '#ff0000',
+        ]);
+        $priority = Priority::create([
+            'priority_name' => 'Critical',
             'color' => '#ff0000',
         ]);
     }

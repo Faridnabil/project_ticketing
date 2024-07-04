@@ -88,7 +88,25 @@
                                         <tr>
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
                                             <td>
-                                                <span class="badge" style="background-color: {{ $priority->color }}; color: white; font-weight:bold"> {{ $priority->priority_name }}</span>
+                                                @if ($priority->priority_name == 'Critical')
+                                                    <span class="badge"
+                                                        style="background-color:red ; color: white; font-weight:bold">
+                                                        Critical</span>
+                                                @elseif($priority->priority_name == 'Medium')
+                                                    <span class="badge"
+                                                        style="background-color:blue ; color: white; font-weight:bold">
+                                                        Medium</span>
+                                                @elseif($priority->priority_name == 'Hight')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                        Hight</span>
+                                                @elseif($priority->priority_name == 'Low')
+                                                    <span class="badge"
+                                                        style="background-color:green ; color: white; font-weight:bold">
+                                                        Low</span>
+                                                @else
+                                                    {{ $priority->priority_name }}
+                                                @endif
                                             </td>
                                             <!--end::Name=-->
                                             <td>

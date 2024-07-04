@@ -19,17 +19,17 @@ class StatusSeeder extends Seeder
         ]);
 
         $status = Status::create([
-            'status_name' => 'Buka',
+            'status_name' => 'Diterima',
             'color' => '#ff0000',
         ]);
 
         $status = Status::create([
-            'status_name' => 'Berlangsung',
+            'status_name' => 'Proses',
             'color' => '#ff0000',
         ]);
 
         $status = Status::create([
-            'status_name' => 'Tutup',
+            'status_name' => 'Selesai',
             'color' => '#ff0000',
         ]);
     }

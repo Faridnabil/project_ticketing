@@ -59,7 +59,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Warna Label</label>
                                     <input type="color" class="form-control @error('color') is-invalid @enderror"
                                         id="color" name="color" value="{{ $status->color }}" autofocus required>
@@ -73,7 +73,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                     <a href="{{ route('status.index') }}" class="btn btn-danger">Cancel</a>
