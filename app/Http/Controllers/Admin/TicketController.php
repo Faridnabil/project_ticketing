@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Priority;
+use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,8 +24,8 @@ class TicketController extends Controller
     {
         $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser');
 
-        if ($request->has('customer') && $request->customer) {
-            $query->where('customer', $request->customer);
+        if ($request->has('category_id') && $request->category_id) {
+            $query->where('category_id', $request->category_id);
         }
 
         if ($request->has('assign_to') && $request->assign_to) {
@@ -39,17 +40,17 @@ class TicketController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
-        $tickets = $query->get();
+        $tickets = $query->orderBy('id', 'desc')->get();
+
 
         // Fetch necessary data for filters
-        $customers = User::role('Customer')
-            ->get();
         $assign_to = User::role('Department')
             ->get();
         $priorities = Priority::all();
         $statuses = Status::all();
+        $categories = Category::all();
 
-        return view('dashboard.admin.ticket.index', compact('tickets', 'customers', 'assign_to', 'priorities', 'statuses'));
+        return view('dashboard.admin.ticket.index', compact('tickets', 'categories', 'assign_to', 'priorities', 'statuses'));
     }
 
 
@@ -316,4 +317,22 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
+
+    public function approve_assignment(Request $request, RequestAssignment $requestAssignment)
+    {
+        if (Auth::user()->hasRole('Admin')) {
+            $ticket = $requestAssignment->ticket;
+            $ticket->assign_to = $requestAssignment->user_id;
+            $ticket->save();
+
+            $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
+            $requestAssignment->save();
+
+            return redirect()->back()->with('success', 'Tiket berhasil diassign.');
+        }
+
+        return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+    }
+
+
 }

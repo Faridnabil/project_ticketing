@@ -83,8 +83,9 @@
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
-                                        class="form-control @error('category_id') is-invalid @enderror" required autofocus>
-                                        <option value="" disabled>Pilih Kategori</option>
+                                        class="form-control @error('category_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
+                                        <option></option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ $ticket->category_id == $category->id ? 'selected' : '' }}>

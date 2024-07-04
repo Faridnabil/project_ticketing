@@ -8,6 +8,7 @@ use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Priority;
+use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,32 @@ class UnassignedTicketController extends Controller
 
         return view('dashboard.department.unassigned-ticket.index', compact('tickets'));
     }
+
+    public function request_assignment(Request $request, Ticket $ticket)
+    {
+        if (Auth::user()->hasRole('Department') && $ticket->assign_to == null) {
+            // Periksa apakah pengajuan sudah ada
+            $existingRequest = RequestAssignment::where('ticket_id', $ticket->id)
+                ->where('user_id', Auth::id())
+                ->exists();
+
+            if ($existingRequest) {
+                return redirect()->back()->with('error', 'Anda sudah mengajukan untuk tiket ini.');
+            }
+
+            // Simpan pengajuan ke dalam tabel request_assignments
+            RequestAssignment::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => Auth::id(),
+                'status_id' => 1 // status_id 1 untuk 'Pending'
+            ]);
+
+            return redirect()->back()->with('success', 'Pengajuan berhasil dikirim. Menunggu persetujuan admin.');
+        }
+
+        return redirect()->back()->with('error', 'Pengajuan gagal. Anda tidak berhak mengajukan.');
+    }
+
 
     public function show($id)
     {

@@ -131,12 +131,12 @@
                                         <!--begin::Date=-->
                                         <td>
                                             @if ($ticket->status_id != null)
-                                            <span class="badge"
-                                                style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
-                                                {{ $ticket->status->status_name }}
-                                            </span>
+                                                <span class="badge"
+                                                    style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
+                                                    {{ $ticket->status->status_name }}
+                                                </span>
                                             @else
-                                            -
+                                                -
                                             @endif
                                         </td>
                                         <!--end::Date=-->
@@ -148,6 +148,21 @@
                                                     Lihat
                                                 </a>
                                             @endcan
+                                            @php
+                                                $existingRequest = App\Models\RequestAssignment::where(
+                                                    'ticket_id',
+                                                    $ticket->id,
+                                                )
+                                                    ->where('user_id', Auth::id())
+                                                    ->exists();
+                                            @endphp
+                                            @if (Auth::user()->hasRole('Department') && $ticket->assign_to == null && !$existingRequest)
+                                                <button class="btn btn-primary px-6 align-self-center text-nowrap mb-2"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_request_{{ $ticket->id }}">
+                                                    Ajukan Diri
+                                                </button>
+                                            @endif
                                         </td>
                                         <!--end::Action=-->
                                     </tr>
@@ -197,6 +212,42 @@
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
+                        </form>
+                    </div><!--end modal-footer-->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Ajukan Diri -->
+        <div class="modal fade" tabindex="-1" id="kt_modal_request_{{ $ticket->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h6 class="modal-title m-0 text-white" id="exampleModalRequest1">
+                            Form Ajukan Diri Menangani Tiket
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5>Apakah Anda yakin ingin menangani tiket ini?</h5>
+                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                <ul class="mt-3 mb-0">
+                                    <li>{{ $ticket->no_ticket }}</li>
+                                    <li>{{ $ticket->title }}</li>
+                                </ul>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end modal-body-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                            Tutup
+                        </button>
+                        <form action="{{ route('unassignedTicket.requestAssignment', $ticket->id) }}" method="POST"
+                            class="d-inline">
+                            @csrf
+                            <button class="btn btn-primary" type="submit">Ajukan</button>
                         </form>
                     </div><!--end modal-footer-->
                 </div>

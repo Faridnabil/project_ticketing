@@ -107,7 +107,7 @@
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
-                                            @if ($ticket->assignTo->name != null)
+                                            @if ($ticket->assign_to != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
                                                 Belum ditetapkan
@@ -116,7 +116,7 @@
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
-                                            @if ($ticket->priority->priority_name != null)
+                                            @if ($ticket->priority_id != null)
                                                 {{ $ticket->priority->priority_name }}
                                             @else
                                                 Belum ditetapkan
@@ -144,19 +144,14 @@
                                                     Lihat
                                                 </a>
                                             @endcan
-                                            @can('Edit Ticket')
-                                                <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
-                                                    class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
-                                                    Ubah
-                                                </a>
-                                            @endcan
-                                            {{-- @can('Delete Ticket')
-                                                <button type="reset" class="btn btn-danger px-6 align-self-center text-nowrap"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                    Hapus
-                                                </button>
-                                            @endcan --}}
+                                            @if ($ticket->status->status_name != 'Selesai')
+                                                @can('Edit Ticket')
+                                                    <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
+                                                        class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
+                                                        Ubah
+                                                    </a>
+                                                @endcan
+                                            @endif
                                         </td>
                                         <!--end::Action=-->
                                     </tr>

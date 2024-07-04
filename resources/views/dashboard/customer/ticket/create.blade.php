@@ -80,8 +80,9 @@
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
-                                        class="form-control @error('category_id') is-invalid @enderror" required autofocus>
-                                        <option value="" selected disabled>Pilih Kategori</option>
+                                        class="form-control @error('category_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
+                                        <option></option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                         @endforeach
@@ -120,12 +121,14 @@
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
-                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau klik untuk mengunggah.</h3>
+                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau
+                                                klik untuk mengunggah.</h3>
                                             <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                         </div>
                                         <div class="preview"></div>
                                     </div>
-                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none" multiple>
+                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none"
+                                        multiple>
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('attachments')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -134,7 +137,7 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <button class="btn btn-primary" type="submit">Ajukan</button>
                                     <a href="{{ route('myTicket.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
@@ -156,6 +159,4 @@
                 console.error(error);
             });
     </script>
-
-
 @endsection

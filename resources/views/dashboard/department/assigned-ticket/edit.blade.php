@@ -25,7 +25,8 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('unassignedTicket.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
+                                action="{{ route('assignedTicket.update', $ticket->id) }}" enctype="multipart/form-data"
+                                novalidate>
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
@@ -57,9 +58,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
-                                    <select name="assign_to" class="form-control @error('assign_to') is-invalid @enderror"
-                                        required autofocus>
-                                        <option value="" disabled>Pilih Departemen</option>
+                                    <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Departemen" required autofocus>
+                                        <option></option>
                                         @foreach ($assignTo as $assign)
                                             <option value="{{ $assign->id }}"
                                                 {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
@@ -74,8 +75,9 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Prioritas</label>
                                     <select name="priority_id"
-                                        class="form-control @error('priority_id') is-invalid @enderror" required autofocus>
-                                        <option value="" disabled>Pilih Prioritas</option>
+                                        class="form-select @error('priority_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
+                                        <option></option>
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}"
                                                 {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
@@ -98,9 +100,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Status</label>
-                                    <select name="status_id" class="form-control @error('status_id') is-invalid @enderror"
-                                        required autofocus>
-                                        <option value="" disabled>Pilih Status</option>
+                                    <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
+                                        <option></option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}"
                                                 {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
@@ -115,8 +117,9 @@
                                 <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
-                                        class="form-control @error('category_id') is-invalid @enderror" required autofocus>
-                                        <option value="" disabled>Pilih Kategori</option>
+                                        class="form-select @error('category_id') is-invalid @enderror"data-control="select2"
+                                        data-placeholder="Pilih Kategori" required autofocus>
+                                        <option></option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
@@ -165,8 +168,8 @@
                                         </div>
                                         <div class="preview" id="preview"></div>
                                     </div>
-                                    <input type="file" id="attachments" name="attachments[]" class="form-control d-none"
-                                        multiple>
+                                    <input type="file" id="attachments" name="attachments[]"
+                                        class="form-control d-none" multiple>
 
                                     <input type="hidden" id="removed_attachments" name="removed_attachments">
                                     <input type="hidden" id="remaining_attachments" name="remaining_attachments">
@@ -182,23 +185,6 @@
                                     <a href="{{ route('assignedTicket.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
-                            <hr>
-                            <h5>Riwayat Perubahan</h5>
-                            <ul>
-                                @foreach ($logs as $log)
-                                    <li>
-                                        <strong>{{ $log->attribute }}</strong>:
-                                        <span>{{ $log->old_value }}</span>
-                                        ->
-                                        <span>{{ $log->new_value }}</span>
-                                        oleh
-                                        <strong>{{ $log->user->name }}</strong>
-                                        dengan alasan
-                                        <em>{{ $log->reason }}</em>
-                                        pada {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                    </li>
-                                @endforeach
-                            </ul>
                         </div>
                     </div>
                 </div>

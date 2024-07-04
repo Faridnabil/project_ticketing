@@ -134,19 +134,22 @@
                                                     Lihat
                                                 </a>
                                             @endcan
-                                            @can('Edit Ticket')
-                                                <a href="{{ route('myTicket.edit', $ticket->id) }}"
-                                                    class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
-                                                    Ubah
-                                                </a>
-                                            @endcan
-                                            @can('Delete Ticket')
-                                                <button type="reset" class="btn btn-danger px-6 align-self-center text-nowrap"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                    Hapus
-                                                </button>
-                                            @endcan
+                                            @if ($ticket->status->status_name != 'Selesai')
+                                                @can('Edit Ticket')
+                                                    <a href="{{ route('myTicket.edit', $ticket->id) }}"
+                                                        class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
+                                                        Ubah
+                                                    </a>
+                                                @endcan
+                                                @can('Delete Ticket')
+                                                    <button type="reset"
+                                                        class="btn btn-danger px-6 align-self-center text-nowrap"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        Hapus
+                                                    </button>
+                                                @endcan
+                                            @endif
                                         </td>
                                         <!--end::Action=-->
                                     </tr>

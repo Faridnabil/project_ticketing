@@ -41,35 +41,41 @@
                     <div class="card-title">
                         <!--begin::Form-->
                         <form method="GET" action="{{ route('ticket.index') }}" class="d-flex">
-                            <select name="customer_id" class="form-select me-2">
-                                <option value="">Pilih Customer</option>
-                                @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="assign_to" class="form-select me-2">
-                                <option value="">Pilih Ditujukan Ke</option>
+                            <select name="assign_to" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Ditujukan Ke">
+                                <option></option>
                                 @foreach ($assign_to as $assign)
                                     <option value="{{ $assign->id }}">{{ $assign->name }}</option>
                                 @endforeach
                             </select>
 
-                            <select name="priority_id" class="form-select me-2">
-                                <option value="">Pilih Prioritas</option>
+                            <select name="category_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Kategori">
+                                <option></option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
+                            </select>
+
+
+                            <select name="priority_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Prioritas">
+                                <option></option>
                                 @foreach ($priorities as $priority)
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
 
-                            <select name="status_id" class="form-select me-2">
-                                <option value="">Pilih Status</option>
+                            <select name="status_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Status">
+                                <option></option>
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
 
                             <button type="submit" class="btn btn-primary">Filter</button>
+                            <a href="{{ route('ticket.index') }}" class="btn btn-danger">Hapus</a>
                         </form>
                         <!--end::Form-->
                     </div>
@@ -106,7 +112,7 @@
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-125px">Nomor Tiket</th>
-                                <th class="min-w-125px">Judul</th>
+                                <th class="min-w-125px">Kategori</th>
                                 <th class="min-w-125px">Pemilik</th>
                                 <th class="min-w-125px">Tetapkan Ke</th>
                                 <th class="min-w-125px">Prioritas</th>
@@ -130,7 +136,7 @@
                                         <!--end::Nomor Ticket=-->
                                         <!--begin::Title=-->
                                         <td>
-                                            {{ $ticket->title }}
+                                            {{ $ticket->category->category_name }}
                                         </td>
                                         <!--end::Title=-->
                                         <!--begin::Customer Name=-->
@@ -180,6 +186,7 @@
                                                     Lihat
                                                 </a>
                                             @endcan
+                                            {{-- @if ($ticket->status->status_name != 'Selesai') --}}
                                             @can('Edit Ticket')
                                                 <a href="{{ route('ticket.edit', $ticket->id) }}"
                                                     class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
@@ -193,6 +200,7 @@
                                                     Hapus
                                                 </button>
                                             @endcan
+                                            {{-- @endif --}}
                                         </td>
                                         <!--end::Action=-->
                                     </tr>
@@ -226,7 +234,8 @@
                         <div class="row">
                             <div class="col-lg-9">
                                 <h5>Apakah Anda yakin menghapus Tiket ini?</h5>
-                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                <small
+                                    class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
                                 <ul class="mt-3 mb-0">
                                     <li>{{ $ticket->no_ticket }}</li>
                                     <li>{{ $ticket->title }}</li>
