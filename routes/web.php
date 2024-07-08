@@ -55,7 +55,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
         '/admin/ticket' => TicketController::class,
     ]);
 
-    Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.create');
+    Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
     Route::put('/admin/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
 
     Route::get('/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');

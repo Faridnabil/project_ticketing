@@ -269,13 +269,17 @@ class TicketCustomerController extends Controller
             $comment->save();
 
             DB::commit();
-            return redirect()->back()->with('success', 'Komen telah terbuat!');
+            return redirect()->back()->with([
+                'success' => 'Komen telah terbuat!',
+                'new_comment_id' => $comment->id
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
 
             return back()->with('error', 'Komentar anda tidak tersimpan!');
         }
     }
+
 
     public function update_comment(Request $request, $id)
     {

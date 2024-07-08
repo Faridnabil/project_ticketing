@@ -27,7 +27,7 @@
 
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title" style="color: white">Dashboard</span>
                     </a>
                 </div>
             @endcan

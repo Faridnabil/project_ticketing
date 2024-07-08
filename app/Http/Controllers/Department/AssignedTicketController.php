@@ -39,7 +39,7 @@ class AssignedTicketController extends Controller
         $statusChangedBy = Auth::user();
 
         $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket)
+            ->where('model_id', $id)
             ->latest()
             ->get();
 
@@ -153,7 +153,10 @@ class AssignedTicketController extends Controller
             $comment->save();
 
             DB::commit();
-            return redirect()->back()->with('success', 'Komen telah terbuat!');
+            return redirect()->back()->with([
+                'success' => 'Komen telah terbuat!',
+                'new_comment_id' => $comment->id
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
 

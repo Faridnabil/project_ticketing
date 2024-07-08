@@ -5,6 +5,48 @@
 @endsection
 
 @section('content')
+
+    <style>
+        .activity-log {
+            padding: 15px;
+            background-color: #f9fafc;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .log-header {
+            margin-bottom: 10px;
+        }
+
+        .log-body span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .log-body hr {
+            margin: 10px 0;
+            border: 0;
+            border-top: 1px solid #272727;
+        }
+
+        .btn-custom {
+            margin-right: 10px;
+            border: none;
+            background-color: #f8f9fa;
+            padding: 10px 50px;
+            border-radius: 5px;
+        }
+
+        .btn-custom.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .font-regular {
+            font-size: 1rem;
+        }
+    </style>
+
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
@@ -29,6 +71,7 @@
         <!--end::Container-->
     </div>
     <!--end::Toolbar-->
+
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -36,12 +79,12 @@
             <!--begin::Row-->
             <div class="row gy-5 g-xl-8">
                 <!--begin::Col-->
-                <div class="col-xxl-6">
+                <div class="col-xxl-4">
                     <!--begin::Mixed Widget 2-->
                     <div class="card card-xxl-stretch">
                         <!--begin::Header-->
-                        <div class="card-header border-0 bg-danger py-5">
-                            <h3 class="card-title fw-bolder text-white">Data</h3>
+                        <div class="card-header border-0 bg-primary py-5">
+                            <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
                             <div class="card-toolbar">
                                 <!--begin::Menu-->
                                 <!--end::Menu-->
@@ -50,54 +93,31 @@
                         <!--end::Header-->
                         <div class="card-body p-0">
                             <!--begin::Chart-->
-                            <div class="mixed card-rounded-bottom bg-danger" data-kt-color="danger" style="height: 70px">
+                            <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary" style="height: 28px">
                             </div>
                             <!--begin::Stats-->
                             <div class="card-p mt-n20 position-relative">
                                 <!--begin::Row-->
                                 <div class="row g-0">
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-warning px-6 py-8 rounded-2 me-7 mb-7">
-                                        <!--begin::Svg Icon | path: icons/duotone/Media/Equalizer.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
-                                                    <rect fill="#000000" opacity="0.3" x="13" y="4" width="3"
-                                                        height="16" rx="1.5" />
-                                                    <rect fill="#000000" x="8" y="9" width="3" height="11"
-                                                        rx="1.5" />
-                                                    <rect fill="#000000" x="18" y="11" width="3" height="9"
-                                                        rx="1.5" />
-                                                    <rect fill="#000000" x="3" y="13" width="3" height="7"
-                                                        rx="1.5" />
-                                                </g>
-                                            </svg>
+                                    <div class="col bg-light-primary px-6 py-8 rounded-2 me-7 mb-7">
+                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
+                                            <i class="fas fa-ticket-alt text-primary" style="font-size: 24px;"></i>
+                                            <!-- Icon tiket diterima -->
                                         </span>
-                                        <span class="text-warning fw-bold fs-3">{{ $total_tiket }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-warning fw-bold fs-6">Data Tiket</a>
+                                        <span class="text-primary fw-bold fs-3">{{ $tiket_buka }}</span>
+                                        <a href="#" class="text-primary fw-bold fs-6">Diterima</a>
                                     </div>
+
                                     <!--end::Col-->
                                     <!--begin::Col-->
-                                    <div class="col bg-light-primary px-6 py-8 rounded-2 mb-7">
+                                    <div class="col bg-light-warning px-6 py-8 rounded-2 mb-7">
                                         <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <path
-                                                    d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
-                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <path
-                                                    d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
-                                                    fill="#000000" fill-rule="nonzero" />
-                                            </svg>
+                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
+                                            <i class="fas fa-spinner fa-spin text-warning" style="font-size: 24px;"></i>
                                         </span>
-                                        <span class="text-primary fw-bold fs-3">{{ $tiket_proses }}</span>
+                                        <span class="text-warning fw-bold fs-3">{{ $tiket_proses }}</span>
                                         <!--end::Svg Icon-->
-                                        <a href="#" class="text-primary fw-bold fs-6">Proses Tiket</a>
+                                        <a href="#" class="text-warning fw-bold fs-6">Proses</a>
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -106,36 +126,25 @@
                                 <div class="row g-0">
                                     <!--begin::Col-->
                                     <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
-                                        <!--begin::Svg Icon | path: icons/duotone/Design/Layers.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <path
-                                                    d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z"
-                                                    fill="#000000" fill-rule="nonzero" />
-                                                <path
-                                                    d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z"
-                                                    fill="#000000" opacity="0.3" />
-                                            </svg>
+                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
+                                            <i class="fas fa-hourglass-half fa-pulse text-danger"
+                                                style="font-size: 24px;"></i>
+                                            <!-- Icon tiket yang tertunda dengan animasi -->
                                         </span>
                                         <span class="text-danger fw-bold fs-3">{{ $tiket_tertunda }}</span>
-                                        <!--end::Svg Icon-->
+
                                         <a href="#" class="text-danger fw-bold fs-6 mt-2">Tiket Tertunda</a>
                                     </div>
+
                                     <!--end::Col-->
                                     <!--begin::Col-->
                                     <div class="col bg-light-success px-6 py-8 rounded-2">
                                         <!--begin::Svg Icon | path: icons/duotone/Communication/Urgent-mail.svg-->
                                         <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <path
-                                                    d="M9,10 L9,19 C9,19.5522847 8.55228475,20 8,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,10 C3,9.44771525 3.44771525,9 4,9 L8,9 C8.55228475,9 9,9.44771525 9,10 Z M21,10 L21,19 C21,19.5522847 20.5522847,20 20,20 L16,20 C15.4477153,20 15,19.5522847 15,19 L15,10 C15,9.44771525 15.4477153,9 16,9 L20,9 C20.5522847,9 21,9.44771525 21,10 Z"
-                                                    fill="#000000" />
-                                                <rect fill="#000000" opacity="0.3"
-                                                    transform="translate(14.500000, 7.000000) rotate(-90.000000) translate(-14.500000, -7.000000)"
-                                                    x="13.5" y="2" width="2" height="10" rx="1" />
-                                            </svg>
+                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-4">
+                                                <i class="fas fa-ticket-alt text-success" style="font-size: 24px;"></i>
+                                                <!-- Icon tiket diterima -->
+                                            </span>
                                         </span>
                                         <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
                                         <!--end::Svg Icon-->
@@ -152,100 +161,155 @@
                     <!--end::Mixed Widget 2-->
                 </div>
                 <!--end::Col-->
+
                 <!--begin::Col-->
-                <div class="col-xxl-6">
+                <div class="col-xxl-8">
                     <!--begin::List Widget 5-->
                     <div class="card card-xxl-stretch">
                         <!--begin::Header-->
                         <div class="card-header align-items-center border-0 mt-4">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="fw-bolder mb-2 text-dark">Monitoring Tiket</span>
-                            </h3>
-                            <form action="{{ route('admin.dashboard.index') }}" method="GET">
-                                <div class="input-group">
-                                    <select name="ticket_number" class="form-control mt-3">
-                                        <option value="">Pilih Nomor Tiket</option>
-                                        @foreach ($tickets as $ticket)
-                                            <option value="{{ $ticket->id }}">{{ $ticket->id }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
-                                </div>
-                            </form>
-                            <div class="card-toolbar">
-                                <div class="card-toolbar scrollable-card" style="max-height: 290px; overflow-y:auto;">
-                                    @foreach ($logs as $log)
-                                        <div
-                                            class="d-flex align-items-center @if (!$loop->last) mb-10 @endif">
-                                            <i class="bi bi-file-earmark-text text-primary fs-1 me-5"></i>
-                                            <div class="d-flex flex-column">
-                                                <h5 class="text-gray-800 fw-bolder">
-                                                    <strong>
-                                                        @if ($log->attribute == 'priority_id')
-                                                            Prioritas
-                                                        @elseif($log->attribute == 'status_id')
-                                                            Status
-                                                        @elseif($log->attribute == 'customer')
-                                                            Customer
-                                                        @elseif($log->attribute == 'assign_to')
-                                                            Ditugaskan Ke
-                                                        @elseif($log->attribute == 'assign_to')
-                                                            Ditugaskan Ke
-                                                        @elseif($log->attribute == 'category_id')
-                                                            Kategori
-                                                        @elseif($log->attribute == 'title')
-                                                            Judul
-                                                        @elseif($log->attribute == 'due_date')
-                                                            Tanggal Jatuh Tempo
-                                                        @elseif($log->attribute == 'description')
-                                                            Deskripsi
-                                                        @else
-                                                            {{ $log->attribute }}
-                                                        @endif
-                                                    </strong>:
-                                                </h5>
-                                                <div class="fw-bold">
-                                                    @if ($log->old_value == null)
-                                                        <span>
-                                                            @if (is_numeric($log->new_value))
-                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                            @else
-                                                                {{ $log->new_value }}
-                                                            @endif
-                                                        </span><br>
-                                                        <span>Alasan: {!! $log->reason !!}</span>
-                                                        <div class="text-muted">Dirubah oleh:
-                                                            {{ $log->user->name }} pada
-                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                        </div>
-                                                    @else
-                                                        <span class="text-muted">Dari:
-                                                            @if (is_numeric($log->old_value))
-                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                            @elseif(is_string($log->old_value))
-                                                                {!! $log->old_value !!}
-                                                            @endif
-                                                        </span>
+                            <div class="card-header" style="margin-top: 30px">
+                                <ul class="nav custom-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="btn-custom active font-regular" data-bs-toggle="tab" href="#pertahun"
+                                            role="tab" aria-selected="false">
+                                            <Strong>Data Pertahun</Strong>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="btn-custom font-regular mt-4" data-bs-toggle="tab" href="#prioritas"
+                                            role="tab" aria-selected="true">
+                                            <strong>TiketPrioritas</strong>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="kt_content_container" class="container mt-5">
+                                <div class="card">
 
-                                                        <span>Untuk:
-                                                            @if (is_numeric($log->new_value))
-                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                            @elseif (is_string($log->new_value))
-                                                                {!! $log->new_value !!}
-                                                            @endif
-                                                        </span>
-                                                        <span>Alasan: {!! $log->reason !!}</span>
-                                                        <div class="text-muted">Dirubah oleh:
-                                                            {{ $log->user->name }} pada
-                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}
-                                                        </div>
-                                                    @endif
-                                                </div>
+                                    <div class="card-body">
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <!-- Tiket Pertahun -->
+                                            <div class="tab-pane fade show active" id="pertahun" role="tabpanel">
+                                                <canvas id="ticketChart"></canvas>
+                                            </div>
+                                            <!-- Detail Keluhan -->
+                                            <div class="tab-pane fade" id="prioritas" role="tabpanel">
+                                                <table id="kt_datatable_example_5"
+                                                    class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr
+                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-125px">Nomor Tiket</th>
+                                                            <th class="min-w-125px">Kategori</th>
+                                                            <th class="min-w-125px">Pemilik</th>
+                                                            <th class="min-w-125px">Tetapkan Ke</th>
+                                                            <th class="min-w-125px">Prioritas</th>
+                                                            <th class="min-w-125px">Dibuat Tanggal</th>
+                                                            <th class="min-w-125px">Status</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="text-gray-600 fw-bold">
+                                                        @if ($ticketPriotitas->count())
+                                                            @foreach ($ticketPriotitas as $ticket)
+                                                                <!--begin::Table row-->
+                                                                <tr>
+                                                                    <!--begin::Nomor Ticket=-->
+                                                                    <td>
+                                                                        {{ $ticket->no_ticket }}
+                                                                    </td>
+                                                                    <!--end::Nomor Ticket=-->
+                                                                    <!--begin::Title=-->
+                                                                    <td>
+                                                                        {{ $ticket->category->category_name }}
+                                                                    </td>
+                                                                    <!--end::Title=-->
+                                                                    <!--begin::Customer Name=-->
+                                                                    <td>
+                                                                        {{ $ticket->customers->name }}
+                                                                    </td>
+                                                                    <!--end::Customer Name=-->
+                                                                    <!--begin::Assign To=-->
+                                                                    <td>
+                                                                        @if ($ticket->assignTo != null)
+                                                                            {{ $ticket->assignTo->name }}
+                                                                        @else
+                                                                            -
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Assign To=-->
+                                                                    <!--begin::Priority=-->
+                                                                    <td>
+                                                                        @if ($ticket->priority_id == '4')
+                                                                            <span class="badge"
+                                                                                style="background-color:red ; color: white; font-weight:bold">
+                                                                                Critical</span>
+                                                                        @elseif($ticket->priority_id == '3')
+                                                                            <span class="badge"
+                                                                                style="background-color:blue ; color: white; font-weight:bold">
+                                                                                Medium</span>
+                                                                        @elseif($ticket->priority_id == '2')
+                                                                            <span class="badge"
+                                                                                style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                                                Hight</span>
+                                                                        @elseif($ticket->priority_id == '1')
+                                                                            <span class="badge"
+                                                                                style="background-color:green ; color: white; font-weight:bold">
+                                                                                Low</span>
+                                                                        @else
+                                                                            <span class="badge"
+                                                                                style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                                                -</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Priority=-->
+                                                                    <!--begin::Payment method=-->
+                                                                    <td>
+                                                                        {{ date('d F Y', strtotime($ticket->created_at)) }}
+                                                                    </td>
+                                                                    <!--end::Payment method=-->
+                                                                    <!--begin::Date=-->
+                                                                    <td>
+                                                                        @if ($ticket->status_id == '1')
+                                                                            <span class="badge"
+                                                                                style="background-color:red ; color: white; font-weight:bold">
+                                                                                Tertunda</span>
+                                                                        @elseif($ticket->status_id == '2')
+                                                                            <span class="badge"
+                                                                                style="background-color:blue ; color: white; font-weight:bold">
+                                                                                Diterima</span>
+                                                                        @elseif($ticket->status_id == '3')
+                                                                            <span class="badge"
+                                                                                style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                                                Proses</span>
+                                                                        @elseif($ticket->status_id == '4')
+                                                                            <span class="badge"
+                                                                                style="background-color:green ; color: white; font-weight:bold">
+                                                                                Selesai</span>
+                                                                        @else
+                                                                            <span class="badge"
+                                                                                style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                                                -</span>
+                                                                        @endif
+                                                                    </td>
+
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    </div>
                                 </div>
-                                <!--end::Menu-->
                             </div>
                         </div>
                         <!--end::Header-->
@@ -253,41 +317,15 @@
                     <!--end: List Widget 5-->
                 </div>
                 <!--end::Col-->
-                <!--begin::Col-->
-                <div class="col-xxl-12">
-                    <!--begin::List Widget 5-->
-                    <div class="card card-xxl-stretch">
-                        <!--begin::Header-->
-                        <div class="card-header align-items-center border-0 mt-4">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="fw-bolder mb-2 text-dark">Data Pertahun</span>
-                            </h3>
-                            {{-- <form action="{{ route('admin.dashboard.index') }}" method="GET">
-                                <div class="input-group">
-                                    <select name="ticket_number" class="form-control mt-3">
-                                        <option value="">Pilih Nomor Tiket</option>
-                                        @foreach ($tickets as $ticket)
-                                            <option value="{{ $ticket->id }}">{{ $ticket->id }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
-                                </div>
-                            </form> --}}
-                            <div class="container">
-                                <canvas id="ticketChart"></canvas>
-                            </div>
-                        </div>
-                        <!--end::Header-->
-                    </div>
-                    <!--end: List Widget 5-->
-                </div>
-                <!--end::Col-->
+
             </div>
             <!--end::Row-->
         </div>
         <!--end::Container-->
     </div>
     <!--end::Post-->
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

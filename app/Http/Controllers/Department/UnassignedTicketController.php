@@ -62,7 +62,7 @@ class UnassignedTicketController extends Controller
         $categories = Category::all();
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Status::class)
+        $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket)
             ->latest()
             ->get();
@@ -100,13 +100,17 @@ class UnassignedTicketController extends Controller
             $comment->save();
 
             DB::commit();
-            return redirect()->back()->with('success', 'Komen telah terbuat!');
+            return redirect()->back()->with([
+                'success' => 'Komen telah terbuat!',
+                'new_comment_id' => $comment->id
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
 
             return back()->with('error', 'Komentar anda tidak tersimpan!');
         }
     }
+
 
     public function update_comment(Request $request, $id)
     {

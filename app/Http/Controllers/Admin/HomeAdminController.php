@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\Comment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeAdminController extends Controller
 {
@@ -34,16 +35,16 @@ class HomeAdminController extends Controller
             ->where('status.status_name', null)
             ->count();
         $tiket_buka = $tickets
-            ->where('status.status_name', 'Buka')
+            ->where('status.status_name', 'Diterima')
             ->count();
         $tiket_proses = $tickets
-            ->where('status.status_name', 'Berlangsung')
+            ->where('status.status_name', 'Proses')
             ->count();
         $tiket_tertunda = $tickets
             ->where('status.status_name', 'Tertunda')
             ->count();
         $tiket_selesai = $tickets
-            ->where('status.status_name', 'Tutup')
+            ->where('status.status_name', 'Selesai')
             ->count();
 
         // Mendapatkan data logs dan comments untuk setiap tiket
@@ -62,9 +63,43 @@ class HomeAdminController extends Controller
             $comments = $comments->merge($ticketComments);
         }
 
+        $selectedTicketId = $request->input('ticket_number');
+        $selectedTicketNumber = null;
+
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+            ->get();
+
+        if ($selectedTicketId) {
+            $selectedTicket = $tickets->firstWhere('id', $selectedTicketId);
+            if ($selectedTicket) {
+                $selectedTicketNumber = $selectedTicket->no_ticket;
+            }
+        }
+
+        $logs = collect();
+
+        if ($selectedTicketId) {
+            $ticketLogs = ActivityLog::where('model_type', Ticket::class)
+                ->where('model_id', $selectedTicketId)
+                ->get();
+            $logs = $logs->merge($ticketLogs);
+        } else {
+            foreach ($tickets as $ticket) {
+                $ticketLogs = ActivityLog::where('model_type', Ticket::class)
+                    ->where('model_id', $ticket->id)
+                    ->get();
+                $logs = $logs->merge($ticketLogs);
+            }
+        }
+
+        $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
+        ->get();
+
         return view(
             'dashboard.admin.home.index',
             compact(
+                'ticketPriotitas',
                 'tickets',
                 'total_tiket',
                 'tiket_belum',
@@ -74,7 +109,10 @@ class HomeAdminController extends Controller
                 'tiket_selesai',
                 'logs',
                 'comments',
-                'allTickets'
+                'allTickets',
+                'logs',
+                'selectedTicketId',
+                'selectedTicketNumber'
             )
         );
     }
@@ -117,5 +155,4 @@ class HomeAdminController extends Controller
 
         return response()->json($chartData);
     }
-
 }

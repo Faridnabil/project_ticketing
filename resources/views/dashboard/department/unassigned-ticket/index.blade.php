@@ -116,10 +116,26 @@
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
-                                            @if ($ticket->priority_id != null)
-                                                {{ $ticket->priority->priority_name }}
+                                           @if ($ticket->priority_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Critical</span>
+                                            @elseif($ticket->priority_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Medium</span>
+                                            @elseif($ticket->priority_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    Hight</span>
+                                            @elseif($ticket->priority_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Low</span>
                                             @else
-                                                -
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
                                             @endif
                                         </td>
                                         <!--end::Priority=-->
@@ -130,13 +146,26 @@
                                         <!--end::Payment method=-->
                                         <!--begin::Date=-->
                                         <td>
-                                            @if ($ticket->status_id != null)
+                                            @if ($ticket->status_id == '1')
                                                 <span class="badge"
-                                                    style="background-color: {{ $ticket->status->color }}; color: white; font-weight:bold">
-                                                    {{ $ticket->status->status_name }}
-                                                </span>
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Tertunda</span>
+                                            @elseif($ticket->status_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Diterima</span>
+                                            @elseif($ticket->status_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    Proses</span>
+                                            @elseif($ticket->status_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Selesai</span>
                                             @else
-                                                -
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
                                             @endif
                                         </td>
                                         <!--end::Date=-->
