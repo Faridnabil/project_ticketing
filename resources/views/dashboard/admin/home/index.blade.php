@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <style>
         .activity-log {
             padding: 15px;
@@ -72,258 +71,197 @@
     </div>
     <!--end::Toolbar-->
 
-    <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
-        <!--begin::Container-->
         <div id="kt_content_container" class="container">
-            <!--begin::Row-->
-            <div class="row gy-5 g-xl-8">
-                <!--begin::Col-->
-                <div class="col-xxl-4">
-                    <!--begin::Mixed Widget 2-->
-                    <div class="card card-xxl-stretch">
-                        <!--begin::Header-->
-                        <div class="card-header border-0 bg-primary py-5">
-                            <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
-                            <div class="card-toolbar">
-                                <!--begin::Menu-->
-                                <!--end::Menu-->
-                            </div>
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-xl-9 col-lg-12 mb-4">
+                    <!-- First Card -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-3">Tiket Pertahun</h1>
+                            <canvas id="ticketChart" width="80%" height="20px"></canvas>
                         </div>
-                        <!--end::Header-->
-                        <div class="card-body p-0">
-                            <!--begin::Chart-->
-                            <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary" style="height: 28px">
-                            </div>
-                            <!--begin::Stats-->
-                            <div class="card-p mt-n20 position-relative">
-                                <!--begin::Row-->
-                                <div class="row g-0">
-                                    <div class="col bg-light-primary px-6 py-8 rounded-2 me-7 mb-7">
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-ticket-alt text-primary" style="font-size: 24px;"></i>
-                                            <!-- Icon tiket diterima -->
-                                        </span>
-                                        <span class="text-primary fw-bold fs-3">{{ $tiket_buka }}</span>
-                                        <a href="#" class="text-primary fw-bold fs-6">Diterima</a>
-                                    </div>
-
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-warning px-6 py-8 rounded-2 mb-7">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-spinner fa-spin text-warning" style="font-size: 24px;"></i>
-                                        </span>
-                                        <span class="text-warning fw-bold fs-3">{{ $tiket_proses }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-warning fw-bold fs-6">Proses</a>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                                <!--begin::Row-->
-                                <div class="row g-0">
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-hourglass-half fa-pulse text-danger"
-                                                style="font-size: 24px;"></i>
-                                            <!-- Icon tiket yang tertunda dengan animasi -->
-                                        </span>
-                                        <span class="text-danger fw-bold fs-3">{{ $tiket_tertunda }}</span>
-
-                                        <a href="#" class="text-danger fw-bold fs-6 mt-2">Tiket Tertunda</a>
-                                    </div>
-
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-success px-6 py-8 rounded-2">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Urgent-mail.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
-                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-4">
-                                                <i class="fas fa-ticket-alt text-success" style="font-size: 24px;"></i>
-                                                <!-- Icon tiket diterima -->
-                                            </span>
-                                        </span>
-                                        <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Stats-->
-                        </div>
-                        <br>
                     </div>
-                    <!--end::Mixed Widget 2-->
+                    <!-- Second Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-5">Tiket Prioritas</h1>
+                            <table id="kt_datatable_example_5"
+                                class="table table-striped table-row-bordered border rounded">
+                                <thead>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nomor Tiket</th>
+                                        <th class="min-w-125px">Kategori</th>
+                                        <th class="min-w-125px">Pemilik</th>
+                                        <th class="min-w-125px">Tetapkan Ke</th>
+                                        <th class="min-w-125px">Prioritas</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-600 fw-bold">
+                                    @if ($ticketPriotitas->count())
+                                        @foreach ($ticketPriotitas as $ticket)
+                                            <tr>
+                                                <td>{{ $ticket->no_ticket }}</td>
+                                                <td>{{ $ticket->category->category_name }}</td>
+                                                <td>{{ $ticket->customers->name }}</td>
+                                                <td>{{ $ticket->assignTo->name ?? '-' }}</td>
+                                                <td>
+                                                    @if ($ticket->priority_id == '4')
+                                                        <span class="badge"
+                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
+                                                    @elseif($ticket->priority_id == '3')
+                                                        <span class="badge"
+                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                    @elseif($ticket->priority_id == '2')
+                                                        <span class="badge"
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                    @elseif($ticket->priority_id == '1')
+                                                        <span class="badge"
+                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
+                                                    @else
+                                                        <span class="badge"
+                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                                <td>
+                                                    @if ($ticket->status_id == '1')
+                                                        <span class="badge"
+                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
+                                                    @elseif($ticket->status_id == '2')
+                                                        <span class="badge"
+                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
+                                                    @elseif($ticket->status_id == '3')
+                                                        <span class="badge"
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
+                                                    @elseif($ticket->status_id == '4')
+                                                        <span class="badge"
+                                                            style="background-color:green; color: white; font-weight:bold">Selesai</span>
+                                                    @else
+                                                        <span class="badge"
+                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <!--end::Col-->
 
-                <!--begin::Col-->
-                <div class="col-xxl-8">
-                    <!--begin::List Widget 5-->
-                    <div class="card card-xxl-stretch">
-                        <!--begin::Header-->
-                        <div class="card-header align-items-center border-0 mt-4">
-                            <div class="card-header" style="margin-top: 30px">
-                                <ul class="nav custom-tabs" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="btn-custom active font-regular" data-bs-toggle="tab" href="#pertahun"
-                                            role="tab" aria-selected="false">
-                                            <Strong>Data Pertahun</Strong>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="btn-custom font-regular mt-4" data-bs-toggle="tab" href="#prioritas"
-                                            role="tab" aria-selected="true">
-                                            <strong>TiketPrioritas</strong>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div id="kt_content_container" class="container mt-5">
-                                <div class="card">
-
-                                    <div class="card-body">
-                                        <!-- Tab panes -->
-                                        <div class="tab-content">
-                                            <!-- Tiket Pertahun -->
-                                            <div class="tab-pane fade show active" id="pertahun" role="tabpanel">
-                                                <canvas id="ticketChart"></canvas>
-                                            </div>
-                                            <!-- Detail Keluhan -->
-                                            <div class="tab-pane fade" id="prioritas" role="tabpanel">
-                                                <table id="kt_datatable_example_5"
-                                                    class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                                                    <!--begin::Table head-->
-                                                    <thead>
-                                                        <!--begin::Table row-->
-                                                        <tr
-                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-125px">Nomor Tiket</th>
-                                                            <th class="min-w-125px">Kategori</th>
-                                                            <th class="min-w-125px">Pemilik</th>
-                                                            <th class="min-w-125px">Tetapkan Ke</th>
-                                                            <th class="min-w-125px">Prioritas</th>
-                                                            <th class="min-w-125px">Dibuat Tanggal</th>
-                                                            <th class="min-w-125px">Status</th>
-                                                        </tr>
-                                                        <!--end::Table row-->
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody class="text-gray-600 fw-bold">
-                                                        @if ($ticketPriotitas->count())
-                                                            @foreach ($ticketPriotitas as $ticket)
-                                                                <!--begin::Table row-->
-                                                                <tr>
-                                                                    <!--begin::Nomor Ticket=-->
-                                                                    <td>
-                                                                        {{ $ticket->no_ticket }}
-                                                                    </td>
-                                                                    <!--end::Nomor Ticket=-->
-                                                                    <!--begin::Title=-->
-                                                                    <td>
-                                                                        {{ $ticket->category->category_name }}
-                                                                    </td>
-                                                                    <!--end::Title=-->
-                                                                    <!--begin::Customer Name=-->
-                                                                    <td>
-                                                                        {{ $ticket->customers->name }}
-                                                                    </td>
-                                                                    <!--end::Customer Name=-->
-                                                                    <!--begin::Assign To=-->
-                                                                    <td>
-                                                                        @if ($ticket->assignTo != null)
-                                                                            {{ $ticket->assignTo->name }}
-                                                                        @else
-                                                                            -
-                                                                        @endif
-                                                                    </td>
-                                                                    <!--end::Assign To=-->
-                                                                    <!--begin::Priority=-->
-                                                                    <td>
-                                                                        @if ($ticket->priority_id == '4')
-                                                                            <span class="badge"
-                                                                                style="background-color:red ; color: white; font-weight:bold">
-                                                                                Critical</span>
-                                                                        @elseif($ticket->priority_id == '3')
-                                                                            <span class="badge"
-                                                                                style="background-color:blue ; color: white; font-weight:bold">
-                                                                                Medium</span>
-                                                                        @elseif($ticket->priority_id == '2')
-                                                                            <span class="badge"
-                                                                                style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                                                Hight</span>
-                                                                        @elseif($ticket->priority_id == '1')
-                                                                            <span class="badge"
-                                                                                style="background-color:green ; color: white; font-weight:bold">
-                                                                                Low</span>
-                                                                        @else
-                                                                            <span class="badge"
-                                                                                style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                                                -</span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <!--end::Priority=-->
-                                                                    <!--begin::Payment method=-->
-                                                                    <td>
-                                                                        {{ date('d F Y', strtotime($ticket->created_at)) }}
-                                                                    </td>
-                                                                    <!--end::Payment method=-->
-                                                                    <!--begin::Date=-->
-                                                                    <td>
-                                                                        @if ($ticket->status_id == '1')
-                                                                            <span class="badge"
-                                                                                style="background-color:red ; color: white; font-weight:bold">
-                                                                                Tertunda</span>
-                                                                        @elseif($ticket->status_id == '2')
-                                                                            <span class="badge"
-                                                                                style="background-color:blue ; color: white; font-weight:bold">
-                                                                                Diterima</span>
-                                                                        @elseif($ticket->status_id == '3')
-                                                                            <span class="badge"
-                                                                                style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                                                Proses</span>
-                                                                        @elseif($ticket->status_id == '4')
-                                                                            <span class="badge"
-                                                                                style="background-color:green ; color: white; font-weight:bold">
-                                                                                Selesai</span>
-                                                                        @else
-                                                                            <span class="badge"
-                                                                                style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                                                -</span>
-                                                                        @endif
-                                                                    </td>
-
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            @endforeach
+                <!-- Right Column -->
+                <div class="col-xl-3 col-lg-12">
+                    <div class="card">
+                        <div class="card-header border-0 bg-primary py-5">
+                            <form action="{{ route('admin.dashboard.index') }}" method="GET">
+                                <div class="input-group">
+                                    <!-- Dropdown for selecting ticket number -->
+                                    <select name="ticket_number" class="form-control mt-3" style="width: 60%">
+                                        <option value="">Pilih Nomor Tiket</option>
+                                        @foreach ($tickets as $ticket)
+                                            <option value="{{ $ticket->id }}"
+                                                {{ $selectedTicketId == $ticket->id ? 'selected' : '' }}>
+                                                {{ $ticket->no_ticket }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-toolbar scrollable-card" style="max-height: 500px; overflow-y:auto;">
+                                @foreach ($logs as $log)
+                                    @if ($log->attribute != 'attachments')
+                                        <div class="activity-log @if (!$loop->last) mb-10 @endif">
+                                            <div class="log-header">
+                                                <h5 class="text-gray-800 fw-bolder mb-2">
+                                                    <strong>
+                                                        @if ($log->attribute == 'priority_id')
+                                                            Data Prioritas
+                                                        @elseif($log->attribute == 'status_id')
+                                                            Data Status
+                                                        @elseif($log->attribute == 'customer')
+                                                            Data Customer
+                                                        @elseif($log->attribute == 'assign_to')
+                                                            Data Ditugaskan
+                                                        @elseif($log->attribute == 'category_id')
+                                                            Data Kategori
+                                                        @elseif($log->attribute == 'title')
+                                                            Data Judul
+                                                        @elseif($log->attribute == 'due_date')
+                                                            Data Tanggal Jatuh Tempo
+                                                        @elseif($log->attribute == 'description')
+                                                            Data Deskripsi
+                                                        @else
+                                                            {{ $log->attribute }}
                                                         @endif
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
+                                                    </strong>:
+                                                </h5>
+                                            </div>
+                                            <div class="log-body fw-bold">
+                                                @if ($log->old_value == null)
+                                                    <hr>
+                                                    <div>
+                                                        <span><strong class="mt-2">Data sebelum diubah :
+                                                                @if (is_numeric($log->new_value))
+                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                @else
+                                                                    {{ $log->new_value }}
+                                                                @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Dirubah oleh :</strong>{{ $log->user->name }} pada
+                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
+                                                    </div>
+                                                @else
+                                                    <div>
+                                                        <hr>
+                                                        <span><strong>Data sebelum diubah :</strong>
+                                                            @if (is_numeric($log->old_value))
+                                                                {{ $log->oldPrioritas->priority_name ?? ($log->oldCategory->category_name ?? ($log->oldUser->name ?? $log->oldStatus->status_name)) }}
+                                                            @else
+                                                                {!! $log->old_value !!}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Menjadi :</strong>
+                                                            @if (is_numeric($log->new_value))
+                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                            @else
+                                                                {!! $log->new_value !!}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Diubah oleh :</strong>{{ $log->user->name }} pada
+                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
-                        <!--end::Header-->
                     </div>
-                    <!--end: List Widget 5-->
                 </div>
-                <!--end::Col-->
-
             </div>
-            <!--end::Row-->
         </div>
-        <!--end::Container-->
     </div>
-    <!--end::Post-->
 
 
 

@@ -127,7 +127,7 @@
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
                                                     style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    Hight</span>
+                                                    High</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
                                                     style="background-color:green ; color: white; font-weight:bold">

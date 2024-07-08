@@ -96,10 +96,10 @@
                                                     <span class="badge"
                                                         style="background-color:blue ; color: white; font-weight:bold">
                                                         Medium</span>
-                                                @elseif($priority->priority_name == 'Hight')
+                                                @elseif($priority->priority_name == 'High')
                                                     <span class="badge"
                                                         style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                        Hight</span>
+                                                        High</span>
                                                 @elseif($priority->priority_name == 'Low')
                                                     <span class="badge"
                                                         style="background-color:green ; color: white; font-weight:bold">

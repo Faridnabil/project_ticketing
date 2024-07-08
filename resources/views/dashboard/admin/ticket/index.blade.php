@@ -41,44 +41,44 @@
                     <div class="card-title">
                         <!--begin::Form-->
                         <form method="GET" action="{{ route('ticket.index') }}" class="d-flex">
-                            <select name="assign_to" class="form-select" data-control="select2"
-                                data-placeholder="Pilih Ditujukan Ke">
+                            <select name="assign_to" class="form-select me-2" data-control="select2" data-placeholder="Pilih Ditujukan Ke">
                                 <option></option>
                                 @foreach ($assign_to as $assign)
                                     <option value="{{ $assign->id }}">{{ $assign->name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;
 
-                            <select name="category_id" class="form-select" data-control="select2"
-                                data-placeholder="Pilih Kategori">
+                            <select name="category_id" class="form-select me-2" data-control="select2" data-placeholder="Pilih Kategori">
                                 <option></option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;
 
-
-                            <select name="priority_id" class="form-select" data-control="select2"
-                                data-placeholder="Pilih Prioritas">
+                            <select name="priority_id" class="form-select me-2" data-control="select2" data-placeholder="Pilih Prioritas">
                                 <option></option>
                                 @foreach ($priorities as $priority)
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;
 
-                            <select name="status_id" class="form-select" data-control="select2"
-                                data-placeholder="Pilih Status">
+                            <select name="status_id" class="form-select me-2" data-control="select2" data-placeholder="Pilih Status">
                                 <option></option>
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;
 
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary me-1">Filter</button>
                             <a href="{{ route('ticket.index') }}" class="btn btn-danger">Hapus</a>
                         </form>
                         <!--end::Form-->
                     </div>
+
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
                     @can('Create Ticket')
@@ -166,7 +166,7 @@
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
                                                     style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    Hight</span>
+                                                    High</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
                                                     style="background-color:green ; color: white; font-weight:bold">

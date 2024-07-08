@@ -28,10 +28,12 @@ class HomeCustomerController extends Controller
         }
 
         $total_tiket = $tickets->count();
-        $tiket_proses = $tickets->where('status.status_name', 'Berlangsung')->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Tutup')->count();
+        $tiket_belum = $tickets->where('status.status_name', null)->count();
 
+        $tiket_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
+
+        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
         $logs = collect();
 
         if ($selectedTicketId) {
