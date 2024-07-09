@@ -10,9 +10,12 @@ use App\Models\Comment;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\CommentCustomer;
+use App\Notifications\NotificationCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class TicketCustomerController extends Controller
 {
@@ -92,6 +95,22 @@ class TicketCustomerController extends Controller
                     $attachments[] = $nama_folder . "/" . $nama_file;
                 }
             }
+
+            //Notifikasi
+            $users = User::role(['Admin'])->get();
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Menunggu konfirmasi Tiket',
+                'thanks' => 'Terimakasih',
+                'Text' => 'Tolong cek Kembali',
+                'Url' => url('/admin/ticket'),
+                'customer_id' => rand(1111, 9999),
+            ];
+
+            Notification::send($users, new NotificationCustomer($notificationData));
+
 
             $validate['attachments'] = json_encode($attachments);
 
@@ -268,7 +287,24 @@ class TicketCustomerController extends Controller
             $comment->updated_at = null;
             $comment->save();
 
+            // Notifikasi
+            $users = User::role(['Department'])->get();
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Ada komentar baru pada tiket anda',
+                'thanks' => 'Terimakasih',
+                'Text' => 'Tolong cek kembali',
+                'Url' => url('/department/assignedTicket/' . $comment->ticket_id),
+                'customer_id' => rand(1111, 9999),
+                'type' => 'comment', // Menambahkan properti 'type'
+            ];
+
+            Notification::send($users, new CommentCustomer($notificationData));
+
             DB::commit();
+
             return redirect()->back()->with([
                 'success' => 'Komen telah terbuat!',
                 'new_comment_id' => $comment->id

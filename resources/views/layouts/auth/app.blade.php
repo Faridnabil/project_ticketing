@@ -32,7 +32,7 @@
             <!--begin::Content-->
             <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
                 <!--begin::Wrapper-->
-                <div class="w-lg-500px bg-black rounded shadow-sm p-10 p-lg-15 mx-auto">
+                <div class="w-lg-500px  rounded shadow-sm p-10 p-lg-15 mx-auto" style="background-color: rgb(62, 62, 62)">
                     @yield('content')
                 </div>
                 <!--end::Wrapper-->

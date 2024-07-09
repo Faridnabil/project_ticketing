@@ -15,6 +15,7 @@ use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\Department\AssignedTicketController;
 use App\Http\Controllers\Department\HomeDepartmentController;
 use App\Http\Controllers\Department\UnassignedTicketController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,8 +29,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Notifikasi
+Route::get('/notification', [NotificationController::class, 'sendnotification']);
+Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login'); // Mengarahkan ke halaman login
 });
 
 Route::middleware('auth')->group(function () {
@@ -101,5 +108,3 @@ Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
 
     Route::post('/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
 });
-
-

@@ -11,9 +11,12 @@ use App\Models\Priority;
 use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\NotificationCustomer;
+use App\Notifications\NotificationDepartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class TicketController extends Controller
 {
@@ -237,6 +240,60 @@ class TicketController extends Controller
                 }
             }
 
+            // ------ Notifikasi --------------
+            $statusId = $validate['status_id'];
+            $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
+
+            // Ambil customer yang ditugaskan dari inputan
+            $customerId = $validate['customer'];
+            $customer = User::findOrFail($customerId);
+
+            $authenticatedUserName = Auth::user()->name;
+
+            if (in_array($status->status_name, ['Diterima', 'Proses'])) {
+                // Ambil departemen yang ditugaskan dari inputan
+                $assignedDepartmentId = $validate['assign_to'];
+                $assignedDepartment = User::findOrFail($assignedDepartmentId);
+
+                // Notifikasi untuk Customer
+                $notificationDataForCustomer = [
+                    'name' => $authenticatedUserName,
+                    'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
+                    'thanks' => 'Terimakasih',
+                    'Text' => 'Tolong cek kembali',
+                    'Url' => url('/customer/myTicket'),
+                    'customer_id' => rand(1111, 9999),
+                ];
+
+                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+
+                // Notifikasi untuk Departemen yang ditugaskan
+                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+
+                $notificationDataForDepartment = [
+                    'name' => $authenticatedUserName,
+                    'body' => 'Ada tiket baru untuk anda kerjakan',
+                    'thanks' => 'Terimakasih',
+                    'Text' => 'Tolong cek kembali',
+                    'Url' => url('/department/assignedTicket'),
+                    'department_id' => rand(1111, 9999),
+                ];
+
+                Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
+            } elseif ($status->status_name == 'Selesai') {
+                // Notifikasi untuk Customer bahwa tiket telah dikerjakan
+                $notificationDataForCustomer = [
+                    'name' => $authenticatedUserName,
+                    'body' => 'Tiket anda telah dikerjakan',
+                    'thanks' => 'Terimakasih',
+                    'Text' => 'Tolong cek hasilnya',
+                    'Url' => url('/customer/myTicket'),
+                    'customer_id' => rand(1111, 9999),
+                ];
+
+                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+            }
+
             // Gabungkan file baru dengan file yang masih ada
             $attachments = array_merge($remainingAttachments, $attachments);
             $validate['attachments'] = json_encode($attachments);
@@ -248,9 +305,11 @@ class TicketController extends Controller
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th->getMessage()); // Menampilkan pesan error untuk debugging
             return back()->with('error', $th->getMessage());
         }
     }
+
 
 
     /**
@@ -337,6 +396,4 @@ class TicketController extends Controller
 
         return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
     }
-
-
 }
