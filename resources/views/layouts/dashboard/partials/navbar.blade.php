@@ -35,8 +35,8 @@
                     data-kt-menu-flip="bottom">
                     <!--begin::Svg Icon | path: icons/duotone/Code/Compiling.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                            viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                            version="1.1">
                             <path
                                 d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
                                 fill="#000000" opacity="0.3" />
@@ -61,7 +61,9 @@
                         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
                             <li class="nav-item">
                                 <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active"
-                                    data-bs-toggle="tab" href="#kt_topbar_notifications_1"><p style="color: black;font-weigth:bold">Alerts</p></a>
+                                    data-bs-toggle="tab" href="#kt_topbar_notifications_1">
+                                    <p style="color: black;font-weigth:bold">Alerts</p>
+                                </a>
                             </li>
                         </ul>
                         <!--end::Tabs-->
@@ -126,10 +128,10 @@
                                                         <path
                                                             d="M11.1669899,4.49941818 L2.82535718,19.5143571 C2.557144,19.9971408 2.7310878,20.6059441 3.21387153,20.8741573 C3.36242953,20.9566895 3.52957021,21 3.69951446,21 L21.2169432,21 C21.7692279,21 22.2169432,20.5522847 22.2169432,20 C22.2169432,19.8159952 22.1661743,19.6355579 22.070225,19.47855 L12.894429,4.4636111 C12.6064401,3.99235656 11.9909517,3.84379039 11.5196972,4.13177928 C11.3723594,4.22181902 11.2508468,4.34847583 11.1669899,4.49941818 Z"
                                                             fill="#000000" opacity="0.3" />
-                                                        <rect fill="#000000" x="11" y="9" width="2"
-                                                            height="7" rx="1" />
-                                                        <rect fill="#000000" x="11" y="17" width="2"
-                                                            height="2" rx="1" />
+                                                        <rect fill="#000000" x="11" y="9" width="2" height="7"
+                                                            rx="1" />
+                                                        <rect fill="#000000" x="11" y="17" width="2" height="2"
+                                                            rx="1" />
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
@@ -138,8 +140,7 @@
                                         <!--end::Symbol-->
                                         <!--begin::Title-->
                                         <div class="mb-0 me-2">
-                                            <a href="#"
-                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder">HR
+                                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bolder">HR
                                                 Confidential</a>
                                             <div class="text-gray-400 fs-7">Confidential staff
                                                 documents</div>
@@ -357,15 +358,13 @@
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
                                     <span class="svg-icon svg-icon-5">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none"
-                                                fill-rule="evenodd">
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <rect fill="#000000" opacity="0.5"
                                                     transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)"
-                                                    x="7.5" y="7.5" width="2" height="9"
-                                                    rx="1" />
+                                                    x="7.5" y="7.5" width="2" height="9" rx="1" />
                                                 <path
                                                     d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z"
                                                     fill="#000000" fill-rule="nonzero"
@@ -391,11 +390,11 @@
                 <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
                     @if (Auth::user()->gender == 'Pria')
-                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-1.png') }}"
+                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                             class="rounded me-2 thumb-sm" alt="profile-user"
                             style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
                     @else
-                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-12.jpg') }}"
+                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                             class="rounded-circle me-2 thumb-sm" alt="profile-user"
                             style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
                     @endif
@@ -409,11 +408,11 @@
                             <!--begin::Avatar-->
                             <div class="symbol symbol-50px me-5">
                                 @if (Auth::user()->gender == 'Pria')
-                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-1.png') }}"
+                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                                         class="rounded me-2 thumb-sm" alt="profile-user"
                                         style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
                                 @else
-                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/assets/images/users/user-12.jpg') }}"
+                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                                         class="rounded-circle me-2 thumb-sm" alt="profile-user"
                                         style="border: 1px solid rgb(196, 196, 196); border-radius: 4px;">
                                 @endif

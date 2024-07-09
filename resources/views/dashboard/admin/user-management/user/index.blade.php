@@ -98,10 +98,10 @@
                                                     <a href="apps/user-management/users/view.html">
                                                         <div class="symbol-label">
                                                             @if ($user->gender == 'Pria')
-                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/assets/images/users/user-12.jpg') }}"
+                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                                                                     class="w-100" />
                                                             @else
-                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/assets/images/users/user-12.jpg') }}"
+                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
                                                                     class="w-100" />
                                                             @endif
                                                         </div>
