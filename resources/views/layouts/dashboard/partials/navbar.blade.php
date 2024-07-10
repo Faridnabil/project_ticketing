@@ -143,30 +143,29 @@
                                                 </span>
                                             </div>
                                             <div class="mb-0 me-2">
-                                                <a href="{{ $notification->data['Url'] }}"
-                                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $notification->data['name'] }}</a>
+                                                <form
+                                                    action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
+                                                    method="POST" class="notification-form">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
+                                                </form>
                                                 <div class="text-gray-400 fs-7">
-                                                    {{ ucwords($notification->data['body']) }}</div>
+                                                    {{ ucwords($notification->data['body']) }}
+                                                </div>
                                             </div>
+
                                         </div>
                                         <span
                                             class="badge badge-light fs-8">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
                                     </div>
-                                    <form
-                                        action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-link btn-sm"
-                                            style="margin-left: 15%"><span class="badge bg-danger">Sudah
-                                                dibaca</span></button>
-                                    </form>
                                 @endforeach
 
                             </div>
                             <!--end::Items-->
                             <!--begin::View more-->
-                            <div class="py-3 text-center border-top">
+                            {{-- <div class="py-3 text-center border-top">
                                 <form action="{{ route('notifications.mark-all-as-read') }}" method="POST">
                                     @csrf
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
@@ -195,7 +194,7 @@
                                 </form>
 
 
-                            </div>
+                            </div> --}}
                             <!--end::View more-->
                         </div>
                         <!--end::Tab panel-->
@@ -228,24 +227,21 @@
                                                     </span>
                                                 </div>
                                                 <div class="mb-0 me-2">
-                                                    <a href="{{ $notification->data['Url'] }}"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $notification->data['name'] }}</a>
+                                                    <form action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
+                                                          method="POST" class="notification-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <a href="{{ $notification->data['Url'] }}"
+                                                           class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
+                                                    </form>
                                                     <div class="text-gray-400 fs-7">
-                                                        {{ ucwords($notification->data['body']) }}</div>
+                                                        {{ ucwords($notification->data['body']) }}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <span
                                                 class="badge badge-light fs-8">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
                                         </div>
-                                        <form
-                                            action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-link btn-sm"
-                                                style="margin-left: 15%"><span class="badge bg-danger">Sudah
-                                                    dibaca</span></button>
-                                        </form>
                                     @endif
                                 @endforeach
 
@@ -253,7 +249,7 @@
                             </div>
                             <!--end::Items-->
                             <!--begin::View more-->
-                            <div class="py-3 text-center border-top">
+                            {{-- <div class="py-3 text-center border-top">
                                 <form action="{{ route('notifications.mark-all-as-read') }}" method="POST">
                                     @csrf
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
@@ -283,7 +279,7 @@
                                 </form>
 
 
-                            </div>
+                            </div> --}}
                             <!--end::View more-->
                         </div>
                         <!--end::Tab panel-->
