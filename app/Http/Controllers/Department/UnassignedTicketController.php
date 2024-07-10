@@ -11,9 +11,12 @@ use App\Models\Priority;
 use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\CommentDepartment;
+use App\Notifications\NotificationDepartment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class UnassignedTicketController extends Controller
 {
@@ -28,7 +31,8 @@ class UnassignedTicketController extends Controller
 
     public function request_assignment(Request $request, Ticket $ticket)
     {
-        if (Auth::user()->hasRole('Department') && $ticket->assign_to == null) {
+        // Pastikan user yang sedang login memiliki role 'Department' dan tiket belum diassign ke siapa pun
+        if (Auth::user()->hasRole('Department') && $ticket->assign_to === null) {
             // Periksa apakah pengajuan sudah ada
             $existingRequest = RequestAssignment::where('ticket_id', $ticket->id)
                 ->where('user_id', Auth::id())
@@ -38,17 +42,32 @@ class UnassignedTicketController extends Controller
                 return redirect()->back()->with('error', 'Anda sudah mengajukan untuk tiket ini.');
             }
 
-            // Simpan pengajuan ke dalam tabel request_assignments
+            // Notifikasi kepada admin dengan role 'Department'
+            $users = User::role('Admin')->get();
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Ada permintaan, untuk tiket yang belum ditetapkan.',
+                'thanks' => 'Terima kasih.',
+                'Text' => 'Tolong perbaiki lagi.',
+                'Url' => url('/approve-assignment'), // Perbaikan pada URL
+                'department_id' => rand(1111, 9999),
+            ];
+
+            Notification::send($users, new NotificationDepartment($notificationData));
+
+            // Simpan permintaan penugasan ke dalam tabel request_assignments
             RequestAssignment::create([
                 'ticket_id' => $ticket->id,
                 'user_id' => Auth::id(),
                 'status_id' => 1 // status_id 1 untuk 'Pending'
             ]);
 
-            return redirect()->back()->with('success', 'Pengajuan berhasil dikirim. Menunggu persetujuan admin.');
+            return redirect()->back()->with('success', 'Permintaan penugasan berhasil dikirim. Menunggu persetujuan admin.');
         }
 
-        return redirect()->back()->with('error', 'Pengajuan gagal. Anda tidak berhak mengajukan.');
+        return redirect()->back()->with('error', 'Permintaan penugasan gagal. Anda tidak memiliki hak untuk mengajukan.');
     }
 
 
@@ -93,13 +112,32 @@ class UnassignedTicketController extends Controller
         try {
             $comment = new Comment();
             $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = auth()->id();
+            $comment->user_id =  $request->user_id;
             $comment->message = $request->message;
             $comment->created_at = now();
             $comment->updated_at = null;
             $comment->save();
 
+            $assignedDepartmentId = $request->assign_to;
+
+            // Notifikasi
+            $users = User::role(['Customer'])->where('id', $assignedDepartmentId)->get();
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Ada komentar baru pada tiket anda',
+                'thanks' => 'Terimakasih',
+                'Text' => 'Tolong cek kembali',
+                'Url' => url('/customer/myTicket/' . $comment->ticket_id),
+                'department_id' => rand(1111, 9999),
+                'type' => 'comment', // Menambahkan properti 'type'
+            ];
+
+            Notification::send($users, new CommentDepartment($notificationData));
+
             DB::commit();
+
             return redirect()->back()->with([
                 'success' => 'Komen telah terbuat!',
                 'new_comment_id' => $comment->id

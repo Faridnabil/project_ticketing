@@ -11,6 +11,7 @@ use App\Models\Priority;
 use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
 use App\Notifications\NotificationDepartment;
 use Illuminate\Http\Request;
@@ -390,6 +391,22 @@ class TicketController extends Controller
 
             $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
             $requestAssignment->save();
+
+            // Notifikasi untuk Departemen yang ditugaskan
+            $authenticatedUserName = Auth::user()->name;
+            $assignedDepartmentUsers = User::role(['Department'])->where('id', $ticket->assign_to = $requestAssignment->user_id)->get();
+
+            $notificationDataForDepartment = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang anda ajukan sudah diterima',
+                'thanks' => 'Terimakasih',
+                'Text' => 'Tolong cek kembali',
+                'Url' => url('/department/assignedTicket'),
+                'admin_id' => rand(1111, 9999),
+            ];
+
+            Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
+
 
             return redirect()->back()->with('success', 'Tiket berhasil diassign.');
         }

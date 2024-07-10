@@ -175,7 +175,7 @@ class AssignedTicketController extends Controller
                 // Notifikasi untuk Customer bahwa tiket telah dikerjakan
                 $notificationDataForCustomer = [
                     'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda telah dikerjakan',
+                    'body' => 'Tiket anda sudah dikerjakan',
                     'thanks' => 'Terimakasih',
                     'Text' => 'Tolong cek hasilnya',
                     'Url' => url('/customer/myTicket'),
@@ -207,14 +207,16 @@ class AssignedTicketController extends Controller
         try {
             $comment = new Comment();
             $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = auth()->id();
+            $comment->user_id = $request->user_id;
             $comment->message = $request->message;
             $comment->created_at = now();
             $comment->updated_at = null;
             $comment->save();
 
+            $assignedDepartmentId = $request->assign_to;
+
             // Notifikasi
-            $users = User::role(['Customer'])->get();
+            $users = User::role(['Customer'])->where('id', $assignedDepartmentId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [

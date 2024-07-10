@@ -281,14 +281,16 @@ class TicketCustomerController extends Controller
         try {
             $comment = new Comment();
             $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = auth()->id();
+            $comment->user_id = $request->user_id;
             $comment->message = $request->message;
             $comment->created_at = now();
             $comment->updated_at = null;
             $comment->save();
 
+            $assignedDepartmentId = $request->assign_to;
+
             // Notifikasi
-            $users = User::role(['Department'])->get();
+            $users = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [

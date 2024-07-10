@@ -273,6 +273,7 @@
                                             novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                            <input type="hidden" name="assign_to" value="{{ $ticket->customer }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                             <textarea name="message" class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
                                                 id="message" cols="10" rows="1"></textarea>
