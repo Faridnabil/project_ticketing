@@ -78,70 +78,95 @@
             <div class="card-header" style="margin-top: 30px">
                 <ul class="nav custom-tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="btn-custom active font-regular mt-4" data-bs-toggle="tab" href="#keluhan" role="tab"
-                            aria-selected="true">
+                        <a class="btn-custom font-regular nav-link {{ request('active_tab', 'absen') == 'absen' ? 'active' : '' }}"
+                            data-bs-toggle="tab" href="#absen" role="tab"
+                            aria-selected="{{ request('active_tab', 'absen') == 'absen' ? 'true' : 'false' }}">
                             <strong>Absensi</strong>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn-custom font-regular" data-bs-toggle="tab" href="#riwayat" role="tab"
-                            aria-selected="false">
-                            <Strong>Data Perbulan</Strong>
+                        <a class="btn-custom font-regular nav-link {{ request('active_tab', 'absen') == 'absen_bulanan' ? 'active' : '' }}"
+                            data-bs-toggle="tab" href="#absen_bulanan" role="tab"
+                            aria-selected="{{ request('active_tab', 'absen') == 'absen_bulanan' ? 'true' : 'false' }}">
+                            <strong>Data Perbulan</strong>
                         </a>
                     </li>
                 </ul>
             </div>
+
             <div class="card-body">
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <!-- Detail Keluhan -->
-                    <div class="tab-pane fade show active" id="keluhan" role="tabpanel">
+                    <!-- Detail Absen -->
+                    <div class="tab-pane fade {{ request('active_tab', 'absen') == 'absen' ? 'show active' : '' }}"
+                        id="absen" role="tabpanel">
                         <div class="row gy-5 g-xl-12">
                             <div class="col-xl-5">
                                 @php
                                     use Carbon\Carbon;
                                     use App\Models\Attendance;
+                                    use Illuminate\Support\Facades\Auth;
 
                                     $today = Carbon::now()->format('Y-m-d');
-                                    $check_in = Attendance::where('check_in', true)
+
+                                    $absen = Attendance::where('user_id', Auth::user()->id)
+                                        ->where(function ($query) {
+                                            $query
+                                                ->where('check_in', 'Shift 1')
+                                                ->orWhere('check_in', 'Shift 2')
+                                                ->orWhere('check_in', 'Shift 3');
+                                        })
                                         ->whereDate('date_check_in', $today)
                                         ->first();
                                 @endphp
 
-                                @if ($check_in)
+                                @if ($absen)
                                     <form class="row g-3 needs-validation" method="POST"
-                                        action="{{ route('attendance.update', $check_in->id) }}"
-                                        enctype="multipart/form-data" novalidate>
+                                        action="{{ route('attendance.update', $absen->id) }}" enctype="multipart/form-data"
+                                        novalidate>
                                         @csrf
                                         @method('PUT')
                                         <div class="mb-4">
                                             <label for="validationCustom01" class="form-label">Nama Lengkap</label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                id="name" name="name" value="{{ $check_in->name }}" readonly required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
+                                                id="name" name="name" value="{{ $absen->name }}" readonly required>
+                                            <div class="valid-feedback">Looks good!</div>
                                             @error('name')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <input type="hidden" name="check_out" value="{{$check_in->check_in}}">
 
-                                        <div class="mb-4">
-                                            <label for="validationCustom01" class="form-label">File</label>
-                                            <input type="file" class="form-control" name="attachment">
-                                        </div>
 
-                                        <input type="hidden" name="date_check_out">
-                                        <div class="mb-4">
-                                            <div id="checkOutSection">
-                                                <button type="submit" class="btn btn-secondary" id="checkOutBtn">Check
-                                                    Out</button>
+                                        <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
+                                        <input type="hidden" name="date_check_out" id="dateCheckOut">
+
+                                        @if ($absen->check_out == null)
+                                            <div class="mb-4">
+                                                <label for="validationCustom01" class="form-label">File</label>
+                                                <input type="file" class="form-control" name="attachment">
                                             </div>
-                                        </div>
+                                            <div class="mb-4">
+                                                <div id="checkOutSection">
+                                                    <button type="submit" class="btn btn-secondary" id="checkOutBtn">
+                                                        Check Out
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </form>
+
+                                    <script>
+                                        document.getElementById('checkOutBtn').addEventListener('click', function() {
+                                            const now = new Date();
+                                            const formattedDate = now.getFullYear() + '-' +
+                                                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                                                String(now.getDate()).padStart(2, '0') + ' ' +
+                                                String(now.getHours()).padStart(2, '0') + ':' +
+                                                String(now.getMinutes()).padStart(2, '0') + ':' +
+                                                String(now.getSeconds()).padStart(2, '0');
+                                            document.getElementById('dateCheckOut').value = formattedDate;
+                                        });
+                                    </script>
                                 @else
                                     <form class="row g-3 needs-validation" method="POST"
                                         action="{{ route('attendance.store') }}" enctype="multipart/form-data" novalidate>
@@ -162,8 +187,8 @@
 
                                         <div class="mb-3">
                                             <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                            <select class="form-select" id="shiftSelect" name="shift" required>
-                                                <option value="">Opsi</option>
+                                            <select class="form-select" id="shiftSelect" name="check_in" required>
+                                                <option selected disabled>Opsi</option>
                                                 <option value="Shift 1">Shift 1</option>
                                                 <option value="Shift 2">Shift 2</option>
                                                 <option value="Shift 3">Shift 3</option>
@@ -173,11 +198,11 @@
                                         <input type="hidden" name="date_check_in">
                                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                         <div id="checkInSection">
-                                            <button type="submit" class="btn btn-primary" id="checkInBtn">Check In</button>
+                                            <button type="submit" class="btn btn-primary" id="checkInBtn">Check
+                                                In</button>
                                         </div>
                                     </form>
                                 @endif
-
                             </div>
 
                             <div class="col-xl-7 mt-13">
@@ -207,12 +232,16 @@
                                                         <tr>
                                                             <td>{{ $attendance_today->name }}</td>
                                                             <td>
-                                                                {{ \Carbon\Carbon::parse($attendance_today->date_check_in)->format('Y-m-d') }}
+                                                                {{ date('d F Y', strtotime($attendance_today->date_check_in)) }}
                                                             </td>
                                                             <td>
-                                                                {{ $attendance_today->check_in }}
+                                                                @if ($attendance_today->check_in)
+                                                                    {{ $attendance_today->check_in }}
+                                                                @else
+                                                                    {{ $attendance_today->check_out }}
+                                                                @endif
                                                             </td>
-                                                            <td>{{ \Carbon\Carbon::parse($attendance_today->date_check_in)->format('H:i') }}
+                                                            <td>{{ date('H:i', strtotime($attendance_today->date_check_in)) }}
                                                             </td>
                                                             <td>
                                                                 @if ($attendance_today->check_in)
@@ -224,24 +253,24 @@
                                                             <tr>
                                                                 <td>{{ $attendance_today->name }}</td>
                                                                 <td>
-                                                                    {{ \Carbon\Carbon::parse($attendance_today->date_check_out)->format('Y-m-d') }}
+                                                                    {{ date('d F Y', strtotime($attendance_today->date_check_out)) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ $attendance_today->check_out }}
                                                                 </td>
-                                                                <td>{{ \Carbon\Carbon::parse($attendance_today->date_check_out)->format('H:i') }}
+                                                                <td>
+                                                                    {{ date('H:i', strtotime($attendance_today->date_check_in)) }}
                                                                 </td>
                                                                 <td>
 
-                                                                    <a href="{{ $attendance_today->attachment }}">
+                                                                    <a href="#" data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}">
                                                                         Keluar
                                                                     </a>
                                                                 </td>
                                                             </tr>
                                                         @endif
                                                     @endforeach
-                                                @else
-
                                                 @endif
                                             </tbody>
                                             <!--end::Table body-->
@@ -254,126 +283,206 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Riwayat -->
-                    <div class="tab-pane fade" id="riwayat" role="tabpanel">
-                        <!--begin::Post-->
-                        <div class="post d-flex flex-column-fluid" id="kt_post">
-                            <table id="kt_datatable_example_5"
-                                class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-10px">No</th>
-                                        <th class="min-w-10px">Nama</th>
-                                        <th class="min-w-100px">Tanggal</th>
-                                        <th class="min-w-100px">Shift</th>
-                                        <th class="min-w-100px">Jam Masuk</th>
-                                        <th class="min-w-100px">Jam Pulang</th>
-                                        <th class="min-w-100px">Keterangan</th>
-                                        <th class="min-w-100px">Fitur</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="text-gray-600 fw-bold">
-                                    @if ($attendances->count())
-                                        @foreach ($attendances as $attendance)
-                                            <tr>
-                                                <td class="min-w-10px">{{ $loop->iteration }}</td>
-                                                <td>{{ $attendance->name }}</td>
-                                                <td>{{ $attendance->date_check_in }}</td>
-                                                <td>
-                                                    @if ($attendance->check_in)
-                                                        {{ \Carbon\Carbon::parse($attendance->check_out)->format('H:i') }}
-                                                    @else
-                                                        {{ \Carbon\Carbon::parse($attendance->check_in)->format('H:i') }}
-                                                    @endif
-                                                </td>
-                                                <td>{{ \Carbon\Carbon::parse($attendance->date_check_in)->format('Y-m-d') }}
-                                                </td>
-                                                <td>{{ \Carbon\Carbon::parse($attendance->date_check_out)->format('Y-m-d') }}
-                                                </td>
+                    <!-- Bulanan -->
+                    <div class="tab-pane fade {{ request('active_tab', 'absen') == 'absen_bulanan' ? 'show active' : '' }}"
+                        id="absen_bulanan" role="tabpanel">
+                        <div class="card-title mb-4">
+                            <!--begin::Form-->
+                            <form method="GET" action="{{ route('attendance.index') }}" class="d-flex">
+                                <select name="check_in" class="form-select me-2" data-control="select2"
+                                    data-placeholder="Pilih Shift">
+                                    <option></option>
+                                    @foreach ($allCheckIns as $checkIn)
+                                        <option value="{{ $checkIn }}"
+                                            {{ request('check_in') == $checkIn ? 'selected' : '' }}>
+                                            {{ $checkIn }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                &nbsp;
 
-                                                <td>{{ $attendance->attachment }}</td>
-                                                <td>
-                                                    @can('Edit attendance')
-                                                        <a href="{{ route('attendance.edit', $attendance->id) }}"
-                                                            class="btn btn-primary px-6 align-self-center text-nowrap">Ubah</a>
-                                                    @endcan
-                                                    @can('Delete attendance')
-                                                        <button type="reset"
-                                                            class="btn btn-danger px-6 align-self-center text-nowrap"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_attendance_{{ $attendance->id }}">Hapus</button>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
+                                <input type="date" name="start_date" class="form-control me-2"
+                                    value="{{ request('start_date') }}" placeholder="Start Date">
+                                &nbsp;
+                                <input type="date" name="end_date" class="form-control me-2"
+                                    value="{{ request('end_date') }}" placeholder="End Date">
+                                &nbsp;
+
+                                <input type="hidden" name="active_tab" id="active_tab"
+                                    value="{{ request('active_tab', 'absen') }}">
+
+                                <button type="submit" class="btn btn-primary me-1">Filter</button>
+                                <a href="#" id="clear-filters" class="btn btn-danger">Hapus</a>
+                            </form>
+                            <!--end::Form-->
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    const activeTab = urlParams.get('active_tab') || 'absen';
+
+                                    if (activeTab) {
+                                        const targetTab = document.querySelector(`a[href="#${activeTab}"]`);
+                                        const tabPane = document.querySelector(`#${activeTab}`);
+
+                                        if (targetTab && tabPane) {
+                                            // Deactivate all tabs and tab contents
+                                            document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+                                            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+
+                                            // Activate target tab and tab content
+                                            targetTab.classList.add('active');
+                                            tabPane.classList.add('show', 'active');
+                                        }
+                                    }
+
+                                    document.getElementById('clear-filters').addEventListener('click', function(event) {
+                                        event.preventDefault();
+                                        const clearUrl = new URL(window.location.href);
+                                        clearUrl.searchParams.delete('check_in');
+                                        clearUrl.searchParams.delete('start_date');
+                                        clearUrl.searchParams.delete('end_date');
+                                        clearUrl.searchParams.set('active_tab', activeTab);
+                                        window.location.href = clearUrl.href;
+                                    });
+
+                                    // Update the active_tab input and URL when the tab is changed
+                                    document.querySelectorAll('.nav-link').forEach(tab => {
+                                        tab.addEventListener('click', function() {
+                                            const newTab = this.getAttribute('href').substring(1);
+                                            document.getElementById('active_tab').value = newTab;
+
+                                            const newUrl = new URL(window.location.href);
+                                            newUrl.searchParams.set('active_tab', newTab);
+                                            history.pushState(null, '', newUrl.href);
+                                        });
+                                    });
+                                });
+                            </script>
                         </div>
-                        <!--end::Post-->
+
+                        <table id="kt_datatable_example_5"
+                            class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-10px">No</th>
+                                    <th class="min-w-10px">Nama</th>
+                                    <th class="min-w-100px">Tanggal</th>
+                                    <th class="min-w-100px">Shift</th>
+                                    <th class="min-w-100px">Jam Masuk</th>
+                                    <th class="min-w-100px">Jam Pulang</th>
+                                    <th class="min-w-100px">Keterangan</th>
+                                    {{-- <th class="min-w-100px">Fitur</th> --}}
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="text-gray-600 fw-bold">
+                                @if ($attendances->count())
+                                    @foreach ($attendances as $attendance)
+                                        <tr>
+                                            <td class="min-w-10px">{{ $loop->iteration }}</td>
+                                            <td>{{ $attendance->name }}</td>
+                                            <td>{{ date('d F Y', strtotime($attendance->date_check_in)) }}</td>
+                                            <td>
+                                                @if ($attendance->check_in)
+                                                    {{ $attendance->check_out }}
+                                                @else
+                                                    {{ $attendance->check_in }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ date('H:i', strtotime($attendance->date_check_in)) }}
+                                            </td>
+                                            <td>
+                                                {{ date('H:i', strtotime($attendance->date_check_out)) }}
+                                            </td>
+                                            <td>
+                                                @if ($attendance->attachment == null)
+                                                @else
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
+                                                        <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
+                                                            width="40px" height="50px" alt="file">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('checkInBtn').addEventListener('click', function() {
-            // Simulate check-in action
-            document.getElementById('checkInSection').style.display = 'none';
-            document.getElementById('checkOutSection').style.display = 'block';
-        });
-
-        document.getElementById('checkOutBtn').addEventListener('click', function() {
-            // Simulate check-out action
-            alert('Checked out successfully!');
-            document.getElementById('kt_modal_attendance_2').modal('hide');
-        });
-    </script> --}}
-
-    {{-- @foreach ($attendances as $attendance)
-        <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}">
+    @foreach ($attendances as $attendance)
+        <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
                         <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
-                            Form Hapus Prioritas
+                            File
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-9">
-                                <h5>Apakah Anda yakin menghapus Prioritas ini?</h5>
-                                <small
-                                    class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
-                                <ul class="mt-3 mb-0">
-                                    <li>{{ $attendance->attendance_name }}</li>
-                                </ul>
-                            </div><!--end col-->
-                        </div><!--end row-->
+                        <center>
+                            <iframe src="{{ asset($attendance->attachment) }}"
+                                style="width: 100%; height: 560px;"></iframe>
+                        </center>
                     </div><!--end modal-body-->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
-                            Tutup
-                        </button>
-                        <form action="{{ route('attendance.destroy', $attendance->id) }}" method="POST"
-                            class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button class="btn btn-danger" type="submit">Hapus</button>
-                        </form>
-                    </div><!--end modal-footer-->
                 </div>
             </div>
         </div>
-    @endforeach --}}
+    @endforeach
+
+    @foreach ($attendances as $attendance_today)
+        <div class="modal fade" tabindex="-1" id="kt_modal_attendances_{{ $attendance_today->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
+                            File
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        <center>
+                            <iframe src="{{ asset($attendance_today->attachment) }}"
+                                style="width: 100%; height: 560px;"></iframe>
+                        </center>
+                    </div><!--end modal-body-->
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('active_tab');
+
+            if (activeTab) {
+                const targetTab = document.querySelector(`a[href="#${activeTab}"]`);
+                const tabPane = document.querySelector(`#${activeTab}`);
+
+                if (targetTab && tabPane) {
+                    // Deactivate all tabs and tab contents
+                    document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+
+                    // Activate target tab and tab content
+                    targetTab.classList.add('active');
+                    tabPane.classList.add('show', 'active');
+                }
+            }
+        });
+    </script>
 @endsection

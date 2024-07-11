@@ -7,23 +7,44 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $attendances = Attendance::all();
+        $query = Attendance::query();
+
+        // Filter
+        if ($request->has('check_in') && $request->check_in) {
+            $query->where('check_in', $request->check_in);
+        }
+
+        if ($request->has('start_date') && $request->start_date) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $query->where('date_check_in', '>=', $startDate);
+        }
+
+        if ($request->has('end_date') && $request->end_date) {
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $query->where('date_check_out', '<=', $endDate);
+        }
+
+        $attendances = $query->get();
 
         $attendanceToday = Attendance::where('user_id', Auth::user()->id)
             ->whereDate('date_check_in', now())
             ->get();
 
+        // Retrieve all unique check-ins for the form dropdowns
+        $allCheckIns = Attendance::select('check_in')->distinct()->pluck('check_in');
 
-        return view('dashboard.admin.attendance.index', compact('attendances', 'attendanceToday'));
+        return view('dashboard.admin.attendance.index', compact('attendances', 'attendanceToday', 'allCheckIns'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,7 +63,6 @@ class AttendanceController extends Controller
         try {
             $validate = $request->all();
             $validate['date_check_in'] = now();
-            $validate['check_in'] = true;
 
             Attendance::create($validate);
 
@@ -77,26 +97,19 @@ class AttendanceController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Update date_check_out with the current time
-            $attendance->date_check_out = now();
+            // Update date_check_out with the provided value
+            $attendance->date_check_out = $request->input('date_check_out');
+            $attendance->check_out = $request->input('check_out');
 
-            // Handle file uploads
-            $files = $request->file('attachment'); // Mengambil file dari input 'attachments'
-            $attachments = [];
+            // Handle file upload
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $nama_file = time() . "_" . $file->getClientOriginalName();
+                $nama_folder = 'file/absen';
+                $file->move(public_path($nama_folder), $nama_file);
 
-            if ($files) {
-                foreach ($files as $file) {
-                    // Proses setiap file
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/absen';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
-                }
-            }
-
-            // Save attachments if needed
-            if (!empty($attachments)) {
-                $attendance->attachments = json_encode($attachments); // Save as JSON encoded array
+                // Save the file path to the database
+                $attendance->attachment = $nama_folder . "/" . $nama_file;
             }
 
             $attendance->save();
@@ -108,6 +121,8 @@ class AttendanceController extends Controller
             return back()->with("error", $th->getMessage());
         }
     }
+
+
 
 
 

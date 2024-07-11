@@ -14,17 +14,21 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $category = Category::create([
-            'category_name' => 'Wifi Rusak',
+            'category_name' => 'A',
             'color' => '#ff0000',
         ]);
 
         $category = Category::create([
-            'category_name' => 'Internet Lemot',
+            'category_name' => 'B',
             'color' => '#ff0000',
         ]);
 
         $category = Category::create([
-            'category_name' => 'PC Blue Screen',
+            'category_name' => 'C',
+            'color' => '#ff0000',
+        ]);
+        $category = Category::create([
+            'category_name' => 'D',
             'color' => '#ff0000',
         ]);
     }

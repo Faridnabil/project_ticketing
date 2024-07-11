@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Attendance;
 use App\Models\Ticket;
 use App\Models\Comment;
 use Carbon\Carbon;
