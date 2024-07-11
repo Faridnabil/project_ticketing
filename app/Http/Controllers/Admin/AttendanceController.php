@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
@@ -16,7 +17,12 @@ class AttendanceController extends Controller
     {
         $attendances = Attendance::all();
 
-        return view('dashboard.admin.attendance.index', compact('attendances'));
+        $attendanceToday = Attendance::where('user_id', Auth::user()->id)
+            ->whereDate('date_check_in', now())
+            ->get();
+
+
+        return view('dashboard.admin.attendance.index', compact('attendances', 'attendanceToday'));
     }
 
     /**
@@ -34,10 +40,14 @@ class AttendanceController extends Controller
     {
         DB::beginTransaction();
         try {
-            $status = Attendance::create($request->all());
+            $validate = $request->all();
+            $validate['date_check_in'] = now();
+            $validate['check_in'] = true;
+
+            Attendance::create($validate);
 
             DB::commit();
-            return redirect()->route("attendance.index")->with("success", "Absen Berhasil.");
+            return redirect()->route("attendance.index")->with("success", "Check In berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());
@@ -65,8 +75,41 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, Attendance $attendance)
     {
-        //
+        DB::beginTransaction();
+        try {
+            // Update date_check_out with the current time
+            $attendance->date_check_out = now();
+
+            // Handle file uploads
+            $files = $request->file('attachment'); // Mengambil file dari input 'attachments'
+            $attachments = [];
+
+            if ($files) {
+                foreach ($files as $file) {
+                    // Proses setiap file
+                    $nama_file = time() . "_" . $file->getClientOriginalName();
+                    $nama_folder = 'file/absen';
+                    $file->move(public_path($nama_folder), $nama_file);
+                    $attachments[] = $nama_folder . "/" . $nama_file;
+                }
+            }
+
+            // Save attachments if needed
+            if (!empty($attachments)) {
+                $attendance->attachments = json_encode($attachments); // Save as JSON encoded array
+            }
+
+            $attendance->save();
+
+            DB::commit();
+            return redirect()->route("attendance.index")->with("success", "Check Out berhasil.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
