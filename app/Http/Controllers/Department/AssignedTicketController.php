@@ -158,19 +158,18 @@ class AssignedTicketController extends Controller
                 Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
 
                 // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Admin'])->where('id', $assignedDepartmentId)->get();
+                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
 
                 $notificationDataForDepartment = [
                     'name' => $authenticatedUserName,
-                    'body' => 'Tiket telah diambil/kerjakan',
+                    'body' => 'Tiket telah diberikan pada anda untuk dikerjakan ',
                     'thanks' => 'Terimakasih',
                     'Text' => 'Tolong cek kembali',
-                    'Url' => url('/admin/ticket'),
+                    'Url' => url('/department/assignedTicket'),
                     'admin_id' => rand(1111, 9999),
                 ];
 
-                Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
-
+                Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
             } elseif ($status->status_name == 'Selesai') {
                 // Notifikasi untuk Customer bahwa tiket telah dikerjakan
                 $notificationDataForCustomer = [

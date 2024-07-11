@@ -246,7 +246,8 @@ class TicketController extends Controller
             $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
 
             // Ambil customer yang ditugaskan dari inputan
-            $customer = $ticket->customer;
+            $customerId = $validate['customer'];
+            $customer = User::findOrFail($customerId);
 
             $authenticatedUserName = Auth::user()->name;
 
@@ -268,15 +269,15 @@ class TicketController extends Controller
                 Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
 
                 // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = $ticket->assign_to;
+                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
 
                 $notificationDataForDepartment = [
                     'name' => $authenticatedUserName,
-                    'body' => 'Ada tiket baru untuk anda kerjakan',
+                    'body' => 'Tiket telah diberikan pada anda untuk dikerjakan ',
                     'thanks' => 'Terimakasih',
                     'Text' => 'Tolong cek kembali',
                     'Url' => url('/department/assignedTicket'),
-                    'department_id' => rand(1111, 9999),
+                    'admin_id' => rand(1111, 9999),
                 ];
 
                 Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
@@ -284,7 +285,7 @@ class TicketController extends Controller
                 // Notifikasi untuk Customer bahwa tiket telah dikerjakan
                 $notificationDataForCustomer = [
                     'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda telah dikerjakan',
+                    'body' => 'Tiket anda sudah dikerjakan',
                     'thanks' => 'Terimakasih',
                     'Text' => 'Tolong cek hasilnya',
                     'Url' => url('/customer/myTicket'),
@@ -309,8 +310,6 @@ class TicketController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
-
-
 
     /**
      * Remove the specified resource from storage.
