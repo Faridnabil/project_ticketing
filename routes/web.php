@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Customer\HomeCustomerController;
 use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\Department\AssignedTicketController;
@@ -39,13 +40,6 @@ Route::get('/', function () {
     return redirect()->route('login'); // Mengarahkan ke halaman login
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::patch('profile/{id}/update_foto', [ProfileController::class, 'updateFoto'])->name('profile.update_foto');
-});
-
 require __DIR__ . '/auth.php';
 
 
@@ -60,6 +54,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
         '/admin/permission' => PermissionController::class,
         '/admin/user' => UserController::class,
         '/admin/ticket' => TicketController::class,
+        '/admin/attendance' => AttendanceController::class,
     ]);
 
     Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
@@ -67,6 +62,13 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
 
     Route::get('/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
+});
+
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Customer|Department'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('profile/{id}/update_foto', [ProfileController::class, 'updateFoto'])->name('profile.update_foto');
 });
 
 Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department'])->group(function () {

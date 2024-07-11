@@ -160,12 +160,13 @@
 
             @can('View Category')
                 <div class="menu-item">
-                    <a class="menu-link {{ Request::is('category') ? 'active' : '' }}" href="{{ route('category.index') }}">
+                    <a class="menu-link {{ Request::is('category') ? 'active' : '' }}"
+                        href="{{ route('category.index') }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
                                     <path
                                         d="m21,0H3C1.346,0,0,1.346,0,3v21h24V3c0-1.654-1.346-3-3-3Zm1,22H2V3c0-.551.448-1,1-1h18c.552,0,1,.449,1,1v19ZM4,11h7v-7h-7v7Zm2-5h3v3h-3v-3Zm7,5h7v-7h-7v7Zm2-5h3v3h-3v-3Zm-11,14h7v-7h-7v7Zm2-5h3v3h-3v-3Zm7,5h7v-7h-7v7Zm2-5h3v3h-3v-3Z"
                                         fill="#000000" opacity="0.3" />
@@ -182,12 +183,13 @@
             @endcan
             @can('View Priority')
                 <div class="menu-item">
-                    <a class="menu-link {{ Request::is('priority') ? 'active' : '' }}" href="{{ route('priority.index') }}">
+                    <a class="menu-link {{ Request::is('priority') ? 'active' : '' }}"
+                        href="{{ route('priority.index') }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
                                     <path
                                         d="m24,2v2H8v-2h16Zm-11,9h-5v2h5v-2ZM0,0h6v6.004H0V0Zm2,4.004h2v-2.004h-2v2.004ZM0,9h6v6.004H0v-6.004Zm2,4.004h2v-2.004h-2v2.004Zm6,8.996h7v-2h-7v2ZM0,18h6v6.004H0v-6.004Zm2,4.004h2v-2.004h-2v2.004Zm15.586-15.418l-3.579,3.58,1.414,1.414,2.579-2.579v15h2v-15l2.564,2.564,1.414-1.414-3.564-3.565c-.779-.778-2.049-.779-2.828,0Z"
                                         fill="#000000" opacity="0.3" />
@@ -224,6 +226,23 @@
                     </a>
                 </div>
             @endcan
+            @can('View Attendance')
+                <div class="menu-item">
+                    <a class="menu-link {{ Request::is('attendance') ? 'active' : '' }}"
+                        href="{{ route('attendance.index') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
+                            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
+                                viewBox="0 0 24 24" width="512" height="512">
+                                <path
+                                    d="M19.732,13.732l-6.732,6.732v3.536h3.536l6.732-6.732c.472-.472,.732-1.1,.732-1.768s-.26-1.296-.732-1.768c-.943-.944-2.592-.944-3.535,0Zm2.828,2.828l-6.439,6.439h-2.122v-2.122l6.439-6.439c.566-.566,1.555-.566,2.121,0,.283,.283,.439,.66,.439,1.061s-.156,.777-.439,1.061Zm-5.924-2.561H5v-1h12.637l-1,1ZM21.5,2h-3.5V0h-1V2H7V0h-1V2H2.5C1.122,2,0,3.122,0,4.5V24H11v-1H1V9H23v2.294c.352,.122,.692,.27,1,.472V4.5c0-1.378-1.122-2.5-2.5-2.5ZM1,8v-3.5c0-.827,.673-1.5,1.5-1.5H21.5c.827,0,1.5,.673,1.5,1.5v3.5H1Zm4,10h7.636l-1,1H5v-1Z" />
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title">Absensi</span>
+                    </a>
+                </div>
+            @endcan
 
             @can('View Ticket')
                 <div class="menu-item">
@@ -253,7 +272,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('requestAssignment') ? 'active' : '' }}" href="{{ route('requestAssignment.index') }}">
+                        <a class="menu-link {{ Request::is('requestAssignment') ? 'active' : '' }}"
+                            href="{{ route('requestAssignment.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">

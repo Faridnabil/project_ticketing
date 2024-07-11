@@ -246,8 +246,7 @@ class TicketController extends Controller
             $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
 
             // Ambil customer yang ditugaskan dari inputan
-            $customerId = $validate['customer'];
-            $customer = User::findOrFail($customerId);
+            $customer = $ticket->customer;
 
             $authenticatedUserName = Auth::user()->name;
 
@@ -269,7 +268,7 @@ class TicketController extends Controller
                 Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
 
                 // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+                $assignedDepartmentUsers = $ticket->assign_to;
 
                 $notificationDataForDepartment = [
                     'name' => $authenticatedUserName,

@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function checkInOut()
+    {
+        return $this->hasMany(CheckInOut::class);
+    }
 }

@@ -53,6 +53,11 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'Delete Status']);
         Permission::create(['name' => 'Show Status']);
 
+        Permission::create(['name' => 'View Attendance']);
+        Permission::create(['name' => 'Create Attendance']);
+        Permission::create(['name' => 'Edit Attendance']);
+        Permission::create(['name' => 'Show Attendance']);
+
         Permission::create(['name' => 'View Ticket']);
         Permission::create(['name' => 'Create Ticket']);
         Permission::create(['name' => 'Edit Ticket']);
@@ -144,8 +149,22 @@ class UsersSeeder extends Seeder
         $DepartmentRole->givePermissionTo('Show Ticket');
 
         $user = User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'Admin@gmail.com',
+            'name' => 'Admin Shift 1',
+            'email' => 'Admin1@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($adminRole);
+
+        $user = User::factory()->create([
+            'name' => 'Admin Shift 2',
+            'email' => 'Admin2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($adminRole);
+
+        $user = User::factory()->create([
+            'name' => 'Admin Shift 3',
+            'email' => 'Admin3@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($adminRole);

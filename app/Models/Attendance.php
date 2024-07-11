@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
-class Comment extends Model
+class Attendance extends Model
 {
     use HasFactory, HasRoles;
+
     protected $fillable = [
-        'ticket_id',
         'user_id',
-        'message'
+        'name',
+        'check_in',
+        'date_check_in',
+        'check_out',
+        'date_check_out',
+        'attachment'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function ticket()
-    {
-        return $this->belongsTo(Ticket::class);
     }
 }
