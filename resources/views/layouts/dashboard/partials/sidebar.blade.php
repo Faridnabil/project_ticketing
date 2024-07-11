@@ -226,23 +226,6 @@
                     </a>
                 </div>
             @endcan
-            @can('View Attendance')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('attendance') ? 'active' : '' }}"
-                        href="{{ route('attendance.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
-                            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
-                                viewBox="0 0 24 24" width="512" height="512">
-                                <path
-                                    d="M19.732,13.732l-6.732,6.732v3.536h3.536l6.732-6.732c.472-.472,.732-1.1,.732-1.768s-.26-1.296-.732-1.768c-.943-.944-2.592-.944-3.535,0Zm2.828,2.828l-6.439,6.439h-2.122v-2.122l6.439-6.439c.566-.566,1.555-.566,2.121,0,.283,.283,.439,.66,.439,1.061s-.156,.777-.439,1.061Zm-5.924-2.561H5v-1h12.637l-1,1ZM21.5,2h-3.5V0h-1V2H7V0h-1V2H2.5C1.122,2,0,3.122,0,4.5V24H11v-1H1V9H23v2.294c.352,.122,.692,.27,1,.472V4.5c0-1.378-1.122-2.5-2.5-2.5ZM1,8v-3.5c0-.827,.673-1.5,1.5-1.5H21.5c.827,0,1.5,.673,1.5,1.5v3.5H1Zm4,10h7.636l-1,1H5v-1Z" />
-                            </svg>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-title">Absensi</span>
-                    </a>
-                </div>
-            @endcan
 
             @can('View Ticket')
                 <div class="menu-item">
@@ -252,6 +235,7 @@
                 </div>
                 @role('Admin')
 
+                @can('View Attendance')
                 <div class="menu-item">
                     <a class="menu-link {{ Request::is('attendance') ? 'active' : '' }}" href="{{ route('attendance.index') }}">
                         <span class="menu-icon">
@@ -260,10 +244,10 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                     viewBox="0 0 24 24" version="1.1">
                                     <path
-                                        d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
                                         fill="#000000" opacity="0.3" />
                                     <path
-                                        d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
                                         fill="#000000" />
                                 </svg>
                             </span>
@@ -272,6 +256,8 @@
                         <span class="menu-title">Absen</span>
                     </a>
                 </div>
+                @endcan
+
 
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('ticket') ? 'active' : '' }}" href="{{ route('ticket.index') }}">

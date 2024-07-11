@@ -56,6 +56,7 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'View Attendance']);
         Permission::create(['name' => 'Create Attendance']);
         Permission::create(['name' => 'Edit Attendance']);
+        Permission::create(['name' => 'Delete Attendance']);
         Permission::create(['name' => 'Show Attendance']);
 
         Permission::create(['name' => 'View Ticket']);
@@ -111,6 +112,12 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Edit Ticket');
         $adminRole->givePermissionTo('Delete Ticket');
         $adminRole->givePermissionTo('Show Ticket');
+
+        $adminRole->givePermissionTo('View Attendance');
+        $adminRole->givePermissionTo('Create Attendance');
+        $adminRole->givePermissionTo('Edit Attendance');
+        $adminRole->givePermissionTo('Delete Attendance');
+        $adminRole->givePermissionTo('Show Attendance');
 
         //Customer
         $CustomerRole->givePermissionTo('View Dashboard Customer');
