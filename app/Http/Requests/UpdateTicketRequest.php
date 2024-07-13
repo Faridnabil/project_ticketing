@@ -2,38 +2,27 @@
 
 namespace App\Http\Requests;
 
-use App\Ticket;
-use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTicketRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
-        abort_if(Gate::denies('ticket_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return true;
+        return false;
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     */
+    public function rules(): array
     {
         return [
-            'title'       => [
-                'required',
-            ],
-            // 'status_id'   => [
-            //     'required',
-            //     'integer',
-            // ],
-            // 'priority_id' => [
-            //     'required',
-            //     'integer',
-            // ],
-            'category_id' => [
-                'required',
-                'integer',
-            ],
+            //
         ];
     }
 }

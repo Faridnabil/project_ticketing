@@ -1,0 +1,307 @@
+@extends('layouts.dashboard.app')
+
+@section('title')
+    Dashboard | SIAK Dukcapil
+@endsection
+
+@section('content')
+    <style>
+        .activity-log {
+            padding: 15px;
+            background-color: #f9fafc;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .log-header {
+            margin-bottom: 10px;
+        }
+
+        .log-body span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .log-body hr {
+            margin: 10px 0;
+            border: 0;
+            border-top: 1px solid #272727;
+        }
+
+        .btn-custom {
+            margin-right: 10px;
+            border: none;
+            background-color: #f8f9fa;
+            padding: 10px 50px;
+            border-radius: 5px;
+        }
+
+        .btn-custom.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .font-regular {
+            font-size: 1rem;
+        }
+    </style>
+
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-place="true" data-kt-place-mode="prepend"
+                data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Dashboard
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1"></small>
+                    <!--end::Description-->
+                </h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Toolbar-->
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container">
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-xl-9 col-lg-12 mb-4">
+                    <!-- First Card -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-3">Tiket Pertahun</h1>
+                            <canvas id="ticketChart" width="80%" height="20px"></canvas>
+                        </div>
+                    </div>
+                    <!-- Second Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-5">Tiket Prioritas</h1>
+                            <table id="kt_datatable_example_5"
+                                class="table table-striped table-row-bordered border rounded">
+                                <thead>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nomor Tiket</th>
+                                        <th class="min-w-125px">Kategori</th>
+                                        <th class="min-w-125px">Pemilik</th>
+                                        <th class="min-w-125px">Tetapkan Ke</th>
+                                        <th class="min-w-125px">Prioritas</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-600 fw-bold">
+                                    @if ($ticketPriotitas->count())
+                                        @foreach ($ticketPriotitas as $ticket)
+                                            <tr>
+                                                <td>{{ $ticket->no_ticket }}</td>
+                                                <td>{{ $ticket->category->category_name }}</td>
+                                                <td>{{ $ticket->customers->name }}</td>
+                                                <td>{{ $ticket->assignTo->name ?? '-' }}</td>
+                                                <td>
+                                                    @if ($ticket->priority_id == '4')
+                                                        <span class="badge"
+                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
+                                                    @elseif($ticket->priority_id == '3')
+                                                        <span class="badge"
+                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                    @elseif($ticket->priority_id == '2')
+                                                        <span class="badge"
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                    @elseif($ticket->priority_id == '1')
+                                                        <span class="badge"
+                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
+                                                    @else
+                                                        <span class="badge"
+                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                                <td>
+                                                    @if ($ticket->status_id == '1')
+                                                        <span class="badge"
+                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
+                                                    @elseif($ticket->status_id == '2')
+                                                        <span class="badge"
+                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
+                                                    @elseif($ticket->status_id == '3')
+                                                        <span class="badge"
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
+                                                    @elseif($ticket->status_id == '4')
+                                                        <span class="badge"
+                                                            style="background-color:green; color: white; font-weight:bold">Selesai</span>
+                                                    @else
+                                                        <span class="badge"
+                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-xl-3 col-lg-12">
+                    <div class="card">
+                        <div class="card-header border-0 bg-primary py-5">
+                            <form action="{{ route('admin.dashboard.index') }}" method="GET">
+                                <div class="input-group">
+                                    <!-- Dropdown for selecting ticket number -->
+                                    <select name="ticket_number" class="form-control mt-3" style="width: 60%">
+                                        <option value="">Pilih Nomor Tiket</option>
+                                        @foreach ($tickets as $ticket)
+                                            <option value="{{ $ticket->id }}"
+                                                {{ $selectedTicketId == $ticket->id ? 'selected' : '' }}>
+                                                {{ $ticket->no_ticket }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-toolbar scrollable-card" style="max-height: 500px; overflow-y:auto;">
+                                @foreach ($logs as $log)
+                                    @if ($log->attribute != 'attachments')
+                                        <div class="activity-log @if (!$loop->last) mb-10 @endif">
+                                            <div class="log-header">
+                                                <h5 class="text-gray-800 fw-bolder mb-2">
+                                                    <strong>
+                                                        @if ($log->attribute == 'priority_id')
+                                                            Data Prioritas
+                                                        @elseif($log->attribute == 'status_id')
+                                                            Data Status
+                                                        @elseif($log->attribute == 'customer')
+                                                            Data Customer
+                                                        @elseif($log->attribute == 'assign_to')
+                                                            Data Ditugaskan
+                                                        @elseif($log->attribute == 'category_id')
+                                                            Data Kategori
+                                                        @elseif($log->attribute == 'title')
+                                                            Data Judul
+                                                        @elseif($log->attribute == 'due_date')
+                                                            Data Tanggal Jatuh Tempo
+                                                        @elseif($log->attribute == 'description')
+                                                            Data Deskripsi
+                                                        @else
+                                                            {{ $log->attribute }}
+                                                        @endif
+                                                    </strong>:
+                                                </h5>
+                                            </div>
+                                            <div class="log-body fw-bold">
+                                                @if ($log->old_value == null)
+                                                    <hr>
+                                                    <div>
+                                                        <span><strong class="mt-2">Data sebelum diubah :
+                                                                @if (is_numeric($log->new_value))
+                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                                @else
+                                                                    {{ $log->new_value }}
+                                                                @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Dirubah oleh :</strong>{{ $log->user->name }} pada
+                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
+                                                    </div>
+                                                @else
+                                                    <div>
+                                                        <hr>
+                                                        <span><strong>Data sebelum diubah :</strong>
+                                                            @if (is_numeric($log->old_value))
+                                                                {{ $log->oldPrioritas->priority_name ?? ($log->oldCategory->category_name ?? ($log->oldUser->name ?? $log->oldStatus->status_name)) }}
+                                                            @else
+                                                                {!! $log->old_value !!}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Menjadi :</strong>
+                                                            @if (is_numeric($log->new_value))
+                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
+                                                            @else
+                                                                {!! $log->new_value !!}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span><strong>Diubah oleh :</strong>{{ $log->user->name }} pada
+                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('ticketChart').getContext('2d');
+
+            fetch('{{ url('/admin/tickets/chart') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const ticketChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.months,
+                            datasets: [{
+                                    label: 'Tiket Masuk',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                    data: data.tickets
+                                },
+                                {
+                                    label: 'Tiket Selesai',
+                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    borderWidth: 1,
+                                    data: data.ticketsClosed
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
+@endsection
