@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Daftar Pengajuan | SIAK Dukcapil
+    Daftar Pengajuan | PLN Icon+
 @endsection
 
 @section('content')
@@ -34,79 +34,68 @@
         <!--begin::Container-->
         <div id="kt_content_container" class="container">
             <!--begin::Card-->
-            <div class="card">
-                <!--begin::Card header-->
-                <div class="card-header border-0 pt-6">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                    </div>
-                    <!--begin::Card title-->
+
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
                 </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card-body pt-0">
-                    <!--begin::Table-->
-                    <table id="kt_datatable_example_5"
-                        class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Nomor Tiket</th>
-                                <th class="min-w-125px">Judul</th>
-                                <th class="min-w-125px">Pemohon</th>
-                                <th class="min-w-125px">Tanggal Pengajuan</th>
-                                <th class="min-w-125px">Aksi</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="text-gray-600 fw-bold">
-                            @if ($requestAssignments->count())
-                                @foreach ($requestAssignments as $requestAssignment)
-                                    <!--begin::Table row-->
-                                    <tr>
-                                        <!--begin::Nomor Ticket=-->
-                                        <td>
-                                            {{ $requestAssignment->ticket->no_ticket }}
-                                        </td>
-                                        <!--end::Nomor Ticket=-->
-                                        <!--begin::Title=-->
-                                        <td>
-                                            {{ $requestAssignment->ticket->title }}
-                                        </td>
-                                        <!--end::Title=-->
-                                        <!--begin::User=-->
-                                        <td>
-                                            {{ $requestAssignment->user->name }}
-                                        </td>
-                                        <!--end::User=-->
-                                        <!--begin::Date=-->
-                                        <td>
-                                            {{ date('d F Y', strtotime($requestAssignment->created_at)) }}
-                                        </td>
-                                        <!--end::Date=-->
-                                        <!--begin::Action=-->
-                                        <td>
-                                            <form action="{{ route('ticket.approveAssignment', $requestAssignment->id) }}"
-                                                method="POST" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-primary" type="submit">Approve</button>
-                                            </form>
-                                        </td>
-                                        <!--end::Action=-->
-                                    </tr>
-                                    <!--end::Table row-->
-                                @endforeach
-                            @endif
-                        </tbody>
-                        <!--end::Table body-->
-                    </table>
-                    <!--end::Table-->
-                </div>
-                <!--end::Card body-->
+                <!--begin::Card title-->
             </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Daftar Pengajuan</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Tiket</th>
+                                    <th>Judul</th>
+                                    <th>Pemilik</th>
+                                    <th>Pemohon</th>
+                                    <th>Tanggal Pengajuan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Nomor Tiket</th>
+                                    <th>Judul</th>
+                                    <th>Pemilik</th>
+                                    <th>Pemohon</th>
+                                    <th>Tanggal Pengajuan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @if ($requestAssignments->count())
+                                    @foreach ($requestAssignments as $requestAssignment)
+                                        <tr>
+                                            <td>{{ $requestAssignment->ticket->no_ticket }}</td>
+                                            <td>{{ $requestAssignment->ticket->title }}</td>
+                                            <td>{{ $requestAssignment->user->name }}</td>
+                                            <td>{{ date('d F Y', strtotime($requestAssignment->created_at)) }}</td>
+                                            <td>
+                                                <form
+                                                    action="{{ route('ticket.approveAssignment', $requestAssignment->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button class="btn btn-primary" type="submit">Approve</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card body-->
             <!--end::Card-->
         </div>
         <!--end::Container-->

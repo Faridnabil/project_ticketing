@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Peran | SIAK Dukcapil
+    Ubah Peran | PLN Icon+
 @endsection
 
 @section('content')
@@ -73,7 +73,7 @@
                                 </div>
 
                                 <!--begin::Input group Permission-->
-                                <div class="col-md-9">
+                                <div class="col-md-11">
                                     <div class="role-permissions">
                                         <div class="row">
                                             @if (count($permission))

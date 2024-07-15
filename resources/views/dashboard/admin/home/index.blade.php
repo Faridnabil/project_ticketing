@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Dashboard | SIAK Dukcapil
+    Dashboard | PLN Icon+
 @endsection
 
 @section('content')
@@ -75,7 +75,7 @@
         <div id="kt_content_container" class="container">
             <div class="row">
                 <!-- Left Column -->
-                <div class="col-xl-9 col-lg-12 mb-4">
+                <div class="col-xl-12 col-lg-12 mb-4">
                     <!-- First Card -->
                     <div class="card mb-4">
                         <div class="card-body">
@@ -85,79 +85,92 @@
                     </div>
                     <!-- Second Card -->
                     <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tiket Prioritas</h4>
+                        </div>
                         <div class="card-body">
-                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-5">Tiket Prioritas</h1>
-                            <table id="kt_datatable_example_5"
-                                class="table table-striped table-row-bordered border rounded">
-                                <thead>
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nomor Tiket</th>
-                                        <th class="min-w-125px">Kategori</th>
-                                        <th class="min-w-125px">Pemilik</th>
-                                        <th class="min-w-125px">Tetapkan Ke</th>
-                                        <th class="min-w-125px">Prioritas</th>
-                                        <th class="min-w-125px">Dibuat Tanggal</th>
-                                        <th class="min-w-125px">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-gray-600 fw-bold">
-                                    @if ($ticketPriotitas->count())
-                                        @foreach ($ticketPriotitas as $ticket)
-                                            <tr>
-                                                <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->category->category_name }}</td>
-                                                <td>{{ $ticket->customers->name }}</td>
-                                                <td>{{ $ticket->assignTo->name ?? '-' }}</td>
-                                                <td>
-                                                    @if ($ticket->priority_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
-                                                    @elseif($ticket->priority_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
-                                                    @elseif($ticket->priority_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
-                                                    @elseif($ticket->priority_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                                <td>
-                                                    @if ($ticket->status_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                                    @elseif($ticket->status_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                                    @elseif($ticket->status_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Selesai</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="basic-datatables" class="display table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nomor Tiket</th>
+                                            <th>Kategori</th>
+                                            <th>Pemilik</th>
+                                            <th>Tetapkan Ke</th>
+                                            <th>Prioritas</th>
+                                            <th>Dibuat Tanggal</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nomor Tiket</th>
+                                            <th>Kategori</th>
+                                            <th>Pemilik</th>
+                                            <th>Tetapkan Ke</th>
+                                            <th>Prioritas</th>
+                                            <th>Dibuat Tanggal</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @if ($ticketPriotitas->count())
+                                            @foreach ($ticketPriotitas as $ticket)
+                                                <tr>
+                                                    <td>{{ $ticket->no_ticket }}</td>
+                                                    <td>{{ $ticket->category->category_name }}</td>
+                                                    <td>{{ $ticket->customers->name }}</td>
+                                                    <td>{{ $ticket->assignTo->name ?? '-' }}</td>
+                                                    <td>
+                                                        @if ($ticket->priority_id == '4')
+                                                            <span class="badge"
+                                                                style="background-color:red; color: white; font-weight:bold">Critical</span>
+                                                        @elseif($ticket->priority_id == '3')
+                                                            <span class="badge"
+                                                                style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                        @elseif($ticket->priority_id == '2')
+                                                            <span class="badge"
+                                                                style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                        @elseif($ticket->priority_id == '1')
+                                                            <span class="badge"
+                                                                style="background-color:green; color: white; font-weight:bold">Low</span>
+                                                        @else
+                                                            <span class="badge"
+                                                                style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                                    <td>
+                                                        @if ($ticket->status_id == '1')
+                                                            <span class="badge"
+                                                                style="background-color:red; color: white; font-weight:bold">Tertunda</span>
+                                                        @elseif($ticket->status_id == '2')
+                                                            <span class="badge"
+                                                                style="background-color:blue; color: white; font-weight:bold">Diterima</span>
+                                                        @elseif($ticket->status_id == '3')
+                                                            <span class="badge"
+                                                                style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
+                                                        @elseif($ticket->status_id == '4')
+                                                            <span class="badge"
+                                                                style="background-color:green; color: white; font-weight:bold">Selesai</span>
+                                                        @else
+                                                            <span class="badge"
+                                                                style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column -->
-                <div class="col-xl-3 col-lg-12">
+                <div class="col-xl-12 col-lg-12">
                     <div class="card">
-                        <div class="card-header border-0 bg-primary py-5">
+                        <div class="card-header border-0 bg-primary py-5" style="border-radius: 14px 14px 1px 1px;">
                             <form action="{{ route('admin.dashboard.index') }}" method="GET">
                                 <div class="input-group">
                                     <!-- Dropdown for selecting ticket number -->
@@ -259,6 +272,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

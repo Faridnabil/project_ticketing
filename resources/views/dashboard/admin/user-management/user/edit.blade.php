@@ -149,46 +149,19 @@
 
                                     <!--begin::Image input-->
                                     <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url(assets/media/avatars/blank.png)">
+                                         style="background-image: url('{{ asset($user->photo ? $user->photo : 'assets/media/avatars/blank.png') }}')">
+
                                         <!--begin::Preview existing avatar-->
                                         <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url(assets/media/avatars/150-1.jpg);">
+                                             style="background-image: url('{{ asset($user->photo ? $user->photo : 'assets/media/avatars/blank.png') }}');">
                                         </div>
                                         <!--end::Preview existing avatar-->
-                                        <!--begin::Label-->
-                                        <label
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                            title="Change avatar">
-                                            <i class="bi bi-pencil-fill fs-7"></i>
-                                            <!--begin::Inputs-->
-                                            <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
-                                            @if (empty($user->photo))
-                                            @else
-                                                <input type="hidden" name="pathfoto" value="{{ $user->photo }}">
-                                            @endif
-                                            <!--end::Inputs-->
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Cancel-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                            title="Cancel avatar">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
-                                        <!--end::Cancel-->
-                                        <!--begin::Remove-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                            title="Remove avatar">
-                                            <i class="bi bi-x fs-2"></i>
-                                        </span>
-                                        <!--end::Remove-->
+
+                                        <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
                                     </div>
                                     <!--end::Image input-->
                                 </div>
+
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>

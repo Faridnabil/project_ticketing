@@ -2,33 +2,39 @@
 <html lang="en">
 
 <head>
-    <base href="">
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@yield('title')</title>
-    <meta name="description"
-        content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
-    <meta name="keywords"
-        content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
-    <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('template/dist/assets/media/logos/logos.png') }}" />
-    <!--begin::Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    <!--end::Fonts-->
-    <!--begin::Global Stylesheets Bundle(used by all pages)-->
-    <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <!--end::Global Stylesheets Bundle-->
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{{ asset('templates/assets/img/kaiadmin/logo.ico') }}" type="image/x-icon" />
 
-    <link href="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
-        type="text/css" />
+    <!-- Fonts and icons -->
+    <script src="{{ asset('templates/assets/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ["Public Sans:300,400,500,600,700"]
+            },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["{{ asset('templates/assets/css/fonts.min.css') }}"],
+            },
+            active: function() {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
 
-    <!-- Include CKEditor script -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ asset('templates/assets/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('templates/assets/css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('templates/assets/css/kaiadmin.min.css') }}" />
 
-    <!-- Dropzone CSS -->
+    <!-- CSS Just for demo purpose, don't include it in your project -->
     <style>
         .custom-dropzone {
             border: 2px dashed #007bff;
@@ -80,281 +86,147 @@
             margin-top: 10px;
         }
     </style>
+    {{-- <link rel="stylesheet" href="assets/css/demo.css" /> --}}
 </head>
 
-<body id="kt_body"
-    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
-    <!--begin::Main-->
-    <!--begin::Root-->
-    <div class="d-flex flex-column flex-root">
-        <!--begin::Page-->
-        <div class="page d-flex flex-row flex-column-fluid">
-            <!--begin::Aside-->
-            <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true"
-                data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}"
-                data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}"
-                data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
-                <!--begin::Brand-->
-                <div class="aside-logo flex-column-auto" id="kt_aside_logo">
-                    <!--begin::Logo-->
-                    <a href="">
-                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="h-30px logo" />
-                    </a>
-                    <!--end::Logo-->
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        @include('layouts.dashboard.partials.sidebar')
+        <!-- End Sidebar -->
 
-                </div>
-                <!--end::Brand-->
-                <!--begin::Aside menu-->
+        <div class="main-panel">
+            @include('layouts.dashboard.partials.navbar')
 
-                @include('layouts.dashboard.partials.sidebar')
-
-                <!--end::Aside menu-->
-            </div>
-            <!--end::Aside-->
-            <!--begin::Wrapper-->
-            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                <!--begin::Header-->
-                <div id="kt_header" style="" class="header align-items-stretch">
-                    <!--begin::Container-->
-                    <div class="container-fluid d-flex align-items-stretch justify-content-between">
-                        <!--begin::Mobile logo-->
-                        <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                            <a href="index.html" class="d-lg-none">
-                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logos.png') }}" class="h-30px" />
-                            </a>
-                        </div>
-                        <!--end::Mobile logo-->
-                        @include('layouts.dashboard.partials.navbar')
-                    </div>
-                    <!--end::Container-->
-                </div>
-                <!--end::Header-->
-
-                <!--begin::Content-->
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div class="container">
+                <div class="page-inner">
                     @yield('content')
                 </div>
-                <!--end::Content-->
-
-                <!--Start Footer-->
-                @include('layouts.dashboard.partials.footer')
-                <!--end footer-->
             </div>
-            <!--end::Wrapper-->
+
+            @include('layouts.dashboard.partials.footer')
         </div>
-        <!--end::Page-->
+        <!-- End Custom template -->
     </div>
-    <!--end::Root-->
+    <!--   Core JS Files   -->
+    <script src="{{ asset('templates/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('templates/assets/js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('templates/assets/js/core/bootstrap.min.js') }}"></script>
 
-    <!--begin::Javascript-->
-    <!--begin::Global Javascript Bundle(used by all pages)-->
-    <script src="{{ asset('template/dist/assets/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/scripts.bundle.js') }}"></script>
-    <!--end::Global Javascript Bundle-->
-    <!--begin::Page Custom Javascript(used by this page)-->
-    <script src="{{ asset('template/dist/assets/js/custom/widgets.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/chat/chat.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
-    <!--end::Page Custom Javascript-->
-    <!--end::Javascript-->
+    <!-- jQuery Scrollbar -->
+    <script src="{{ asset('templates/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
 
-    {{-- Javascript Listing --}}
-    <script src="{{ asset('template/dist/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/customers/list/export.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/customers/list/list.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/customers/add.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/widgets.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/apps/chat/chat.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
-    <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
+    <!-- Chart JS -->
+    <script src="{{ asset('templates/assets/js/plugin/chart.js/chart.min.js') }}"></script>
 
-{{-- Javascript Notifikasi --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.notification-link').forEach(function(link) {
-            link.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
+    <!-- jQuery Sparkline -->
+    <script src="{{ asset('templates/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
 
-                var form = this.closest('.notification-form');
-                var url = this.getAttribute('href');
+    <!-- Chart Circle -->
+    <script src="{{ asset('templates/assets/js/plugin/chart-circle/circles.min.js') }}"></script>
 
-                if (form) {
-                    // Submit the form via AJAX
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', form.action, true);
-                    xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
-                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            // Redirect to the URL after the form is successfully submitted
-                            window.location.href = url;
-                        }
-                    };
+    <!-- Datatables -->
+    <script src="{{ asset('templates/assets/js/plugin/datatables/datatables.min.js') }}"></script>
 
-                    // Collect form data
-                    var formData = new FormData(form);
-                    var formBody = new URLSearchParams(formData).toString();
+    <!-- Bootstrap Notify -->
+    <script src="{{ asset('templates/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
-                    xhr.send(formBody);
-                }
-            });
-        });
-    });
-</script>
+    <!-- jQuery Vector Maps -->
+    <script src="{{ asset('templates/assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
+    <script src="{{ asset('templates/assets/js/plugin/jsvectormap/world.js') }}"></script>
 
-    {{-- Javascript Dropzone --}}
+    <!-- Sweet Alert -->
+    <script src="{{ asset('templates/assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="{{ asset('templates/assets/js/kaiadmin.min.js') }}"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    {{-- <script src="assets/js/setting-demo.js"></script>
+    <script src="assets/js/demo.js"></script> --}}
     <script>
-        let uploadedFiles = [];
-        let existingFiles = [];
+            $(document).ready(function() {
+                $("#basic-datatables").DataTable({});
 
-        @if (isset($ticket) && $ticket->attachments)
-            @php
-                $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
-            @endphp
-            @foreach ($attachments as $attachment)
-                existingFiles.push('{{ $attachment }}');
-            @endforeach
-        @endif
+                $("#multi-filter-select").DataTable({
+                    pageLength: 5,
+                    initComplete: function() {
+                        this.api()
+                            .columns()
+                            .every(function() {
+                                var column = this;
+                                var select = $(
+                                        '<select class="form-select"><option value=""></option></select>'
+                                    )
+                                    .appendTo($(column.footer()).empty())
+                                    .on("change", function() {
+                                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-        let removedFiles = [];
+                                        column
+                                            .search(val ? "^" + val + "$" : "", true, false)
+                                            .draw();
+                                    });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const preview = document.querySelector('.preview');
-            existingFiles.forEach(filePath => {
-                const container = document.createElement('div');
-                container.classList.add('image-container');
-
-                const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
-                img.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    removeExistingFile(event, filePath);
+                                column
+                                    .data()
+                                    .unique()
+                                    .sort()
+                                    .each(function(d, j) {
+                                        select.append(
+                                            '<option value="' + d + '">' + d + "</option>"
+                                        );
+                                    });
+                            });
+                    },
                 });
 
-                const removeBtn = document.createElement('button');
-                removeBtn.textContent = 'x';
-                removeBtn.classList.add('remove-btn');
-                removeBtn.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    removeExistingFile(event, filePath);
+                // Add Row
+                $("#add-row").DataTable({
+                    pageLength: 5,
                 });
 
-                container.appendChild(img);
-                container.appendChild(removeBtn);
-                preview.appendChild(container);
+                var action =
+                    '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+                $("#addRowButton").click(function() {
+                    $("#add-row")
+                        .dataTable()
+                        .fnAddData([
+                            $("#addName").val(),
+                            $("#addPosition").val(),
+                            $("#addOffice").val(),
+                            action,
+                        ]);
+                    $("#addRowModal").modal("hide");
+                });
             });
-            updateExistingFileList(); // Update the list on page load
+        $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#177dff",
+            fillColor: "rgba(23, 125, 255, 0.14)",
         });
 
-        document.getElementById('attachments').addEventListener('change', function(event) {
-            const fileList = Array.from(event.target.files);
-            const preview = document.querySelector('.preview');
-            const errorMessage = document.getElementById('error-message');
-            const maxFiles = 15;
-
-            if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
-                errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
-                return;
-            }
-
-            errorMessage.textContent = ''; // Clear any existing error message
-
-            fileList.forEach(file => {
-                if (!uploadedFiles.includes(file) && !existingFiles.includes(file.name)) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const container = document.createElement('div');
-                        container.classList.add('image-container');
-
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            container.remove();
-                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                            updateFileList();
-                        });
-
-                        const removeBtn = document.createElement('button');
-                        removeBtn.textContent = 'x';
-                        removeBtn.classList.add('remove-btn');
-                        removeBtn.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            container.remove();
-                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                            updateFileList();
-                        });
-
-                        container.appendChild(img);
-                        container.appendChild(removeBtn);
-                        preview.appendChild(container);
-                    };
-
-                    if (file.type.startsWith('image/')) {
-                        reader.readAsDataURL(file); // Read file as Data URL for image preview
-                    }
-
-                    uploadedFiles.push(file);
-                    updateFileList(); // Update file list after adding each file
-                }
-            });
+        $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#f3545d",
+            fillColor: "rgba(243, 84, 93, .14)",
         });
 
-        function uploadFile(event) {
-            if (!event.target.closest('.image-container')) {
-                document.getElementById('attachments').click();
-            }
-        }
-
-        function updateFileList() {
-            const dataTransfer = new DataTransfer();
-            uploadedFiles.forEach(file => dataTransfer.items.add(file));
-            document.getElementById('attachments').files = dataTransfer.files;
-        }
-
-        function updateExistingFileList() {
-            document.getElementById('remaining_attachments').value = existingFiles.join(',');
-        }
-
-        function removeExistingFile(event, filePath) {
-            event.stopPropagation();
-            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
-            if (imgElement && imgElement.parentElement) {
-                existingFiles = existingFiles.filter(file => file !== filePath);
-                removedFiles.push(filePath);
-                imgElement.parentElement.remove();
-                document.getElementById('removed_attachments').value = removedFiles.join(',');
-
-                updateExistingFileList(); // Update remaining files list
-            } else {
-                console.error('File not found:', filePath);
-            }
-        }
-    </script>
-
-
-    <script>
-        $("#kt_datatable_example_5").DataTable({
-            "language": {
-                "lengthMenu": "Show _MENU_",
-            },
-            "dom": "<'row'" +
-                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                ">" +
-
-                "<'table-responsive'tr>" +
-
-                "<'row'" +
-                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                ">"
+        $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#ffa534",
+            fillColor: "rgba(255, 165, 52, .14)",
         });
     </script>
-
 </body>
 
 </html>

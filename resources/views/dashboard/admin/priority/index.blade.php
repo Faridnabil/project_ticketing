@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Prioritas | SIAK Dukcapil
+    Prioritas | PLN Icon+
 @endsection
 
 @section('content')
@@ -32,61 +32,63 @@
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Post-->
-        <div class="post d-flex flex-column-fluid" id="kt_post">
-            <!--begin::Container-->
-            <div id="kt_content_container" class="container">
-                <!--begin::Card-->
-                <div class="card">
-                    <!--begin::Card header-->
-                    <div class="card-header border-0 pt-6">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                        </div>
-                        <!--begin::Card title-->
-                        <!--begin::Card toolbar-->
-                        @can('Create Priority')
-                            <div class="card-toolbar">
-                                <!--begin::Add user-->
-                                <a href="{{ route('priority.create') }}" class="btn btn-primary mb-4">
-                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                    <span class="svg-icon svg-icon-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                            <rect fill="#000000" opacity="0.5"
-                                                transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                                x="4" y="11" width="16" height="2" rx="1" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->Tambah Priority</a>
-                                <!--end::Add user-->
-                            </div>
-                        @endcan
-                        <!--end::Card toolbar-->
+        <div id="kt_content_container" class="container">
+            <!--begin::Card-->
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                </div>
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                @can('Create Priority')
+                    <div class="card-toolbar">
+                        <!--begin::Add user-->
+                        <a href="{{ route('priority.create') }}" class="btn btn-primary mb-4">
+                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                                    <rect fill="#000000" opacity="0.5"
+                                        transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
+                                        x="4" y="11" width="16" height="2" rx="1" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Tambah Priority</a>
+                        <!--end::Add user-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Table-->
-                        <table id="kt_datatable_example_5"
-                            class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                            <!--begin::Table head-->
+                @endcan
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Tabel Prioritas</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-10px">No</th>
-                                    <th class="min-w-10px">Prioritas</th>
-                                    <th class="min-w-100px">Fitur</th>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Prioritas</th>
+                                    <th style="width: 300px">Fitur</th>
                                 </tr>
-                                <!--end::Table row-->
                             </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="text-gray-600 fw-bold">
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Prioritas</th>
+                                    <th style="width: 300px">Fitur</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
                                 @if ($priorities->count())
                                     @foreach ($priorities as $priority)
                                         <tr>
-                                            <td class="min-w-10px">{{ $loop->iteration }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($priority->priority_name == 'Critical')
                                                     <span class="badge"
@@ -108,7 +110,6 @@
                                                     {{ $priority->priority_name }}
                                                 @endif
                                             </td>
-                                            <!--end::Name=-->
                                             <td>
                                                 @can('Edit Priority')
                                                     <a href="{{ route('priority.edit', $priority->id) }}"
@@ -123,22 +124,14 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                @else
                                 @endif
                             </tbody>
-                            <!--end::Table body-->
                         </table>
-                        <!--end::Table-->
                     </div>
-                    <!--end::Card toolbar-->
                 </div>
-                <!--end::Card header-->
             </div>
-            <!--end::Card-->
         </div>
-        <!--end::Container-->
     </div>
-    <!--end::Post-->
 
     @foreach ($priorities as $priority)
         <div class="modal fade" tabindex="-1" id="kt_modal_priority_{{ $priority->id }}">
@@ -149,7 +142,7 @@
                             Form Hapus Prioritas
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><!--end modal-header-->
+                    </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-9">
@@ -158,22 +151,20 @@
                                 <ul class="mt-3 mb-0">
                                     <li>{{ $priority->priority_name }}</li>
                                 </ul>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end modal-body-->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
-                            Tutup
-                        </button>
-                        <form action="{{ route('priority.destroy', $priority->id) }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button class="btn btn-danger" type="submit">Hapus</button>
-                        </form>
-                    </div><!--end modal-footer-->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                                Tutup
+                            </button>
+                            <form action="{{ route('priority.destroy', $priority->id) }}" method="POST" class="d-inline">
+                                @method('delete')
+                                @csrf
+                                <button class="btn btn-danger" type="submit">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
     @endforeach
 
 @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Dashboard | SIAK Dukcapil
+    Dashboard | PLN ICON+
 @endsection
 
 @section('content')
@@ -35,90 +35,86 @@
         <!--begin::Container-->
         <div id="kt_content_container" class="container">
             <!--begin::Row-->
+            <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Total Tiket</p>
+                                        <h4 class="card-title">{{ $total_tiket }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Proses</p>
+                                        <h4 class="card-title">{{ $tiket_proses }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-success bubble-shadow-small">
+                                        <i class="fas fa-hourglass-half fa-pulse"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Tertunda</p>
+                                        <h4 class="card-title">{{ $tiket_tertunda }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                                        <i class="far fa-check-circle"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Selesai</p>
+                                        <h4 class="card-title">{{ $tiket_selesai }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row gy-5 g-xl-8">
                 <!--begin::Col-->
-                <div class="col-xxl-6">
-                    <!--begin::Mixed Widget 2-->
-                    <div class="card card-xxl-stretch">
-                        <!--begin::Header-->
-                        <div class="card-header border-0 bg-primary py-5">
-                            <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
-                            <div class="card-toolbar">
-                                <!--begin::Menu-->
-                                <!--end::Menu-->
-                            </div>
-                        </div>
-                        <!--end::Header-->
-                        <div class="card-body p-0">
-                            <!--begin::Chart-->
-                            <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary" style="height: 28px">
-                            </div>
-                            <!--begin::Stats-->
-                            <div class="card-p mt-n20 position-relative">
-                                <!--begin::Row-->
-                                <div class="row g-0">
-                                    <div class="col bg-light-primary px-6 py-8 rounded-2 me-7 mb-7">
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-ticket-alt text-primary" style="font-size: 24px;"></i>
-                                            <!-- Icon tiket diterima -->
-                                        </span>
-                                        <span class="text-primary fw-bold fs-3">{{ $total_tiket }}</span>
-                                        <a href="#" class="text-primary fw-bold fs-6">Total Tiket</a>
-                                    </div>
-
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-warning px-6 py-8 rounded-2 mb-7">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-spinner fa-spin text-warning" style="font-size: 24px;"></i>
-                                        </span>
-                                        <span class="text-warning fw-bold fs-3">{{ $tiket_proses }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-warning fw-bold fs-6">Proses</a>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                                <!--begin::Row-->
-                                <div class="row g-0">
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
-                                        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
-                                            <i class="fas fa-hourglass-half fa-pulse text-danger"
-                                                style="font-size: 24px;"></i>
-                                            <!-- Icon tiket yang tertunda dengan animasi -->
-                                        </span>
-                                        <span class="text-danger fw-bold fs-3">{{ $tiket_tertunda }}</span>
-
-                                        <a href="#" class="text-danger fw-bold fs-6 mt-2">Tiket Tertunda</a>
-                                    </div>
-
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-success px-6 py-8 rounded-2">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Urgent-mail.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
-                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-4">
-                                                <i class="fas fa-ticket-alt text-success" style="font-size: 24px;"></i>
-                                                <!-- Icon tiket diterima -->
-                                            </span>
-                                        </span>
-                                        <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Stats-->
-                        </div>
-                        <br>
-                        <br>
-                    </div>
-                    <!--end::Mixed Widget 2-->
-                </div>
                 <!--end::Col-->
                 <!--begin::Col-->
                 <div class="col-xxl-6">

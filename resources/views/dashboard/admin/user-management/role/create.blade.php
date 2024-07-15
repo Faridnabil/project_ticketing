@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Peran | SIAK Dukcapil
+    Tambah Peran | PLN Icon+
 @endsection
 
 @section('content')
@@ -73,7 +73,7 @@
 
                                 <!--begin::Input group Permission-->
 
-                                <div class="col-md-9">
+                                <div class="col-md-11">
                                     <div class="role-permissions">
                                         <div class="row">
                                             @foreach ($permission as $item)

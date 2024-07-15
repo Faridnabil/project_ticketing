@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Data Pengguna | SIAK Dukcapil
+    Data Pengguna | PLN Icon+
 @endsection
 
 @section('content')
@@ -32,93 +32,94 @@
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Post-->
-        <div class="post d-flex flex-column-fluid" id="kt_post">
-            <!--begin::Container-->
-            <div id="kt_content_container" class="container">
-                <!--begin::Card-->
-                <div class="card">
-                    <!--begin::Card header-->
-                    <div class="card-header border-0 pt-6">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                        </div>
-                        <!--begin::Card title-->
-                        <!--begin::Card toolbar-->
-                        @can('Create User')
-                            <div class="card-toolbar">
-                                <!--begin::Add user-->
-                                <a href="{{ route('user.create') }}" class="btn btn-primary mb-4">
-                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                    <span class="svg-icon svg-icon-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                            <rect fill="#000000" opacity="0.5"
-                                                transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                                x="4" y="11" width="16" height="2" rx="1" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->Tambah Pengguna</a>
-                                <!--end::Add user-->
-                            </div>
-                        @endcan
-                        <!--end::Card toolbar-->
+        <div id="kt_content_container" class="container">
+            <!--begin::Card-->
+
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                </div>
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                @can('Create User')
+                    <div class="card-toolbar">
+                        <!--begin::Add user-->
+                        <a href="{{ route('user.create') }}" class="btn btn-primary mb-4">
+                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                                    <rect fill="#000000" opacity="0.5"
+                                        transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
+                                        x="4" y="11" width="16" height="2" rx="1" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Tambah Pengguna</a>
+                        <!--end::Add user-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Table-->
-                        <table id="kt_datatable_example_5"
-                            class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                            <!--begin::Table head-->
+                @endcan
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Tabel Pengguna</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-10px">No</th>
-                                    <th class="min-w-125px">Pengguna</th>
-                                    <th class="min-w-125px">Peran</th>
-                                    <th class="min-w-125px">Jenis Kelamin</th>
-                                    <th class="min-w-125px">Tanggal Bergabung</th>
-                                    <th class="text-end min-w-100px">Fitur</th>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Pengguna</th>
+                                    <th>Peran</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tanggal Bergabung</th>
+                                    <th>Fitur</th>
                                 </tr>
-                                <!--end::Table row-->
                             </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="text-gray-600 fw-bold">
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Pengguna</th>
+                                    <th>Peran</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tanggal Bergabung</th>
+                                    <th style="width: 300px">Fitur</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
                                 @if ($users->count())
                                     @foreach ($users as $user)
-                                        <!--begin::Table row-->
                                         <tr>
-                                            <td class="min-w-10px">{{ $loop->iteration }}</td>
-                                            <!--begin::User=-->
-                                            <td class="d-flex align-items-center">
-                                                <!--begin:: Avatar -->
-                                                <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                    <a href="apps/user-management/users/view.html">
-                                                        <div class="symbol-label">
-                                                            @if ($user->gender == 'Pria')
-                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
-                                                                    class="w-100" />
-                                                            @else
-                                                                <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
-                                                                    class="w-100" />
-                                                            @endif
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <!--end::Avatar-->
-                                                <!--begin::User details-->
-                                                <div class="d-flex flex-column">
-                                                    <a href="#"
-                                                        class="text-gray-800 text-hover-primary mb-1">{{ $user->name }}</a>
-                                                    <span>{{ $user->email }}</span>
-                                                </div>
-                                                <!--begin::User details-->
-                                            </td>
-                                            <!--end::User=-->
-                                            <!--begin::Role=-->
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                                        <a href="apps/user-management/users/view.html">
+                                                            <div class="avatar-sm">
+                                                                @if ($user->gender == 'Pria')
+                                                                    <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
+                                                                        class="avatar-img rounded-circle" />
+                                                                @else
+                                                                    <img src="{{ asset($user->photo ? $user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
+                                                                        class="avatar-img rounded-circle" />
+                                                                @endif
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#"
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $user->name }}</a>
+                                                        <span>{{ $user->email }}</span>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td class="text-center">
                                                 @foreach ($user->getRoleNames() as $roles)
                                                     @if ($roles == 'Super Admin')
                                                         <a href="role" class="badge bg-primary">
@@ -135,47 +136,29 @@
                                                     @endif
                                                 @endforeach
                                             </td>
-                                            <!--end::Role=-->
-
-                                            <td>
-                                                {{ $user->gender }}
-                                            </td>
-
-                                            <!--begin::Joined-->
+                                            <td>{{ $user->gender }}</td>
                                             <td>{{ $user->created_at }}</td>
-                                            <!--begin::Joined-->
-                                            <!--begin::Action=-->
                                             <td>
                                                 @can('Edit User')
                                                     <a href="{{ route('user.edit', $user->id) }}"
                                                         class="btn btn-primary px-6 align-self-center text-nowrap">Ubah</a>
                                                 @endcan
                                                 @can('Delete User')
-                                                    <button type="reset"
-                                                        class="btn btn-danger px-6 align-self-center text-nowrap"
+                                                    <a href="£" class="btn btn-danger px-6 align-self-center text-nowrap"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_1{{ $user->id }}">Hapus</button>
+                                                        data-bs-target="#kt_modal_1{{ $user->id }}">Hapus</a>
                                                 @endcan
                                             </td>
-                                            <!--end::Action=-->
                                         </tr>
-                                        <!--end::Table row-->
                                     @endforeach
                                 @endif
                             </tbody>
-                            <!--end::Table body-->
                         </table>
-                        <!--end::Table-->
                     </div>
-                    <!--end::Card toolbar-->
                 </div>
-                <!--end::Card header-->
             </div>
-            <!--end::Card-->
         </div>
-        <!--end::Container-->
     </div>
-    <!--end::Post-->
     @foreach ($users as $user)
         <div class="modal fade" tabindex="-1" id="kt_modal_1{{ $user->id }}">
             <div class="modal-dialog">
@@ -185,13 +168,13 @@
                             Form Hapus Pengguna
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><!--end modal-header-->
+                    </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-3 text-center align-self-center">
                                 <img src="{{ asset($user->photo ? $user->photo : 'template/assets/images/users/user-1.png') }}"
                                     alt="" class="img-fluid">
-                            </div><!--end col-->
+                            </div>
                             <div class="col-lg-9">
                                 <h5>Apakah Anda yakin menghapus pengguna ini?</h5>
                                 <span class="badge bg-soft" style="color: black">
@@ -205,9 +188,9 @@
                                         {{ $user->email_verified_at ? 'Email Pengguna Sudah Verifikasi' : 'Email Pengguna Belum Verifikasi' }}
                                     </li>
                                 </ul>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end modal-body-->
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
@@ -217,7 +200,7 @@
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
                         </form>
-                    </div><!--end modal-footer-->
+                    </div>
                 </div>
             </div>
         </div>

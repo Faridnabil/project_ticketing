@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Status | SIAK Dukcapil
+    Status | PLN Icon+
 @endsection
 
 @section('content')
@@ -32,61 +32,63 @@
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Post-->
-        <div class="post d-flex flex-column-fluid" id="kt_post">
-            <!--begin::Container-->
-            <div id="kt_content_container" class="container">
-                <!--begin::Card-->
-                <div class="card">
-                    <!--begin::Card header-->
-                    <div class="card-header border-0 pt-6">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                        </div>
-                        <!--begin::Card title-->
-                        <!--begin::Card toolbar-->
-                        @can('Create Status')
-                            <div class="card-toolbar">
-                                <!--begin::Add user-->
-                                <a href="{{ route('status.create') }}" class="btn btn-primary mb-4">
-                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                    <span class="svg-icon svg-icon-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                            <rect fill="#000000" opacity="0.5"
-                                                transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                                x="4" y="11" width="16" height="2" rx="1" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->Tambah Status</a>
-                                <!--end::Add user-->
-                            </div>
-                        @endcan
-                        <!--end::Card toolbar-->
+        <div id="kt_content_container" class="container">
+            <!--begin::Card-->
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                </div>
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                @can('Create Status')
+                    <div class="card-toolbar">
+                        <!--begin::Add user-->
+                        <a href="{{ route('status.create') }}" class="btn btn-primary mb-4">
+                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                                    <rect fill="#000000" opacity="0.5"
+                                        transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
+                                        x="4" y="11" width="16" height="2" rx="1" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Tambah Status</a>
+                        <!--end::Add user-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Table-->
-                        <table id="kt_datatable_example_5"
-                            class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                            <!--begin::Table head-->
+                @endcan
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Tabel Status</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-10px">No</th>
-                                    <th class="min-w-10px">Status</th>
-                                    <th class="min-w-100px">Fitur</th>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Status</th>
+                                    <th style="width: 300px">Fitur</th>
                                 </tr>
-                                <!--end::Table row-->
                             </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="text-gray-600 fw-bold">
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Status</th>
+                                    <th style="width: 300px">Fitur</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
                                 @if ($statuses->count())
                                     @foreach ($statuses as $status)
                                         <tr>
-                                            <td class="min-w-10px">{{ $loop->iteration }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($status->status_name == 'Tertunda')
                                                     <span class="badge"
@@ -108,7 +110,6 @@
                                                     {{ $status->status_name }}
                                                 @endif
                                             </td>
-                                            <!--end::Name=-->
                                             <td>
                                                 @can('Edit Status')
                                                     <a href="{{ route('status.edit', $status->id) }}"
@@ -123,18 +124,14 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                @else
                                 @endif
                             </tbody>
-                            <!--end::Table body-->
                         </table>
-                        <!--end::Table-->
                     </div>
-                    <!--end::Card toolbar-->
                 </div>
-                <!--end::Card header-->
             </div>
-            <!--end::Card-->
+            <!--end::Card toolbar-->
+            <!--end::Card header-->
         </div>
         <!--end::Container-->
     </div>
