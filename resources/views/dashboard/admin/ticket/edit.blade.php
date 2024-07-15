@@ -28,6 +28,7 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
+                                <input type="hidden" name="status_changed_by_id" value="{{ Auth::user()->id }}">
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Judul</label>
                                     <input type="text" class="form-control @error('title') is-invalid @enderror"
@@ -139,7 +140,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label for="reason" class="form-label">Alasan Perubahan</label>
                                     <textarea name="reason" class="form-control @error('reason') is-invalid @enderror" id="reason" cols="10"
                                         rows="3">{{ old('reason') }}</textarea>
@@ -153,7 +154,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>

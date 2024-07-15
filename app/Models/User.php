@@ -49,6 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class, 'customer');
     }
+    public function hticket()
+    {
+        return $this->hasMany(history_ticket::class, 'customer');
+    }
 
     public function comment()
     {

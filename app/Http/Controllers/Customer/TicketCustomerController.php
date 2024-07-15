@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
@@ -141,17 +142,18 @@ class TicketCustomerController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket->id)
-            ->latest()
-            ->get();
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        ->where('h_no_ticket', $ticket->no_ticket)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
             ->get();
 
-        return view(
-            'dashboard.customer.ticket.show',
+            return view(
+                'dashboard.customer.ticket.show',
             compact(
                 'ticket',
                 'logs',

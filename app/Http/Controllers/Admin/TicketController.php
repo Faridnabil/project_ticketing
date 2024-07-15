@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\RequestAssignment;
 use App\Models\Status;
@@ -148,10 +149,11 @@ class TicketController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket->id)
-            ->latest()
-            ->get();
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        ->where('h_no_ticket', $ticket->no_ticket)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -240,6 +242,23 @@ class TicketController extends Controller
                     $attachments[] = $nama_folder . "/" . $nama_file;
                 }
             }
+
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_customer' => $ticket->customer,
+                'h_assign_to' => $ticket->assign_to,
+                'h_priority_id' => $ticket->priority_id,
+                'h_due_date' => $ticket->due_date,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'h_status_changed_by_id' => $ticket->status_changed_by_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
             // ------ Notifikasi --------------
             $statusId = $validate['status_id'];

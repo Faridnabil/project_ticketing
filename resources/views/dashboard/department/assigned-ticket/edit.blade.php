@@ -141,7 +141,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label for="reason" class="form-label">Alasan Perubahan</label>
                                     <textarea name="reason" class="form-control @error('reason') is-invalid @enderror" id="reason" cols="10"
                                         rows="3">{{ old('reason') }}</textarea>
@@ -155,7 +155,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>

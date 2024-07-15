@@ -155,6 +155,33 @@ class UsersSeeder extends Seeder
         $DepartmentRole->givePermissionTo('Delete Ticket');
         $DepartmentRole->givePermissionTo('Show Ticket');
 
+        //Department
+        $DepartmentRole->givePermissionTo('View Dashboard Department');
+
+        $DepartmentRole->givePermissionTo('View Category');
+        $DepartmentRole->givePermissionTo('Create Category');
+        $DepartmentRole->givePermissionTo('Edit Category');
+        $DepartmentRole->givePermissionTo('Delete Category');
+        $DepartmentRole->givePermissionTo('Show Category');
+
+        $DepartmentRole->givePermissionTo('View Priority');
+        $DepartmentRole->givePermissionTo('Create Priority');
+        $DepartmentRole->givePermissionTo('Edit Priority');
+        $DepartmentRole->givePermissionTo('Delete Priority');
+        $DepartmentRole->givePermissionTo('Show Priority');
+
+        $DepartmentRole->givePermissionTo('View Status');
+        $DepartmentRole->givePermissionTo('Create Status');
+        $DepartmentRole->givePermissionTo('Edit Status');
+        $DepartmentRole->givePermissionTo('Delete Status');
+        $DepartmentRole->givePermissionTo('Show Status');
+
+        $DepartmentRole->givePermissionTo('View Ticket');
+        $DepartmentRole->givePermissionTo('Create Ticket');
+        $DepartmentRole->givePermissionTo('Edit Ticket');
+        $DepartmentRole->givePermissionTo('Delete Ticket');
+        $DepartmentRole->givePermissionTo('Show Ticket');
+
         $user = User::factory()->create([
             'name' => 'Admin Shift 1',
             'email' => 'Admin1@gmail.com',
@@ -200,6 +227,13 @@ class UsersSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Department2',
             'email' => 'Department2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($DepartmentRole);
+
+        $user = User::factory()->create([
+            'name' => 'Pejabat',
+            'email' => 'Pejabat@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DepartmentRole);

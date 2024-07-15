@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Absensi | SIAK Dukcapil
+    Aktifitas | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -57,12 +57,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Absensi
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Aktifitas
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Absensi</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Aktifitas</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -81,7 +81,7 @@
                         <a class="btn-custom font-regular nav-link {{ request('active_tab', 'absen') == 'absen' ? 'active' : '' }}"
                             data-bs-toggle="tab" href="#absen" role="tab"
                             aria-selected="{{ request('active_tab', 'absen') == 'absen' ? 'true' : 'false' }}">
-                            <strong>Absensi</strong>
+                            <strong>Aktifitas</strong>
                         </a>
                     </li>
                     <li class="nav-item">

@@ -253,7 +253,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Absen</span>
+                        <span class="menu-title">Aktifitas</span>
                     </a>
                 </div>
                 @endcan

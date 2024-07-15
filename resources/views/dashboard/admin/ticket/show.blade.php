@@ -30,6 +30,7 @@
     </div>
     <!--end::Toolbar-->
 
+    {{-- Riwayat Tiket  --}}
     <style>
         .activity-log {
             padding: 15px;
@@ -68,6 +69,58 @@
 
         .font-regular {
             font-size: 1rem;
+        }
+    </style>
+
+    <style>
+        .timeline {
+            list-style: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ddd;
+            left: 20px;
+            margin: 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item.current-status .timeline-content {
+            border: 2px solid #007bff;
+        }
+
+        .timeline-date {
+            margin-left: 33px;
+            font-weight: bold;
+            color: #888;
+        }
+
+        .timeline-content {
+            margin-left: 40px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-title {
+            margin: 0 0 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .timeline-text {
+            margin: 0;
         }
     </style>
 
@@ -296,105 +349,94 @@
                         <div class="col-xl-12">
                             <!--begin::List Widget 4-->
                             <div class="card card-xl-stretch mb-5 mb-xl-8 scrollable-card"
-                                style="max-height: 756px; overflow-y: auto;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                                style="max-height: 756px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                                 <div class="card-body p-12">
                                     <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
-                                    @foreach ($logs as $log)
-                                        @if ($log->user_id != 1)
-                                            @if ($log->attribute != 'attachments')
-                                                <div class="activity-log @if (!$loop->last) mb-10 @endif">
-                                                    <div class="log-header">
-                                                        <h5 class="text-gray-800 fw-bolder mb-2">
-                                                            <strong>
-                                                                @if ($log->attribute == 'priority_id')
-                                                                    Data Prioritas
-                                                                @elseif($log->attribute == 'status_id')
-                                                                    Data Status
-                                                                @elseif($log->attribute == 'customer')
-                                                                    Data Customer
-                                                                @elseif($log->attribute == 'assign_to')
-                                                                    Data Ditugaskan Ke
-                                                                @elseif($log->attribute == 'category_id')
-                                                                    Data Kategori
-                                                                @elseif($log->attribute == 'title')
-                                                                    Data Judul
-                                                                @elseif($log->attribute == 'due_date')
-                                                                    Data Tanggal Jatuh Tempo
-                                                                @elseif($log->attribute == 'description')
-                                                                    Data Deskripsi
-                                                                @else
-                                                                    {{ $log->attribute }}
-                                                                @endif
-                                                            </strong>:
-                                                        </h5>
-                                                    </div>
-                                                    <div class="log-body fw-bold">
-                                                        @if ($log->old_value == null)
-                                                            <div>
-                                                                <span><strong>Nilai Baru : </strong>
-                                                                    @if (is_numeric($log->new_value))
-                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                    @else
-                                                                        {{ $log->new_value }}
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <span><strong>Alasan :
-                                                                    </strong>{!! $log->reason !!}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span><strong>Dirubah oleh :
-                                                                    </strong>{{ $log->user->name }}
-                                                                    pada
-                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
-                                                            </div>
+                                    <ul class="timeline">
+                                        @foreach ($logs as $log)
+                                            <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
+                                                <span
+                                                    class="timeline-date">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
+                                                <div class="timeline-content">
+                                                    <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
+                                                    <p class="timeline-text">
+                                                        <strong>Nomor Tiket :</strong> {{ $log->h_no_ticket }}<br>
+                                                        <strong>Nama Pemilik :</strong>
+                                                        {{ $log->customers->name ?? 'N/A' }}<br>
+                                                        <strong>Ditugaskan Ke :</strong>
+                                                        {{ $log->assignTo->name ?? 'N/A' }}<br>
+                                                        <strong>Prioritas :</strong>
+                                                        {{ $log->priority->priority_name ?? 'N/A' }}<br>
+                                                        <strong>Jatuh Tempo :</strong>
+                                                        {{ \Carbon\Carbon::parse($log->h_due_date)->translatedFormat('d F Y') ?? 'N/A' }}
+                                                        <br>
+                                                        <strong>Status :</strong>
+                                                        {{ $log->status->status_name ?? 'N/A' }}<br>
+                                                        <strong>Kategori :</strong> {{ $log->category->category_name }}<br>
+                                                        <strong>Deskripsi :</strong>{!! $log->h_description !!}<br>
+                                                        <strong>Lampiran :</strong>
+                                                        @if ($log->h_attachments)
+                                                            @foreach (json_decode($log->h_attachments) as $attachment)
+                                                                @php
+                                                                    $filename = basename($attachment);
+                                                                    $parts = explode('_', $filename);
+                                                                    $shortenedFilename = end($parts);
+                                                                @endphp
+                                                                <a href="#" class="attachment-link"
+                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                                    data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                            @endforeach
                                                         @else
-                                                            <div>
-                                                                <hr>
-                                                                <span><strong>Data sebelum diubah :
-                                                                    </strong>
-                                                                    @if (is_numeric($log->old_value))
-                                                                        {{ $log->oldPrioritas->priority_name ?? ($log->oldCategory->category_name ?? ($log->oldUser->name ?? $log->oldStatus->status_name)) }}
-                                                                    @else
-                                                                        {!! $log->old_value !!}
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <span><strong>Menjadi : </strong>
-                                                                    @if (is_numeric($log->new_value))
-                                                                        {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                    @else
-                                                                        {!! $log->new_value !!}
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <span><strong>Alasan :
-                                                                    </strong>{!! $log->reason !!}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span><strong>Diubah oleh :
-                                                                    </strong>{{ $log->user->name }}
-                                                                    pada
-                                                                    {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
-                                                            </div>
+                                                            N/A
                                                         @endif
-                                                    </div>
+
+
+
+                                                        <br>
+                                                        <strong>Status Diubah Oleh :</strong>
+                                                        {{ $log->statusChangedByUser->name ?? 'N/A' }}
+                                                    </p>
                                                 </div>
-                                            @endif
-                                        @endif
-                                    @endforeach
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Riwayat -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Attachment" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+
+            modal.addEventListener('show.bs.modal', function(event) {
+                const link = event.relatedTarget;
+                const imageSrc = link.getAttribute('data-src');
+                modalImage.src = imageSrc;
+            });
+        });
+    </script>
+
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
         <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
