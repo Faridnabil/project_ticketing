@@ -141,10 +141,34 @@
                                         <input type="hidden" name="date_check_out" id="dateCheckOut">
 
                                         @if ($absen->check_out == null)
+
+                                        <div class="mb-4">
+                                            <label for="" class="form-label">Status</label>
+                                            <select class="form-select" id="status_activity" name="status_activity" required>
+                                                <option selected disabled>Status</option>
+                                                <option value="aktif">Aktif</option>
+                                                <option value="istirahat">Istirahat</option>
+                                                <option value="makan_siang">Makan Siang</option>
+                                                <option value="cuti">Cuti</option>
+                                                <option value="sakit">Sakit</option>
+                                                <option value="lembur">Lembur</option>
+                                                <option value="meeting">Meeting</option>
+                                                <option value="training">Training</option>
+                                                <option value="pekerjaan_luar_kantor">Pekerjaan Luar Kantor</option>
+                                                <option value="izin">Izin</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="" class="form-label">Aktifitas</label>
+                                            <textarea name="activity" class="form-control" id="activity"></textarea>
+                                        </div>
+
                                             <div class="mb-4">
                                                 <label for="validationCustom01" class="form-label">File</label>
                                                 <input type="file" class="form-control" name="attachment">
                                             </div>
+
                                             <div class="mb-4">
                                                 <div id="checkOutSection">
                                                     <button type="submit" class="btn btn-secondary" id="checkOutBtn">
@@ -421,6 +445,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#activity'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     @foreach ($attendances as $attendance)
         <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">

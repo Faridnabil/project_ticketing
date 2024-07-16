@@ -23,7 +23,7 @@ class UnassignedTicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers')
             ->whereDoesntHave('assignTo')
             ->get();
 

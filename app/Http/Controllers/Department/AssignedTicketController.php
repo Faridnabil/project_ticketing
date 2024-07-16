@@ -24,14 +24,16 @@ class AssignedTicketController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'changedAssignTo')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
             ->get();
 
         $users = User::role('Department')
+            ->where('id', '!=', Auth::user()->id)
             ->get();
+
 
         return view('dashboard.department.assigned-ticket.index', compact('tickets', 'users'));
     }

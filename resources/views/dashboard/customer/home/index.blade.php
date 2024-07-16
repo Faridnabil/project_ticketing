@@ -126,7 +126,7 @@
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
                                             <i class="fas fa-spinner fa-spin text-warning" style="font-size: 24px;"></i>
                                         </span>
-                                        <span class="text-warning fw-bold fs-3">{{ $tiket_proses }}</span>
+                                        <span class="text-warning fw-bold fs-3">{{ $tiket_buka_proses }}</span>
                                         <!--end::Svg Icon-->
                                         <a href="#" class="text-warning fw-bold fs-6">Proses</a>
                                     </div>

@@ -71,15 +71,15 @@
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Nomor Tiket</th>
-                                <th class="min-w-125px">Judul</th>
-                                <th class="min-w-125px">Pemilik</th>
-                                <th class="min-w-125px">Tetapkan Ke</th>
-                                <th class="min-w-125px">Prioritas</th>
-                                <th class="min-w-125px">Dibuat Tanggal</th>
-                                <th class="min-w-125px">Status</th>
-                                <th class="min-w-125px">Aksi</th>
+                            <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-70px">Nomor Tiket</th>
+                                <th class="min-w-70px">Judul</th>
+                                <th class="min-w-70px">Pemilik</th>
+                                <th class="min-w-70px">Tetapkan Ke</th>
+                                <th class="min-w-70px">Prioritas</th>
+                                <th class="min-w-70px">Dibuat Tanggal</th>
+                                <th class="min-w-70px">Status</th>
+                                <th class="min-w-70px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -172,10 +172,21 @@
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
-                                                <a href="{{ route('unassignedTicket.show', $ticket->id) }}"
-                                                    class="btn btn-success px-6 align-self-center text-nowrap mb-2">
-                                                    Lihat
+                                                <a class="menu-link ms-3" href="{{ route('unassignedTicket.show', $ticket->id) }}" type="reset">
+                                                    <span class="menu-icon" style="fill: #1218ca">
+                                                        <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                        <span class="svg-icon svg-icon-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="512"
+                                                                height="512" viewBox="0 0 24 24" version="1.1">
+                                                                <path
+                                                                    d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                                <circle cx="12" cy="12" r="4" />
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </span>
                                                 </a>
+
                                             @endcan
                                             @php
                                                 $existingRequest = App\Models\RequestAssignment::where(
@@ -186,10 +197,17 @@
                                                     ->exists();
                                             @endphp
                                             @if (Auth::user()->hasRole('Department') && $ticket->assign_to == null && !$existingRequest)
-                                                <button class="btn btn-primary px-6 align-self-center text-nowrap mb-2"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_request_{{ $ticket->id }}">
-                                                    Ajukan Diri
+                                                <button class="menu-link ms-3" type="submit" style="background: none; border: none; padding: 0; cursor: pointer;" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_request_{{ $ticket->id }}">
+                                                    <span class="menu-icon" style="fill: #16ab2d">
+                                                        <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                        <span class="svg-icon svg-icon-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <path d="m10,23c0,.553-.447,1-1,1h-4c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h8c2.757,0,5,2.243,5,5v2c0,.553-.447,1-1,1s-1-.447-1-1v-2c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h4c.553,0,1,.447,1,1ZM14,6c0-.553-.447-1-1-1H5c-.553,0-1,.447-1,1s.447,1,1,1h8c.553,0,1-.447,1-1Zm-4,5c0-.553-.447-1-1-1h-4c-.553,0-1,.447-1,1s.447,1,1,1h4c.553,0,1-.447,1-1Zm-5,4c-.553,0-1,.447-1,1s.447,1,1,1h2c.553,0,1-.447,1-1s-.447-1-1-1h-2Zm19,2c0,3.859-3.141,7-7,7s-7-3.141-7-7,3.141-7,7-7,7,3.141,7,7Zm-2,0c0-2.757-2.243-5-5-5s-5,2.243-5,5,2.243,5,5,5,5-2.243,5-5Zm-3.192-1.241l-2.223,2.134c-.144.141-.379.144-.522.002l-1.131-1.108c-.396-.388-1.028-.382-1.414.014-.387.395-.381,1.027.014,1.414l1.132,1.109c.46.449,1.062.674,1.663.674s1.201-.225,1.653-.671l2.213-2.124c.398-.383.411-1.016.029-1.414-.383-.4-1.017-.411-1.414-.029Z"/>
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </span>
                                                 </button>
                                             @endif
                                         </td>

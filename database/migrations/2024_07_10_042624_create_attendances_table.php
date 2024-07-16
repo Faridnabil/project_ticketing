@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->text('activity')->nullable();
+            $table->text('status_activity')->nullable();
+
             $table->string('check_in');
             $table->dateTime('date_check_in');
 

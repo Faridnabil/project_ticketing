@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Attendance;
 use App\Models\Ticket;
 use App\Models\Comment;
+use App\Models\HistoryTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,109 +15,64 @@ use Illuminate\Support\Facades\Auth;
 class HomeAdminController extends Controller
 {
     public function index(Request $request)
-    {
-        // Mengambil filter dari request
-        $ticketNumber = $request->input('ticket_number');
+{
+    $selectedTicketId = $request->input('ticket_number');
+    $selectedTicketNumber = null;
 
-        // Mengambil semua data tiket untuk mengisi filter dropdown
-        $allTickets = Ticket::all();
+    // Mengambil semua tiket
+    $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')->get();
+    $logs = collect();
+    $comments = collect(); // Inisialisasi variabel comments
 
-        // Mengambil data tiket dan menerapkan filter nomor tiket jika ada
-        $ticketsQuery = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo');
+    // Menghitung jumlah tiket berdasarkan status
+    $total_tiket = $tickets->count();
+    $tiket_belum = $tickets->where('status.status_name', null)->count();
+    $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
+    $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+    $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
-        if ($ticketNumber) {
-            $ticketsQuery->where('id', $ticketNumber);
-        }
+    if ($selectedTicketId) {
+        // Mengambil tiket yang dipilih
+        $selectedTicket = $tickets->firstWhere('id', $selectedTicketId);
 
-        $tickets = $ticketsQuery->get();
+        if ($selectedTicket) {
+            $selectedTicketNumber = $selectedTicket->no_ticket;
 
-        // Menghitung jumlah tiket berdasarkan status
-        $total_tiket = $tickets->count();
-        $tiket_belum = $tickets
-            ->where('status.status_name', null)
-            ->count();
-        $tiket_buka = $tickets
-            ->where('status.status_name', 'Diterima')
-            ->count();
-        $tiket_proses = $tickets
-            ->where('status.status_name', 'Proses')
-            ->count();
-        $tiket_tertunda = $tickets
-            ->where('status.status_name', 'Tertunda')
-            ->count();
-        $tiket_selesai = $tickets
-            ->where('status.status_name', 'Selesai')
-            ->count();
+            $ticketNumbers = [$selectedTicketNumber];
 
-        // Mendapatkan data logs dan comments untuk setiap tiket
-        $logs = collect();
-        $comments = collect();
-
-        foreach ($tickets as $ticket) {
-            $ticketLogs = ActivityLog::where('model_type', Ticket::class)
-                ->where('model_id', $ticket->id)
+            $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+                ->whereIn('h_no_ticket', $ticketNumbers)
+                ->orderBy('created_at', 'desc')
                 ->get();
-            $logs = $logs->merge($ticketLogs);
-
-            $ticketComments = Comment::where('ticket_id', $ticket->id)
-                ->with('user')
-                ->get();
-            $comments = $comments->merge($ticketComments);
         }
+    }
 
-        $selectedTicketId = $request->input('ticket_number');
-        $selectedTicketNumber = null;
+    // Mengambil semua tiket untuk dropdown
+    $allTickets = Ticket::all();
 
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-            ->get();
-
-        if ($selectedTicketId) {
-            $selectedTicket = $tickets->firstWhere('id', $selectedTicketId);
-            if ($selectedTicket) {
-                $selectedTicketNumber = $selectedTicket->no_ticket;
-            }
-        }
-
-        $logs = collect();
-
-        if ($selectedTicketId) {
-            $ticketLogs = ActivityLog::where('model_type', Ticket::class)
-                ->where('model_id', $selectedTicketId)
-                ->get();
-            $logs = $logs->merge($ticketLogs);
-        } else {
-            foreach ($tickets as $ticket) {
-                $ticketLogs = ActivityLog::where('model_type', Ticket::class)
-                    ->where('model_id', $ticket->id)
-                    ->get();
-                $logs = $logs->merge($ticketLogs);
-            }
-        }
-
-        $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-        ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
+    // Mengambil tiket prioritas
+    $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        ->whereIn('priority_id', [2, 4])
         ->get();
 
-        return view(
-            'dashboard.admin.home.index',
-            compact(
-                'ticketPriotitas',
-                'tickets',
-                'total_tiket',
-                'tiket_belum',
-                'tiket_buka',
-                'tiket_proses',
-                'tiket_tertunda',
-                'tiket_selesai',
-                'logs',
-                'comments',
-                'allTickets',
-                'logs',
-                'selectedTicketId',
-                'selectedTicketNumber'
-            )
-        );
-    }
+    return view(
+        'dashboard.admin.home.index',
+        compact(
+            'ticketPriotitas',
+            'tickets',
+            'total_tiket',
+            'tiket_belum',
+            'tiket_buka_proses',
+            'tiket_tertunda',
+            'tiket_selesai',
+            'logs',
+            'comments',
+            'allTickets',
+            'selectedTicketId',
+            'selectedTicketNumber'
+        )
+    );
+}
 
     public function getTicketChartData(Request $request)
     {

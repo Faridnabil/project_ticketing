@@ -17,25 +17,24 @@ class HomeDepartmentController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = collect();
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')->get();
         $logs = collect();
-        $total_tiket = $tiket_belum = $tiket_proses = $tiket_tertunda = $tiket_selesai = 0;
+
+        $total_tiket = $tickets->count();
+        $tiket_belum = $tickets->where('status.status_name', null)->count();
+        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
+        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
         if ($selectedTicketId) {
             // Get the selected ticket
-            $selectedTicket = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+            $selectedTicket = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
                 ->where('assign_to', $user->id)
                 ->find($selectedTicketId);
 
             if ($selectedTicket) {
                 $selectedTicketNumber = $selectedTicket->no_ticket;
                 $tickets = collect([$selectedTicket]);
-
-                $total_tiket = $tickets->count();
-                $tiket_belum = $tickets->where('status.status_name', null)->count();
-                $tiket_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
-                $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-                $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
@@ -53,7 +52,7 @@ class HomeDepartmentController extends Controller
             'allTickets',
             'tickets',
             'total_tiket',
-            'tiket_proses',
+            'tiket_buka_proses',
             'tiket_tertunda',
             'tiket_selesai',
             'logs',
