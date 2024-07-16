@@ -103,7 +103,6 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <input type="hidden" name="status_id" value="1">
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>

@@ -14,13 +14,15 @@ class Ticket extends Model
         'title',
         'customer',
         'assign_to',
+        'changed_assign_to',
+        'approval_assign_to',
         'priority_id',
         'due_date',
         'status_id',
+        'approval_status',
         'category_id',
         'description',
         'attachments',
-        'status_changed_by_id',
     ];
 
     protected static function boot()
@@ -38,7 +40,6 @@ class Ticket extends Model
                     'attribute' => $attribute,
                     'old_value' => $oldValue,
                     'new_value' => $newValue,
-                    'reason' => request()->input('reason'), // Ambil reason dari request
                     'user_id' => auth()->id(),
                 ]);
             }
@@ -75,9 +76,8 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assign_to', 'id');
     }
 
-    public function statusChangedByUser()
+    public function changedAssignTo()
     {
-        return $this->belongsTo(User::class, 'status_changed_by_id');
+        return $this->belongsTo(User::class, 'changed_assign_to', 'id');
     }
-
 }

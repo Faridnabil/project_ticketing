@@ -17,13 +17,15 @@ return new class extends Migration {
             $table->string('title');
             $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
+            $table->foreignId('changed_assign_to')->nullable()->constrained('users');
+            $table->string('approval_assign_to')->nullable();
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('due_date')->nullable();
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('approval_status')->nullable();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
             $table->string('attachments')->nullable();
-            $table->foreignId('status_changed_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

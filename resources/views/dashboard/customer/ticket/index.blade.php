@@ -109,7 +109,9 @@
                                             @if ($ticket->assign_to != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
-                                                -
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
                                             @endif
                                         </td>
                                         <!--end::Assign To=-->
@@ -211,7 +213,7 @@
                         </div><!--end row-->
                     </div><!--end modal-body-->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Tutup
                         </button>
                         <form action="{{ route('myTicket.destroy', $ticket->id) }}" method="POST" class="d-inline">

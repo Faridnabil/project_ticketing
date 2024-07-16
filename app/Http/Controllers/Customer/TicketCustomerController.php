@@ -26,7 +26,7 @@ class TicketCustomerController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })

@@ -19,14 +19,15 @@ class PrioritySeeder extends Seeder
         ]);
 
         $priority = Priority::create([
-            'priority_name' => 'Hight',
+            'priority_name' => 'Medium',
             'color' => '#ff0000',
         ]);
 
         $priority = Priority::create([
-            'priority_name' => 'Medium',
+            'priority_name' => 'High',
             'color' => '#ff0000',
         ]);
+
         $priority = Priority::create([
             'priority_name' => 'Critical',
             'color' => '#ff0000',

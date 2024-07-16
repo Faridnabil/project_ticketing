@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('attribute');
             $table->text('old_value')->nullable();
             $table->text('new_value')->nullable();
-            $table->text('reason')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
@@ -28,8 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('activity_logs', function (Blueprint $table) {
-            $table->dropColumn('reason');
-        });
+        Schema::dropIfExists('activity_logs');
     }
 };

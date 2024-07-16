@@ -12,7 +12,6 @@ use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\CommentDepartment;
-use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
 use App\Notifications\NotificationDepartment;
 use Illuminate\Support\Facades\Auth;
@@ -25,13 +24,16 @@ class AssignedTicketController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'changedAssignTo')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
             ->get();
 
-        return view('dashboard.department.assigned-ticket.index', compact('tickets'));
+        $users = User::role('Department')
+            ->get();
+
+        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'users'));
     }
 
     public function show($id)
@@ -46,8 +48,6 @@ class AssignedTicketController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
-
-        $statusChangedBy = Auth::user();
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
@@ -69,8 +69,7 @@ class AssignedTicketController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'comments',
-                'statusChangedBy'
+                'comments'
             )
         );
     }
@@ -88,8 +87,6 @@ class AssignedTicketController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        $statusChangedBy = Auth::user();
-
         $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket)
             ->get();
@@ -103,7 +100,6 @@ class AssignedTicketController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'statusChangedBy',
                 'logs',
             )
         );

@@ -64,7 +64,8 @@
                                         @foreach ($assignTo as $assign)
                                             <option value="{{ $assign->id }}"
                                                 {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
-                                                {{ $assign->name }}</option>
+                                                {{ $assign->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
@@ -81,7 +82,8 @@
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}"
                                                 {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
-                                                {{ $priority->priority_name }}</option>
+                                                {{ $priority->priority_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
