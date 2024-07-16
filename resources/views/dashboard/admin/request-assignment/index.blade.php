@@ -55,7 +55,6 @@
                                 <tr>
                                     <th>Nomor Tiket</th>
                                     <th>Judul</th>
-                                    <th>Pemilik</th>
                                     <th>Pemohon</th>
                                     <th>Tanggal Pengajuan</th>
                                     <th>Aksi</th>
@@ -65,7 +64,6 @@
                                 <tr>
                                     <th>Nomor Tiket</th>
                                     <th>Judul</th>
-                                    <th>Pemilik</th>
                                     <th>Pemohon</th>
                                     <th>Tanggal Pengajuan</th>
                                     <th>Aksi</th>

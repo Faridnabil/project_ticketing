@@ -35,7 +35,8 @@
     <link rel="stylesheet" href="{{ asset('templates/assets/css/kaiadmin.min.css') }}" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <style>
+     <!-- Dropzone CSS -->
+     <style>
         .custom-dropzone {
             border: 2px dashed #007bff;
             padding: 20px;
@@ -226,6 +227,136 @@
             lineColor: "#ffa534",
             fillColor: "rgba(255, 165, 52, .14)",
         });
+    </script>
+
+     {{-- Javascript Dropzone --}}
+     <script>
+        let uploadedFiles = [];
+        let existingFiles = [];
+
+        @if (isset($ticket) && $ticket->attachments)
+            @php
+                $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
+            @endphp
+            @foreach ($attachments as $attachment)
+                existingFiles.push('{{ $attachment }}');
+            @endforeach
+        @endif
+
+        let removedFiles = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const preview = document.querySelector('.preview');
+            existingFiles.forEach(filePath => {
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+
+                const img = document.createElement('img');
+                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
+                img.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
+            });
+            updateExistingFileList(); // Update the list on page load
+        });
+
+        document.getElementById('attachments').addEventListener('change', function(event) {
+            const fileList = Array.from(event.target.files);
+            const preview = document.querySelector('.preview');
+            const errorMessage = document.getElementById('error-message');
+            const maxFiles = 15;
+
+            if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
+                errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
+                return;
+            }
+
+            errorMessage.textContent = ''; // Clear any existing error message
+
+            fileList.forEach(file => {
+                if (!uploadedFiles.includes(file) && !existingFiles.includes(file.name)) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const container = document.createElement('div');
+                        container.classList.add('image-container');
+
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'x';
+                        removeBtn.classList.add('remove-btn');
+                        removeBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
+
+                        container.appendChild(img);
+                        container.appendChild(removeBtn);
+                        preview.appendChild(container);
+                    };
+
+                    if (file.type.startsWith('image/')) {
+                        reader.readAsDataURL(file); // Read file as Data URL for image preview
+                    }
+
+                    uploadedFiles.push(file);
+                    updateFileList(); // Update file list after adding each file
+                }
+            });
+        });
+
+        function uploadFile(event) {
+            if (!event.target.closest('.image-container')) {
+                document.getElementById('attachments').click();
+            }
+        }
+
+        function updateFileList() {
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('attachments').files = dataTransfer.files;
+        }
+
+        function updateExistingFileList() {
+            document.getElementById('remaining_attachments').value = existingFiles.join(',');
+        }
+
+        function removeExistingFile(event, filePath) {
+            event.stopPropagation();
+            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
+            if (imgElement && imgElement.parentElement) {
+                existingFiles = existingFiles.filter(file => file !== filePath);
+                removedFiles.push(filePath);
+                imgElement.parentElement.remove();
+                document.getElementById('removed_attachments').value = removedFiles.join(',');
+
+                updateExistingFileList(); // Update remaining files list
+            } else {
+                console.error('File not found:', filePath);
+            }
+        }
     </script>
 </body>
 

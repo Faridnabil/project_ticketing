@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Edit Tiket | SIAK Dukcapil
+    Edit Tiket | PLN ICON+
 @endsection
 
 @section('content')
@@ -120,7 +120,6 @@
                                         </div>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">

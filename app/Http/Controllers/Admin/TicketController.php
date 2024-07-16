@@ -241,6 +241,11 @@ class TicketController extends Controller
                 }
             }
 
+            // Ubah status menjadi "Diterima" saat tiket di-assign ke departemen
+            if (!empty($validate['assign_to'])) {
+                $validate['status_id'] = Status::where('status_name', 'Diterima')->first()->id;
+            }
+
             // ------ Notifikasi --------------
             $statusId = $validate['status_id'];
             $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
@@ -387,6 +392,13 @@ class TicketController extends Controller
         if (Auth::user()->hasRole('Admin')) {
             $ticket = $requestAssignment->ticket;
             $ticket->assign_to = $requestAssignment->user_id;
+
+            // Ubah status tiket menjadi "Diterima"
+            $statusDiterima = Status::where('status_name', 'Diterima')->first();
+            if ($statusDiterima) {
+                $ticket->status_id = $statusDiterima->id;
+            }
+
             $ticket->save();
 
             $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
@@ -394,7 +406,7 @@ class TicketController extends Controller
 
             // Notifikasi untuk Departemen yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
-            $assignedDepartmentUsers = User::role(['Department'])->where('id', $ticket->assign_to = $requestAssignment->user_id)->get();
+            $assignedDepartmentUsers = User::role('Department')->where('id', $requestAssignment->user_id)->get();
 
             $notificationDataForDepartment = [
                 'name' => $authenticatedUserName,
@@ -406,7 +418,6 @@ class TicketController extends Controller
             ];
 
             Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
-
 
             return redirect()->back()->with('success', 'Tiket berhasil diassign.');
         }
