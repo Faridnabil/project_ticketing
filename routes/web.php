@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\CityOrRegencyController;
+use App\Http\Controllers\Admin\ProvinceController;
 use App\Http\Controllers\Customer\HomeCustomerController;
 use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\Department\AssignedTicketController;
@@ -73,6 +75,8 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
         '/admin/user' => UserController::class,
         '/admin/ticket' => TicketController::class,
         '/admin/attendance' => AttendanceController::class,
+        '/admin/province' => ProvinceController::class,
+        '/admin/cityOrRegency' => CityOrRegencyController::class,
     ]);
 
     Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');

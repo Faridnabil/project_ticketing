@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('city_or_regencies', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
-            $table->string('color')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('province_id')->constrained()->cascadeOnDelete();
+            $table->string('no_city_or_regency');
+            $table->string('city_or_regency_name');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('city_or_regencies');
     }
 };

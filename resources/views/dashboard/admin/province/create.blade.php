@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Kategori | SIAK Dukcapil
+    Tambah Provinsi | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Kategori
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Provinsi
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Kategori</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Provinsi</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -39,54 +39,44 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('category.update', $category->id) }}" enctype="multipart/form-data"
-                                novalidate>
-                                @method('PUT')
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('province.store') }}"
+                                enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Nama Kategori</label>
-                                    <input type="text" class="form-control @error('category_name') is-invalid @enderror"
-                                        id="category_name" name="category_name"
-                                        value="{{ old('category_name', $category->category_name) }}" autofocus required>
+                                    <label for="validationCustom01" class="form-label">Kode Provinsi</label>
+                                    <input type="text" class="form-control @error('no_province') is-invalid @enderror"
+                                        id="no_province" name="no_province" autofocus
+                                        required>
 
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
 
-                                    @error('category_name')
+                                    @error('no_province')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Warna Label</label>
-                                    <input type="color" class="form-control @error('color') is-invalid @enderror"
-                                        id="color" name="color" value="{{ $category->color }}" autofocus required>
+                                    <label for="validationCustom01" class="form-label">Nama Provinsi</label>
+                                    <input type="text" class="form-control @error('province_name') is-invalid @enderror"
+                                        id="province_name" name="province_name" autofocus
+                                        required>
 
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
 
-                                    @error('color')
+                                    @error('province_name')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3">{{ old('description', $category->description) }}</textarea>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('description')
-                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('category.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('province.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                             <!--end form-->
@@ -99,11 +89,4 @@
         </div>
     </div>
     <!--end::Post-->
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#description'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 @endsection

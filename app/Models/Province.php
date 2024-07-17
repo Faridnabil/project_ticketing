@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
-class Category extends Model
+class Province extends Model
 {
     use HasFactory, HasRoles;
 
     protected $fillable = [
-        'category_name',
-        'color',
-        'description',
+        'no_province',
+        'province_name'
     ];
+
+    public function cityOrRegency()
+    {
+        return $this->hasMany(CityOrRegency::class, 'province_id');
+    }
 }

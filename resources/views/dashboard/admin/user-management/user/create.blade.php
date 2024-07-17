@@ -102,7 +102,7 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom04" class="form-label">Roles</label>
                                     <select class="form-select @error('roles') is-invalid @enderror" name="roles[]"
-                                        id="select-field" required>
+                                        data-control="select2" id="select-field" required>
                                         <option selected disabled> Select Role </option>
                                         @foreach ($roles as $item)
                                             @if ($item == 'Super Admin')
@@ -118,12 +118,11 @@
                                     @enderror
                                 </div>
 
-
                                 <!--end col-->
                                 <div class="col-md-6">
                                     <label for="validationCustom04" class="form-label">Gender</label>
                                     <select class="form-select @error('gender') is-invalid @enderror" name="gender"
-                                        id="select-field2" required>
+                                        data-control="select2" id="select-field2" required>
                                         <option selected disabled> Select Gender </option>
                                         <option value="Man">Man</option>
                                         <option value="Woman">Woman</option>
@@ -135,8 +134,32 @@
                                     @enderror
                                 </div>
 
-                                <br>
+                                <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">Kota/Kabupaten</label>
+                                    <select name="city_or_regency_id"
+                                        class="form-select @error('city_or_regency_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kota/Kabupaten" required autofocus>
+                                        <option></option>
+                                        @foreach ($city_or_regencies as $cityOrRegency)
+                                            <option value="{{ $cityOrRegency->id }}">
+                                                {{ $cityOrRegency->no_city_or_regency }} -
+                                                {{ $cityOrRegency->city_or_regency_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('city_or_regency_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                                 <!--end col-->
+
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>

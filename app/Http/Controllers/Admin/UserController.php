@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CityOrRegency;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,9 +17,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::query();
-
-        $users = $users->get();
+        $users = User::with('cityOrRegency.province')
+            ->get();
 
         return view('dashboard.admin.user-management.user.index', [
             'users' => $users,
@@ -31,7 +31,10 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'name')
             ->all();
 
-        return view('dashboard.admin.user-management.user.create', compact('roles'));
+        $city_or_regencies = CityOrRegency::with('province')
+            ->get();
+
+        return view('dashboard.admin.user-management.user.create', compact('roles', 'city_or_regencies'));
     }
 
     public function store(Request $request, User $user)
@@ -42,9 +45,10 @@ class UserController extends Controller
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
                 'password' => ['nullable', 'string', 'min:8', 'confirmed'],
                 'photo' => ['nullable', 'image', 'max:500', 'mimes:jpg,png,jpeg'],
+                'city_or_regency_id' => ['nullable']
             ], [
-                'password.confirmed' => 'The password confirmation does not match.',
-                'photo.image' => 'The photo must be an image.',
+                'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+                'photo.image' => 'File harus berupa foto.',
                 'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
                 'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 5120 kilobyte.',
             ]);
@@ -62,6 +66,7 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                     'gender' => $request->gender,
+                    'city_or_regency_id' => $request->city_or_regency_id,
                 ]);
             } else {
                 // Process the first file
@@ -76,6 +81,7 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                     'gender' => $request->gender,
+                    'city_or_regency_id' => $request->city_or_regency_id,
                     'photo' => $pathPublic1,
                 ]);
             }
@@ -97,8 +103,9 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
+        $city_or_regencies = CityOrRegency::all();
 
-        return view('dashboard.admin.user-management.user.edit', compact('user', 'roles', 'userRole'));
+        return view('dashboard.admin.user-management.user.edit', compact('user', 'roles', 'userRole', 'city_or_regencies'));
     }
 
     public function update(Request $request, User $user)
@@ -109,10 +116,12 @@ class UserController extends Controller
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
                 'password' => ['nullable', 'string', 'min:8', 'confirmed'],
                 'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
-                // 'nama_perusahaan' => ['required', 'string', 'regex:/^[^0-9!@#$%^&*(),?":{}|<>]+$/'],
+                'city_or_regency_id' => ['nullable'],
             ], [
-                // 'nama_perusahaan.required' => 'The Company name field is required.',
-                // 'nama_perusahaan.regex' => 'The Company name field format is invalid.',
+                'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+                'photo.image' => 'File harus berupa foto.',
+                'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
+                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 5120 kilobyte.',
             ]);
 
             if ($validator->fails()) {

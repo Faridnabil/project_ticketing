@@ -78,6 +78,8 @@
                                     <th class="min-w-70px">Pengguna</th>
                                     <th class="min-w-70px">Peran</th>
                                     <th class="min-w-70px">Jenis Kelamin</th>
+                                    <th class="min-w-70px">Provinsi</th>
+                                    <th class="min-w-70px">Kota/Kabupaten</th>
                                     <th class="min-w-70px">Tanggal Bergabung</th>
                                     <th class="min-w-70px">Fitur</th>
                                 </tr>
@@ -137,12 +139,47 @@
                                             </td>
                                             <!--end::Role=-->
 
-                                            <td>
-                                                {{ $user->gender }}
-                                            </td>
+                                            @if ($user->gender)
+                                                <td>
+                                                    {{ $user->gender }}
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                        -
+                                                    </span>
+                                                </td>
+                                            @endif
+
+                                            @if ($user->city_or_regency_id)
+                                                <td>
+                                                    {{ $user->cityOrRegency->province->no_province }} -
+                                                    {{ $user->cityOrRegency->province->province_name }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $user->cityOrRegency->no_city_or_regency }} -
+                                                    {{ $user->cityOrRegency->city_or_regency_name }}
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                        -
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                        -
+                                                    </span>
+                                                </td>
+                                            @endif
 
                                             <!--begin::Joined-->
-                                            <td>{{ $user->created_at }}</td>
+                                            <td>{{ date('d F Y', strtotime($user->created_at)) }}</td>
                                             <!--begin::Joined-->
                                             <!--begin::Action=-->
                                             <td>

@@ -23,6 +23,8 @@ class Ticket extends Model
         'category_id',
         'description',
         'attachments',
+        'province_id',
+        'city_or_regency_id',
     ];
 
     protected static function boot()

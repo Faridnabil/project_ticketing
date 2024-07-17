@@ -53,6 +53,18 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'Delete Status']);
         Permission::create(['name' => 'Show Status']);
 
+        Permission::create(['name' => 'View Province']);
+        Permission::create(['name' => 'Create Province']);
+        Permission::create(['name' => 'Edit Province']);
+        Permission::create(['name' => 'Delete Province']);
+        Permission::create(['name' => 'Show Province']);
+
+        Permission::create(['name' => 'View City Or Regency']);
+        Permission::create(['name' => 'Create City Or Regency']);
+        Permission::create(['name' => 'Edit City Or Regency']);
+        Permission::create(['name' => 'Delete City Or Regency']);
+        Permission::create(['name' => 'Show City Or Regency']);
+
         Permission::create(['name' => 'View Attendance']);
         Permission::create(['name' => 'Create Attendance']);
         Permission::create(['name' => 'Edit Attendance']);
@@ -69,6 +81,10 @@ class UsersSeeder extends Seeder
         $adminRole = Role::create(['name' => 'Admin']);
         $CustomerRole = Role::create(['name' => 'Customer']);
         $DepartmentRole = Role::create(['name' => 'Department']);
+        $KoordinatorRole = Role::create(['name' => 'Koordinator']);
+        $StaffSubditRole = Role::create(['name' => 'Staff Subdit']);
+        $SiakDevRole = Role::create(['name' => 'SIAK Dev']);
+        $PejabatRole = Role::create(['name' => 'Pejabat']);
 
         //Admin
         $adminRole->givePermissionTo('View Dashboard Admin');
@@ -107,17 +123,29 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Delete Status');
         $adminRole->givePermissionTo('Show Status');
 
-        $adminRole->givePermissionTo('View Ticket');
-        $adminRole->givePermissionTo('Create Ticket');
-        $adminRole->givePermissionTo('Edit Ticket');
-        $adminRole->givePermissionTo('Delete Ticket');
-        $adminRole->givePermissionTo('Show Ticket');
+        $adminRole->givePermissionTo('View Province');
+        $adminRole->givePermissionTo('Create Province');
+        $adminRole->givePermissionTo('Edit Province');
+        $adminRole->givePermissionTo('Delete Province');
+        $adminRole->givePermissionTo('Show Province');
+
+        $adminRole->givePermissionTo('View City Or Regency');
+        $adminRole->givePermissionTo('Create City Or Regency');
+        $adminRole->givePermissionTo('Edit City Or Regency');
+        $adminRole->givePermissionTo('Delete City Or Regency');
+        $adminRole->givePermissionTo('Show City Or Regency');
 
         $adminRole->givePermissionTo('View Attendance');
         $adminRole->givePermissionTo('Create Attendance');
         $adminRole->givePermissionTo('Edit Attendance');
         $adminRole->givePermissionTo('Delete Attendance');
         $adminRole->givePermissionTo('Show Attendance');
+
+        $adminRole->givePermissionTo('View Ticket');
+        $adminRole->givePermissionTo('Create Ticket');
+        $adminRole->givePermissionTo('Edit Ticket');
+        $adminRole->givePermissionTo('Delete Ticket');
+        $adminRole->givePermissionTo('Show Ticket');
 
         //Customer
         $CustomerRole->givePermissionTo('View Dashboard Customer');
@@ -232,10 +260,31 @@ class UsersSeeder extends Seeder
         $user->assignRole($DepartmentRole);
 
         $user = User::factory()->create([
+            'name' => 'Koordinator',
+            'email' => 'Koordinator@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($KoordinatorRole);
+
+        $user = User::factory()->create([
+            'name' => 'Staff Subdit',
+            'email' => 'StaffSubdit@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($StaffSubditRole);
+
+        $user = User::factory()->create([
+            'name' => 'SIAK Dev',
+            'email' => 'Siakdev@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($SiakDevRole);
+
+        $user = User::factory()->create([
             'name' => 'Pejabat',
             'email' => 'Pejabat@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($DepartmentRole);
+        $user->assignRole($PejabatRole);
     }
 }

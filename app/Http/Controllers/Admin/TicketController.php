@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\CityOrRegency;
 use App\Models\Comment;
 use App\Models\HistoryTicket;
 use App\Models\Priority;
@@ -147,8 +148,6 @@ class TicketController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        $statusChangedBy = Auth::user();
-
         $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
         ->where('h_no_ticket', $ticket->no_ticket)
         ->orderBy('created_at', 'desc')
@@ -170,7 +169,6 @@ class TicketController extends Controller
                 'statuses',
                 'categories',
                 'comments',
-                'statusChangedBy'
             )
         );
     }
@@ -191,8 +189,6 @@ class TicketController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        $statusChangedBy = Auth::user();
-
         $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket->id)
             ->get();
@@ -206,7 +202,6 @@ class TicketController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'statusChangedBy',
                 'logs',
             )
         );

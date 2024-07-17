@@ -383,10 +383,10 @@
                                                             style="background-color:red; color: white; font-weight:bold">Critical</span>
                                                     @elseif($ticket->priority_id == '3')
                                                         <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
                                                     @elseif($ticket->priority_id == '2')
                                                         <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
                                                     @elseif($ticket->priority_id == '1')
                                                         <span class="badge"
                                                             style="background-color:green; color: white; font-weight:bold">Low</span>

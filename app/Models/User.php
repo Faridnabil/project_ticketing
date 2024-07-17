@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'gender',
         'photo',
+        'city_or_regency_id'
     ];
 
     /**
@@ -51,7 +52,7 @@ class User extends Authenticatable
     }
     public function hticket()
     {
-        return $this->hasMany(history_ticket::class, 'customer');
+        return $this->hasMany(HistoryTicket::class, 'customer');
     }
 
     public function comment()
@@ -59,8 +60,13 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function checkInOut()
+    public function attendance()
     {
-        return $this->hasMany(CheckInOut::class);
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function cityOrRegency()
+    {
+        return $this->belongsTo(CityOrRegency::class, 'city_or_regency_id');
     }
 }

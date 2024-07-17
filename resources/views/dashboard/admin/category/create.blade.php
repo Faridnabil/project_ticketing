@@ -45,8 +45,7 @@
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Nama Kategori</label>
                                     <input type="text" class="form-control @error('category_name') is-invalid @enderror"
-                                        id="category_name" name="category_name" autofocus
-                                        required>
+                                        id="category_name" name="category_name" autofocus required>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -73,6 +72,21 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="col-md-12">
+                                    <label for="validationCustom01" class="form-label">Keterangan</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                        cols="10" rows="3"></textarea>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('description')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                     <a href="{{ route('category.index') }}" class="btn btn-danger">Cancel</a>
@@ -88,4 +102,11 @@
         </div>
     </div>
     <!--end::Post-->
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 @endsection
