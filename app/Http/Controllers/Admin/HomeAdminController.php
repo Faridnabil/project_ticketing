@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
-use App\Models\Attendance;
 use App\Models\Ticket;
-use App\Models\Comment;
 use App\Models\HistoryTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeAdminController extends Controller
 {
@@ -52,7 +48,7 @@ class HomeAdminController extends Controller
 
     // Mengambil tiket prioritas
     $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-        ->whereIn('priority_id', [2, 4])
+        ->whereIn('priority_id', [3, 4])
         ->get();
 
     return view(

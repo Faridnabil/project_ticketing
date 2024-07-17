@@ -100,6 +100,8 @@ class AttendanceController extends Controller
             // Update date_check_out with the provided value
             $attendance->date_check_out = $request->input('date_check_out');
             $attendance->check_out = $request->input('check_out');
+            $attendance->activity = $request->input('activity');
+            $attendance->status_activity = $request->input('status_activity');
 
             // Handle file upload
             if ($request->hasFile('attachment')) {

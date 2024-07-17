@@ -79,18 +79,13 @@ class AssignedTicketController extends Controller
     public function edit($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
-            ->get();
-
-        $assignTo = User::role('Department')
-            ->get();
-
+        $customers = User::role('Customer')->get();
+        $assignTo = User::role('Department')->get();
         $priorities = Priority::all();
-        $statuses = Status::all();
+        $statuses = Status::where('status_name', '!=', 'Tertunda')->get();
         $categories = Category::all();
-
         $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket)
+            ->where('model_id', $ticket->id)
             ->get();
 
         return view(
@@ -106,6 +101,7 @@ class AssignedTicketController extends Controller
             )
         );
     }
+
 
     public function update(Request $request, $id)
     {

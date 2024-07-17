@@ -207,7 +207,9 @@
                                     @if ($selectedTicketId)
                                     @if ($logs->isEmpty())
                                         <div class="text-center mt-5">
-                                            <img src="{{ asset('template/dist/assets/media/illustrations/terms-2.png') }}" alt="No History" class="img-fluid" />
+                                            <img src="{{ asset('template/dist/assets/media/illustrations/terms-2.png') }} "
+                                                    style="width: 280px" height="150px" alt="No History"
+                                                    class="img-fluid" />
                                             <p class="mt-3">Tidak ada history untuk tiket yang dipilih.</p>
                                         </div>
                                     @else

@@ -55,4 +55,27 @@ class RequestTicketController extends Controller
 
         return redirect()->back()->with('success', 'Perubahan kepemilikan tiket telah ditolak.');
     }
+
+    public function send_ticket($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->changed_assign_to = null;
+        $ticket->approval_assign_to = 1;
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Tiket telah dikirim.');
+    }
+    public function status_ticket(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->status_id = $request->status_id;
+        $ticket->changed_assign_to = null;
+        $ticket->approval_assign_to = 0;
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Status Tiket telah diubah.');
+    }
+
 }

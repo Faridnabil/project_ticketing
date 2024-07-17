@@ -185,7 +185,7 @@
                                             <td>
                                                 @can('Edit User')
                                                     <a class="menu-link ms-3" href="{{ route('user.edit', $user->id) }}"
-                                                        type="button">
+                                                        type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -202,7 +202,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('Delete User')
-                                                    <a class="menu-link ms-3" href="#" type="reset"
+                                                    <a class="menu-link ms-3" href="#" type="reset" title="Hapus"
                                                         data-bs-toggle="modal" data-bs-target="#kt_modal_1{{ $user->id }}">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->

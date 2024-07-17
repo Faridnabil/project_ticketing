@@ -73,7 +73,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Prioritas</label>
                                     <select name="priority_id"
                                         class="form-select @error('priority_id') is-invalid @enderror"
@@ -91,7 +91,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
                                     <input type="date" name="due_date" class="form-control"
                                         value="{{ old('due_date', $ticket->due_date) }}">
@@ -100,7 +100,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
@@ -116,7 +116,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-select @error('category_id') is-invalid @enderror"data-control="select2"

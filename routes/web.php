@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CityOrRegencyController;
 use App\Http\Controllers\Admin\ProvinceController;
+use App\Http\Controllers\Admin\RequestApprovalTicketController;
 use App\Http\Controllers\Customer\HomeCustomerController;
 use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\Department\AssignedTicketController;
@@ -84,6 +85,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
 
     Route::get('/admin/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
+    Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
 });
 
 
@@ -123,5 +125,8 @@ Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
     Route::get('/department/requestTicket', [RequestTicketController::class, 'index'])->name('requestTicket.index');
     Route::post('/department/approve-ticket/{id}', [RequestTicketController::class, 'approve_ticket'])->name('requestTicket.approveTicket');
     Route::post('/department/reject-ticket/{id}', [RequestTicketController::class, 'reject_ticket'])->name('requestTicket.rejectTicket');
+
+    Route::post('/department/send-ticket/{id}', [RequestTicketController::class, 'send_ticket'])->name('requestTicket.sendTicket');
+    Route::post('/department/status-ticket/{id}', [RequestTicketController::class, 'status_ticket'])->name('requestTicket.statusTicket');
 
 });
