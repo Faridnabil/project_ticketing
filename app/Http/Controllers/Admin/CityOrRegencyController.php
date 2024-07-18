@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CityOrRegencyExport;
 use App\Http\Controllers\Controller;
+use App\Imports\CityOrRegencyImport;
 use App\Models\CityOrRegency;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CityOrRegencyController extends Controller
 {
@@ -96,6 +99,27 @@ class CityOrRegencyController extends Controller
             return redirect()->route("cityOrRegency.index")->with("success", "Kota/Kabupaten Berhasil Dihapus!");
         } catch (\Throwable $th) {
             DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function exportFormat()
+    {
+        return Excel::download(new CityOrRegencyExport, 'cityOrRegency-format.xlsx');
+    }
+
+    public function export()
+    {
+        return Excel::download(new CityOrRegencyExport, 'cityOrRegency.xlsx');
+    }
+
+    public function import()
+    {
+        try {
+            Excel::import(new CityOrRegencyImport, request()->file('your_file'));
+
+            return redirect()->route("cityOrRegency.index")->with('success', 'Kota/Kabupaten Berhasil Di Import!');
+        } catch (\Throwable $th) {
             return back()->with("error", $th->getMessage());
         }
     }

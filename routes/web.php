@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\CityOrRegencyFormatExport;
+use App\Exports\ProvinceFormatExport;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomeAdminController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Department\RequestTicketController;
 use App\Http\Controllers\Department\UnassignedTicketController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +89,10 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
     Route::get('/admin/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
     Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
+
+    Route::get('/admin/export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
+    Route::get('/admin/export', [ProvinceController::class, 'export'])->name('province.export');
+    Route::post('/admin/import', [ProvinceController::class, 'import'])->name('province.import');
 });
 
 

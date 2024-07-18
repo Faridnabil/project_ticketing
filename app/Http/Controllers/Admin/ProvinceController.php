@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ProvinceExport;
+use App\Exports\ProvinceFormatExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ProvinceImport;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProvinceController extends Controller
 {
@@ -87,9 +91,30 @@ class ProvinceController extends Controller
         try {
             $province->delete();
             DB::commit();
-            return redirect()->route("province.index")->with("success","Provinsi Berhasil Dihapus!");
+            return redirect()->route("province.index")->with("success", "Provinsi Berhasil Dihapus!");
         } catch (\Throwable $th) {
             DB::rollBack();
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function exportFormat()
+    {
+        return Excel::download(new ProvinceFormatExport, 'province-format.xlsx');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProvinceExport, 'province.xlsx');
+    }
+
+    public function import()
+    {
+        try {
+            Excel::import(new ProvinceImport, request()->file('your_file'));
+
+            return redirect()->route("province.index")->with('success', 'Provinsi Berhasil Di Import!');
+        } catch (\Throwable $th) {
             return back()->with("error", $th->getMessage());
         }
     }
