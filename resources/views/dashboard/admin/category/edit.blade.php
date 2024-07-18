@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
                                         cols="10" rows="3">{{ old('description', $category->description) }}</textarea>
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('description')

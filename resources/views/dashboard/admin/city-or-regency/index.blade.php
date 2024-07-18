@@ -46,15 +46,12 @@
                         <!--begin::Card toolbar-->
                         <div class="card-toolbar">
                             <!--begin::Add user-->
-                            <a href="{{ route('cityOrRegency.exportFormat') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('cityOrRegency.exportFormat') }}" class="btn mb-4" style="background-color: #ee8d18;color:white">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                         width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                        <rect fill="#000000" opacity="0.5"
-                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                            x="4" y="11" width="16" height="2" rx="1" />
+                                        <path style="fill: #ffffff" d="m14,7.015V.474c.913.346,1.753.879,2.465,1.59l3.484,3.486c.712.711,1.245,1.551,1.591,2.464h-6.54c-.552,0-1-.449-1-1Zm7.976,3h-6.976c-1.654,0-3-1.346-3-3V.038c-.161-.011-.322-.024-.485-.024h-4.515C4.243.015,2,2.258,2,5.015v14c0,2.757,2.243,5,5,5h10c2.757,0,5-2.243,5-5v-8.515c0-.163-.013-.324-.024-.485Zm-6.269,8.506l-1.613,1.614c-.577.577-1.336.866-2.094.866s-1.517-.289-2.094-.866l-1.613-1.614c-.391-.391-.391-1.024,0-1.414.391-.391,1.023-.391,1.414,0l1.293,1.293v-4.398c0-.552.447-1,1-1s1,.448,1,1v4.398l1.293-1.293c.391-.391,1.023-.391,1.414,0,.391.39.391,1.023,0,1.414Z"/></svg>
                                     </svg>
                                 </span>
                                 <!--end::Svg Icon-->Download Format
@@ -62,7 +59,7 @@
                             <!--end::Add user-->
                             &nbsp;&nbsp;
 
-                            <a href="" class="btn btn-primary mb-4" data-bs-toggle="modal"
+                            <a href="" class="btn btn-danger mb-4" data-bs-toggle="modal"
                                 data-bs-target="#kt_customers_export_modal">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -87,29 +84,14 @@
                             </a>
                             &nbsp;&nbsp;
 
-                            <a href="{{ route('cityOrRegency.export') }}" class="btn btn-primary mb-4">
-                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <path
-                                                d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z"
-                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000)"
-                                                x="11" y="2" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000)" />
-                                        </g>
-                                    </svg>
+                            <a href="{{ route('cityOrRegency.export') }}" class="btn mb-4" style="background-color: #17ba4b;color:white">
+                                <span class="img-icon">
+                                    <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
                                 </span>
-                                <!--end::Svg Icon-->Export
+                                Export
                             </a>
 
+                            &nbsp;&nbsp;
                             @can('Create City Or Regency')
                                 <!--begin::Add user-->
                                 <a href="{{ route('cityOrRegency.create') }}" class="btn btn-primary mb-4">

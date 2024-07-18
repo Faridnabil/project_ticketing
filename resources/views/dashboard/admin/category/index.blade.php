@@ -95,7 +95,7 @@
                                                     {{ $category->category_name }}</span>
                                             </td>
                                             <td>
-                                                {!! $category->description !!}
+                                                {!! nl2br(e(wordwrap($category->description, 50, "\n", true))) !!}
                                             </td>
                                             <td>
                                                 @can('Edit Category')

@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Keterangan</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
                                         cols="10" rows="3"></textarea>
 
                                     <div class="valid-feedback">

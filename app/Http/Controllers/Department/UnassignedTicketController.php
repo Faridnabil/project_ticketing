@@ -52,7 +52,7 @@ class UnassignedTicketController extends Controller
                 'body' => 'Ada permintaan, untuk tiket yang belum ditetapkan.',
                 'thanks' => 'Terima kasih.',
                 'Text' => 'Tolong perbaiki lagi.',
-                'Url' => url('/approve-assignment'), // Perbaikan pada URL
+                'Url' => url('/admin/approve-assignment'), // Perbaikan pada URL
                 'department_id' => rand(1111, 9999),
             ];
 
