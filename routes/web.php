@@ -90,9 +90,13 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
     Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
 
-    Route::get('/admin/export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
-    Route::get('/admin/export', [ProvinceController::class, 'export'])->name('province.export');
-    Route::post('/admin/import', [ProvinceController::class, 'import'])->name('province.import');
+    Route::get('/admin/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
+    Route::get('/admin/province-export', [ProvinceController::class, 'export'])->name('province.export');
+    Route::post('/admin/province-import', [ProvinceController::class, 'import'])->name('province.import');
+
+    Route::get('/admin/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
+    Route::get('/admin/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
+    Route::post('/admin/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
 });
 
 

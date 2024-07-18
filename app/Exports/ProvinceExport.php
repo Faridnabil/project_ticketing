@@ -4,23 +4,23 @@ namespace App\Exports;
 
 use App\Models\Province;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ProvinceExport implements FromCollection
+class ProvinceExport implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Province::all();
+        return Province::select('no_province', 'province_name')->get();
     }
 
     public function headings(): array
     {
         return [
-            'ID',
-            'Kode Provinsi',
-            'Nama Provinsi',
+            'KODE PROVINSI',
+            'NAMA PROVINSI',
         ];
     }
 }

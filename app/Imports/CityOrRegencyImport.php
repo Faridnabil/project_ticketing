@@ -5,8 +5,9 @@ namespace App\Imports;
 use App\Models\CityOrRegency;
 use App\Models\Province;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CityOrRegencyImport implements ToModel
+class CityOrRegencyImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row
@@ -16,7 +17,7 @@ class CityOrRegencyImport implements ToModel
     public function model(array $row)
     {
         // Cari province_id berdasarkan kode_provinsi
-        $province = Province::where('no_province', $row[0])->first();
+        $province = Province::where('no_province', $row['kode_provinsi'])->first();
 
         // Jika province tidak ditemukan, Anda bisa menangani sesuai kebutuhan, misalnya return null atau lempar exception
         if (!$province) {
@@ -26,10 +27,18 @@ class CityOrRegencyImport implements ToModel
 
         return new CityOrRegency([
             'province_id' => $province->id,
-            'no_city_or_regency' => $row[1],
-            'city_or_regency_name' => $row[2],
+            'no_city_or_regency' => $row['kode_kota_kabupaten'],
+            'city_or_regency_name' => $row['nama_kota_kabupaten'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    /**
+     * @return int
+     */
+    public function headingRow(): int
+    {
+        return 1;
     }
 }
