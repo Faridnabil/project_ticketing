@@ -101,209 +101,211 @@
                     <div class="tab-pane fade {{ request('active_tab', 'absen') == 'absen' ? 'show active' : '' }}"
                         id="absen" role="tabpanel">
                         <div class="row gy-5 g-xl-12">
-                            <div class="col-xl-5">
-                                @php
-                                    use Carbon\Carbon;
-                                    use App\Models\Attendance;
-                                    use Illuminate\Support\Facades\Auth;
+                            <div class="col-xl-12">
+                                <!--begin::List Widget 1-->
+                                <div class="card card-xl-stretch mb-xl-8">
+                                    <!--begin::Body-->
+                                    <div class="card-body pt-5">
+                                        @php
+                                            use Carbon\Carbon;
+                                            use App\Models\Attendance;
+                                            use Illuminate\Support\Facades\Auth;
 
-                                    $today = Carbon::now()->format('Y-m-d');
+                                            $today = Carbon::now()->format('Y-m-d');
 
-                                    $absen = Attendance::where('user_id', Auth::user()->id)
-                                        ->where(function ($query) {
-                                            $query
-                                                ->where('check_in', 'Shift 1')
-                                                ->orWhere('check_in', 'Shift 2')
-                                                ->orWhere('check_in', 'Shift 3');
-                                        })
-                                        ->whereDate('date_check_in', $today)
-                                        ->first();
-                                @endphp
+                                            $absen = Attendance::where('user_id', Auth::user()->id)
+                                                ->where(function ($query) {
+                                                    $query
+                                                        ->where('check_in', 'Shift 1')
+                                                        ->orWhere('check_in', 'Shift 2')
+                                                        ->orWhere('check_in', 'Shift 3');
+                                                })
+                                                ->whereDate('date_check_in', $today)
+                                                ->first();
+                                        @endphp
 
-                                @if ($absen)
-                                    <form class="row g-3 needs-validation" method="POST"
-                                        action="{{ route('attendance.update', $absen->id) }}" enctype="multipart/form-data"
-                                        novalidate>
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="mb-4">
-                                            <label for="validationCustom01" class="form-label">Nama Lengkap</label>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                id="name" name="name" value="{{ $absen->name }}" readonly required>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                        @if ($absen)
+                                            <form class="row g-3 needs-validation" method="POST"
+                                                action="{{ route('attendance.update', $absen->id) }}"
+                                                enctype="multipart/form-data" novalidate>
+                                                @csrf
+                                                @method('PUT')
 
+                                                <div class="col-md-6">
+                                                    <label for="validationCustom01" class="form-label">Nama Lengkap</label>
+                                                    <input type="text"
+                                                        class="form-control @error('name') is-invalid @enderror"
+                                                        id="name" name="name" value="{{ $absen->name }}" readonly
+                                                        required>
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    @error('name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
 
-                                        <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
-                                        <input type="hidden" name="date_check_out" id="dateCheckOut">
-
-                                        @if ($absen->check_out == null)
-
-                                        <div class="mb-4">
-                                            <label for="" class="form-label">Status</label>
-                                            <select class="form-select" id="status_activity" name="status_activity" required>
-                                                <option selected disabled>Status</option>
-                                                <option value="aktif">Aktif</option>
-                                                <option value="istirahat">Istirahat</option>
-                                                <option value="makan_siang">Makan Siang</option>
-                                                <option value="cuti">Cuti</option>
-                                                <option value="sakit">Sakit</option>
-                                                <option value="lembur">Lembur</option>
-                                                <option value="meeting">Meeting</option>
-                                                <option value="training">Training</option>
-                                                <option value="pekerjaan_luar_kantor">Pekerjaan Luar Kantor</option>
-                                                <option value="izin">Izin</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="" class="form-label">Aktifitas</label>
-                                            <textarea name="activity" class="form-control" id="activity"></textarea>
-                                        </div>
-
-                                            <div class="mb-4">
-                                                <label for="validationCustom01" class="form-label">File</label>
-                                                <input type="file" class="form-control" name="attachment">
-                                            </div>
-
-                                            <div class="mb-4">
-                                                <div id="checkOutSection">
-                                                    <button type="submit" class="btn btn-secondary" id="checkOutBtn">
-                                                        Check Out
-                                                    </button>
+                                                    <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
+                                                    <input type="hidden" name="date_check_out" id="dateCheckOut">
                                                 </div>
-                                            </div>
+                                                @if ($absen->check_out == null)
+                                                    <div class="col-md-6">
+                                                        <label for="validationCustom01" class="form-label">File</label>
+                                                        <input type="file" class="form-control" name="attachment">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label for="" class="form-label">Aktifitas</label>
+                                                        <textarea name="activity" class="form-control" id="activity"></textarea>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label for="" class="form-label">Status</label>
+                                                        <textarea name="status_activity" class="form-control" id="status_activity"></textarea>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div id="checkOutSection">
+                                                            <button type="submit" class="btn btn-secondary"
+                                                                id="checkOutBtn">
+                                                                Check Out
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </form>
+                                            <script>
+                                                document.getElementById('checkOutBtn').addEventListener('click', function() {
+                                                    const now = new Date();
+                                                    const formattedDate = now.getFullYear() + '-' +
+                                                        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                                                        String(now.getDate()).padStart(2, '0') + ' ' +
+                                                        String(now.getHours()).padStart(2, '0') + ':' +
+                                                        String(now.getMinutes()).padStart(2, '0') + ':' +
+                                                        String(now.getSeconds()).padStart(2, '0');
+                                                    document.getElementById('dateCheckOut').value = formattedDate;
+                                                });
+                                            </script>
+                                        @else
+                                            <form class="row g-3 needs-validation" method="POST"
+                                                action="{{ route('attendance.store') }}" enctype="multipart/form-data"
+                                                novalidate>
+                                                @csrf
+                                                <div class="col-md-6">
+                                                    <label for="validationCustom01" class="form-label">Nama Lengkap</label>
+                                                    <input type="text"
+                                                        class="form-control @error('name') is-invalid @enderror"
+                                                        id="name" name="name" required>
+                                                    <div class="valid-feedback">
+                                                        Looks good!
+                                                    </div>
+                                                    @error('name')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <label for="shiftSelect" class="form-label">Pilih Shift</label>
+                                                    <select class="form-select" id="shiftSelect" name="check_in"
+                                                        required>
+                                                        <option selected disabled>Opsi</option>
+                                                        <option value="Shift 1">Shift 1</option>
+                                                        <option value="Shift 2">Shift 2</option>
+                                                        <option value="Shift 3">Shift 3</option>
+                                                    </select>
+                                                </div>
+
+                                                <input type="hidden" name="date_check_in">
+                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                <div class="col-md-2 mt-11">
+                                                    <div id="checkInSection">
+                                                        <button type="submit" class="btn btn-primary"
+                                                            id="checkInBtn">Check
+                                                            In</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
-                                    </form>
-
-                                    <script>
-                                        document.getElementById('checkOutBtn').addEventListener('click', function() {
-                                            const now = new Date();
-                                            const formattedDate = now.getFullYear() + '-' +
-                                                String(now.getMonth() + 1).padStart(2, '0') + '-' +
-                                                String(now.getDate()).padStart(2, '0') + ' ' +
-                                                String(now.getHours()).padStart(2, '0') + ':' +
-                                                String(now.getMinutes()).padStart(2, '0') + ':' +
-                                                String(now.getSeconds()).padStart(2, '0');
-                                            document.getElementById('dateCheckOut').value = formattedDate;
-                                        });
-                                    </script>
-                                @else
-                                    <form class="row g-3 needs-validation" method="POST"
-                                        action="{{ route('attendance.store') }}" enctype="multipart/form-data" novalidate>
-                                        @csrf
-                                        <div class="mb-4">
-                                            <label for="validationCustom01" class="form-label">Nama Lengkap</label>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                id="name" name="name" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            @error('name')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                            <select class="form-select" id="shiftSelect" name="check_in" required>
-                                                <option selected disabled>Opsi</option>
-                                                <option value="Shift 1">Shift 1</option>
-                                                <option value="Shift 2">Shift 2</option>
-                                                <option value="Shift 3">Shift 3</option>
-                                            </select>
-                                        </div>
-
-                                        <input type="hidden" name="date_check_in">
-                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                        <div id="checkInSection">
-                                            <button type="submit" class="btn btn-primary" id="checkInBtn">Check
-                                                In</button>
-                                        </div>
-                                    </form>
-                                @endif
-                            </div>
-
-                            <div class="col-xl-7 mt-13">
-                                <!--begin::Messenger-->
-                                <div class="card">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Table-->
-                                        <table class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-10px">Nama</th>
-                                                    <th class="min-w-100px">Tanggal</th>
-                                                    <th class="min-w-100px">Shift</th>
-                                                    <th class="min-w-100px">Jam</th>
-                                                    <th class="min-w-100px">Keterangan</th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--end::Table head-->
-                                            <!--begin::Table body-->
-                                            <tbody class="text-gray-600 fw-bold">
-                                                @if ($attendanceToday->count())
-                                                    @foreach ($attendanceToday as $attendance_today)
-                                                        <tr>
-                                                            <td>{{ $attendance_today->name }}</td>
-                                                            <td>
-                                                                {{ date('d F Y', strtotime($attendance_today->date_check_in)) }}
-                                                            </td>
-                                                            <td>
-                                                                @if ($attendance_today->check_in)
-                                                                    {{ $attendance_today->check_in }}
-                                                                @else
-                                                                    {{ $attendance_today->check_out }}
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ date('H:i', strtotime($attendance_today->date_check_in)) }}
-                                                            </td>
-                                                            <td>
-                                                                @if ($attendance_today->check_in)
-                                                                    Masuk
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                        @if ($attendance_today->check_out)
+                                        <!--end form-->
+                                    </div>
+                                    <!--end::Body-->
+                                    <!--begin::Messenger-->
+                                    <div class="card">
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-0">
+                                            <!--begin::Table-->
+                                            <table class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr
+                                                        class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-10px">Nama</th>
+                                                        <th class="min-w-100px">Tanggal</th>
+                                                        <th class="min-w-100px">Shift</th>
+                                                        <th class="min-w-100px">Jam</th>
+                                                        <th class="min-w-100px">Absen</th>
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="text-gray-600 fw-bold">
+                                                    @if ($attendanceToday->count())
+                                                        @foreach ($attendanceToday as $attendance_today)
                                                             <tr>
                                                                 <td>{{ $attendance_today->name }}</td>
                                                                 <td>
-                                                                    {{ date('d F Y', strtotime($attendance_today->date_check_out)) }}
+                                                                    {{ date('d F Y', strtotime($attendance_today->date_check_in)) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $attendance_today->check_out }}
+                                                                    @if ($attendance_today->check_in)
+                                                                        {{ $attendance_today->check_in }}
+                                                                    @else
+                                                                        {{ $attendance_today->check_out }}
+                                                                    @endif
+                                                                </td>
+                                                                <td>{{ date('H:i', strtotime($attendance_today->date_check_in)) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ date('H:i', strtotime($attendance_today->date_check_in)) }}
-                                                                </td>
-                                                                <td>
-
-                                                                    <a href="#" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}">
-                                                                        Keluar
-                                                                    </a>
+                                                                    @if ($attendance_today->check_in)
+                                                                        Masuk
+                                                                    @endif
                                                                 </td>
                                                             </tr>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table-->
+                                                            @if ($attendance_today->check_in)
+                                                                <tr>
+                                                                    <td>{{ $attendance_today->name }}</td>
+                                                                    <td>
+                                                                        {{ date('d F Y', strtotime($attendance_today->date_check_out)) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $attendance_today->check_out }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ date('H:i', strtotime($attendance_today->date_check_out)) }}
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}">
+                                                                            Keluar
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table-->
+                                        </div>
+                                        <!--end::Card toolbar-->
                                     </div>
-                                    <!--end::Card toolbar-->
+                                    <!--end::Messenger-->
+
                                 </div>
-                                <!--end::Messenger-->
+                                <!--end::List Widget 1-->
                             </div>
                         </div>
                     </div>
@@ -390,14 +392,16 @@
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-10px">No</th>
                                     <th class="min-w-10px">Nama</th>
-                                    <th class="min-w-100px">Tanggal</th>
-                                    <th class="min-w-100px">Shift</th>
-                                    <th class="min-w-100px">Jam Masuk</th>
-                                    <th class="min-w-100px">Jam Pulang</th>
-                                    <th class="min-w-100px">Keterangan</th>
+                                    <th class="min-w-40px">Tanggal</th>
+                                    <th class="min-w-40px">Shift</th>
+                                    <th class="min-w-40px">Jam Masuk</th>
+                                    <th class="min-w-40px">Jam Pulang</th>
+                                    <th class="min-w-40px">Keterangan</th>
+                                    <th class="min-w-40px">Aktifitas</th>
+                                    <th class="min-w-40px">Status Tugas</th>
                                     {{-- <th class="min-w-100px">Fitur</th> --}}
                                 </tr>
                                 <!--end::Table row-->
@@ -434,6 +438,10 @@
                                                     </a>
                                                 @endif
                                             </td>
+                                            <td style="text-align: left"> {!! $attendance_today->activity !!}
+                                            </td>
+                                            <td style="text-align: left"> {!! $attendance_today->status_activity !!}
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -449,6 +457,13 @@
     <script>
         ClassicEditor
             .create(document.querySelector('#activity'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#status_activity'))
             .catch(error => {
                 console.error(error);
             });
