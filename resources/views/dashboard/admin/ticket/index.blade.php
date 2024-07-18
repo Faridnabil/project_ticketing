@@ -220,7 +220,7 @@
                                                     <a class="menu-link ms-3" href="" type="button"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_ticket2_{{ $ticket->id }}"
-                                                        title="Approval Tiket">
+                                                        title="Pengajuan Tiket">
                                                         <span class="menu-icon" style="fill: #0d8987">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

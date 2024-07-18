@@ -173,7 +173,7 @@
                                             <td>
                                                 @can('Edit Province')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('province.edit', $province->id) }}" type="button">
+                                                        href="{{ route('province.edit', $province->id) }}" type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -192,7 +192,7 @@
                                                 @can('Delete Province')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_priority_{{ $province->id }}">
+                                                        data-bs-target="#kt_modal_priority_{{ $province->id }}" title="Hapus">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

@@ -121,7 +121,7 @@
                                             <td>
                                                 @can('Edit Role')
                                                     <a class="menu-link ms-3" href="{{ route('role.edit', $role->id) }}"
-                                                        type="button">
+                                                        type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -139,7 +139,8 @@
                                                 @endcan
                                                 @can('Delete Role')
                                                     <a class="menu-link ms-3" href="#" type="reset"
-                                                        data-bs-toggle="modal" data-bs-target="#kt_modal_1{{ $role->id }}">
+                                                        data-bs-toggle="modal" data-bs-target="#kt_modal_1{{ $role->id }}"
+                                                        title="Hapus">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

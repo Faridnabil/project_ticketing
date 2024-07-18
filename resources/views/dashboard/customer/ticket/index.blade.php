@@ -149,7 +149,7 @@
                                         <td>
                                             @can('Show Ticket')
                                                 <a class="menu-link ms-3" href="{{ route('myTicket.show', $ticket->id) }}"
-                                                    type="button">
+                                                    type="button" title="Lihat">
                                                     <span class="menu-icon" style="fill: #1218ca">
                                                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                         <span class="svg-icon svg-icon-2">
@@ -168,7 +168,8 @@
                                                 @if ($ticket->status->status_name != 'Selesai')
                                                     @can('Edit Ticket')
                                                         <a class="menu-link ms-3"
-                                                            href="{{ route('myTicket.edit', $ticket->id) }}" type="button">
+                                                            href="{{ route('myTicket.edit', $ticket->id) }}" type="button"
+                                                            title="Edit">
                                                             <span class="menu-icon" style="fill: #bd6710">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
@@ -187,7 +188,8 @@
                                                     @can('Delete Ticket')
                                                         <a class="menu-link ms-3" href="#" type="reset"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                            data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
+                                                            title="Hapus">
                                                             <span class="menu-icon" style="fill: #e21414">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">

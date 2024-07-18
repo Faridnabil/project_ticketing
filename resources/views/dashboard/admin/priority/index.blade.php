@@ -112,7 +112,7 @@
                                             <td>
                                                 @can('Edit Priority')
                                                     <a class="menu-link ms-3" href="{{ route('priority.edit', $priority->id) }}"
-                                                        type="button">
+                                                        type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -131,7 +131,7 @@
                                                 @can('Delete Priority')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_priority_{{ $priority->id }}">
+                                                        data-bs-target="#kt_modal_priority_{{ $priority->id }}" title="Hapus">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

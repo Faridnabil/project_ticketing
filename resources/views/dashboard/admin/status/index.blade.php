@@ -112,7 +112,7 @@
                                             <td>
                                                 @can('Edit Status')
                                                     <a class="menu-link ms-3" href="{{ route('status.edit', $status->id) }}"
-                                                        type="button">
+                                                        type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -131,7 +131,7 @@
                                                 @can('Delete Status')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_status_{{ $status->id }}">
+                                                        data-bs-target="#kt_modal_status_{{ $status->id }}" title="Hapus">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -150,7 +150,6 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                @else
                                 @endif
                             </tbody>
                             <!--end::Table body-->

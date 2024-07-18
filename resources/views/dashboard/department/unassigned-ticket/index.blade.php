@@ -116,7 +116,7 @@
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
-                                           @if ($ticket->priority_id == '4')
+                                            @if ($ticket->priority_id == '4')
                                                 <span class="badge"
                                                     style="background-color:red ; color: white; font-weight:bold">
                                                     Critical</span>
@@ -172,8 +172,9 @@
                                         <!--begin::Action=-->
                                         <td>
                                             @can('Show Ticket')
-                                                <a class="menu-link ms-3" href="{{ route('unassignedTicket.show', $ticket->id) }}" type="reset">
-                                                    <span class="menu-icon" style="fill: #1218ca">
+                                                <a class="menu-link ms-3"
+                                                    href="{{ route('unassignedTicket.show', $ticket->id) }}" type="reset">
+                                                    <span class="menu-icon" style="fill: #1218ca" title="Lihat">
                                                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                         <span class="svg-icon svg-icon-2">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="512"
@@ -186,7 +187,6 @@
                                                         <!--end::Svg Icon-->
                                                     </span>
                                                 </a>
-
                                             @endcan
                                             @php
                                                 $existingRequest = App\Models\RequestAssignment::where(
@@ -197,13 +197,17 @@
                                                     ->exists();
                                             @endphp
                                             @if (Auth::user()->hasRole('Department') && $ticket->assign_to == null && !$existingRequest)
-                                                <button class="menu-link ms-3" type="submit" style="background: none; border: none; padding: 0; cursor: pointer;" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_request_{{ $ticket->id }}">
+                                                <button class="menu-link ms-3" type="submit"
+                                                    style="background: none; border: none; padding: 0; cursor: pointer;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_request_{{ $ticket->id }}">
                                                     <span class="menu-icon" style="fill: #16ab2d">
                                                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                         <span class="svg-icon svg-icon-2">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                <path d="m10,23c0,.553-.447,1-1,1h-4c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h8c2.757,0,5,2.243,5,5v2c0,.553-.447,1-1,1s-1-.447-1-1v-2c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h4c.553,0,1,.447,1,1ZM14,6c0-.553-.447-1-1-1H5c-.553,0-1,.447-1,1s.447,1,1,1h8c.553,0,1-.447,1-1Zm-4,5c0-.553-.447-1-1-1h-4c-.553,0-1,.447-1,1s.447,1,1,1h4c.553,0,1-.447,1-1Zm-5,4c-.553,0-1,.447-1,1s.447,1,1,1h2c.553,0,1-.447,1-1s-.447-1-1-1h-2Zm19,2c0,3.859-3.141,7-7,7s-7-3.141-7-7,3.141-7,7-7,7,3.141,7,7Zm-2,0c0-2.757-2.243-5-5-5s-5,2.243-5,5,2.243,5,5,5,5-2.243,5-5Zm-3.192-1.241l-2.223,2.134c-.144.141-.379.144-.522.002l-1.131-1.108c-.396-.388-1.028-.382-1.414.014-.387.395-.381,1.027.014,1.414l1.132,1.109c.46.449,1.062.674,1.663.674s1.201-.225,1.653-.671l2.213-2.124c.398-.383.411-1.016.029-1.414-.383-.4-1.017-.411-1.414-.029Z"/>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <path
+                                                                    d="m10,23c0,.553-.447,1-1,1h-4c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h8c2.757,0,5,2.243,5,5v2c0,.553-.447,1-1,1s-1-.447-1-1v-2c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h4c.553,0,1,.447,1,1ZM14,6c0-.553-.447-1-1-1H5c-.553,0-1,.447-1,1s.447,1,1,1h8c.553,0,1-.447,1-1Zm-4,5c0-.553-.447-1-1-1h-4c-.553,0-1,.447-1,1s.447,1,1,1h4c.553,0,1-.447,1-1Zm-5,4c-.553,0-1,.447-1,1s.447,1,1,1h2c.553,0,1-.447,1-1s-.447-1-1-1h-2Zm19,2c0,3.859-3.141,7-7,7s-7-3.141-7-7,3.141-7,7-7,7,3.141,7,7Zm-2,0c0-2.757-2.243-5-5-5s-5,2.243-5,5,2.243,5,5,5,5-2.243,5-5Zm-3.192-1.241l-2.223,2.134c-.144.141-.379.144-.522.002l-1.131-1.108c-.396-.388-1.028-.382-1.414.014-.387.395-.381,1.027.014,1.414l1.132,1.109c.46.449,1.062.674,1.663.674s1.201-.225,1.653-.671l2.213-2.124c.398-.383.411-1.016.029-1.414-.383-.4-1.017-.411-1.414-.029Z" />
                                                             </svg>
                                                         </span>
                                                         <!--end::Svg Icon-->
@@ -279,7 +283,8 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h5>Apakah Anda yakin ingin menangani tiket ini?</h5>
-                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                <small
+                                    class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
                                 <ul class="mt-3 mb-0">
                                     <li>{{ $ticket->no_ticket }}</li>
                                     <li>{{ $ticket->title }}</li>

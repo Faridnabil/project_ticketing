@@ -100,7 +100,7 @@
                                             <td>
                                                 @can('Edit Category')
                                                     <a class="menu-link ms-3" href="{{ route('category.edit', $category->id) }}"
-                                                        type="button">
+                                                        type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -119,7 +119,7 @@
                                                 @can('Delete Category')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_priority_{{ $category->id }}">
+                                                        data-bs-target="#kt_modal_priority_{{ $category->id }}" title="Hapus">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
