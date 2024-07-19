@@ -137,7 +137,6 @@ Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
     Route::post('/department/approve-ticket/{id}', [RequestTicketController::class, 'approve_ticket'])->name('requestTicket.approveTicket');
     Route::post('/department/reject-ticket/{id}', [RequestTicketController::class, 'reject_ticket'])->name('requestTicket.rejectTicket');
 
-    Route::post('/department/send-ticket/{id}', [RequestTicketController::class, 'send_ticket'])->name('requestTicket.sendTicket');
     Route::post('/department/status-ticket/{id}', [RequestTicketController::class, 'status_ticket'])->name('requestTicket.statusTicket');
 
 });

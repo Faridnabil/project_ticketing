@@ -50,7 +50,6 @@ class RequestTicketController extends Controller
             // Kirim notifikasi hanya kepada pengguna yang dipilih
             Notification::send($user, new NotificationDepartment($notificationData));
         }
-
         return redirect()->back()->with('success', 'Pengajuan telah dikirim.');
     }
 
@@ -92,8 +91,6 @@ class RequestTicketController extends Controller
         return redirect()->back()->with('success', 'Perubahan kepemilikan tiket telah disetujui.');
     }
 
-
-
     public function reject_ticket(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
@@ -124,31 +121,48 @@ class RequestTicketController extends Controller
         }
 
         $ticket->save();
-
-
         return redirect()->back()->with('success', 'Perubahan kepemilikan tiket telah ditolak.');
     }
 
-
-    public function send_ticket($id)
-    {
-        $ticket = Ticket::findOrFail($id);
-
-        $ticket->changed_assign_to = null;
-        $ticket->approval_assign_to = 1;
-        $ticket->save();
-
-        return redirect()->back()->with('success', 'Tiket telah dikirim.');
-    }
     public function status_ticket(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->status_id = $request->status_id;
         $ticket->changed_assign_to = null;
         $ticket->approval_assign_to = 0;
+
+        // Simpan status_id yang lama sebelum mengubahnya
+        $oldStatusId = $ticket->status_id;
+
+        // Update status_id dengan yang baru dari request
+        $ticket->status_id = $request->status_id;
+
+        // Periksa apakah status_id berubah menjadi 4
+        if ($request->status_id == 4) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang diambil ' . $authenticatedUserName . ', sudah terselesaikan',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/admin/ticket'),
+                'customer_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan peran 'admin'
+            $adminUsers = User::role('Admin')
+            ->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($adminUsers as $admin) {
+                Notification::send($admin, new NotificationDepartment($notificationData));
+            }
+        }
+
         $ticket->save();
 
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
+
 }

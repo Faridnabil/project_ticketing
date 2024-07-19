@@ -89,12 +89,13 @@
                                         <!--end::Date=-->
                                         <!--begin::Action=-->
                                         <td>
+                                            <!-- Approval Form -->
                                             <form action="{{ route('requestTicket.approveTicket', $requestTicket->id) }}"
-                                                method="POST" class="d-inline">
+                                                method="POST" class="d-inline" onsubmit="return confirmApproval()">
                                                 @csrf
                                                 <button class="menu-link ms-3" type="submit"
                                                     style="background: none; border: none; padding: 0; cursor: pointer;">
-                                                    <span class="menu-icon" style="fill: #13be2d">
+                                                    <span class="menu-icon" style="fill: #13be2d;">
                                                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                         <span class="svg-icon svg-icon-2">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24px"
@@ -107,13 +108,13 @@
                                                     </span>
                                                 </button>
                                             </form>
-
+                                            <!-- Rejection Form -->
                                             <form action="{{ route('requestTicket.rejectTicket', $requestTicket->id) }}"
-                                                method="POST" class="d-inline">
+                                                method="POST" class="d-inline" onsubmit="return confirmRejection()">
                                                 @csrf
                                                 <button class="menu-link ms-3" type="submit"
                                                     style="background: none; border: none; padding: 0; cursor: pointer;">
-                                                    <span class="menu-icon" style="fill: #c11717">
+                                                    <span class="menu-icon" style="fill: #c11717;">
                                                         <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                         <span class="svg-icon svg-icon-2">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24px"
@@ -144,4 +145,17 @@
         <!--end::Container-->
     </div>
     <!--end::Post-->
+
+
+    <!-- JavaScript Functions for Confirmation -->
+    <script>
+        function confirmApproval() {
+            return confirm('Apakah Anda yakin ingin menyetujui tiket ini?');
+        }
+
+        function confirmRejection() {
+            return confirm('Apakah Anda yakin ingin menolak tiket ini?');
+        }
+    </script>
+
 @endsection
