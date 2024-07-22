@@ -48,7 +48,7 @@ class TicketController extends Controller
 
 
         // Fetch necessary data for filters
-        $assign_to = User::role('Department')
+        $assign_to = User::role('Tenaga Ahli')
             ->get();
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -66,7 +66,7 @@ class TicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -139,7 +139,7 @@ class TicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -182,7 +182,7 @@ class TicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -274,7 +274,7 @@ class TicketController extends Controller
                 Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
 
                 // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+                $assignedDepartmentUsers = User::role(['Tenaga Ahli'])->where('id', $assignedDepartmentId)->get();
 
                 $notificationDataForDepartment = [
                     'name' => $authenticatedUserName,

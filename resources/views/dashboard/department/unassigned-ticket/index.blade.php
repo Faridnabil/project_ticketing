@@ -142,7 +142,7 @@
                                                         ->where('user_id', Auth::id())
                                                         ->exists();
                                                 @endphp
-                                                @if (Auth::user()->hasRole('Department') && $ticket->assign_to == null && !$existingRequest)
+                                                @if (Auth::user()->hasRole('Tenaga Ahli') && $ticket->assign_to == null && !$existingRequest)
                                                     <button class="btn btn-primary px-6 align-self-center text-nowrap mb-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_request_{{ $ticket->id }}">

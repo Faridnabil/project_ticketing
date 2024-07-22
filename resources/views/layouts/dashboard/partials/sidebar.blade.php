@@ -171,7 +171,7 @@
                             </a>
                         </li>
                     @endrole
-                    @role('Department')
+                    @role('Tenaga Ahli')
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
                                 href="{{ route('unassignedTicket.index') }}">

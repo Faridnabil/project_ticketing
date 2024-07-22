@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
+use App\Exports\TicketsExport;
 use App\Models\Ticket;
 use App\Models\ActivityLog;
 use App\Models\Category;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssignedTicketController extends Controller
 {
@@ -29,15 +31,16 @@ class AssignedTicketController extends Controller
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
             ->get();
+        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
 
-        return view('dashboard.department.assigned-ticket.index', compact('tickets'));
+        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'statuses'));
     }
 
     public function show($id)
     {
         $ticket = Ticket::find($id);
         $customers = User::role('Customer')->get();
-        $assignTo = User::role('Department')->get();
+        $assignTo = User::role('Tenaga Ahli')->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -74,7 +77,7 @@ class AssignedTicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -170,7 +173,6 @@ class AssignedTicketController extends Controller
                 ];
 
                 Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
-
             } elseif ($status->status_name == 'Selesai') {
                 // Notifikasi untuk Customer bahwa tiket telah dikerjakan
                 $notificationDataForCustomer = [
@@ -267,5 +269,14 @@ class AssignedTicketController extends Controller
         $comment->save();
 
         return redirect()->back()->with('success', 'Comment updated successfully!');
+    }
+
+    public function export(Request $request)
+    {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $status_id = $request->input('status_id');
+
+        return Excel::download(new TicketsExport($start_date, $end_date, $status_id), 'tickets.xlsx');
     }
 }

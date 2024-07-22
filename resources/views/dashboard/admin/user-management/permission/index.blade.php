@@ -95,13 +95,13 @@
                                                 <td>{{ $permission->name }}</td>
                                                 <td>
                                                     @foreach ($permission->getRoleNames() as $roles)
-                                                        @if ($roles == 'Super Admin')
+                                                        @if ($roles == 'Admin')
                                                             <a href="role"
                                                                 class="badge bg-primary">{{ $roles }}</a>
-                                                        @elseif ($roles == 'Admin')
+                                                        @elseif ($roles == 'Department')
                                                             <a href="role"
                                                                 class="badge bg-success">{{ $roles }}</a>
-                                                        @elseif ($roles == 'Manager')
+                                                        @elseif ($roles == 'Customer')
                                                             <a href="role"
                                                                 class="badge bg-warning">{{ $roles }}</a>
                                                         @elseif ($roles == 'Vendor')

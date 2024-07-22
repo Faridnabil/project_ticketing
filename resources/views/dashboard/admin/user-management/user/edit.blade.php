@@ -1,9 +1,43 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Pengguna | SIAK Dukcapil
+    Ubah Pengguna | PLN ICON+
 @endsection
 
+<style>
+    .image-input-wrapper {
+        width: 125px;
+        height: 125px;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        position: relative;
+    }
+
+    .image-input-wrapper .btn {
+        position: absolute;
+        top: -10px;
+        /* Sesuaikan posisi dari atas */
+        right: -10px;
+        /* Sesuaikan posisi dari kanan */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        /* Lebar ikon */
+        height: 25px;
+        /* Tinggi ikon */
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        /* Membuat ikon menjadi bulat */
+    }
+
+    .image-input input[type="file"] {
+        display: none;
+        /* Menyembunyikan input file default */
+    }
+</style>
 @section('content')
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
@@ -148,16 +182,23 @@
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
 
                                     <!--begin::Image input-->
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                         style="background-image: url('{{ asset($user->photo ? $user->photo : 'assets/media/avatars/blank.png') }}')">
-
+                                    <div class="image-input image-input-outline" data-kt-image-input="true">
                                         <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                             style="background-image: url('{{ asset($user->photo ? $user->photo : 'assets/media/avatars/blank.png') }}');">
+                                        <div class="image-input-wrapper w-125px h-125px" id="imagePreview"
+                                            style="background-image: url('{{ asset($user->photo ? $user->photo : 'assets/media/avatars/blank.png') }}');
+                                                    background-size: cover;
+                                                    background-position: center;">
+                                            <!--begin::Input file-->
+                                            <label class="btn btn-icon btn-active-color-primary"
+                                                data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                                title="Change avatar">
+                                                <i class="fas fa-pen fs-7"></i>
+                                                <input type="file" name="photo" accept=".png, .jpg, .jpeg"
+                                                    id="photoInput" />
+                                            </label>
+                                            <!--end::Input file-->
                                         </div>
                                         <!--end::Preview existing avatar-->
-
-                                        <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
                                     </div>
                                     <!--end::Image input-->
                                 </div>
@@ -177,4 +218,17 @@
         </div>
     </div>
     <!--end::Post-->
+    <script>
+        document.getElementById('photoInput').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').style.backgroundImage = 'url(' + e.target.result +
+                        ')';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 @endsection

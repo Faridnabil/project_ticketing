@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket yang Ditetapkan | PLN ICON+
+    Ticket yang Ditetapkan | PLN Icon+
 @endsection
 
 @section('content')
@@ -36,9 +36,34 @@
             <!--begin::Card-->
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Daftar Pengajuan</h4>
+                    <h4 class="card-title">Data Tiket yang Masuk</h4>
                 </div>
                 <div class="card-body">
+                    <form action="{{ route('department.tickets.export') }}" method="GET" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="start_date">Start Date</label>
+                                <input type="date" name="start_date" class="form-control" id="start_date">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="end_date">End Date</label>
+                                <input type="date" name="end_date" class="form-control" id="end_date">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status_id">Status</label>
+                                <select name="status_id" class="form-control" id="status_id">
+                                    <option value="">Pilih Status</option>
+                                    @foreach($statuses as $status)
+                                        <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">Export to Excel</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Prioritas | SIAK Dukcapil
+    Ubah Prioritas | PLN Icon+
 @endsection
 
 @section('content')

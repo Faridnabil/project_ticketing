@@ -88,15 +88,15 @@
                                         @foreach ($roles as $role)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                @if ($role->name == 'Super Admin')
+                                                @if ($role->name == 'Admin')
                                                     <td>
                                                         <p class="badge bg-primary">{{ $role->name }}</p>
                                                     </td>
-                                                @elseif ($role->name == 'Admin')
+                                                @elseif ($role->name == 'Tenaga Ahli')
                                                     <td>
                                                         <p class="badge bg-success">{{ $role->name }}</p>
                                                     </td>
-                                                @elseif ($role->name == 'Manager')
+                                                @elseif ($role->name == 'Customer')
                                                     <td>
                                                         <p class="badge bg-warning">{{ $role->name }}</p>
                                                     </td>

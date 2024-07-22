@@ -69,7 +69,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
     Route::post('/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
 });
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Tenaga Ahli'])->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
 
     Route::resources([
@@ -90,7 +90,7 @@ Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
     Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
 });
 
-Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {
     Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
 
     Route::resources([
@@ -105,6 +105,7 @@ Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
 
     Route::post('/department/assignedTicketStore', [AssignedTicketController::class, 'store_comment'])->name('assignedTickets.store');
     Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
+    Route::get('/department/export-tickets', [AssignedTicketController::class, 'export'])->name('department.tickets.export');
 
     Route::post('/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
 });

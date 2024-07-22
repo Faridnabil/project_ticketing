@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Edit Tiket | SIAK Dukcapil
+    Edit Tiket | PLN Icon+
 @endsection
 
 @section('content')

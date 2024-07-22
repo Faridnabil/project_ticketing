@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Izin | SIAK Dukcapil
+    Ubah Izin | PLN Icon+
 @endsection
 
 @section('content')

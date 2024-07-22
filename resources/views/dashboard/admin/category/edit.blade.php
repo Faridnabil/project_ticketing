@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Kategori | SIAK Dukcapil
+    Ubah Kategori | PLN Icon+
 @endsection
 
 @section('content')

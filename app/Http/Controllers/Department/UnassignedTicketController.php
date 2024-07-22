@@ -32,7 +32,7 @@ class UnassignedTicketController extends Controller
     public function request_assignment(Request $request, Ticket $ticket)
     {
         // Pastikan user yang sedang login memiliki role 'Department' dan tiket belum diassign ke siapa pun
-        if (Auth::user()->hasRole('Department') && $ticket->assign_to === null) {
+        if (Auth::user()->hasRole('Tenaga Ahli') && $ticket->assign_to === null) {
             // Periksa apakah pengajuan sudah ada
             $existingRequest = RequestAssignment::where('ticket_id', $ticket->id)
                 ->where('user_id', Auth::id())
@@ -75,7 +75,7 @@ class UnassignedTicketController extends Controller
     {
         $ticket = Ticket::find($id);
         $customers = User::role('Customer')->get();
-        $assignTo = User::role('Department')->get();
+        $assignTo = User::role('Tenaga Ahli')->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();

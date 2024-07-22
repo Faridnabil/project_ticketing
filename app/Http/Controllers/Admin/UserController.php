@@ -109,10 +109,6 @@ class UserController extends Controller
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
                 'password' => ['nullable', 'string', 'min:8', 'confirmed'],
                 'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
-                // 'nama_perusahaan' => ['required', 'string', 'regex:/^[^0-9!@#$%^&*(),?":{}|<>]+$/'],
-            ], [
-                // 'nama_perusahaan.required' => 'The Company name field is required.',
-                // 'nama_perusahaan.regex' => 'The Company name field format is invalid.',
             ]);
 
             if ($validator->fails()) {
@@ -135,7 +131,7 @@ class UserController extends Controller
                     File::delete($user->photo);
                 }
             } else {
-                $path = $request->pathfoto ?? null;
+                $path = $user->photo; // Gunakan path foto yang sudah ada jika tidak ada foto baru yang diunggah
             }
 
             $input = $request->all();

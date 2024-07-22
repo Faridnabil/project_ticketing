@@ -120,6 +120,24 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="col-md-4">
+                                    <label for="validationCustom01" class="form-label">Status</label>
+                                    <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
+                                        <option></option>
+                                        @foreach ($statuses as $status)
+                                            @if (in_array($status->status_name, ['Proses', 'Selesai']))
+                                                <option value="{{ $status->id }}"
+                                                    {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('status_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">

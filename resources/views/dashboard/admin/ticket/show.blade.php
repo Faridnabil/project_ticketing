@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket | SIAK Dukcapil
+    Ticket | PLN Icon+
 @endsection
 
 @section('content')
@@ -247,7 +247,8 @@
                                                                 id="message-display-{{ $comment->id }}">
                                                                 {!! $comment->message !!}
                                                             </p>
-                                                            <form action="{{ route('tickets.update', $comment->id) }}"
+                                                            <form
+                                                                action="{{ route('assignedTickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -266,22 +267,20 @@
                                     </div>
                                     <!--end::Card body-->
                                     <!--begin::Card footer-->
-                                    <div class="card-footer pt-4" id="kt_chat_messenger_footer">
-                                        <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('tickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
+                                    <div class="card-footer" id="kt_chat_messenger_footer">
+                                        <form class="row needs-validation" method="POST" action="{{ route('assignedTickets.store') }}" enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                            <input type="hidden" name="assign_to" value="{{ $ticket->customer }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                             <textarea name="message" class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
-                                                id="message" cols="10" rows="1"></textarea>
+                                                id="message" cols="10" rows="1" placeholder="Ketikan Komentar" style="margin-top: 0;"></textarea>
                                             <div class="valid-feedback">Looks good!</div>
                                             @error('message')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <div class="d-flex flex-stack">
-                                                <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send">Kirim</button>
+                                                <button class="btn btn-primary" type="submit" data-kt-element="send">Kirim</button>
                                             </div>
                                         </form>
                                     </div>

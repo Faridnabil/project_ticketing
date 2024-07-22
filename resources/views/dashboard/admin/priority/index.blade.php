@@ -96,7 +96,7 @@
                                                         Critical</span>
                                                 @elseif($priority->priority_name == 'Medium')
                                                     <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">
+                                                        style="background-color:#eed600 ; color: white; font-weight:bold">
                                                         Medium</span>
                                                 @elseif($priority->priority_name == 'High')
                                                     <span class="badge"

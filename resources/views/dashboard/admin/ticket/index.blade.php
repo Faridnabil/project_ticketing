@@ -4,6 +4,14 @@
     Ticket | PLN Icon+
 @endsection
 
+<style>
+    .actions {
+        display: relative;
+        justify-content: space-between;
+        gap: 10px;
+        /* Optional: Adjust the space between buttons */
+    }
+</style>
 @section('content')
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
@@ -42,8 +50,8 @@
                         <!--begin::Form-->
                         <form method="GET" action="{{ route('ticket.index') }}" class="d-flex">
                             <select name="assign_to" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Ditujukan Ke">
-                                <option></option>
+                                data-placeholder="Pilih Tenaga Ahli">
+                                <option value="">Pilih Tenaga Ahli </option>
                                 @foreach ($assign_to as $assign)
                                     <option value="{{ $assign->id }}">{{ $assign->name }}</option>
                                 @endforeach
@@ -52,7 +60,7 @@
 
                             <select name="category_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Kategori">
-                                <option></option>
+                                <option value="">Pilih Kategori</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
@@ -61,7 +69,7 @@
 
                             <select name="priority_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
-                                <option></option>
+                                <option value="">Pilih Prioritas</option>
                                 @foreach ($priorities as $priority)
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
@@ -70,7 +78,7 @@
 
                             <select name="status_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Status">
-                                <option></option>
+                                <option value="">Pilih Status</option>
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
@@ -88,7 +96,7 @@
                     @can('Create Ticket')
                         <div class="card-toolbar">
                             <!--begin::Add Ticket-->
-                            <a href="{{ route('ticket.create') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('ticket.create') }}" class="btn btn-primary mb-4" style="margin-top:20px">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -126,18 +134,6 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Nomor Tiket</th>
-                                        <th>Kategori</th>
-                                        <th>Pemilik</th>
-                                        <th>Tetapkan Ke</th>
-                                        <th>Prioritas</th>
-                                        <th>Dibuat Tanggal</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
                                     @if ($tickets->count())
                                         @foreach ($tickets as $ticket)
@@ -145,14 +141,14 @@
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->category->category_name }}</td>
                                                 <td>{{ $ticket->customers->name }}</td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if ($ticket->assignTo != null)
                                                         {{ $ticket->assignTo->name }}
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if ($ticket->priority_id == '4')
                                                         <span class="badge"
                                                             style="background-color:red; color: white; font-weight:bold">Critical</span>
@@ -171,7 +167,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if ($ticket->status_id == '1')
                                                         <span class="badge"
                                                             style="background-color:red; color: white; font-weight:bold">Tertunda</span>
@@ -189,25 +185,24 @@
                                                             style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="actions">
                                                     @can('Show Ticket')
-                                                        <a href="{{ route('ticket.show', $ticket->id) }}"
-                                                            class="btn btn-success px-6 align-self-center text-nowrap mb-2">
-                                                            Lihat
+                                                        <a href="{{ route('ticket.show', $ticket->id) }}" title="Lihat"
+                                                            class="btn btn-icon btn-round btn-success mb-1">
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
                                                     @endcan
                                                     @can('Edit Ticket')
-                                                        <a href="{{ route('ticket.edit', $ticket->id) }}"
-                                                            class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
-                                                            Ubah
+                                                        <a href="{{ route('ticket.edit', $ticket->id) }}" title="Edit"
+                                                            class="btn btn-icon btn-round btn-primary mb-1">
+                                                            <i class="fa fa-pen"></i>
                                                         </a>
                                                     @endcan
                                                     @can('Delete Ticket')
-                                                        <button type="reset"
-                                                            class="btn btn-danger px-6 align-self-center text-nowrap"
+                                                        <button type="reset" class="btn btn-icon btn-round btn-danger" title="Hapus"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                            Hapus
+                                                            <i class="fa fa-trash-alt"></i>
                                                         </button>
                                                     @endcan
                                                 </td>
@@ -265,4 +260,3 @@
         </div>
     @endforeach
 @endsection
-

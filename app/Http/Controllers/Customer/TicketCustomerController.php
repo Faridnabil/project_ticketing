@@ -44,7 +44,7 @@ class TicketCustomerController extends Controller
             ->where('id', $user->id)
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -132,7 +132,7 @@ class TicketCustomerController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -176,7 +176,7 @@ class TicketCustomerController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Tenaga Ahli')
             ->get();
 
         $priorities = Priority::all();
@@ -290,7 +290,7 @@ class TicketCustomerController extends Controller
             $assignedDepartmentId = $request->assign_to;
 
             // Notifikasi
-            $users = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+            $users = User::role(['Tenaga Ahli'])->where('id', $assignedDepartmentId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [

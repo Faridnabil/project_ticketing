@@ -121,16 +121,16 @@
                                             </td>
                                             <td class="text-center">
                                                 @foreach ($user->getRoleNames() as $roles)
-                                                    @if ($roles == 'Super Admin')
+                                                    @if ($roles == 'Admin')
                                                         <a href="role" class="badge bg-primary">
                                                             {{ $roles }}
                                                         </a>
-                                                    @elseif ($roles == 'Admin')
+                                                    @elseif ($roles == 'Tenaga Ahli')
                                                         <a href="role" class="badge bg-success">
                                                             {{ $roles }}
                                                         </a>
                                                     @else
-                                                        <a href="role" class="badge bg-danger">
+                                                        <a href="role" class="badge bg-warning">
                                                             {{ $roles }}
                                                         </a>
                                                     @endif

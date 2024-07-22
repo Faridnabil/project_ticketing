@@ -1,9 +1,20 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Pengguna | SIAK Dukcapil
+    Tambah Pengguna | PLN ICON+
 @endsection
 
+<style>
+    .image-input-wrapper {
+        width: 125px;
+        height: 125px;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        position: relative;
+    }
+</style>
 @section('content')
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
@@ -125,8 +136,8 @@
                                     <select class="form-select @error('gender') is-invalid @enderror" name="gender"
                                         id="select-field2" required>
                                         <option selected disabled> Select Gender </option>
-                                        <option value="Man">Man</option>
-                                        <option value="Woman">Woman</option>
+                                        <option value="Man">Pria</option>
+                                        <option value="Woman">Wanita</option>
                                     </select>
                                     @error('gender')
                                         <div class="invalid-feedback">
@@ -142,13 +153,14 @@
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
 
                                     <!--begin::Image input-->
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url(assets/media/avatars/blank.png)">
+                                    <div class="image-input image-input-outline" data-kt-image-input="true">
                                         <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url(assets/media/avatars/150-1.jpg);">
+                                        <div class="image-input-wrapper w-125px h-125px" id="imagePreview"
+                                            style="background-image: url('assets/media/avatars/blank.png');
+                                                    background-size: cover;
+                                                    background-position: center;">
                                         </div>
-                                        <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
+                                        <input type="file" name="photo" accept=".png, .jpg, .jpeg" id="photoInput" />
                                         <input type="hidden" name="photo" />
                                         <!--end::Label-->
                                         <!--begin::Cancel-->
@@ -170,4 +182,17 @@
         </div>
     </div>
     <!--end::Post-->
+    <script>
+        document.getElementById('photoInput').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').style.backgroundImage = 'url(' + e.target.result +
+                        ')';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 @endsection

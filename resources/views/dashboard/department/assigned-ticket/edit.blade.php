@@ -104,9 +104,11 @@
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
-                                                {{ $status->status_name }}</option>
+                                            @if (in_array($status->status_name, ['Diterima' ,'Proses', 'Selesai']))
+                                                <option value="{{ $status->id }}"
+                                                    {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
