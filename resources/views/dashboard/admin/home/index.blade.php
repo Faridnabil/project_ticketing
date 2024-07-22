@@ -6,6 +6,19 @@
 
 @section('content')
     <style>
+        .col {
+            flex: 1;
+            margin-right: 10px;
+            height: 100px;
+            /* Set a specific height for uniformity */
+        }
+
+        .col:last-child {
+            margin-right: 0;
+        }
+    </style>
+
+    <style>
         .activity-log {
             padding: 15px;
             background-color: #f9fafc;
@@ -100,6 +113,7 @@
     </style>
 
     <!--begin::Toolbar-->
+    {{--  card title  --}}
     <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -123,15 +137,14 @@
         <!--end::Container-->
     </div>
     <!--end::Toolbar-->
-
-    <div class="post d-flex flex-column-fluid" id="kt_post">
+    {{--  card main  --}}
+    <div class="post  " id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row">
-
                 <!--begin::Col-->
-                <div class="col-xxl-4">
+                <div class="col-xxl-12 ">
                     <!--begin::Mixed Widget 2-->
-                    <div class="card card-xxl-stretch" style="height: 380px">
+                    <div class="card card-xxl-stretch" style="height: 190px">
                         <!--begin::Header-->
                         <div class="card-header border-0 bg-primary py-5">
                             <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
@@ -148,64 +161,56 @@
                             <!--begin::Stats-->
                             <div class="card-p mt-n20 position-relative">
                                 <!--begin::Row-->
+
                                 <div class="row g-0">
-                                    <div class="col bg-light-primary px-6 py-8 rounded-2 me-7 mb-7">
+                                    <div class="col"
+                                        style="width: 25%; background-color: #e9ecef; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
                                             <i class="fas fa-ticket-alt text-primary" style="font-size: 24px;"></i>
-                                            <!-- Icon tiket diterima -->
                                         </span>
                                         <span class="text-primary fw-bold fs-3">{{ $total_tiket }}</span>
                                         <a href="#" class="text-primary fw-bold fs-6">Total Tiket</a>
                                     </div>
 
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-warning px-6 py-8 rounded-2 mb-7">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Add-user.svg-->
+                                    <div class="col"
+                                        style="width: 25%; background-color: #fff3cd; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
                                             <i class="fas fa-spinner fa-spin text-warning" style="font-size: 24px;"></i>
                                         </span>
                                         <span class="text-warning fw-bold fs-3">{{ $tiket_buka_proses }}</span>
-                                        <!--end::Svg Icon-->
                                         <a href="#" class="text-warning fw-bold fs-6">Proses</a>
                                     </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                                <!--begin::Row-->
-                                <div class="row g-0">
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
+
+                                    <div class="col"
+                                        style="width: 25%; background-color: #f8d7da; padding: 1rem; border-radius: 0.5rem; ">
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-4">
                                             <i class="fas fa-hourglass-half fa-pulse text-danger"
                                                 style="font-size: 24px;"></i>
-                                            <!-- Icon tiket yang tertunda dengan animasi -->
                                         </span>
                                         <span class="text-danger fw-bold fs-3">{{ $tiket_tertunda }}</span>
-
                                         <a href="#" class="text-danger fw-bold fs-6 mt-2">Tiket Tertunda</a>
                                     </div>
 
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col bg-light-success px-6 py-8 rounded-2">
-                                        <!--begin::Svg Icon | path: icons/duotone/Communication/Urgent-mail.svg-->
-                                        <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
-                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-4">
-                                                <i class="fas fa-ticket-alt text-success" style="font-size: 24px;"></i>
-                                                <!-- Icon tiket diterima -->
+                                    <div class="col"
+                                        style="width: 25%; background-color: #d4edda; padding: 1rem; border-radius: 0.5rem;">
+                                        <div class="mb-5">
+                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
+                                                <span class="svg-icon svg-icon-3x svg-icon-success d-block my-4"
+                                                    style="margin-top: 9px;">
+                                                    <i class="fas fa-ticket-alt text-success" style="font-size: 24px;"></i>
+                                                </span>
                                             </span>
-                                        </span>
-                                        <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
-                                        <!--end::Svg Icon-->
-                                        <a href="#" class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
+                                            <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
+                                            <a href="#" class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
+                                        </div>
                                     </div>
-                                    <!--end::Col-->
                                 </div>
+
                                 <!--end::Row-->
                             </div>
                             <!--end::Stats-->
                         </div>
+
                         <br>
                         <br>
                     </div>
@@ -213,7 +218,7 @@
                 </div>
                 <!--end::Col-->
                 <!--begin::Col-->
-                <div class="col-xxl-8">
+                <div class="col-xxl-12 mt-5">
                     <!--begin::List Widget 5-->
                     <div class="card card-xxl-stretch" style="height: 380px">
                         <!--begin::Header-->
@@ -299,7 +304,8 @@
                                     @else
                                         <div class="text-center mt-5">
                                             <img src="{{ asset('template/dist/assets/media/illustrations/presentation.png') }}"
-                                                alt="No History" class="img-fluid" style="width: 280px" height="150px" />
+                                                alt="No History" class="img-fluid" style="width: 280px"
+                                                height="150px" />
                                             <p class="mt-3">Silakan pilih nomor tiket untuk melihat history.</p>
                                         </div>
                                     @endif
@@ -354,21 +360,27 @@
                     </div>
                     <!-- Second Card -->
                     <div class="card">
-                        <div class="card-body">
-                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-5">Tiket Prioritas</h1>
+                        <!--begin::Card body-->
+                        <div class="card-body pt-0">
+                            <!--begin::Table-->
                             <table id="kt_datatable_example_5"
-                                class="table table-striped table-row-bordered border rounded">
+                                class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                                <!--begin::Table head-->
                                 <thead>
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nomor Tiket</th>
-                                        <th class="min-w-125px">Kategori</th>
-                                        <th class="min-w-125px">Pemilik</th>
-                                        <th class="min-w-125px">Tetapkan Ke</th>
-                                        <th class="min-w-125px">Prioritas</th>
-                                        <th class="min-w-125px">Dibuat Tanggal</th>
-                                        <th class="min-w-125px">Status</th>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-70px">Nomor Tiket</th>
+                                        <th class="min-w-70px">Kategori</th>
+                                        <th class="min-w-70px">Pemilik</th>
+                                        <th class="min-w-70px">Tetapkan Ke</th>
+                                        <th class="min-w-70px">Prioritas</th>
+                                        <th class="min-w-70px">Dibuat Tanggal</th>
+                                        <th class="min-w-70px">Status</th>
                                     </tr>
+                                    <!--end::Table row-->
                                 </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
                                 <tbody class="text-gray-600 fw-bold">
                                     @if ($ticketPriotitas->count())
                                         @foreach ($ticketPriotitas as $ticket)
@@ -418,8 +430,11 @@
                                         @endforeach
                                     @endif
                                 </tbody>
+                                <!--end::Table body-->
                             </table>
+                            <!--end::Table-->
                         </div>
+                        <!--end::Card body-->
                     </div>
                 </div>
 
@@ -431,8 +446,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

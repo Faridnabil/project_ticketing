@@ -89,21 +89,30 @@
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($priority->priority_name == 'Critical')
-                                                    <span class="badge"
-                                                        style="background-color:red ; color: white; font-weight:bold">
-                                                        Critical</span>
+                                                    <div
+                                                        style="background-color: red; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style=" color: white; font-weight:500">
+                                                            Critical</span>
+                                                    </div>
                                                 @elseif($priority->priority_name == 'Medium')
-                                                    <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">
-                                                        Medium</span>
+                                                    <div
+                                                        style="background-color: blue; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style=" color: white; font-weight:500">
+                                                            Medium</span>
+                                                    </div>
                                                 @elseif($priority->priority_name == 'High')
-                                                    <span class="badge"
-                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                        High</span>
+                                                    <div
+                                                        style="background-color: #FF7F3E; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style=" color: white; font-weight: 500">
+                                                            High</span>
+                                                    </div>
                                                 @elseif($priority->priority_name == 'Low')
-                                                    <span class="badge"
-                                                        style="background-color:green ; color: white; font-weight:bold">
-                                                        Low</span>
+                                                    <div
+                                                        style="background-color: green; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge"
+                                                            style=" color: white; font-weight:500">
+                                                            Low</span>
+                                                    </div>
                                                 @else
                                                     {{ $priority->priority_name }}
                                                 @endif

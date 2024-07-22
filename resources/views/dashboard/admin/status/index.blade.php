@@ -89,21 +89,30 @@
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($status->status_name == 'Tertunda')
-                                                    <span class="badge"
-                                                        style="background-color:red ; color: white; font-weight:bold">
-                                                        Tertunda</span>
+                                                    <div
+                                                        style="background-color: red; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style="color: white; font-weight: 500;">
+                                                            Tertunda
+                                                        </span>
+                                                    </div>
                                                 @elseif($status->status_name == 'Diterima')
-                                                    <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">
-                                                        Diterima</span>
+                                                    <div
+                                                        style="background-color: blue; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style="color: white; font-weight:500">
+                                                            Diterima</span>
+                                                    </div>
                                                 @elseif($status->status_name == 'Proses')
-                                                    <span class="badge"
-                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                        Proses</span>
+                                                    <div
+                                                        style="background-color: #FF7F3E; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge" style=" color: white; font-weight:500">
+                                                            Proses</span>
+                                                    </div>
                                                 @elseif($status->status_name == 'Selesai')
-                                                    <span class="badge"
-                                                        style="background-color:green ; color: white; font-weight:bold">
-                                                        Selesai</span>
+                                                    <div   style="background-color: green; width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge"
+                                                            style="color: white; font-weight:500">
+                                                            Selesai</span>
+                                                    </div>
                                                 @else
                                                     {{ $status->status_name }}
                                                 @endif

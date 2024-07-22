@@ -90,15 +90,28 @@
                                             <td>
                                                 @foreach ($permission->getRoleNames() as $roles)
                                                     @if ($roles == 'Super Admin')
-                                                        <a href="role" class="badge bg-primary">{{ $roles }}</a>
+                                                        <div class="bg-primary"
+                                                            style=" width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px; font-weight: 500;">
+                                                            <a href="role">{{ $roles }}</a>
+                                                        </div>
                                                     @elseif ($roles == 'Admin')
-                                                        <a href="role" class="badge bg-success">{{ $roles }}</a>
+                                                        <div class="bg-success"
+                                                            style=" width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px; font-weight: 500;">
+                                                            <a href="role"
+                                                                class="badge bg-success">{{ $roles }}</a>
+                                                        </div>
                                                     @elseif ($roles == 'Manager')
-                                                        <a href="role" class="badge bg-warning">{{ $roles }}</a>
+                                                        <div class="bg-warning"
+                                                            style=" width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px; font-weight: 500;">
+                                                            <a href="role">{{ $roles }}</a>
+                                                        </div>
                                                     @elseif ($roles == 'Vendor')
-                                                        <a href="role" class="badge bg-info">{{ $roles }}</a>
+                                                        <div class="bg-info"
+                                                            style=" width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;font-weight: 500;">
+                                                            <a href="role">{{ $roles }}</a>
+                                                        </div>
                                                     @else
-                                                        <a href="role" class="badge bg-danger">{{ $roles }}</a>
+                                                        <a href="role" class="badge bg-danger fw-500">{{ $roles }}</a>
                                                     @endif
                                                 @endforeach
                                             </td>
