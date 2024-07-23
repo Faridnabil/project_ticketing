@@ -271,12 +271,36 @@ class AssignedTicketController extends Controller
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
 
+    public function completedTickets()
+    {
+        $userId = auth()->user()->id;
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+            ->whereHas('assignTo', function ($query) use ($userId) {
+                $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
+            })
+            ->where('status_id', 4) // Asumsi status_id 4 adalah "Selesai"
+            ->get();
+
+        // Ambil reason dari log aktivitas terbaru untuk setiap tiket
+        // foreach ($tickets as $ticket) {
+        //     $activityLog = ActivityLog::where('model_type', Ticket::class)
+        //         ->where('model_id', $ticket->id)
+        //         ->latest()
+        //         ->first();
+
+        //     $ticket->reason = $activityLog ? $activityLog->reason : null;
+        // }
+
+        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
+
+        return view('dashboard.department.assigned-ticket.completed', compact('tickets', 'statuses'));
+    }
+
     public function export(Request $request)
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
-        $status_id = $request->input('status_id');
 
-        return Excel::download(new TicketsExport($start_date, $end_date, $status_id), 'tickets.xlsx');
+        return Excel::download(new TicketsExport($start_date, $end_date), 'tickets.xlsx');
     }
 }

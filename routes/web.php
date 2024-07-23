@@ -105,6 +105,7 @@ Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {
 
     Route::post('/department/assignedTicketStore', [AssignedTicketController::class, 'store_comment'])->name('assignedTickets.store');
     Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
+    Route::get('/department/completed-tickets', [AssignedTicketController::class, 'completedTickets'])->name('department.completed-tickets');
     Route::get('/department/export-tickets', [AssignedTicketController::class, 'export'])->name('department.tickets.export');
 
     Route::post('/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');

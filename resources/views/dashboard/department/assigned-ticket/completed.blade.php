@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket yang Ditetapkan | PLN Icon+
+    Tiket Selesai | PLN Icon+
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Ticket yang Ditetapkan
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Selesai
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Ticket yang Ditetapkan</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket yang Selesai</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -36,7 +36,7 @@
             <!--begin::Card-->
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Tiket yang Diterima dan Proses</h4>
+                    <h4 class="card-title">Data Tiket Selesai</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('department.tickets.export') }}" method="GET" class="mb-4">
@@ -59,7 +59,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-success">Export to Excel</button>
+                                <button type="submit" class="btn btn-primary">Export to Excel</button>
                             </div>
                         </div>
                     </form>
@@ -69,81 +69,48 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Tiket</th>
-                                    <th>Judul</th>
                                     <th>Pemilik</th>
-                                    <th>Tetapkan Ke</th>
+                                    <th>Judul</th>
+                                    <th>Kategori</th>
                                     <th>Prioritas</th>
-                                    <th>Dibuat pada Tanggal</th>
-                                    <th>Status</th>
+                                    <th>Deskripsi</th>
+                                    <th>Solusi</th>
+                                    <th>Tanggal Dikirim</th>
+                                    <th>Tanggal Selesai</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Nomor Tiket</th>
-                                    <th>Judul</th>
-                                    <th>Pemilik</th>
-                                    <th>Tetapkan Ke</th>
-                                    <th>Prioritas</th>
-                                    <th>Dibuat pada Tanggal</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                        @if (in_array($ticket->status_id, [2, 3])) <!-- Diterima dan Proses -->
+                                        @if ($ticket->status_id == 4) <!-- Selesai -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->title }}</td>
                                                 <td>{{ $ticket->customers->name }}</td>
-                                                <td>
-                                                    @if ($ticket->assign_to != null)
-                                                        {{ $ticket->assignTo->name }}
-                                                    @else
-                                                        Belum ditetapkan
-                                                    @endif
-                                                </td>
-                                                <td>
+                                                <td>{{ $ticket->title }}</td>
+                                                <td>{{ $ticket->category->category_name }}</td>
+                                                <td class="text-center">
                                                     @if ($ticket->priority_id == '4')
                                                         <span class="badge"
-                                                            style="background-color:red ; color: white; font-weight:bold">
-                                                            Critical</span>
+                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
                                                     @elseif($ticket->priority_id == '3')
                                                         <span class="badge"
-                                                            style="background-color:blue ; color: white; font-weight:bold">
-                                                            Medium</span>
+                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
                                                     @elseif($ticket->priority_id == '2')
                                                         <span class="badge"
-                                                            style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                            High</span>
+                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
                                                     @elseif($ticket->priority_id == '1')
                                                         <span class="badge"
-                                                            style="background-color:green ; color: white; font-weight:bold">
-                                                            Low</span>
+                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
                                                     @else
                                                         <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                            -</span>
+                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
                                                     @endif
                                                 </td>
+                                                <td>{{ $ticket->description }}</td>
+                                                <td>{{ $ticket->solution }}</td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                                <td>
-                                                    @if ($ticket->status_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:blue ; color: white; font-weight:bold">
-                                                            Diterima</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                            Proses</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                            -</span>
-                                                    @endif
-                                                </td>
+                                                <td>{{ date('d F Y', strtotime($ticket->updated_at)) }}</td>
                                                 <td>
                                                     @can('Show Ticket')
                                                         <a href="{{ route('assignedTicket.show', $ticket->id) }}"

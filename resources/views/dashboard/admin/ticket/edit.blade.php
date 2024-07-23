@@ -140,15 +140,15 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="reason" class="form-label">Alasan Perubahan</label>
-                                    <textarea name="reason" class="form-control @error('reason') is-invalid @enderror" id="reason" cols="10"
-                                        rows="3">{{ old('reason') }}</textarea>
+                                    <label for="solution" class="form-label">Solusi</label>
+                                    <textarea name="solution" class="form-control @error('solution') is-invalid @enderror" id="solution" cols="10"
+                                        rows="3">{{ old('solution') }}</textarea>
 
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
 
-                                    @error('reason')
+                                    @error('solution')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -197,7 +197,7 @@
                 console.error(error);
             });
         ClassicEditor
-            .create(document.querySelector('#reason'))
+            .create(document.querySelector('#solution'))
             .catch(error => {
                 console.error(error);
             });

@@ -182,8 +182,15 @@
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
                                 href="{{ route('assignedTicket.index') }}">
+                                <i class="fas fa-spinner"></i>
+                                <p>Tiket Proses</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
+                                href="{{ route('department.completed-tickets') }}">
                                 <i class="fas fa-check-circle"></i>
-                                <p>Sudah Ditetapkan</p>
+                                <p>Tiket Selesai</p>
                             </a>
                         </li>
                     @endrole

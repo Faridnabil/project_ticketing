@@ -406,7 +406,7 @@ class TicketController extends Controller
 
             // Notifikasi untuk Departemen yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
-            $assignedDepartmentUsers = User::role('Department')->where('id', $requestAssignment->user_id)->get();
+            $assignedDepartmentUsers = User::role('Tenaga Ahli')->where('id', $requestAssignment->user_id)->get();
 
             $notificationDataForDepartment = [
                 'name' => $authenticatedUserName,

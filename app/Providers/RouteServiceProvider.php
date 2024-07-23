@@ -52,7 +52,7 @@ class RouteServiceProvider extends ServiceProvider
             return '/admin/dashboard';
         } elseif ($user->hasRole('Customer')) {
             return '/customer/dashboard';
-        } elseif ($user->hasRole('Department')) {
+        } elseif ($user->hasRole('Tenaga Ahli')) {
             return '/department/dashboard';
         }
 
