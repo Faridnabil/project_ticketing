@@ -9,10 +9,6 @@
         margin-left: 10px;
     }
 
-    .menu-sub {
-        background-color: #000;
-    }
-
     .menu-sub.show {
         display: block; /* Pastikan submenu terlihat */
     }
@@ -457,7 +453,7 @@
 
                 @role('Customer')
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('myTicket') ? 'active' : '' }}"
+                        <a class="{{ request()->routeIs('myTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('myTicket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -481,7 +477,7 @@
 
                 @role('Department')
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
+                        <a class="{{ request()->routeIs('unassignedTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('unassignedTicket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -503,7 +499,7 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
+                        <a class="{{ request()->routeIs('assignedTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('assignedTicket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -525,7 +521,7 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link {{ Request::is('requestTicket') ? 'active' : '' }}"
+                        <a class="{{ request()->routeIs('requestTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('requestTicket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
