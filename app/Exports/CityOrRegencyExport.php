@@ -22,8 +22,8 @@ class CityOrRegencyExport implements FromCollection, WithHeadings
     {
         return [
             'KODE PROVINSI',
-            'KODE KOTA/KABUPATEN',
-            'NAMA KOTA/KABUPATEN',
+            'KODE KOTA KABUPATEN',
+            'NAMA KOTA KABUPATEN',
         ];
     }
 }

@@ -2,9 +2,7 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
 class CityOrRegencyFormatExport implements WithHeadings
 {
@@ -13,8 +11,8 @@ class CityOrRegencyFormatExport implements WithHeadings
         return [
             [
                 'KODE PROVINSI',
-                'KODE KOTA/KABUPATEN',
-                'NAMA KOTA/KABUPATEN'
+                'KODE KOTA KABUPATEN',
+                'NAMA KOTA KABUPATEN'
             ]
         ];
     }

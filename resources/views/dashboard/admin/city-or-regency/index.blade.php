@@ -259,7 +259,7 @@
                     <h2 class="fw-bolder">Import Excel</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
-                    <div id="kt_customers_export_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                    <div id="kt_customers_export_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotone/Navigation/Close.svg-->
                         <span class="svg-icon svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -297,7 +297,7 @@
                         <!--begin::Actions-->
                         <div class="text-center">
                             <button type="reset" id="kt_customers_export_cancel"
-                                class="btn btn-white me-3">Batal</button>
+                                class="btn btn-white me-3" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" id="kt_customers_export_submit" class="btn btn-primary">
                                 <span class="indicator-label">Submit</span>
                             </button>
