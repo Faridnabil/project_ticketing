@@ -49,17 +49,14 @@
                                 <label for="end_date">End Date</label>
                                 <input type="date" name="end_date" class="form-control" id="end_date">
                             </div>
-                            <div class="col-md-3">
-                                <label for="status_id">Status</label>
-                                <select name="status_id" class="form-control" id="status_id">
-                                    <option value="">Pilih Status</option>
-                                    @foreach($statuses as $status)
-                                        <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                             <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary">Export to Excel</button>
+                                <button type="submit" class="btn" style="background-color: #17ba4b; color:white">
+                                    <span class="img-icon">
+                                        <img src="{{ asset('templates/assets/img/excel.png') }}" alt="Export Icon"
+                                            width="29px">
+                                    </span>
+                                    Export
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -73,8 +70,6 @@
                                     <th>Judul</th>
                                     <th>Kategori</th>
                                     <th>Prioritas</th>
-                                    <th>Deskripsi</th>
-                                    <th>Solusi</th>
                                     <th>Tanggal Dikirim</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Aksi</th>
@@ -83,7 +78,8 @@
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                        @if ($ticket->status_id == 4) <!-- Selesai -->
+                                        @if ($ticket->status_id == 4)
+                                            <!-- Selesai -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->customers->name }}</td>
@@ -107,18 +103,17 @@
                                                             style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $ticket->description }}</td>
-                                                <td>{{ $ticket->solution }}</td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
                                                 <td>{{ date('d F Y', strtotime($ticket->updated_at)) }}</td>
                                                 <td>
                                                     @can('Show Ticket')
                                                         <a href="{{ route('assignedTicket.show', $ticket->id) }}"
-                                                            class="btn btn-success px-6 align-self-center text-nowrap mb-2">
-                                                            Lihat
+                                                            class="btn btn-icon btn-round btn-success mb-1" title="Lihat">
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
                                                     @endcan
-                                                    @if (in_array($ticket->status_id, [2, 3])) <!-- Diterima dan Proses -->
+                                                    @if (in_array($ticket->status_id, [2, 3]))
+                                                        <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
                                                                 class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
@@ -156,8 +151,7 @@
                         <div class="row">
                             <div class="col-lg-9">
                                 <h5>Apakah Anda yakin menghapus Tiket ini?</h5>
-                                <small
-                                    class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
                                 <ul class="mt-3 mb-0">
                                     <li>{{ $ticket->no_ticket }}</li>
                                     <li>{{ $ticket->title }}</li>

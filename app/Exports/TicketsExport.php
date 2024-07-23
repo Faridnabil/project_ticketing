@@ -15,17 +15,22 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
 {
     protected $start_date;
     protected $end_date;
+    protected $user_id;
 
-    public function __construct($start_date, $end_date)
+    public function __construct($start_date, $end_date, $user_id)
     {
         $this->start_date = $start_date;
         $this->end_date = $end_date;
+        $this->user_id = $user_id;
     }
 
     public function query()
     {
-        $query = Ticket::query()
-        ->where('status_id', 4);
+        $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+            ->whereHas('assignTo', function ($q) {
+                $q->where('id', $this->user_id);
+            })
+            ->where('status_id', 4);
 
         if ($this->start_date) {
             $query->whereDate('created_at', '>=', $this->start_date);

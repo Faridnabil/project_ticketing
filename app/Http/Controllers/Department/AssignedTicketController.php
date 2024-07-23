@@ -300,7 +300,8 @@ class AssignedTicketController extends Controller
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
+        $user_id = auth()->user()->id;
 
-        return Excel::download(new TicketsExport($start_date, $end_date), 'tickets.xlsx');
+        return Excel::download(new TicketsExport($start_date, $end_date, $user_id), 'tickets.xlsx');
     }
 }
