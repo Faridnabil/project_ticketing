@@ -31,10 +31,14 @@ class AssignedTicketController extends Controller
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
             ->get();
-        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
 
-        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'statuses'));
+        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
+        $categories = Category::all(); // Ambil semua kategori untuk dropdown filter
+        $priorities = Priority::all(); // Ambil semua prioritas untuk dropdown filter
+
+        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'statuses', 'categories', 'priorities'));
     }
+
 
     public function show($id)
     {

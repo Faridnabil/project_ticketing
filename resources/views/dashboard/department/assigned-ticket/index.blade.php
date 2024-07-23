@@ -25,6 +25,8 @@
                 <!--end::Title-->
             </div>
             <!--end::Page title-->
+            <div>
+            </div>
         </div>
         <!--end::Container-->
     </div>
@@ -35,35 +37,13 @@
         <div id="kt_content_container" class="container">
             <!--begin::Card-->
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Data Tiket yang Diterima dan Proses</h4>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        Filter
+                    </button>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('department.tickets.export') }}" method="GET" class="mb-4">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="start_date">Start Date</label>
-                                <input type="date" name="start_date" class="form-control" id="start_date">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="end_date">End Date</label>
-                                <input type="date" name="end_date" class="form-control" id="end_date">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="status_id">Status</label>
-                                <select name="status_id" class="form-control" id="status_id">
-                                    <option value="">Pilih Status</option>
-                                    @foreach($statuses as $status)
-                                        <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-success">Export to Excel</button>
-                            </div>
-                        </div>
-                    </form>
-
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
@@ -93,7 +73,8 @@
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                        @if (in_array($ticket->status_id, [2, 3])) <!-- Diterima dan Proses -->
+                                        @if (in_array($ticket->status_id, [2, 3]))
+                                            <!-- Diterima dan Proses -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->title }}</td>
@@ -151,7 +132,8 @@
                                                             Lihat
                                                         </a>
                                                     @endcan
-                                                    @if (in_array($ticket->status_id, [2, 3])) <!-- Diterima dan Proses -->
+                                                    @if (in_array($ticket->status_id, [2, 3]))
+                                                        <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
                                                                 class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
@@ -174,6 +156,68 @@
         <!--end::Container-->
     </div>
     <!--end::Post-->
+
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filter Tiket</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3" method="GET" action="{{ route('assignedTicket.index') }}"
+                        class="d-flex flex-wrap justify-content-between">
+                        <div class="col-md-4">
+                            <label for="category_id" class="form-label">Kategori</label>
+                            <select name="category_id" id="category_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Kategori">
+                                <option value="">Pilih Kategori</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="priority_id" class="form-label">Prioritas</label>
+                            <select name="priority_id" id="priority_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Prioritas">
+                                <option value="">Pilih Prioritas</option>
+                                @foreach ($priorities as $priority)
+                                    <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="status_id" class="form-label">Status</label>
+                            <select name="status_id" id="status_id" class="form-select" data-control="select2"
+                                data-placeholder="Pilih Status">
+                                <option value="">Pilih Status</option>
+                                @foreach ($statuses as $status)
+                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="start_date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                placeholder="Tanggal Mulai">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="end_date" class="form-label">Tanggal Akhir</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control"
+                                placeholder="Tanggal Akhir">
+                        </div>
+                        <div class="d-flex align-self-end mt-2">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
+                            <a href="{{ route('ticket.index') }}" class="btn btn-danger" style="color: white">Hapus</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Filter Modal -->
 
     @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">
