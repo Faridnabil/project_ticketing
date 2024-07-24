@@ -86,7 +86,7 @@ Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
     Route::resources([
         '/customer/myTicket' => TicketCustomerController::class,
     ]);
-
+    Route::get('/customer/completed-tickets', [TicketCustomerController::class, 'completedTickets'])->name('myTicket.completed');
     Route::post('/customer/TicketStore', [TicketCustomerController::class, 'store_comment'])->name('myTickets.store');
     Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
 });

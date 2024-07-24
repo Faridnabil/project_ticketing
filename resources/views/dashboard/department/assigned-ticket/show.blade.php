@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket | PLN ICON+
+    Ticket | PLN Icon+
 @endsection
 
 @section('content')
@@ -69,6 +69,16 @@
         .font-regular {
             font-size: 1rem;
         }
+
+        .my-slider img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-icon {
+            cursor: pointer;
+        }
     </style>
 
     <div id="kt_content_container" class="container mt-5">
@@ -127,12 +137,11 @@
                                             <!--begin::Product slider-->
                                             <div class="tns tns-default">
                                                 <!--begin::Slider-->
-                                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
-                                                    data-tns-speed="2000" data-tns-autoplay="true"
-                                                    data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false"
-                                                    data-tns-dots="false" data-tns-prev-button="#kt_team_slider_prev1"
-                                                    data-tns-next-button="#kt_team_slider_next1">
+                                                <div id="kt_team_slider" class="my-slider" data-tns="true"
+                                                    data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
+                                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                                    data-tns-center="false" data-tns-dots="false">
 
                                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
                                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
@@ -191,7 +200,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="col-xl-5">
@@ -517,6 +525,28 @@
                     localStorage.setItem('lastEditedComment', commentId);
                 });
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var slider = tns({
+                container: '#kt_team_slider',
+                items: 1,
+                slideBy: 'page',
+                autoplay: true,
+                controls: false, // disable built-in controls
+                nav: false,
+                autoplayButtonOutput: false
+            });
+
+            document.getElementById('kt_team_slider_prev1').onclick = function() {
+                slider.goTo('prev');
+            };
+
+            document.getElementById('kt_team_slider_next1').onclick = function() {
+                slider.goTo('next');
+            };
         });
     </script>
 @endsection

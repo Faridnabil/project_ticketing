@@ -170,6 +170,13 @@
                                 <p>Tiket Saya</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('myTicket') ? 'active' : '' }}"
+                                href="{{ route('myTicket.completed') }}">
+                                <i class="fas fa-history"></i>
+                                <p>Riwayat Tiket</p>
+                            </a>
+                        </li>
                     @endrole
                     @role('Tenaga Ahli')
                         <li class="nav-item">

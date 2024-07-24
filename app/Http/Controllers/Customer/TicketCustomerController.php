@@ -29,6 +29,7 @@ class TicketCustomerController extends Controller
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
+            ->whereIn('status_id', [2, 3]) // Filter for 'Diterima' and 'Proses' statuses
             ->get();
 
         return view('dashboard.customer.ticket.index', compact('tickets'));
@@ -342,5 +343,18 @@ class TicketCustomerController extends Controller
         $comment->save();
 
         return redirect()->back()->with('success', 'Comment updated successfully!');
+    }
+
+    public function completedTickets()
+    {
+        $userId = auth()->user()->id;
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+            ->whereHas('customers', function ($query) use ($userId) {
+                $query->where('id', $userId);
+            })
+            ->where('status_id', 4) // Filter for 'Selesai' status
+            ->get();
+
+        return view('dashboard.customer.ticket.completed', compact('tickets'));
     }
 }

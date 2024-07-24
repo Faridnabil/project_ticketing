@@ -35,32 +35,31 @@
         <div id="kt_content_container" class="container">
             <!--begin::Card-->
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Data Tiket Selesai</h4>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('department.tickets.export') }}" method="GET" class="mb-4">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="start_date">Start Date</label>
-                                <input type="date" name="start_date" class="form-control" id="start_date">
+                    <form action="{{ route('department.tickets.export') }}" method="GET" class="d-flex mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="me-2">
+                                <label for="start_date" class="form-label mb-0">Start Date</label>
+                                <input type="date" name="start_date" class="form-control form-control-sm"
+                                    id="start_date">
                             </div>
-                            <div class="col-md-3">
-                                <label for="end_date">End Date</label>
-                                <input type="date" name="end_date" class="form-control" id="end_date">
+                            <div class="me-2">
+                                <label for="end_date" class="form-label mb-0">End Date</label>
+                                <input type="date" name="end_date" class="form-control form-control-sm" id="end_date">
                             </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn" style="background-color: #17ba4b; color:white">
-                                    <span class="img-icon">
-                                        <img src="{{ asset('templates/assets/img/excel.png') }}" alt="Export Icon"
-                                            width="29px">
+                            <div class="d-flex align-items-end mt-4">
+                                <button type="submit" class="btn btn-sm" style="background-color: #17ba4b; color:white">
+                                    <span class="btn-label">
+                                        <i class="fas fa-file-excel"></i>
                                     </span>
                                     Export
                                 </button>
                             </div>
                         </div>
                     </form>
-
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>

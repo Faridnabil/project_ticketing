@@ -48,17 +48,24 @@
                     <h4 class="card-title">Semua Tiket</h4>
                     <div class="d-flex align-items-center">
                         @can('Create Ticket')
-                            <a href="{{ route('ticket.create') }}" class="btn btn-primary me-2">
-                                <span class="svg-icon svg-icon-2">
-
+                            <a href="{{ route('ticket.create') }}" class="btn btn-primary btn-sm me-2">
+                                <span class="btn-label">
+                                    <i class="fas fa-plus"></i>
                                 </span>
                                 Tambah Tiket
                             </a>
                         @endcan
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#filterModal">
+                            <span class="btn-label">
+                                <i class="fas fa-filter"></i>
+                            </span>
                             Filter
                         </button>
-                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-success ms-2">
+                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-success btn-sm ms-2">
+                            <span class="btn-label">
+                                <i class="fas fa-file-excel"></i>
+                            </span>
                             Export
                         </a>
                     </div>
@@ -69,6 +76,7 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Tiket</th>
+                                    <th>Judul</th>
                                     <th>Kategori</th>
                                     <th>Pemilik</th>
                                     <th>Tetapkan Ke</th>
@@ -83,6 +91,7 @@
                                     @foreach ($tickets as $ticket)
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
+                                            <td>{{ $ticket->title }}</td>
                                             <td>{{ $ticket->category->category_name }}</td>
                                             <td>{{ $ticket->customers->name }}</td>
                                             <td class="text-center">

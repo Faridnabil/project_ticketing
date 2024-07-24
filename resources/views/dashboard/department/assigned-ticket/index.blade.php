@@ -39,7 +39,11 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Data Tiket yang Diterima dan Proses</h4>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#filterModal">
+                        <span class="btn-label">
+                            <i class="fas fa-filter"></i>
+                        </span>
                         Filter
                     </button>
                 </div>
@@ -51,25 +55,13 @@
                                     <th>Nomor Tiket</th>
                                     <th>Judul</th>
                                     <th>Pemilik</th>
-                                    <th>Tetapkan Ke</th>
                                     <th>Prioritas</th>
-                                    <th>Dibuat pada Tanggal</th>
+                                    <th>Tanggal Kirim</th>
+                                    <th>Tenggat Waktu</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Nomor Tiket</th>
-                                    <th>Judul</th>
-                                    <th>Pemilik</th>
-                                    <th>Tetapkan Ke</th>
-                                    <th>Prioritas</th>
-                                    <th>Dibuat pada Tanggal</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
@@ -79,14 +71,7 @@
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->title }}</td>
                                                 <td>{{ $ticket->customers->name }}</td>
-                                                <td>
-                                                    @if ($ticket->assign_to != null)
-                                                        {{ $ticket->assignTo->name }}
-                                                    @else
-                                                        Belum ditetapkan
-                                                    @endif
-                                                </td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if ($ticket->priority_id == '4')
                                                         <span class="badge"
                                                             style="background-color:red ; color: white; font-weight:bold">
@@ -110,6 +95,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                                <td>{{ date('d F Y', strtotime($ticket->due_date)) }}</td>
                                                 <td>
                                                     @if ($ticket->status_id == '2')
                                                         <span class="badge"
@@ -127,17 +113,17 @@
                                                 </td>
                                                 <td>
                                                     @can('Show Ticket')
-                                                        <a href="{{ route('assignedTicket.show', $ticket->id) }}"
-                                                            class="btn btn-success px-6 align-self-center text-nowrap mb-2">
-                                                            Lihat
+                                                        <a href="{{ route('assignedTicket.show', $ticket->id) }}" title="Lihat"
+                                                            class="btn btn-icon btn-round btn-success mb-1">
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
                                                     @endcan
                                                     @if (in_array($ticket->status_id, [2, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
-                                                                class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
-                                                                Ubah
+                                                                title="Edit" class="btn btn-icon btn-round btn-primary mb-1">
+                                                                <i class="fa fa-pen"></i>
                                                             </a>
                                                         @endcan
                                                     @endif

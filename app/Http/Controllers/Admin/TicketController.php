@@ -130,6 +130,11 @@ class TicketController extends Controller
 
             $validate['attachments'] = json_encode($attachments);
 
+            // Menetapkan status menjadi "Diterima" jika tiket ditugaskan ke tenaga ahli
+            if (isset($validate['assign_to'])) {
+                $validate['status_id'] = 2; // Ganti 2 dengan ID status "Diterima" yang sesuai
+            }
+
             Ticket::create($validate);
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dibuat.');

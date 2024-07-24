@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket Saya | PLN Icon+
+    Riwayat Tiket | PLN Icon+
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Saya
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Riwayat Tiket
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket Saya</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Riwayat Tiket</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -44,21 +44,7 @@
 
                     <!--end::Card toolbar-->
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Tiket Saya</h4>
-                        <div class="d-flex align-items-center">
-                            @can('Create Ticket')
-                                <div class="card-toolbar">
-                                    <!--begin::Add Ticket-->
-                                    <a href="{{ route('myTicket.create') }}" class="btn btn-primary btn-sm me-2">
-                                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                        <span class="btn-label">
-                                            <i class="fas fa-plus"></i>
-                                        </span>
-                                        <!--end::Svg Icon-->Tambah Tiket</a>
-                                    <!--end::Add Ticket-->
-                                </div>
-                            @endcan
-                        </div>
+                        <h4 class="card-title">Riwayat Tiket</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -69,7 +55,8 @@
                                         <th>Judul</th>
                                         <th>Kategori</th>
                                         <th>Tetapkan Ke</th>
-                                        <th>Dibuat Tanggal</th>
+                                        <th>Tanggal Dibuat</th>
+                                        <th>Tanggal Selesai</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -89,20 +76,10 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                                <td>{{ date('d F Y', strtotime($ticket->updated_at)) }}</td>
                                                 <td>
-                                                    @if ($ticket->status_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                                    @elseif($ticket->status_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
+                                                    <span class="badge"
+                                                        style="background-color:green; color: white; font-weight:bold">Selesai</span>
                                                 </td>
                                                 <td class="actions text-center">
                                                     @can('Show Ticket')
@@ -111,23 +88,6 @@
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                     @endcan
-                                                    @if ($ticket->status_id != null)
-                                                        @if ($ticket->status->status_name != 'Selesai')
-                                                            @can('Edit Ticket')
-                                                                <a href="{{ route('myTicket.edit', $ticket->id) }}"
-                                                                    class="btn btn-icon btn-round btn-primary mb-1">
-                                                                    <i class="fa fa-pen"></i>
-                                                                </a>
-                                                            @endcan
-                                                            @can('Delete Ticket')
-                                                                <button type="reset" class="btn btn-icon btn-round btn-danger"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                                    <i class="fa fa-trash-alt"></i>
-                                                                </button>
-                                                            @endcan
-                                                        @endif
-                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

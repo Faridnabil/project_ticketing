@@ -285,16 +285,6 @@ class AssignedTicketController extends Controller
             ->where('status_id', 4) // Asumsi status_id 4 adalah "Selesai"
             ->get();
 
-        // Ambil reason dari log aktivitas terbaru untuk setiap tiket
-        // foreach ($tickets as $ticket) {
-        //     $activityLog = ActivityLog::where('model_type', Ticket::class)
-        //         ->where('model_id', $ticket->id)
-        //         ->latest()
-        //         ->first();
-
-        //     $ticket->reason = $activityLog ? $activityLog->reason : null;
-        // }
-
         $statuses = Status::all(); // Ambil semua status untuk dropdown filter
 
         return view('dashboard.department.assigned-ticket.completed', compact('tickets', 'statuses'));

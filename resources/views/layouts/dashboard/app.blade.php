@@ -29,14 +29,17 @@
         });
     </script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('templates/assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('templates/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('templates/assets/css/kaiadmin.min.css') }}" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
-     <!-- Dropzone CSS -->
-     <style>
+    <!-- Dropzone CSS -->
+    <style>
         .custom-dropzone {
             border: 2px dashed #007bff;
             padding: 20px;
@@ -146,61 +149,61 @@
     {{-- <script src="assets/js/setting-demo.js"></script>
     <script src="assets/js/demo.js"></script> --}}
     <script>
-            $(document).ready(function() {
-                $("#basic-datatables").DataTable({});
+        $(document).ready(function() {
+            $("#basic-datatables").DataTable({});
 
-                $("#multi-filter-select").DataTable({
-                    pageLength: 5,
-                    initComplete: function() {
-                        this.api()
-                            .columns()
-                            .every(function() {
-                                var column = this;
-                                var select = $(
-                                        '<select class="form-select"><option value=""></option></select>'
-                                    )
-                                    .appendTo($(column.footer()).empty())
-                                    .on("change", function() {
-                                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            $("#multi-filter-select").DataTable({
+                pageLength: 5,
+                initComplete: function() {
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            var column = this;
+                            var select = $(
+                                    '<select class="form-select"><option value=""></option></select>'
+                                )
+                                .appendTo($(column.footer()).empty())
+                                .on("change", function() {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                                        column
-                                            .search(val ? "^" + val + "$" : "", true, false)
-                                            .draw();
-                                    });
+                                    column
+                                        .search(val ? "^" + val + "$" : "", true, false)
+                                        .draw();
+                                });
 
-                                column
-                                    .data()
-                                    .unique()
-                                    .sort()
-                                    .each(function(d, j) {
-                                        select.append(
-                                            '<option value="' + d + '">' + d + "</option>"
-                                        );
-                                    });
-                            });
-                    },
-                });
-
-                // Add Row
-                $("#add-row").DataTable({
-                    pageLength: 5,
-                });
-
-                var action =
-                    '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-                $("#addRowButton").click(function() {
-                    $("#add-row")
-                        .dataTable()
-                        .fnAddData([
-                            $("#addName").val(),
-                            $("#addPosition").val(),
-                            $("#addOffice").val(),
-                            action,
-                        ]);
-                    $("#addRowModal").modal("hide");
-                });
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function(d, j) {
+                                    select.append(
+                                        '<option value="' + d + '">' + d + "</option>"
+                                    );
+                                });
+                        });
+                },
             });
+
+            // Add Row
+            $("#add-row").DataTable({
+                pageLength: 5,
+            });
+
+            var action =
+                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+            $("#addRowButton").click(function() {
+                $("#add-row")
+                    .dataTable()
+                    .fnAddData([
+                        $("#addName").val(),
+                        $("#addPosition").val(),
+                        $("#addOffice").val(),
+                        action,
+                    ]);
+                $("#addRowModal").modal("hide");
+            });
+        });
         $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
             type: "line",
             height: "70",
@@ -229,8 +232,8 @@
         });
     </script>
 
-     {{-- Javascript Dropzone --}}
-     <script>
+    {{-- Javascript Dropzone --}}
+    <script>
         let uploadedFiles = [];
         let existingFiles = [];
 
