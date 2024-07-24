@@ -42,13 +42,141 @@
         <!--begin::Container-->
         <div id="kt_content_container" class="container">
             <!--begin::Card-->
+
             <div class="card">
-                <!--begin::Card header-->
-                <div class="card-header border-0 pt-6">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                        <!--begin::Form-->
-                        <form method="GET" action="{{ route('ticket.index') }}" class="d-flex">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Semua Tiket</h4>
+                    <div class="d-flex align-items-center">
+                        @can('Create Ticket')
+                            <a href="{{ route('ticket.create') }}" class="btn btn-primary me-2">
+                                <span class="svg-icon svg-icon-2">
+
+                                </span>
+                                Tambah Tiket
+                            </a>
+                        @endcan
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            Filter
+                        </button>
+                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-success ms-2">
+                            Export
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Tiket</th>
+                                    <th>Kategori</th>
+                                    <th>Pemilik</th>
+                                    <th>Tetapkan Ke</th>
+                                    <th>Prioritas</th>
+                                    <th>Dibuat Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($tickets->count())
+                                    @foreach ($tickets as $ticket)
+                                        <tr>
+                                            <td>{{ $ticket->no_ticket }}</td>
+                                            <td>{{ $ticket->category->category_name }}</td>
+                                            <td>{{ $ticket->customers->name }}</td>
+                                            <td class="text-center">
+                                                @if ($ticket->assignTo != null)
+                                                    {{ $ticket->assignTo->name }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($ticket->priority_id == '4')
+                                                    <span class="badge"
+                                                        style="background-color:red; color: white; font-weight:bold">Critical</span>
+                                                @elseif($ticket->priority_id == '3')
+                                                    <span class="badge"
+                                                        style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                @elseif($ticket->priority_id == '2')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                @elseif($ticket->priority_id == '1')
+                                                    <span class="badge"
+                                                        style="background-color:green; color: white; font-weight:bold">Low</span>
+                                                @else
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
+                                            <td class="text-center">
+                                                @if ($ticket->status_id == '1')
+                                                    <span class="badge"
+                                                        style="background-color:red; color: white; font-weight:bold">Tertunda</span>
+                                                @elseif($ticket->status_id == '2')
+                                                    <span class="badge"
+                                                        style="background-color:blue; color: white; font-weight:bold">Diterima</span>
+                                                @elseif($ticket->status_id == '3')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
+                                                @elseif($ticket->status_id == '4')
+                                                    <span class="badge"
+                                                        style="background-color:green; color: white; font-weight:bold">Selesai</span>
+                                                @else
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="actions">
+                                                @can('Show Ticket')
+                                                    <a href="{{ route('ticket.show', $ticket->id) }}" title="Lihat"
+                                                        class="btn btn-icon btn-round btn-success mb-1">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('Edit Ticket')
+                                                    <a href="{{ route('ticket.edit', $ticket->id) }}" title="Edit"
+                                                        class="btn btn-icon btn-round btn-primary mb-1">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('Delete Ticket')
+                                                    <button type="reset" class="btn btn-icon btn-round btn-danger"
+                                                        title="Hapus" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </button>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
+
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filter Tiket</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-4" method="GET" action="{{ route('ticket.index') }}"
+                        class="d-flex flex-wrap justify-content-between">
+                        <div class="col-md-6">
+                            <label for="assign_to" class="form-label">Tenaga Ahli</label>
                             <select name="assign_to" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Tenaga Ahli">
                                 <option value="">Pilih Tenaga Ahli </option>
@@ -56,171 +184,57 @@
                                     <option value="{{ $assign->id }}">{{ $assign->name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
-
-                            <select name="category_id" class="form-select me-2" data-control="select2"
+                        </div>
+                        <div class="col-md-6">
+                            <label for="category_id" class="form-label">Kategori</label>
+                            <select name="category_id" id="category_id" class="form-select" data-control="select2"
                                 data-placeholder="Pilih Kategori">
                                 <option value="">Pilih Kategori</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
-
-                            <select name="priority_id" class="form-select me-2" data-control="select2"
+                        </div>
+                        <div class="col-md-6">
+                            <label for="priority_id" class="form-label">Prioritas</label>
+                            <select name="priority_id" id="priority_id" class="form-select" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
                                 <option value="">Pilih Prioritas</option>
                                 @foreach ($priorities as $priority)
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
-
-                            <select name="status_id" class="form-select me-2" data-control="select2"
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status_id" class="form-label">Status</label>
+                            <select name="status_id" id="status_id" class="form-select" data-control="select2"
                                 data-placeholder="Pilih Status">
                                 <option value="">Pilih Status</option>
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
-
-                            <button type="submit" class="btn btn-primary me-1">Filter</button>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="start_date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                placeholder="Tanggal Mulai">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="end_date" class="form-label">Tanggal Akhir</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control"
+                                placeholder="Tanggal Akhir">
+                        </div>
+                        <div class="d-flex align-self-end mt-2">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
                             <a href="{{ route('ticket.index') }}" class="btn btn-danger" style="color: white">Hapus</a>
-                        </form>
-                        <!--end::Form-->
-                    </div>
-
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-                    @can('Create Ticket')
-                        <div class="card-toolbar">
-                            <!--begin::Add Ticket-->
-                            <a href="{{ route('ticket.create') }}" class="btn btn-primary mb-4" style="margin-top:20px">
-                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                        <rect fill="#000000" opacity="0.5"
-                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                            x="4" y="11" width="16" height="2" rx="1" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->Tambah Tiket</a>
-                            <!--end::Add Ticket-->
                         </div>
-                    @endcan
-                    <!--end::Card toolbar-->
+                    </form>
                 </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Semua Tiket</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="basic-datatables" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nomor Tiket</th>
-                                        <th>Kategori</th>
-                                        <th>Pemilik</th>
-                                        <th>Tetapkan Ke</th>
-                                        <th>Prioritas</th>
-                                        <th>Dibuat Tanggal</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($tickets->count())
-                                        @foreach ($tickets as $ticket)
-                                            <tr>
-                                                <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->category->category_name }}</td>
-                                                <td>{{ $ticket->customers->name }}</td>
-                                                <td class="text-center">
-                                                    @if ($ticket->assignTo != null)
-                                                        {{ $ticket->assignTo->name }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($ticket->priority_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
-                                                    @elseif($ticket->priority_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
-                                                    @elseif($ticket->priority_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
-                                                    @elseif($ticket->priority_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                                <td class="text-center">
-                                                    @if ($ticket->status_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                                    @elseif($ticket->status_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                                    @elseif($ticket->status_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Selesai</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </td>
-                                                <td class="actions">
-                                                    @can('Show Ticket')
-                                                        <a href="{{ route('ticket.show', $ticket->id) }}" title="Lihat"
-                                                            class="btn btn-icon btn-round btn-success mb-1">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    @endcan
-                                                    @can('Edit Ticket')
-                                                        <a href="{{ route('ticket.edit', $ticket->id) }}" title="Edit"
-                                                            class="btn btn-icon btn-round btn-primary mb-1">
-                                                            <i class="fa fa-pen"></i>
-                                                        </a>
-                                                    @endcan
-                                                    @can('Delete Ticket')
-                                                        <button type="reset" class="btn btn-icon btn-round btn-danger" title="Hapus"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
-                                                            <i class="fa fa-trash-alt"></i>
-                                                        </button>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!--end::Card body-->
             </div>
-            <!--end::Card-->
         </div>
-        <!--end::Container-->
     </div>
-    <!--end::Post-->
+    <!-- End Filter Modal -->
 
     @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">

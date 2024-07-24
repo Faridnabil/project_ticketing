@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\AllTicketsExport;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TicketController extends Controller
 {
@@ -44,8 +46,16 @@ class TicketController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
-        $tickets = $query->orderBy('id', 'desc')->get();
+        if ($request->has('start_date') && $request->start_date) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
 
+        if ($request->has('end_date') && $request->end_date) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+
+        $tickets = $query->orderBy('id', 'desc')->get();
 
         // Fetch necessary data for filters
         $assign_to = User::role('Tenaga Ahli')
@@ -423,5 +433,9 @@ class TicketController extends Controller
         }
 
         return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+    }
+    public function export(Request $request)
+    {
+        return Excel::download(new AllTicketsExport($request), 'alltickets.xlsx');
     }
 }
