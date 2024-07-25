@@ -17,8 +17,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::with('cityOrRegency.province')
-            ->get();
+        $users = User::all();
 
         return view('dashboard.admin.user-management.user.index', [
             'users' => $users,
@@ -31,26 +30,28 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'name')
             ->all();
 
-        $city_or_regencies = CityOrRegency::with('province')
-            ->get();
-
-        return view('dashboard.admin.user-management.user.create', compact('roles', 'city_or_regencies'));
+        return view('dashboard.admin.user-management.user.create', compact('roles'));
     }
 
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string'],
-                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-                'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-                'photo' => ['nullable', 'image', 'max:500', 'mimes:jpg,png,jpeg'],
-                'city_or_regency_id' => ['nullable']
+                'email' => ['required', 'email', 'unique:users,email'],
+                'nik' => ['required', 'string', 'unique:users,nik'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
+                'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
             ], [
+                'email.unique' => 'Email sudah terdaftar.',
+                'nik.unique' => 'NIK sudah terdaftar.',
                 'password.confirmed' => 'Konfirmasi password tidak sesuai.',
                 'photo.image' => 'File harus berupa foto.',
                 'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
-                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 5120 kilobyte.',
+                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
+                'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
+                'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
             ]);
 
             if ($validator->fails()) {
@@ -58,42 +59,39 @@ class UserController extends Controller
             }
 
             $file1 = $request->file('photo');
+            $file2 = $request->file('surat_tugas');
 
-            // Check if both files are empty
-            if (empty($file1)) {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'gender' => $request->gender,
-                    'city_or_regency_id' => $request->city_or_regency_id,
-                ]);
-            } else {
-                // Process the first file
-                $nama_file = time() . "_" . $file1->getClientOriginalName();
-                $nama_folder = 'file/photo_profiles';
-                $file1->move($nama_folder, $nama_file);
-                $pathPublic1 = $nama_folder . "/" . $nama_file;
+            $pathPublic1 = null;
+            $pathPublic2 = null;
 
-                // Create user with file paths
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'gender' => $request->gender,
-                    'city_or_regency_id' => $request->city_or_regency_id,
-                    'photo' => $pathPublic1,
-                ]);
+            if ($file1 && $file1->isValid()) {
+                $nama_file = time() . "-" . $file1->getClientOriginalName();
+                $folder = 'file/photo_profiles';
+                $file1->move($folder, $nama_file);
+                $pathPublic1 = $folder . "/" . $nama_file;
             }
 
-            // Assign roles
-            $user->assignRole($request->input('roles'));
+            if ($file2 && $file2->isValid()) {
+                $nama_file = time() . "-" . $file2->getClientOriginalName();
+                $folder = 'file/surat_tugas';
+                $file2->move($folder, $nama_file);
+                $pathPublic2 = $folder . "/" . $nama_file;
+            }
 
+            $input = $request->all();
+            $input['photo'] = $pathPublic1;
+            $input['surat_tugas'] = $pathPublic2;
+            $input['password'] = Hash::make($request->password);
 
-            return redirect('admin/user')->with('success', 'User created successfully');
+            $user = User::create($input);
+
+            if ($request->has('roles')) {
+                $user->assignRole($request->input('roles'));
+            }
+
+            return redirect()->route('user.index')->with('success', 'User created successfully');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
-            return back()->with(['error' => 'User creation failed.']);
+            return back()->with(['error' => 'Data gagal disimpan.']);
         }
     }
 
@@ -103,9 +101,8 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
-        $city_or_regencies = CityOrRegency::all();
 
-        return view('dashboard.admin.user-management.user.edit', compact('user', 'roles', 'userRole', 'city_or_regencies'));
+        return view('dashboard.admin.user-management.user.edit', compact('user', 'roles', 'userRole'));
     }
 
     public function update(Request $request, User $user)
@@ -114,41 +111,58 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string'],
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+                'nik' => ['required', 'string', 'unique:users,nik,' . $user->id],
                 'password' => ['nullable', 'string', 'min:8', 'confirmed'],
                 'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
-                'city_or_regency_id' => ['nullable'],
+                'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
             ], [
+                'email.unique' => 'Email sudah terdaftar.',
+                'nik.unique' => 'NIK sudah terdaftar.',
                 'password.confirmed' => 'Konfirmasi password tidak sesuai.',
                 'photo.image' => 'File harus berupa foto.',
                 'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
-                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 5120 kilobyte.',
+                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
+                'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
+                'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
             ]);
 
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
 
-            $file = $request->file('photo');
+            $file1 = $request->file('photo');
+            $file2 = $request->file('surat_tugas');
 
-            // Menyimpan nama pengguna sebelum diubah
-            $previousName = $user->name;
+            $previousPhoto = $user->photo;
+            $previousSuratTugas = $user->surat_tugas;
+            $pathPublic1 = $previousPhoto;
+            $pathPublic2 = $previousSuratTugas;
 
-            if ($file && $file->isValid()) {
-                $nama_file = time() . "-" . $file->getClientOriginalName();
+            if ($file1 && $file1->isValid()) {
+                $nama_file = time() . "-" . $file1->getClientOriginalName();
                 $folder = 'file/photo_profiles';
-                $file->move($folder, $nama_file);
-                $path = $folder . "/" . $nama_file;
+                $file1->move($folder, $nama_file);
+                $pathPublic1 = $folder . "/" . $nama_file;
 
-                // Hapus foto yang sudah ada jika ada
-                if ($user->photo && file_exists($user->photo)) {
-                    File::delete($user->photo);
+                if ($previousPhoto && file_exists($previousPhoto)) {
+                    File::delete($previousPhoto);
                 }
-            } else {
-                $path = $request->pathfoto ?? null;
+            }
+
+            if ($file2 && $file2->isValid()) {
+                $nama_file = time() . "-" . $file2->getClientOriginalName();
+                $folder = 'file/surat_tugas';
+                $file2->move($folder, $nama_file);
+                $pathPublic2 = $folder . "/" . $nama_file;
+
+                if ($previousSuratTugas && file_exists($previousSuratTugas)) {
+                    File::delete($previousSuratTugas);
+                }
             }
 
             $input = $request->all();
-            $input['photo'] = $path;
+            $input['photo'] = $pathPublic1;
+            $input['surat_tugas'] = $pathPublic2;
 
             if (!empty($input['password'])) {
                 $input['password'] = Hash::make($input['password']);
@@ -156,22 +170,18 @@ class UserController extends Controller
                 unset($input['password']);
             }
 
-            // Simpan nama pengguna setelah diubah
-            $newName = $input['name'] ?? $previousName;
-
-            // Update informasi pengguna
             $user->update($input);
 
-            // Hapus peran yang sudah ada dan tambahkan peran baru
             DB::table('model_has_roles')->where('model_id', $user->id)->delete();
             $user->assignRole($request->input('roles'));
 
-            return redirect('admin/user')->with('success', 'User updated successfully');
+            return redirect()->route('user.index')->with('success', 'User updated successfully');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             return back()->with(['error' => 'Data gagal disimpan.']);
         }
     }
+
+
 
     public function destroy(User $user)
     {

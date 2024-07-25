@@ -43,15 +43,10 @@
                                 action="{{ route('user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
                                 @method('PUT')
                                 @csrf
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Full Name</label>
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Full Name</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        id="name" name="name" value="{{ old('name', $user->name) }}" autofocus
-                                        required>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
+                                        id="name" name="name" value="{{ old('name', $user->name) }}" required>
 
                                     @error('name')
                                         <div class="invalid-feedback">
@@ -59,15 +54,21 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="validationCustom02" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        id="email" name="email" value="{{ old('email', $user->email) }}" autofocus
-                                        required>
 
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
+                                <div class="col-md-4">
+                                    <label for="nik" class="form-label">NIK</label>
+                                    <input type="text" class="form-control @error('nik') is-invalid @enderror"
+                                        id="nik" name="nik" value="{{ old('nik', $user->nik) }}" required>
+
+                                    @error('nik')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" value="{{ old('email', $user->email) }}" required>
 
                                     @error('email')
                                         <div class="invalid-feedback">
@@ -77,13 +78,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom02" class="form-label">Password</label>
+                                    <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        id="password" name="password" autofocus>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
+                                        id="password" name="password">
 
                                     @error('password')
                                         <div class="invalid-feedback">
@@ -93,9 +90,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom02" class="form-label">Confirm Password</label>
+                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
                                     <input type="password" class="form-control" name="password_confirmation"
-                                        id="password_confirmation" autofocus>
+                                        id="password_confirmation">
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -103,16 +100,16 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom04" class="form-label">Roles</label>
+                                    <label for="roles" class="form-label">Roles</label>
                                     <select class="form-select @error('roles') is-invalid @enderror" name="roles[]"
-                                        id="default" data-control="select2" data-placeholder="Pilih Role" required
-                                        autofocus>
+                                        id="roles" data-control="select2" data-placeholder="Pilih Role" required>
                                         @foreach ($roles as $item)
                                             <option value="{{ $item }}"
                                                 @if ($user->hasRole($item)) selected @endif>{{ $item }}
                                             </option>
                                         @endforeach
                                     </select>
+
                                     @error('roles')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -120,20 +117,17 @@
                                     @enderror
                                 </div>
 
-                                <!--end col-->
                                 <div class="col-md-6">
-                                    <label for="validationCustom04" class="form-label">Jenis Kelamin</label>
+                                    <label for="gender" class="form-label">Jenis Kelamin</label>
                                     <select class="form-select @error('gender') is-invalid @enderror" name="gender"
-                                        id="default" data-control="select2" data-placeholder="Pilih Jenis Kelamin"
-                                        required autofocus>
-                                        @if ($user->gender == 'Pria')
-                                            <option value="Pria" selected>Pria</option>
-                                            <option value="Wanita">Wanita</option>
-                                        @else
-                                            <option value="Wanita" selected>Wanita</option>
-                                            <option value="Pria">Pria</option>
-                                        @endif
+                                        id="gender" data-control="select2" data-placeholder="Pilih Jenis Kelamin"
+                                        required>
+                                        <option value="Pria" {{ $user->gender == 'Pria' ? 'selected' : '' }}>Pria
+                                        </option>
+                                        <option value="Wanita" {{ $user->gender == 'Wanita' ? 'selected' : '' }}>Wanita
+                                        </option>
                                     </select>
+
                                     @error('gender')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -141,36 +135,15 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Kota/Kabupaten</label>
-                                    <select name="city_or_regency_id"
-                                        class="form-select @error('city_or_regency_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kota/Kabupaten" required autofocus>
-                                        <option></option>
-                                        @foreach ($city_or_regencies as $cityOrRegency)
-                                            <option value="{{ $cityOrRegency->id }}"
-                                                {{ $user->city_or_regency_id == $cityOrRegency->id ? 'selected' : '' }}>
-                                                {{ $cityOrRegency->no_city_or_regency }} -
-                                                {{ $cityOrRegency->city_or_regency_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('city_or_regency_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <!--end col-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
-
                                     <!--begin::Image input-->
                                     <div class="image-input image-input-outline" data-kt-image-input="true"
                                         style="background-image: url(assets/media/avatars/blank.png)">
                                         <!--begin::Preview existing avatar-->
                                         <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url(assets/media/avatars/150-1.jpg);">
+                                            style="background-image: url({{ asset($user->photo) }});">
                                         </div>
                                         <!--end::Preview existing avatar-->
                                         <!--begin::Label-->
@@ -181,8 +154,7 @@
                                             <i class="bi bi-pencil-fill fs-7"></i>
                                             <!--begin::Inputs-->
                                             <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
-                                            @if (empty($user->photo))
-                                            @else
+                                            @if (!empty($user->photo))
                                                 <input type="hidden" name="pathfoto" value="{{ $user->photo }}">
                                             @endif
                                             <!--end::Inputs-->

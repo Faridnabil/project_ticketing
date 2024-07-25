@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Faker\Factory as FakerFactory;
+use Database\Factories\NikProvider;
 
 class UsersSeeder extends Seeder
 {
@@ -251,10 +253,14 @@ class UsersSeeder extends Seeder
         $koordinatorRole->givePermissionTo('Delete Ticket');
         $koordinatorRole->givePermissionTo('Show Ticket');
 
+        $faker = FakerFactory::create();
+        $faker->addProvider(new NikProvider($faker));
+
         $user = User::factory()->create([
             'name' => 'Admin',
             'email' => 'Admin@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($adminRole);
 
@@ -262,6 +268,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 1',
             'email' => 'helpdesk1@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);
 
@@ -269,6 +276,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 2',
             'email' => 'helpdesk2@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);
 
@@ -276,6 +284,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 3',
             'email' => 'helpdesk3@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);
 
@@ -283,6 +292,7 @@ class UsersSeeder extends Seeder
             'name' => 'Koordinator',
             'email' => 'Koordinator@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($koordinatorRole);
 
@@ -290,6 +300,7 @@ class UsersSeeder extends Seeder
             'name' => 'Staff Subdit',
             'email' => 'StaffSubdit@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($staffSubditRole);
 
@@ -297,6 +308,7 @@ class UsersSeeder extends Seeder
             'name' => 'SIAK Dev',
             'email' => 'Siakdev@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($siakDevRole);
 
@@ -304,6 +316,7 @@ class UsersSeeder extends Seeder
             'name' => 'Pejabat',
             'email' => 'Pejabat@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
         ]);
         $user->assignRole($pejabatRole);
     }
