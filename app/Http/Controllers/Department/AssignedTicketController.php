@@ -30,12 +30,12 @@ class AssignedTicketController extends Controller
             })
             ->get();
 
-        $users = User::role('Department')
+        $users = User::role('Helpdesk')
             ->where('id', '!=', Auth::user()->id)
             ->get();
 
 
-        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'users'));
+        return view('dashboard.helpdesk.assigned-ticket.index', compact('tickets', 'users'));
     }
 
     public function show($id)
@@ -44,7 +44,7 @@ class AssignedTicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Department')
+        $assignTo = User::role('Helpdesk')
             ->get();
 
         $priorities = Priority::all();
@@ -62,7 +62,7 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.department.assigned-ticket.show',
+            'dashboard.helpdesk.assigned-ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -80,7 +80,7 @@ class AssignedTicketController extends Controller
     {
         $ticket = Ticket::find($id);
         $customers = User::role('Customer')->get();
-        $assignTo = User::role('Department')->get();
+        $assignTo = User::role('Helpdesk')->get();
         $priorities = Priority::all();
         $statuses = Status::where('status_name', '!=', 'Tertunda')->get();
         $categories = Category::all();
@@ -89,7 +89,7 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.department.assigned-ticket.edit',
+            'dashboard.helpdesk.assigned-ticket.edit',
             compact(
                 'ticket',
                 'customers',

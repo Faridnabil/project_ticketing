@@ -134,10 +134,16 @@
                                                 <span class="badge"
                                                     style="background-color:#FF7F3E ; color: white; font-weight:bold">
                                                     Proses</span>
-                                            @elseif($ticket->status_id == '4')
+                                            @elseif($ticket->status_id == '4' && $ticket->approval_assign_to == 2)
                                                 <span class="badge"
                                                     style="background-color:green ; color: white; font-weight:bold">
-                                                    Selesai</span>
+                                                    Selesai
+                                                </span>
+                                            @elseif($ticket->status_id == '4' && $ticket->approval_assign_to != 2)
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    Proses
+                                                </span>
                                             @else
                                                 <span class="badge"
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">

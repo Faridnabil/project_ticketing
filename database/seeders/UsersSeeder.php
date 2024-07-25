@@ -79,12 +79,11 @@ class UsersSeeder extends Seeder
 
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
-        $CustomerRole = Role::create(['name' => 'Customer']);
-        $DepartmentRole = Role::create(['name' => 'Department']);
-        $KoordinatorRole = Role::create(['name' => 'Koordinator']);
-        $StaffSubditRole = Role::create(['name' => 'Staff Subdit']);
-        $SiakDevRole = Role::create(['name' => 'SIAK Dev']);
-        $PejabatRole = Role::create(['name' => 'Pejabat']);
+        $helpdeskRole = Role::create(['name' => 'Helpdesk']);
+        $koordinatorRole = Role::create(['name' => 'Koordinator']);
+        $staffSubditRole = Role::create(['name' => 'Staff Subdit']);
+        $siakDevRole = Role::create(['name' => 'SIAK Dev']);
+        $pejabatRole = Role::create(['name' => 'Pejabat']);
 
         //Admin
         $adminRole->givePermissionTo('View Dashboard Admin');
@@ -148,143 +147,164 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Show Ticket');
 
         //Customer
-        $CustomerRole->givePermissionTo('View Dashboard Customer');
+        // $CustomerRole->givePermissionTo('View Dashboard Customer');
 
-        $CustomerRole->givePermissionTo('View Ticket');
-        $CustomerRole->givePermissionTo('Create Ticket');
-        $CustomerRole->givePermissionTo('Edit Ticket');
-        $CustomerRole->givePermissionTo('Delete Ticket');
-        $CustomerRole->givePermissionTo('Show Ticket');
+        // $CustomerRole->givePermissionTo('View Ticket');
+        // $CustomerRole->givePermissionTo('Create Ticket');
+        // $CustomerRole->givePermissionTo('Edit Ticket');
+        // $CustomerRole->givePermissionTo('Delete Ticket');
+        // $CustomerRole->givePermissionTo('Show Ticket');
 
-        //Department
-        $DepartmentRole->givePermissionTo('View Dashboard Department');
+        //Helpdesk
+        $helpdeskRole->givePermissionTo('View Dashboard Department');
 
-        $DepartmentRole->givePermissionTo('View Category');
-        $DepartmentRole->givePermissionTo('Create Category');
-        $DepartmentRole->givePermissionTo('Edit Category');
-        $DepartmentRole->givePermissionTo('Delete Category');
-        $DepartmentRole->givePermissionTo('Show Category');
+        $helpdeskRole->givePermissionTo('View Category');
+        $helpdeskRole->givePermissionTo('Create Category');
+        $helpdeskRole->givePermissionTo('Edit Category');
+        $helpdeskRole->givePermissionTo('Delete Category');
+        $helpdeskRole->givePermissionTo('Show Category');
 
-        $DepartmentRole->givePermissionTo('View Priority');
-        $DepartmentRole->givePermissionTo('Create Priority');
-        $DepartmentRole->givePermissionTo('Edit Priority');
-        $DepartmentRole->givePermissionTo('Delete Priority');
-        $DepartmentRole->givePermissionTo('Show Priority');
+        $helpdeskRole->givePermissionTo('View Priority');
+        $helpdeskRole->givePermissionTo('Create Priority');
+        $helpdeskRole->givePermissionTo('Edit Priority');
+        $helpdeskRole->givePermissionTo('Delete Priority');
+        $helpdeskRole->givePermissionTo('Show Priority');
 
-        $DepartmentRole->givePermissionTo('View Status');
-        $DepartmentRole->givePermissionTo('Create Status');
-        $DepartmentRole->givePermissionTo('Edit Status');
-        $DepartmentRole->givePermissionTo('Delete Status');
-        $DepartmentRole->givePermissionTo('Show Status');
+        $helpdeskRole->givePermissionTo('View Status');
+        $helpdeskRole->givePermissionTo('Create Status');
+        $helpdeskRole->givePermissionTo('Edit Status');
+        $helpdeskRole->givePermissionTo('Delete Status');
+        $helpdeskRole->givePermissionTo('Show Status');
 
-        $DepartmentRole->givePermissionTo('View Ticket');
-        $DepartmentRole->givePermissionTo('Create Ticket');
-        $DepartmentRole->givePermissionTo('Edit Ticket');
-        $DepartmentRole->givePermissionTo('Delete Ticket');
-        $DepartmentRole->givePermissionTo('Show Ticket');
+        $helpdeskRole->givePermissionTo('View Ticket');
+        $helpdeskRole->givePermissionTo('Create Ticket');
+        $helpdeskRole->givePermissionTo('Edit Ticket');
+        $helpdeskRole->givePermissionTo('Delete Ticket');
+        $helpdeskRole->givePermissionTo('Show Ticket');
 
-        //Department
-        $DepartmentRole->givePermissionTo('View Dashboard Department');
+        $helpdeskRole->givePermissionTo('View Category');
+        $helpdeskRole->givePermissionTo('Create Category');
+        $helpdeskRole->givePermissionTo('Edit Category');
+        $helpdeskRole->givePermissionTo('Delete Category');
+        $helpdeskRole->givePermissionTo('Show Category');
 
-        $DepartmentRole->givePermissionTo('View Category');
-        $DepartmentRole->givePermissionTo('Create Category');
-        $DepartmentRole->givePermissionTo('Edit Category');
-        $DepartmentRole->givePermissionTo('Delete Category');
-        $DepartmentRole->givePermissionTo('Show Category');
+        $helpdeskRole->givePermissionTo('View Priority');
+        $helpdeskRole->givePermissionTo('Create Priority');
+        $helpdeskRole->givePermissionTo('Edit Priority');
+        $helpdeskRole->givePermissionTo('Delete Priority');
+        $helpdeskRole->givePermissionTo('Show Priority');
 
-        $DepartmentRole->givePermissionTo('View Priority');
-        $DepartmentRole->givePermissionTo('Create Priority');
-        $DepartmentRole->givePermissionTo('Edit Priority');
-        $DepartmentRole->givePermissionTo('Delete Priority');
-        $DepartmentRole->givePermissionTo('Show Priority');
+        $helpdeskRole->givePermissionTo('View Status');
+        $helpdeskRole->givePermissionTo('Create Status');
+        $helpdeskRole->givePermissionTo('Edit Status');
+        $helpdeskRole->givePermissionTo('Delete Status');
+        $helpdeskRole->givePermissionTo('Show Status');
 
-        $DepartmentRole->givePermissionTo('View Status');
-        $DepartmentRole->givePermissionTo('Create Status');
-        $DepartmentRole->givePermissionTo('Edit Status');
-        $DepartmentRole->givePermissionTo('Delete Status');
-        $DepartmentRole->givePermissionTo('Show Status');
+        $helpdeskRole->givePermissionTo('View Province');
+        $helpdeskRole->givePermissionTo('Create Province');
+        $helpdeskRole->givePermissionTo('Edit Province');
+        $helpdeskRole->givePermissionTo('Delete Province');
+        $helpdeskRole->givePermissionTo('Show Province');
 
-        $DepartmentRole->givePermissionTo('View Ticket');
-        $DepartmentRole->givePermissionTo('Create Ticket');
-        $DepartmentRole->givePermissionTo('Edit Ticket');
-        $DepartmentRole->givePermissionTo('Delete Ticket');
-        $DepartmentRole->givePermissionTo('Show Ticket');
+        $helpdeskRole->givePermissionTo('View City Or Regency');
+        $helpdeskRole->givePermissionTo('Create City Or Regency');
+        $helpdeskRole->givePermissionTo('Edit City Or Regency');
+        $helpdeskRole->givePermissionTo('Delete City Or Regency');
+        $helpdeskRole->givePermissionTo('Show City Or Regency');
+
+        $helpdeskRole->givePermissionTo('View Attendance');
+        $helpdeskRole->givePermissionTo('Create Attendance');
+        $helpdeskRole->givePermissionTo('Edit Attendance');
+        $helpdeskRole->givePermissionTo('Delete Attendance');
+        $helpdeskRole->givePermissionTo('Show Attendance');
+
+        $helpdeskRole->givePermissionTo('View Ticket');
+        $helpdeskRole->givePermissionTo('Create Ticket');
+        $helpdeskRole->givePermissionTo('Edit Ticket');
+        $helpdeskRole->givePermissionTo('Delete Ticket');
+        $helpdeskRole->givePermissionTo('Show Ticket');
+
+        //Koordinator
+        $koordinatorRole->givePermissionTo('View Dashboard Department');
+
+        $koordinatorRole->givePermissionTo('View Category');
+        $koordinatorRole->givePermissionTo('Create Category');
+        $koordinatorRole->givePermissionTo('Edit Category');
+        $koordinatorRole->givePermissionTo('Delete Category');
+        $koordinatorRole->givePermissionTo('Show Category');
+
+        $koordinatorRole->givePermissionTo('View Priority');
+        $koordinatorRole->givePermissionTo('Create Priority');
+        $koordinatorRole->givePermissionTo('Edit Priority');
+        $koordinatorRole->givePermissionTo('Delete Priority');
+        $koordinatorRole->givePermissionTo('Show Priority');
+
+        $koordinatorRole->givePermissionTo('View Status');
+        $koordinatorRole->givePermissionTo('Create Status');
+        $koordinatorRole->givePermissionTo('Edit Status');
+        $koordinatorRole->givePermissionTo('Delete Status');
+        $koordinatorRole->givePermissionTo('Show Status');
+
+        $koordinatorRole->givePermissionTo('View Ticket');
+        $koordinatorRole->givePermissionTo('Create Ticket');
+        $koordinatorRole->givePermissionTo('Edit Ticket');
+        $koordinatorRole->givePermissionTo('Delete Ticket');
+        $koordinatorRole->givePermissionTo('Show Ticket');
 
         $user = User::factory()->create([
-            'name' => 'Admin Shift 1',
-            'email' => 'Admin1@gmail.com',
+            'name' => 'Admin',
+            'email' => 'Admin@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($adminRole);
 
         $user = User::factory()->create([
-            'name' => 'Admin Shift 2',
-            'email' => 'Admin2@gmail.com',
+            'name' => 'Helpdesk 1',
+            'email' => 'helpdesk1@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($adminRole);
+        $user->assignRole($helpdeskRole);
 
         $user = User::factory()->create([
-            'name' => 'Admin Shift 3',
-            'email' => 'Admin3@gmail.com',
+            'name' => 'Helpdesk 2',
+            'email' => 'helpdesk2@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($adminRole);
+        $user->assignRole($helpdeskRole);
 
         $user = User::factory()->create([
-            'name' => 'Customer1',
-            'email' => 'Customer1@gmail.com',
+            'name' => 'Helpdesk 3',
+            'email' => 'helpdesk3@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($CustomerRole);
-
-        $user = User::factory()->create([
-            'name' => 'Customer2',
-            'email' => 'Customer2@gmail.com',
-            'password' => bcrypt('qwerty12'),
-        ]);
-        $user->assignRole($CustomerRole);
-
-        $user = User::factory()->create([
-            'name' => 'Department1',
-            'email' => 'Department1@gmail.com',
-            'password' => bcrypt('qwerty12'),
-        ]);
-        $user->assignRole($DepartmentRole);
-
-        $user = User::factory()->create([
-            'name' => 'Department2',
-            'email' => 'Department2@gmail.com',
-            'password' => bcrypt('qwerty12'),
-        ]);
-        $user->assignRole($DepartmentRole);
+        $user->assignRole($helpdeskRole);
 
         $user = User::factory()->create([
             'name' => 'Koordinator',
             'email' => 'Koordinator@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($KoordinatorRole);
+        $user->assignRole($koordinatorRole);
 
         $user = User::factory()->create([
             'name' => 'Staff Subdit',
             'email' => 'StaffSubdit@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($StaffSubditRole);
+        $user->assignRole($staffSubditRole);
 
         $user = User::factory()->create([
             'name' => 'SIAK Dev',
             'email' => 'Siakdev@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($SiakDevRole);
+        $user->assignRole($siakDevRole);
 
         $user = User::factory()->create([
             'name' => 'Pejabat',
             'email' => 'Pejabat@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($PejabatRole);
+        $user->assignRole($pejabatRole);
     }
 }
