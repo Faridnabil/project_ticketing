@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
-use App\Models\CityOrRegency;
 use App\Models\Comment;
 use App\Models\HistoryTicket;
 use App\Models\Priority;
@@ -50,13 +49,21 @@ class TicketController extends Controller
 
 
         // Fetch necessary data for filters
-        $assign_to = User::role('Department')
+        $level1 = User::role('Helpdesk')
+            ->get();
+        $level2 = User::role('Koordinator')
+            ->get();
+        $level3 = User::role('Staff Subdit')
+            ->get();
+        $level4 = User::role('SIAK Dev')
+            ->get();
+        $level5 = User::role('Pejabat')
             ->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
 
-        return view('dashboard.admin.ticket.index', compact('tickets', 'categories', 'assign_to', 'priorities', 'statuses'));
+        return view('dashboard.admin.ticket.index', compact('tickets', 'categories', 'assign_to', 'priorities', 'statuses', 'level1', 'level2', 'level3', 'level4', 'level5'));
     }
 
 

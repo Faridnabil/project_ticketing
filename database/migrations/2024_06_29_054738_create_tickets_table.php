@@ -16,7 +16,11 @@ return new class extends Migration {
             $table->string('no_ticket');
             $table->string('title');
             $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('assign_to')->nullable()->constrained('users');
+            $table->foreignId('level1')->nullable()->constrained('users');
+            $table->foreignId('level2')->nullable()->constrained('users');
+            $table->foreignId('level3')->nullable()->constrained('users');
+            $table->foreignId('level4')->nullable()->constrained('users');
+            $table->foreignId('level5')->nullable()->constrained('users');
             $table->foreignId('changed_assign_to')->nullable()->constrained('users');
             $table->string('approval_assign_to')->nullable();
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();

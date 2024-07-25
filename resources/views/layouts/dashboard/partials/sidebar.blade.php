@@ -1,5 +1,5 @@
 <style>
-    .menu-accordion.menu-active > .menu-link,
+    .menu-accordion.menu-active>.menu-link,
     .menu-link.active {
         background-color: #000;
         color: #000;
@@ -10,7 +10,8 @@
     }
 
     .menu-sub.show {
-        display: block; /* Pastikan submenu terlihat */
+        display: block;
+        /* Pastikan submenu terlihat */
     }
 
     .menu-link {
@@ -242,63 +243,67 @@
             @endcan
 
             @can('View User Management')
-            @php
-                // Cek apakah salah satu submenu aktif
-                $userManagementActive = request()->routeIs('user.index') || request()->routeIs('role.index') || request()->routeIs('permission.index');
-            @endphp
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ $userManagementActive ? 'menu-active show' : '' }}">
-                <span class="menu-link">
-                    <span class="menu-icon">
-                        <!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
-                        <span class="svg-icon svg-icon-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                    <path
-                                        d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139,14.209139,11 12,11 Z"
-                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                    <path
-                                        d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
-                                        fill="#000000" fill-rule="nonzero" />
-                                </g>
-                            </svg>
+                @php
+                    // Cek apakah salah satu submenu aktif
+                    $userManagementActive =
+                        request()->routeIs('user.index') ||
+                        request()->routeIs('role.index') ||
+                        request()->routeIs('permission.index');
+                @endphp
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ $userManagementActive ? 'menu-active show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <path
+                                            d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139,14.209139,11 12,11 Z"
+                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                        <path
+                                            d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                    </g>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
                         </span>
-                        <!--end::Svg Icon-->
+                        <span class="menu-title">Manajemen Pengguna</span>
+                        <span class="menu-arrow"></span>
                     </span>
-                    <span class="menu-title">Manajemen Pengguna</span>
-                    <span class="menu-arrow"></span>
-                </span>
-                <div class="menu-sub menu-sub-accordion menu-active-bg {{ $userManagementActive ? 'show' : '' }}">
-                    <div class="menu-item">
-                        <a class="menu-link mt-3 {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Pengguna</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('role.index') ? 'active' : '' }}" href="{{ route('role.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Peran</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ $userManagementActive ? 'show' : '' }}">
+                        <div class="menu-item">
+                            <a class="menu-link mt-3 {{ request()->routeIs('user.index') ? 'active' : '' }}"
+                                href="{{ route('user.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Pengguna</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('role.index') ? 'active' : '' }}"
+                                href="{{ route('role.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Hak Akses</span>
+                            </a>
+                        </div>
+                        {{-- <div class="menu-item">
                         <a class="menu-link mb-3 {{ request()->routeIs('permission.index') ? 'active' : '' }}" href="{{ route('permission.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Ijin Akses</span>
                         </a>
+                    </div> --}}
                     </div>
                 </div>
-            </div>
-        @endcan
-
-
+            @endcan
 
             @can('View Category')
                 <div class="menu-item">
@@ -403,8 +408,6 @@
                         </div>
                     @endcan
 
-
-
                     <div class="menu-item">
                         <a class="{{ request()->routeIs('ticket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('ticket.index') }}">
@@ -428,7 +431,7 @@
                     </div>
 
 
-                    <div class="menu-item">
+                    {{-- <div class="menu-item">
                         <a class="{{ request()->routeIs('requestAssignment.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('requestAssignment.index') }}">
                             <span class="menu-icon">
@@ -448,10 +451,10 @@
                             </span>
                             <span class="menu-title">Daftar Pengajuan</span>
                         </a>
-                    </div>
+                    </div> --}}
                 @endrole
 
-                @role('Customer')
+                {{-- @role('Customer')
                     <div class="menu-item">
                         <a class="{{ request()->routeIs('myTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('myTicket.index') }}">
@@ -541,7 +544,7 @@
                             <span class="menu-title">Pengajuan Pindah</span>
                         </a>
                     </div>
-                @endrole
+                @endrole --}}
             @endcan
         </div>
         <!--end::Menu-->

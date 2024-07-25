@@ -101,42 +101,42 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
 
 
 //CUSTOMER
-Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
-    Route::get('/customer/dashboard', [HomeCustomerController::class, 'index'])->name('customer.dashboard.index');
+// Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
+//     Route::get('/customer/dashboard', [HomeCustomerController::class, 'index'])->name('customer.dashboard.index');
 
-    Route::resources([
-        '/customer/myTicket' => TicketCustomerController::class,
-    ]);
+//     Route::resources([
+//         '/customer/myTicket' => TicketCustomerController::class,
+//     ]);
 
-    Route::post('/customer/TicketStore', [TicketCustomerController::class, 'store_comment'])->name('myTickets.store');
-    Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
-});
+//     Route::post('/customer/TicketStore', [TicketCustomerController::class, 'store_comment'])->name('myTickets.store');
+//     Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
+// });
 
 
 //DEPARTMENT
-Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
-    Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
+// Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
+//     Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
 
-    Route::resources([
-        '/department/assignedTicket' => AssignedTicketController::class,
-    ]);
+//     Route::resources([
+//         '/department/assignedTicket' => AssignedTicketController::class,
+//     ]);
 
-    Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
-    Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
+//     Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
+//     Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
 
-    Route::post('/department/unassignedTicketStore', [UnassignedTicketController::class, 'store_comment'])->name('unassignedTickets.store');
-    Route::put('/department/unassignedTicketUpdate/{id}', [UnassignedTicketController::class, 'update_comment'])->name('unassignedTickets.update');
+//     Route::post('/department/unassignedTicketStore', [UnassignedTicketController::class, 'store_comment'])->name('unassignedTickets.store');
+//     Route::put('/department/unassignedTicketUpdate/{id}', [UnassignedTicketController::class, 'update_comment'])->name('unassignedTickets.update');
 
-    Route::post('/department/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
+//     Route::post('/department/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
 
-    Route::post('/department/assignedTicketStore', [AssignedTicketController::class, 'store_comment'])->name('assignedTickets.store');
-    Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
+//     Route::post('/department/assignedTicketStore', [AssignedTicketController::class, 'store_comment'])->name('assignedTickets.store');
+//     Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
 
-    Route::put('/department/request-assignTo/{id}', [RequestTicketController::class, 'request_ticket'])->name('requestTicket.requestAssignTo');
-    Route::get('/department/requestTicket', [RequestTicketController::class, 'index'])->name('requestTicket.index');
-    Route::post('/department/approve-ticket/{id}', [RequestTicketController::class, 'approve_ticket'])->name('requestTicket.approveTicket');
-    Route::post('/department/reject-ticket/{id}', [RequestTicketController::class, 'reject_ticket'])->name('requestTicket.rejectTicket');
+//     Route::put('/department/request-assignTo/{id}', [RequestTicketController::class, 'request_ticket'])->name('requestTicket.requestAssignTo');
+//     Route::get('/department/requestTicket', [RequestTicketController::class, 'index'])->name('requestTicket.index');
+//     Route::post('/department/approve-ticket/{id}', [RequestTicketController::class, 'approve_ticket'])->name('requestTicket.approveTicket');
+//     Route::post('/department/reject-ticket/{id}', [RequestTicketController::class, 'reject_ticket'])->name('requestTicket.rejectTicket');
 
-    Route::post('/department/status-ticket/{id}', [RequestTicketController::class, 'status_ticket'])->name('requestTicket.statusTicket');
+//     Route::post('/department/status-ticket/{id}', [RequestTicketController::class, 'status_ticket'])->name('requestTicket.statusTicket');
 
-});
+// });
