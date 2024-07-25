@@ -18,7 +18,11 @@ class UsersSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         Permission::create(['name' => 'View Dashboard Admin']);
-        Permission::create(['name' => 'View Dashboard Customer']);
+        Permission::create(['name' => 'View Dashboard Helpdesk']);
+        Permission::create(['name' => 'View Dashboard Koordinator']);
+        Permission::create(['name' => 'View Dashboard Staff Subdit']);
+        Permission::create(['name' => 'View Dashboard SIAK Dev']);
+        Permission::create(['name' => 'View Dashboard Pejabat']);
         Permission::create(['name' => 'View Dashboard Department']);
 
         Permission::create(['name' => 'View User Management']);
@@ -158,7 +162,22 @@ class UsersSeeder extends Seeder
         // $CustomerRole->givePermissionTo('Show Ticket');
 
         //Helpdesk
-        $helpdeskRole->givePermissionTo('View Dashboard Department');
+        $helpdeskRole->givePermissionTo('View Dashboard Helpdesk');
+        $helpdeskRole->givePermissionTo('View User Management');
+        $helpdeskRole->givePermissionTo('Create User');
+        $helpdeskRole->givePermissionTo('Edit User');
+        $helpdeskRole->givePermissionTo('Delete User');
+        $helpdeskRole->givePermissionTo('Show User');
+
+        $helpdeskRole->givePermissionTo('Create Role');
+        $helpdeskRole->givePermissionTo('Edit Role');
+        $helpdeskRole->givePermissionTo('Delete Role');
+        $helpdeskRole->givePermissionTo('Show Role');
+
+        $helpdeskRole->givePermissionTo('Create Permission');
+        $helpdeskRole->givePermissionTo('Edit Permission');
+        $helpdeskRole->givePermissionTo('Delete Permission');
+        $helpdeskRole->givePermissionTo('Show Permission');
 
         $helpdeskRole->givePermissionTo('View Category');
         $helpdeskRole->givePermissionTo('Create Category');
@@ -227,7 +246,7 @@ class UsersSeeder extends Seeder
         $helpdeskRole->givePermissionTo('Show Ticket');
 
         //Koordinator
-        $koordinatorRole->givePermissionTo('View Dashboard Department');
+        $koordinatorRole->givePermissionTo('View Dashboard Koordinator');
 
         $koordinatorRole->givePermissionTo('View Category');
         $koordinatorRole->givePermissionTo('Create Category');

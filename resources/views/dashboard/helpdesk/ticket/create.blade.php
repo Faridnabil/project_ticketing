@@ -39,32 +39,18 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.ticket.store') }}"
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('helpdesk.ticket.store') }}"
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <input type="hidden" name="no_ticket">
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Judul</label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        id="title" name="title" autofocus required>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('title')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Pemilik</label>
-                                    <select name="customer" class="form-control @error('customer') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Pemilik"required autofocus>
+                                    <label for="validationCustom01" class="form-label">Kategori</label>
+                                    <select name="category_id"
+                                        class="form-select @error('category_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
                                         <option></option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                         @endforeach
                                     </select>
 
@@ -72,13 +58,14 @@
                                         Looks good!
                                     </div>
 
-                                    @error('customer')
+                                    @error('category_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-
+                                <div class="col-md-6">
+                                </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
                                     <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
@@ -98,6 +85,9 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
+                                </div>
+
+                                <div class="col-md-6">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Prioritas</label>
@@ -157,25 +147,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="validationCustom01" class="form-label">Kategori</label>
-                                    <select name="category_id"
-                                        class="form-select @error('category_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                        @endforeach
-                                    </select>
 
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('category_id')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
                                 </div>
 
                                 <div class="col-md-6">
@@ -216,7 +188,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                             <!--end form-->

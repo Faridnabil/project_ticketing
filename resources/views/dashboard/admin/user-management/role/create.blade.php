@@ -51,7 +51,7 @@
                                 </div>
                             @endif
                             <!--end::Error-->
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('role.store') }}"
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.role.store') }}"
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
 
@@ -100,7 +100,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('role.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ route('admin.role.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form><!--end form-->
                         </div>

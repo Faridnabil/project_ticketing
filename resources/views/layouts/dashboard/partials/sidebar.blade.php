@@ -108,7 +108,31 @@
                     </a>
                 </div>
             @endcan
-            @can('View Dashboard Customer')
+            @can('View Dashboard Helpdesk')
+                <div class="menu-item">
+                    <a class="menu-link {{ Request::is('helpdesk.dashboard.index') ? 'active' : '' }}"
+                        href="{{ route('helpdesk.dashboard.index') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                    version="1.1">
+                                    <path
+                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                        fill="#000000" opacity="0.3" />
+                                    <path
+                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                        fill="#000000" />
+                                </svg>
+                            </span>
+
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title" style="color: white">Dashboard</span>
+                    </a>
+                </div>
+            @endcan
+            {{-- @can('View Dashboard Customer')
                 <div class="menu-item">
                     <a class="menu-link {{ Request::is('customer.dashboard') ? 'active' : '' }}"
                         href="{{ route('customer.dashboard.index') }}">
@@ -131,8 +155,8 @@
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </div>
-            @endcan
-            @can('View Dashboard Department')
+            @endcan --}}
+            {{-- @can('View Dashboard Department')
                 <div class="menu-item">
                     <a class="menu-link {{ Request::is('department.dashboard') ? 'active' : '' }}"
                         href="{{ route('department.dashboard.index') }}">
@@ -155,7 +179,7 @@
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </div>
-            @endcan
+            @endcan --}}
             @can('View User Management')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
@@ -276,8 +300,8 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg {{ $userManagementActive ? 'show' : '' }}">
                         <div class="menu-item">
-                            <a class="menu-link mt-3 {{ request()->routeIs('user.index') ? 'active' : '' }}"
-                                href="{{ route('user.index') }}">
+                            <a class="menu-link mt-3 {{ request()->routeIs('admin.user.index') ? 'active' : '' }}"
+                                href="{{ route('admin.user.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -285,8 +309,8 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('role.index') ? 'active' : '' }}"
-                                href="{{ route('role.index') }}">
+                            <a class="menu-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}"
+                                href="{{ route('admin.role.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -294,7 +318,7 @@
                             </a>
                         </div>
                         {{-- <div class="menu-item">
-                        <a class="menu-link mb-3 {{ request()->routeIs('permission.index') ? 'active' : '' }}" href="{{ route('permission.index') }}">
+                        <a class="menu-link mb-3 {{ request()->routeIs('admin.permission.index') ? 'active' : '' }}" href="{{ route('admin.permission.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -383,11 +407,12 @@
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Aplikasi Tiket</span>
                     </div>
                 </div>
-                @role('Admin')
+                @role('Helpdesk')
+
                     @can('View Attendance')
                         <div class="menu-item">
-                            <a class="{{ request()->routeIs('attendance.index') ? 'menu-link active' : 'menu-link' }}"
-                                href="{{ route('attendance.index') }}">
+                            <a class="{{ request()->routeIs('helpdesk.attendance.index') ? 'menu-link active' : 'menu-link' }}"
+                                href="{{ route('helpdesk.attendance.index') }}">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                     <span class="svg-icon svg-icon-2">
@@ -409,8 +434,8 @@
                     @endcan
 
                     <div class="menu-item">
-                        <a class="{{ request()->routeIs('ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('ticket.index') }}">
+                        <a class="{{ request()->routeIs('helpdesk.ticket.index') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('helpdesk.ticket.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -429,9 +454,31 @@
                             <span class="menu-title">Semua Tiket</span>
                         </a>
                     </div>
+                    @endrole
 
-
-                    {{-- <div class="menu-item">
+                    @role('Admin')
+                        <div class="menu-item">
+                            <a class="{{ request()->routeIs('admin.ticket.index') ? 'menu-link active' : 'menu-link' }}"
+                                href="{{ route('admin.ticket.index') }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1">
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" opacity="0.3" />
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title">Semua Tiket</span>
+                            </a>
+                        </div>
+                        {{-- <div class="menu-item">
                         <a class="{{ request()->routeIs('requestAssignment.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('requestAssignment.index') }}">
                             <span class="menu-icon">
@@ -452,9 +499,9 @@
                             <span class="menu-title">Daftar Pengajuan</span>
                         </a>
                     </div> --}}
-                @endrole
+                    @endrole
 
-                {{-- @role('Customer')
+                    {{-- @role('Customer')
                     <div class="menu-item">
                         <a class="{{ request()->routeIs('myTicket.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('myTicket.index') }}">
@@ -545,8 +592,8 @@
                         </a>
                     </div>
                 @endrole --}}
-            @endcan
+                @endcan
+            </div>
+            <!--end::Menu-->
         </div>
-        <!--end::Menu-->
     </div>
-</div>

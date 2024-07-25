@@ -1,30 +1,26 @@
 <?php
 
-use App\Exports\CityOrRegencyFormatExport;
-use App\Exports\ProvinceFormatExport;
+use App\Http\Controllers\Helpdesk\TicketHelpdeskController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\HomeAdminController;
-use App\Http\Controllers\Admin\PriorityController;
-use App\Http\Controllers\Admin\StatusController;
-use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PriorityController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\CityOrRegencyController;
+use App\Http\Controllers\ProvinceController;
+
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\AttendanceController;
-use App\Http\Controllers\Admin\CityOrRegencyController;
-use App\Http\Controllers\Admin\ProvinceController;
+use App\Http\Controllers\Admin\HomeAdminController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\RequestApprovalTicketController;
-use App\Http\Controllers\Customer\HomeCustomerController;
-use App\Http\Controllers\Customer\TicketCustomerController;
-use App\Http\Controllers\Department\AssignedTicketController;
-use App\Http\Controllers\Department\HomeDepartmentController;
-use App\Http\Controllers\Department\RequestTicketController;
-use App\Http\Controllers\Department\UnassignedTicketController;
+
+use App\Http\Controllers\Helpdesk\AttendanceHelpdeskController;
+use App\Http\Controllers\Helpdesk\HomeHelpdeskController;
+
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,39 +45,24 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Customer|Department'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin|Customer|Department'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('profile/{id}/update_foto', [ProfileController::class, 'updateFoto'])->name('profile.update_foto');
 });
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Department'])->group(function () {
-    Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
-
-    Route::resources([
-        '/admin/priority' => PriorityController::class,
-        '/admin/status' => StatusController::class,
-        '/admin/category' => CategoryController::class,
-    ]);
-});
-
-
 //ADMIN
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(function () {
-    Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
+Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(function () {
+    Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('dashboard.index');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
-
-
     Route::resources([
         '/admin/role' => RoleController::class,
         '/admin/permission' => PermissionController::class,
         '/admin/user' => UserController::class,
         '/admin/ticket' => TicketController::class,
-        '/admin/attendance' => AttendanceController::class,
-        '/admin/province' => ProvinceController::class,
-        '/admin/cityOrRegency' => CityOrRegencyController::class,
     ]);
+
 
     Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
     Route::put('/admin/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
@@ -89,15 +70,40 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
     Route::get('/admin/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
     Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
-
-    Route::get('/admin/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
-    Route::get('/admin/province-export', [ProvinceController::class, 'export'])->name('province.export');
-    Route::post('/admin/province-import', [ProvinceController::class, 'import'])->name('province.import');
-
-    Route::get('/admin/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
-    Route::get('/admin/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
-    Route::post('/admin/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
 });
+
+
+//HELPDESK
+Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->group(function () {
+    Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
+    Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
+    Route::resources([
+        '/helpdesk/ticket' => TicketHelpdeskController::class,
+        '/attendance' => AttendanceHelpdeskController::class,
+    ]);
+    Route::post('/helpdesk/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/helpdesk/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
+});
+
+//ADMIN, HELPDESK
+Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk'])->group(function () {
+    Route::resources([
+        '/province' => ProvinceController::class,
+        '/cityOrRegency' => CityOrRegencyController::class,
+        '/priority' => PriorityController::class,
+        '/status' => StatusController::class,
+        '/category' => CategoryController::class,
+    ]);
+
+    Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
+    Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
+    Route::post('/province-import', [ProvinceController::class, 'import'])->name('province.import');
+
+    Route::get('/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
+    Route::get('/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
+    Route::post('/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
+});
+
 
 
 //CUSTOMER

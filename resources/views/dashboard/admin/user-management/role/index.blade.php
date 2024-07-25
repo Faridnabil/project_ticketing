@@ -46,7 +46,7 @@
                         <!--begin::Card toolbar-->
                         <div class="card-toolbar">
                             <!--begin::Add user-->
-                            <a href="{{ route('role.create') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('admin.role.create') }}" class="btn btn-primary mb-4">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -120,7 +120,7 @@
                                             @endif
                                             <td>
                                                 @can('Edit Role')
-                                                    <a class="menu-link ms-3" href="{{ route('role.edit', $role->id) }}"
+                                                    <a class="menu-link ms-3" href="{{ route('admin.role.edit', $role->id) }}"
                                                         type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -203,7 +203,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.role.destroy', $role->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>

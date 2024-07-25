@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Priority;
@@ -16,7 +16,7 @@ class PriorityController extends Controller
     {
         $priorities = Priority::all();
 
-        return view("dashboard.admin.priority.index", compact("priorities"));
+        return view("dashboard.priority.index", compact("priorities"));
     }
 
     /**
@@ -24,7 +24,7 @@ class PriorityController extends Controller
      */
     public function create()
     {
-        return view("dashboard.admin.priority.create");
+        return view("dashboard.priority.create");
     }
 
     /**
@@ -58,7 +58,7 @@ class PriorityController extends Controller
      */
     public function edit(Priority $priority)
     {
-        return view("dashboard.admin.priority.edit", compact("priority"));
+        return view("dashboard.priority.edit", compact("priority"));
     }
 
     /**
@@ -88,7 +88,7 @@ class PriorityController extends Controller
             $priority->delete();
 
             DB::commit();
-            return redirect()->route("dashboard.admin.priority.index")->with("success", "Prioritas Berhasil Di Hapus.");
+            return redirect()->route("dashboard.priority.index")->with("success", "Prioritas Berhasil Di Hapus.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());

@@ -40,7 +40,7 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="d-flex">
+                        <form method="GET" action="{{ route('helpdesk.ticket.index') }}" class="d-flex">
                             {{-- <select name="assign_to" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Ditujukan Ke">
                                 <option></option>
@@ -78,7 +78,7 @@
                             &nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Hapus</a>
+                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Hapus</a>
                         </form>
                         <!--end::Form-->
                     </div>
@@ -88,7 +88,7 @@
                     @can('Create Ticket')
                         <div class="card-toolbar">
                             <!--begin::Add Ticket-->
-                            <a href="{{ route('admin.ticket.create') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('helpdesk.ticket.create') }}" class="btn btn-primary mb-4">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -241,7 +241,7 @@
                                                     </a>
                                                 @endif
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -258,7 +258,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('Edit Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.edit', $ticket->id) }}"
+                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -296,7 +296,7 @@
                                                 @endcan
                                             @else
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -359,7 +359,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('helpdesk.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
@@ -380,7 +380,7 @@
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
-                    <form action="{{ route('admin.ticket.update_approval', $ticket->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('helpdesk.ticket.update_approval', $ticket->id) }}" method="POST" class="d-inline">
                         @method('put')
                         @csrf
                         <div class="modal-body">

@@ -40,7 +40,7 @@
                         <!--begin::Body-->
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
+                                action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
                                 @method('PUT')
                                 @csrf
                                 <div class="col-md-4">
@@ -182,7 +182,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('user.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form><!--end form-->
                         </div>

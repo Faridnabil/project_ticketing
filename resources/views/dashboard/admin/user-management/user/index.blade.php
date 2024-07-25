@@ -47,7 +47,7 @@
                         @can('Create User')
                             <div class="card-toolbar">
                                 <!--begin::Add user-->
-                                <a href="{{ route('user.create') }}" class="btn btn-primary mb-4">
+                                <a href="{{ route('admin.user.create') }}" class="btn btn-primary mb-4">
                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -159,7 +159,7 @@
                                             <!--begin::Action=-->
                                             <td>
                                                 @can('Edit User')
-                                                    <a class="menu-link ms-3" href="{{ route('user.edit', $user->id) }}"
+                                                    <a class="menu-link ms-3" href="{{ route('admin.user.edit', $user->id) }}"
                                                         type="button" title="Edit">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -251,7 +251,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>

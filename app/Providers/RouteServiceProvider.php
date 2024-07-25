@@ -50,10 +50,16 @@ class RouteServiceProvider extends ServiceProvider
 
         if ($user->hasRole('Admin')) {
             return '/admin/dashboard';
-        } elseif ($user->hasRole('Customer')) {
-            return '/customer/dashboard';
-        } elseif ($user->hasRole('Department')) {
-            return '/department/dashboard';
+        } elseif ($user->hasRole('Helpdesk')) {
+            return '/helpdesk/dashboard';
+        } elseif ($user->hasRole('Koordinator')) {
+            return '/koordinator/dashboard';
+        } elseif ($user->hasRole('Staff Subdit')) {
+            return '/staffsubdit/dashboard';
+        } elseif ($user->hasRole('SIAK Dev')) {
+            return '/siakdev/dashboard';
+        } elseif ($user->hasRole('Pejabat')) {
+            return '/pejabat/dashboard';
         }
 
         return self::HOME;

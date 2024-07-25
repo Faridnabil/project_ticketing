@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Status;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class StatusController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $statuses = Status::all();
+        $categories = Category::all();
 
-        return view("dashboard.admin.status.index", compact("statuses"));
+        return view("dashboard.category.index", compact("categories"));
     }
 
     /**
@@ -24,7 +24,7 @@ class StatusController extends Controller
      */
     public function create()
     {
-        return view("dashboard.admin.status.create");
+        return view("dashboard.category.create");
     }
 
     /**
@@ -34,11 +34,12 @@ class StatusController extends Controller
     {
         DB::beginTransaction();
         try {
-            $status = Status::create($request->all());
+            $category = Category::create($request->all());
 
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Dibuat.");
+            return redirect()->route("category.index")->with("success", "Kategori Berhasil Dibuat!");
         } catch (\Throwable $th) {
+            //throw $th;
             DB::rollBack();
             return back()->with("error", $th->getMessage());
         }
@@ -47,7 +48,7 @@ class StatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Status $status)
+    public function show(Category $category)
     {
         //
     }
@@ -55,23 +56,23 @@ class StatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Status $status)
+    public function edit(Category $category)
     {
-        return view("dashboard.admin.status.edit", compact("status"));
+        return view("dashboard.category.edit", compact("category"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Status $status)
+    public function update(Request $request, Category $category)
     {
         DB::beginTransaction();
         try {
-            $status->update($request->all());
-
+            $category->update($request->all());
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Di Rubah.");
+            return redirect()->route("category.index")->with("success", "Kategori Berhasil Dirubah!");
         } catch (\Throwable $th) {
+            //throw $th;
             DB::rollBack();
             return back()->with("error", $th->getMessage());
         }
@@ -80,14 +81,13 @@ class StatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Status $status)
+    public function destroy(Category $category)
     {
         DB::beginTransaction();
         try {
-            $status->delete();
-
+            $category->delete();
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Dihapus.");
+            return redirect()->route("category.index")->with("success","Kategori Berhasil Dihapus!");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());

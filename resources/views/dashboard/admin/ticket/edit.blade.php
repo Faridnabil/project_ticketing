@@ -24,7 +24,7 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('ticket.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
+                                action="{{ route('admin.ticket.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
@@ -181,7 +181,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Update</button>
-                                    <a href="{{ route('ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                         </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Helpdesk;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-class TicketController extends Controller
+class TicketHelpdeskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -63,7 +63,7 @@ class TicketController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        return view('dashboard.admin.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'level1', 'level2', 'level3', 'level4', 'level5'));
+        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'level1', 'level2', 'level3', 'level4', 'level5'));
     }
 
 
@@ -83,7 +83,7 @@ class TicketController extends Controller
         $categories = Category::all();
 
         return view(
-            'dashboard.admin.ticket.create',
+            'dashboard.helpdesk.ticket.create',
             compact(
                 'customers',
                 'assignTo',
@@ -166,7 +166,7 @@ class TicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.admin.ticket.show',
+            'dashboard.helpdesk.ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -201,7 +201,7 @@ class TicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.admin.ticket.edit',
+            'dashboard.helpdesk.ticket.edit',
             compact(
                 'ticket',
                 'customers',

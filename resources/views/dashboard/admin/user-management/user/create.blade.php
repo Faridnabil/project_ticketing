@@ -39,7 +39,7 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('user.store') }}"
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.user.store') }}"
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="col-md-4">
@@ -153,7 +153,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('user.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                         </div>

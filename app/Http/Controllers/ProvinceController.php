@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Exports\ProvinceExport;
 use App\Exports\ProvinceFormatExport;
@@ -20,7 +20,7 @@ class ProvinceController extends Controller
     {
         $provinces = Province::all();
 
-        return view("dashboard.admin.province.index", compact("provinces"));
+        return view("dashboard.province.index", compact("provinces"));
     }
 
     /**
@@ -28,7 +28,7 @@ class ProvinceController extends Controller
      */
     public function create()
     {
-        return view("dashboard.admin.province.create");
+        return view("dashboard.province.create");
     }
 
     /**
@@ -62,7 +62,7 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
-        return view("dashboard.admin.province.edit", compact('province'));
+        return view("dashboard.province.edit", compact('province'));
     }
 
     /**

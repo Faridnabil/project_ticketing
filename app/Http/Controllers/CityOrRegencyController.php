@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Exports\CityOrRegencyExport;
 use App\Http\Controllers\Controller;
@@ -21,7 +21,7 @@ class CityOrRegencyController extends Controller
         $city_or_regencies = CityOrRegency::with('province')
             ->get();
 
-        return view("dashboard.admin.city-or-regency.index", compact("city_or_regencies"));
+        return view("dashboard.city-or-regency.index", compact("city_or_regencies"));
     }
 
     /**
@@ -31,7 +31,7 @@ class CityOrRegencyController extends Controller
     {
         $provinces = Province::all();
 
-        return view("dashboard.admin.city-or-regency.create", compact('provinces'));
+        return view("dashboard.city-or-regency.create", compact('provinces'));
     }
 
     /**
@@ -67,7 +67,7 @@ class CityOrRegencyController extends Controller
     {
         $provinces = Province::all();
 
-        return view("dashboard.admin.city-or-regency.edit", compact('cityOrRegency', 'provinces'));
+        return view("dashboard.city-or-regency.edit", compact('cityOrRegency', 'provinces'));
     }
 
     /**
