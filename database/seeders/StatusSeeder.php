@@ -32,5 +32,10 @@ class StatusSeeder extends Seeder
             'status_name' => 'Selesai',
             'color' => '#ff0000',
         ]);
+
+        $status = Status::create([
+            'status_name' => 'Buka Kembali',
+            'color' => '#ff0000',
+        ]);
     }
 }

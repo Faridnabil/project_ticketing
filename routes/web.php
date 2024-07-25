@@ -77,6 +77,7 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
 Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->group(function () {
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
+    Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/attendance' => AttendanceHelpdeskController::class,
