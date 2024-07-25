@@ -62,7 +62,8 @@
                             </span>
                             Filter
                         </button>
-                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-success btn-sm ms-2">
+                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-sm ms-2"
+                            style="background-color: #17ba4b; color:white">
                             <span class="btn-label">
                                 <i class="fas fa-file-excel"></i>
                             </span>
