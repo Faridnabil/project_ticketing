@@ -15,8 +15,6 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('no_ticket');
-            // $table->string('title');
-            // $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
             $table->foreignId('province_id')->nullable()->constrained();
             $table->foreignId('city_or_regency_id')->nullable()->constrained('city_or_regencies');
             $table->foreignId('level1')->nullable()->constrained('users');
@@ -24,12 +22,8 @@ return new class extends Migration
             $table->foreignId('level3')->nullable()->constrained('users');
             $table->foreignId('level4')->nullable()->constrained('users');
             $table->foreignId('level5')->nullable()->constrained('users');
-            $table->foreignId('changed_assign_to')->nullable()->constrained('users');
-            $table->string('approval_assign_to')->nullable();
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('due_date')->nullable();
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('approval_status')->nullable();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
             $table->string('attachments')->nullable();

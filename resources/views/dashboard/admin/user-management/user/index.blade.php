@@ -77,7 +77,7 @@
                                     <th class="min-w-10px">No</th>
                                     <th class="min-w-70px">Pengguna</th>
                                     <th class="min-w-70px">NIK</th>
-                                    <th class="min-w-70px">Peran</th>
+                                    <th class="min-w-70px">Role</th>
                                     <th class="min-w-70px">Jenis Kelamin</th>
                                     <th class="min-w-70px">Tanggal Bergabung</th>
                                     <th class="min-w-70px">Fitur</th>
@@ -121,18 +121,18 @@
                                             <!--end::Nik=-->
 
                                             <!--begin::Role=-->
-                                            <td class="w-100 m-auto">
+                                            <td class="w-40 m-auto">
                                                 @foreach ($user->getRoleNames() as $roles)
                                                     @if ($roles == 'Super Admin')
-                                                        <a href="role" class="badge bg-primary w-100 p-3 mt-3">
+                                                        <a href="role" class="badge bg-primary w-40 p-3 mt-3">
                                                             {{ $roles }}
                                                         </a>
                                                     @elseif ($roles == 'Admin')
-                                                        <a href="role" class="badge bg-success w-100 p-3 mt-3">
+                                                        <a href="role" class="badge bg-success w-40 p-3 mt-3">
                                                             {{ $roles }}
                                                         </a>
                                                     @else
-                                                        <a href="role" class="badge bg-danger w-100 p-3 mt-3">
+                                                        <a href="role" class="badge bg-danger w-40 p-3 mt-3">
                                                             {{ $roles }}
                                                         </a>
                                                     @endif

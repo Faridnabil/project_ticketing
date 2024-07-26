@@ -163,12 +163,6 @@ class UsersSeeder extends Seeder
 
         //Helpdesk
         $helpdeskRole->givePermissionTo('View Dashboard Helpdesk');
-        $helpdeskRole->givePermissionTo('View User Management');
-        $helpdeskRole->givePermissionTo('Create User');
-        $helpdeskRole->givePermissionTo('Edit User');
-        $helpdeskRole->givePermissionTo('Delete User');
-        $helpdeskRole->givePermissionTo('Show User');
-
         $helpdeskRole->givePermissionTo('Create Role');
         $helpdeskRole->givePermissionTo('Edit Role');
         $helpdeskRole->givePermissionTo('Delete Role');

@@ -75,10 +75,6 @@ class TicketHelpdeskController extends Controller
      */
     public function create()
     {
-        $customers = User::role('Helpdesk')
-            ->get();
-
-        $assignTo = Role::where('name', '!=', 'Admin')->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -90,10 +86,8 @@ class TicketHelpdeskController extends Controller
         return view(
             'dashboard.helpdesk.ticket.create',
             compact(
-                'customers',
                 'city_or_regencies',
                 'provinces',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
@@ -161,11 +155,6 @@ class TicketHelpdeskController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        // $customers = User::role('Customer')
-        //     ->get();
-
-        // $assignTo = User::role('Department')
-        //     ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -200,8 +189,6 @@ class TicketHelpdeskController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $customers = User::role('Helpdesk')->get();
-        $assignTo = Role::where('name', '!=', 'Admin')->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -214,8 +201,6 @@ class TicketHelpdeskController extends Controller
             'dashboard.helpdesk.ticket.edit',
             compact(
                 'ticket',
-                'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
@@ -267,15 +252,11 @@ class TicketHelpdeskController extends Controller
                 'h_level3' => $ticket->level3,
                 'h_level4' => $ticket->level4,
                 'h_level5' => $ticket->level5,
-                'changed_assign_to' => $ticket->assign_to,
-                'h_approval_assign_to' => $ticket->approval_assign_to,
                 'h_priority_id' => $ticket->priority_id,
-                'h_due_date' => $ticket->due_date,
                 'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
                 'h_attachments' => $ticket->attachments,
-                'h_status_changed_by_id' => $ticket->status_changed_by_id,
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,

@@ -21,18 +21,13 @@ return new class extends Migration
             $table->foreignId('h_level3')->nullable()->constrained('users');
             $table->foreignId('h_level4')->nullable()->constrained('users');
             $table->foreignId('h_level5')->nullable()->constrained('users');
-            $table->foreignId('changed_assign_to')->nullable()->constrained('users');
-            $table->string('h_approval_assign_to')->nullable();
 
             $table->foreignId('h_priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
-            $table->string('h_due_date')->nullable();
             $table->foreignId('h_status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
             $table->foreignId('h_category_id')->constrained('categories')->cascadeOnDelete();
             $table->text('h_description');
             $table->string('h_attachments')->nullable();
-            $table->foreignId('h_status_changed_by_id')->nullable()->constrained('users');
-
-            $table->string('H_pic')->nullable();
+            $table->string('h_pic')->nullable();
             $table->string('h_jabatan')->nullable();
             $table->string('h_no_hp')->nullable();
             $table->timestamps();

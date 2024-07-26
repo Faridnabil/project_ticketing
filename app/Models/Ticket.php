@@ -11,15 +11,8 @@ class Ticket extends Model
 
     protected $fillable = [
         'no_ticket',
-        // 'title',
-        // 'customer',
-        'assign_to',
-        'changed_assign_to',
-        'approval_assign_to',
         'priority_id',
-        'due_date',
         'status_id',
-        'approval_status',
         'category_id',
         'description',
         'attachments',

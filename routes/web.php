@@ -80,7 +80,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
-        '/attendance' => AttendanceHelpdeskController::class,
+        '/helpdesk/attendance' => AttendanceHelpdeskController::class,
     ]);
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');

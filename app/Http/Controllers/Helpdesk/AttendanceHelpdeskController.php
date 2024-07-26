@@ -67,7 +67,7 @@ class AttendanceHelpdeskController extends Controller
             Attendance::create($validate);
 
             DB::commit();
-            return redirect()->route("attendance.index")->with("success", "Check In berhasil.");
+            return redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());
@@ -117,7 +117,7 @@ class AttendanceHelpdeskController extends Controller
             $attendance->save();
 
             DB::commit();
-            return redirect()->route("attendance.index")->with("success", "Check Out berhasil.");
+            return redirect()->route("helpdesk.attendance.index")->with("success", "Check Out berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());
