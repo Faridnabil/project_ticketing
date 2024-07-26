@@ -161,11 +161,11 @@ class TicketHelpdeskController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
-            ->get();
+        // $customers = User::role('Customer')
+        //     ->get();
 
-        $assignTo = User::role('Department')
-            ->get();
+        // $assignTo = User::role('Department')
+        //     ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -186,8 +186,6 @@ class TicketHelpdeskController extends Controller
             compact(
                 'ticket',
                 'logs',
-                'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
@@ -202,17 +200,15 @@ class TicketHelpdeskController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $customers = User::role('Helpdesk')
-            ->get();
-
+        $customers = User::role('Helpdesk')->get();
         $assignTo = Role::where('name', '!=', 'Admin')->get();
-
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
         $provinces = Province::all();
 
-        $city_or_regencies = CityOrRegency::with('province');
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
 
         return view(
             'dashboard.helpdesk.ticket.edit',
@@ -224,10 +220,11 @@ class TicketHelpdeskController extends Controller
                 'statuses',
                 'categories',
                 'provinces',
-                'city_or_regencies',
+                'city_or_regencies'
             )
         );
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -263,9 +260,15 @@ class TicketHelpdeskController extends Controller
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
-                'h_title' => $ticket->title,
-                'h_customer' => $ticket->customer,
-                'h_assign_to' => $ticket->assign_to,
+                'h_province_id' => $ticket->province_id,
+                'h_city_or_regency_id' => $ticket->city_or_regency_id,
+                'h_level1' => $ticket->level1,
+                'h_level2' => $ticket->level2,
+                'h_level3' => $ticket->level3,
+                'h_level4' => $ticket->level4,
+                'h_level5' => $ticket->level5,
+                'changed_assign_to' => $ticket->assign_to,
+                'h_approval_assign_to' => $ticket->approval_assign_to,
                 'h_priority_id' => $ticket->priority_id,
                 'h_due_date' => $ticket->due_date,
                 'h_status_id' => $ticket->status_id,
@@ -273,63 +276,66 @@ class TicketHelpdeskController extends Controller
                 'h_description' => $ticket->description,
                 'h_attachments' => $ticket->attachments,
                 'h_status_changed_by_id' => $ticket->status_changed_by_id,
+                'h_pic' => $ticket->pic,
+                'h_jabatan' => $ticket->jabatan,
+                'h_no_hp' => $ticket->no_hp,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
             // ------ Notifikasi --------------
-            $statusId = $validate['status_id'];
-            $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
+            // $statusId = $validate['status_id'];
+            // $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
 
-            // Ambil customer yang ditugaskan dari inputan
-            $customerId = $validate['customer'];
-            $customer = User::findOrFail($customerId);
+            // // Ambil customer yang ditugaskan dari inputan
+            // $customerId = $validate['customer'];
+            // $customer = User::findOrFail($customerId);
 
-            $authenticatedUserName = Auth::user()->name;
+            // $authenticatedUserName = Auth::user()->name;
 
-            if (in_array($status->status_name, ['Diterima', 'Proses'])) {
-                // Ambil departemen yang ditugaskan dari inputan
-                $assignedDepartmentId = $validate['assign_to'];
-                $assignedDepartment = User::findOrFail($assignedDepartmentId);
+            // if (in_array($status->status_name, ['Diterima', 'Proses'])) {
+            //     // Ambil departemen yang ditugaskan dari inputan
+            //     $assignedDepartmentId = $validate['assign_to'];
+            //     $assignedDepartment = User::findOrFail($assignedDepartmentId);
 
-                // Notifikasi untuk Customer
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
+            //     // Notifikasi untuk Customer
+            //     $notificationDataForCustomer = [
+            //         'name' => $authenticatedUserName,
+            //         'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
+            //         'thanks' => 'Terimakasih',
+            //         'Text' => 'Tolong cek kembali',
+            //         'Url' => url('/customer/myTicket'),
+            //         'customer_id' => rand(1111, 9999),
+            //     ];
 
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+            //     Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
 
-                // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+            //     // Notifikasi untuk Departemen yang ditugaskan
+            //     $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
 
-                $notificationDataForDepartment = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket telah diberikan pada anda untuk dikerjakan ',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/department/assignedTicket'),
-                    'admin_id' => rand(1111, 9999),
-                ];
+            //     $notificationDataForDepartment = [
+            //         'name' => $authenticatedUserName,
+            //         'body' => 'Tiket telah diberikan pada anda untuk dikerjakan ',
+            //         'thanks' => 'Terimakasih',
+            //         'Text' => 'Tolong cek kembali',
+            //         'Url' => url('/department/assignedTicket'),
+            //         'admin_id' => rand(1111, 9999),
+            //     ];
 
-                Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
-            } elseif ($status->status_name == 'Selesai') {
-                // Notifikasi untuk Customer bahwa tiket telah dikerjakan
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah dikerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek hasilnya',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
+            //     Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
+            // } elseif ($status->status_name == 'Selesai') {
+            //     // Notifikasi untuk Customer bahwa tiket telah dikerjakan
+            //     $notificationDataForCustomer = [
+            //         'name' => $authenticatedUserName,
+            //         'body' => 'Tiket anda sudah dikerjakan',
+            //         'thanks' => 'Terimakasih',
+            //         'Text' => 'Tolong cek hasilnya',
+            //         'Url' => url('/customer/myTicket'),
+            //         'customer_id' => rand(1111, 9999),
+            //     ];
 
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-            }
+            //     Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+            // }
 
             // Gabungkan file baru dengan file yang masih ada
             $attachments = array_merge($remainingAttachments, $attachments);
@@ -339,7 +345,7 @@ class TicketHelpdeskController extends Controller
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th->getMessage()); // Menampilkan pesan error untuk debugging
@@ -359,7 +365,7 @@ class TicketHelpdeskController extends Controller
             }
 
             $ticket->delete(); // Hapus principle
-            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil dihapus');
+            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil dihapus');
         } catch (\Throwable $th) {
             // Log activity
             return back()->with('error', 'Tiket gagal dihapus');

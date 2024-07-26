@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('history_tickets', function (Blueprint $table) {
             $table->id();
             $table->string('h_no_ticket');
-            $table->string('h_title');
-            $table->foreignId('h_customer')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('h_assign_to')->nullable()->constrained('users');
+            $table->foreignId('h_province_id')->nullable()->constrained('provinces');
+            $table->foreignId('h_city_or_regency_id')->nullable()->constrained('city_or_regencies');
+            $table->foreignId('h_level1')->nullable()->constrained('users');
+            $table->foreignId('h_level2')->nullable()->constrained('users');
+            $table->foreignId('h_level3')->nullable()->constrained('users');
+            $table->foreignId('h_level4')->nullable()->constrained('users');
+            $table->foreignId('h_level5')->nullable()->constrained('users');
+            $table->foreignId('changed_assign_to')->nullable()->constrained('users');
+            $table->string('h_approval_assign_to')->nullable();
+
             $table->foreignId('h_priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->string('h_due_date')->nullable();
             $table->foreignId('h_status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
@@ -24,6 +31,10 @@ return new class extends Migration
             $table->text('h_description');
             $table->string('h_attachments')->nullable();
             $table->foreignId('h_status_changed_by_id')->nullable()->constrained('users');
+
+            $table->string('H_pic')->nullable();
+            $table->string('h_jabatan')->nullable();
+            $table->string('h_no_hp')->nullable();
             $table->timestamps();
         });
     }

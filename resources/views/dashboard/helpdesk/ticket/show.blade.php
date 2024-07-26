@@ -156,12 +156,12 @@
                                                 <!-- SVG Icon -->
                                             </span>
                                             <div class="d-flex flex-column">
-                                                <h1 class="text-gray-800 fw-bold">{{ $ticket->title }}</h1>
+                                                <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}</h1>
                                                 <div class="">
-                                                    <span class="fw-bold text-muted me-6">Pemilik :
-                                                        {{ $ticket->customers->name }}</span>
+                                                    {{-- <span class="fw-bold text-muted me-6">Pemilik :
+                                                        {{ $ticket->customers->name }}</span> --}}
                                                     <span class="fw-bold text-muted">
-                                                        Created:
+                                                        Dibuat :
                                                         <span
                                                             class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
                                                     </span>
@@ -300,7 +300,7 @@
                                                                 id="message-display-{{ $comment->id }}">
                                                                 {!! $comment->message !!}
                                                             </p>
-                                                            <form action="{{ route('tickets.update', $comment->id) }}"
+                                                            <form action="{{ route('helpdesk.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -321,7 +321,7 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('tickets.store') }}" enctype="multipart/form-data"
+                                            action="{{ route('helpdesk.tickets.store') }}" enctype="multipart/form-data"
                                             novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
