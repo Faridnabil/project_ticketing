@@ -111,7 +111,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
 
-    Route::get('/get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -126,8 +126,6 @@ Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.'
     ]);
     Route::post('/koordinator/TicketStore', [TicketKoordinatorController::class, 'store_comment'])->name('tickets.store');
     Route::put('/koordinator/TicketUpdate/{id}', [TicketKoordinatorController::class, 'update_comment'])->name('tickets.update');
-
-    Route::get('/get-cities/{provinceId}', [TicketKoordinatorController::class, 'getCities']);
     Route::post('/koordinator/status-ticket/{id}', [TicketKoordinatorController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -142,8 +140,6 @@ Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.
     ]);
     Route::post('/staff-subdit/TicketStore', [TicketStaffSubditController::class, 'store_comment'])->name('tickets.store');
     Route::put('/staff-subdit/TicketUpdate/{id}', [TicketStaffSubditController::class, 'update_comment'])->name('tickets.update');
-
-    Route::get('/get-cities/{provinceId}', [TicketStaffSubditController::class, 'getCities']);
     Route::post('/staff-subdit/status-ticket/{id}', [TicketStaffSubditController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -158,8 +154,6 @@ Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->grou
     ]);
     Route::post('/siak-dev/TicketStore', [TicketSiakDevController::class, 'store_comment'])->name('tickets.store');
     Route::put('/siak-dev/TicketUpdate/{id}', [TicketSiakDevController::class, 'update_comment'])->name('tickets.update');
-
-    Route::get('/get-cities/{provinceId}', [TicketSiakDevController::class, 'getCities']);
     Route::post('/siak-dev/status-ticket/{id}', [TicketSiakDevController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -174,7 +168,5 @@ Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group
     ]);
     Route::post('/pejabat/TicketStore', [TicketPejabatController::class, 'store_comment'])->name('tickets.store');
     Route::put('/pejabat/TicketUpdate/{id}', [TicketPejabatController::class, 'update_comment'])->name('tickets.update');
-
-    Route::get('/get-cities/{provinceId}', [TicketPejabatController::class, 'getCities']);
     Route::post('/pejabat/status-ticket/{id}', [TicketPejabatController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
