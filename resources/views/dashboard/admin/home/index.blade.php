@@ -74,6 +74,84 @@
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Total Tiket</p>
+                                        <h4 class="card-title">{{ $total_tiket }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Proses</p>
+                                        <h4 class="card-title">{{ $tiket_proses }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-success bubble-shadow-small">
+                                        <i class="fas fa-hourglass-half fa-pulse"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Tertunda</p>
+                                        <h4 class="card-title">{{ $tiket_tertunda }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                                        <i class="far fa-check-circle"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tiket Selesai</p>
+                                        <h4 class="card-title">{{ $tiket_selesai }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <!-- Left Column -->
                 <div class="col-xl-12 col-lg-12 mb-4">
                     <!-- First Card -->
@@ -167,112 +245,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-xl-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-header border-0 bg-primary py-5" style="border-radius: 14px 14px 1px 1px;">
-                            <form action="{{ route('admin.dashboard.index') }}" method="GET">
-                                <div class="input-group">
-                                    <!-- Dropdown for selecting ticket number -->
-                                    <select name="ticket_number" class="form-control mt-3" style="width: 60%">
-                                        <option value="">Pilih Nomor Tiket</option>
-                                        @foreach ($tickets as $ticket)
-                                            <option value="{{ $ticket->id }}"
-                                                {{ $selectedTicketId == $ticket->id ? 'selected' : '' }}>
-                                                {{ $ticket->no_ticket }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-toolbar scrollable-card" style="max-height: 500px; overflow-y:auto;">
-                                @foreach ($logs as $log)
-                                    @if ($log->attribute != 'attachments')
-                                        <div class="activity-log @if (!$loop->last) mb-10 @endif">
-                                            <div class="log-header">
-                                                <h5 class="text-gray-800 fw-bolder mb-2">
-                                                    <strong>
-                                                        @if ($log->attribute == 'priority_id')
-                                                            Data Prioritas
-                                                        @elseif($log->attribute == 'status_id')
-                                                            Data Status
-                                                        @elseif($log->attribute == 'customer')
-                                                            Data Customer
-                                                        @elseif($log->attribute == 'assign_to')
-                                                            Data Ditugaskan
-                                                        @elseif($log->attribute == 'category_id')
-                                                            Data Kategori
-                                                        @elseif($log->attribute == 'title')
-                                                            Data Judul
-                                                        @elseif($log->attribute == 'due_date')
-                                                            Data Tanggal Jatuh Tempo
-                                                        @elseif($log->attribute == 'description')
-                                                            Data Deskripsi
-                                                        @else
-                                                            {{ $log->attribute }}
-                                                        @endif
-                                                    </strong>:
-                                                </h5>
-                                            </div>
-                                            <div class="log-body fw-bold">
-                                                @if ($log->old_value == null)
-                                                    <hr>
-                                                    <div>
-                                                        <span><strong class="mt-2">Data sebelum diubah :
-                                                                @if (is_numeric($log->new_value))
-                                                                    {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                                @else
-                                                                    {{ $log->new_value }}
-                                                                @endif
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
-                                                    </div>
-                                                    <div>
-                                                        <span><strong>Dirubah oleh :</strong>{{ $log->user->name }} pada
-                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
-                                                    </div>
-                                                @else
-                                                    <div>
-                                                        <hr>
-                                                        <span><strong>Data sebelum diubah :</strong>
-                                                            @if (is_numeric($log->old_value))
-                                                                {{ $log->oldPrioritas->priority_name ?? ($log->oldCategory->category_name ?? ($log->oldUser->name ?? $log->oldStatus->status_name)) }}
-                                                            @else
-                                                                {!! $log->old_value !!}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span><strong>Menjadi :</strong>
-                                                            @if (is_numeric($log->new_value))
-                                                                {{ $log->newPrioritas->priority_name ?? ($log->newCategory->category_name ?? ($log->newUser->name ?? $log->newStatus->status_name)) }}
-                                                            @else
-                                                                {!! $log->new_value !!}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span><strong>Alasan :</strong>{!! $log->reason !!}</span>
-                                                    </div>
-                                                    <div>
-                                                        <span><strong>Diubah oleh :</strong>{{ $log->user->name }} pada
-                                                            {{ date('d F Y H:i', strtotime($log->created_at)) }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>

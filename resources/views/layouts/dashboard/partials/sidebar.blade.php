@@ -2,9 +2,9 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
-                <img src="{{ asset('templates/assets/img/kaiadmin/logo.png') }}" alt="navbar brand" class="navbar-brand"
-                    height="48" />
+            <a href="#" class="logo">
+                <img src="{{ asset('templates/assets/img/kaiadmin/logonew.png') }}" alt="navbar brand" class="navbar-brand"
+                    height="80px" style="margin-top: 25px;"/>
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -20,7 +20,7 @@
         </div>
         <!-- End Logo Header -->
     </div>
-    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+    <div class="sidebar-wrapper scrollbar scrollbar-inner" style="margin-top: 15px">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 @can('View Dashboard Admin')

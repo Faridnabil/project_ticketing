@@ -80,9 +80,21 @@
                                             <td>
                                                 <form
                                                     action="{{ route('ticket.approveAssignment', $requestAssignment->id) }}"
-                                                    method="POST" class="d-inline">
+                                                    method="POST" class="d-inline"
+                                                    id="approve-form-{{ $requestAssignment->id }}">
                                                     @csrf
-                                                    <button class="btn btn-primary" type="submit">Approve</button>
+                                                    <a href="#" class="menu-link ms-3"
+                                                        onclick="event.preventDefault(); document.getElementById('approve-form-{{ $requestAssignment->id }}').submit();">
+                                                        <span class="menu-icon" style="fill: #0d8987">
+                                                            <span class="svg-icon svg-icon-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <path
+                                                                        d="m21,11.706c1.153-.343,2.18-.974,3-1.812v14.106H0V6.5c0-1.93,1.57-3.5,3.5-3.5h8.794c-.189.634-.294,1.305-.294,2,0,.34.033.673.08,1H3.5c-.276,0-.5.225-.5.5v.383l7.374,7.446c.861.861,2.386.866,3.258-.005l2.812-2.812c.793.311,1.653.488,2.556.488.454,0,.897-.047,1.328-.13l-4.575,4.575c-1.003,1.003-2.336,1.555-3.753,1.555s-2.75-.552-3.753-1.555l-5.247-5.299v9.853h18v-9.294Zm-7-6.706c0-2.761,2.239-5,5-5s5,2.239,5,5-2.239,5-5,5-5-2.239-5-5Zm4,.414l2.293,2.293,1.414-1.414-1.707-1.707v-2.586h-2v3.414Z" />
+                                                                </svg>
+                                                            </span>
+                                                        </span>
+                                                    </a>
                                                 </form>
                                             </td>
                                         </tr>

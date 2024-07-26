@@ -29,7 +29,7 @@ class TicketCustomerController extends Controller
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
-            ->whereIn('status_id', [2, 3]) // Filter for 'Diterima' and 'Proses' statuses
+            ->whereIn('status_id', [1, 2, 3]) // Filter for 'Diterima' and 'Proses' statuses
             ->get();
 
         return view('dashboard.customer.ticket.index', compact('tickets'));

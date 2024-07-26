@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Pengguna | PLN ICON+
+    Tambah Pengguna | PLN Icon+
 @endsection
 
 <style>

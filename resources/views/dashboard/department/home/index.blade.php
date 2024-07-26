@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Dashboard | PLN ICON+
+    Dashboard | PLN Icon+
 @endsection
 
 @section('content')
