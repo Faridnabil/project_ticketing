@@ -82,8 +82,10 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/attendance' => AttendanceHelpdeskController::class,
     ]);
-    Route::post('/helpdesk/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
-    Route::put('/helpdesk/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
+    Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
+
+    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
 });
 
 //ADMIN, HELPDESK

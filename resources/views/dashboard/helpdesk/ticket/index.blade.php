@@ -117,8 +117,8 @@
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
-                                <th class="min-w-70px">Pemilik</th>
-                                <th class="min-w-70px">Tetapkan Ke</th>
+                                {{-- <th class="min-w-70px">Pemilik</th> --}}
+                                {{-- <th class="min-w-70px">Tetapkan Ke</th> --}}
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
@@ -144,12 +144,12 @@
                                         </td>
                                         <!--end::Title=-->
                                         <!--begin::Customer Name=-->
-                                        <td>
+                                        {{-- <td>
                                             {{ $ticket->customers->name }}
-                                        </td>
+                                        </td> --}}
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
-                                        <td>
+                                        {{-- <td>
                                             @if ($ticket->assignTo != null)
                                                 {{ $ticket->assignTo->name }}
                                             @else
@@ -157,7 +157,7 @@
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
                                                     -</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
@@ -370,7 +370,7 @@
         </div>
     @endforeach
 
-    @foreach ($tickets as $ticket)
+    {{-- @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -406,6 +406,6 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
 
 @endsection

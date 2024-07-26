@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\CityOrRegency;
 use App\Models\Comment;
 use App\Models\HistoryTicket;
 use App\Models\Priority;
+use App\Models\Province;
 use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
@@ -19,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
 
 class TicketHelpdeskController extends Controller
 {
@@ -75,23 +78,36 @@ class TicketHelpdeskController extends Controller
         $customers = User::role('Helpdesk')
             ->get();
 
-        $assignTo = User::role('Koordinator')
-            ->get();
+        $assignTo = Role::where('name', '!=', 'Admin')->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+        $provinces = Province::all();
+
+        $city_or_regencies = CityOrRegency::with('province');
 
         return view(
             'dashboard.helpdesk.ticket.create',
             compact(
                 'customers',
+                'city_or_regencies',
+                'provinces',
                 'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
             )
         );
+    }
+
+    public function getCities($provinceId)
+    {
+        $cities = CityOrRegency::with('province')
+            ->where('province_id', $provinceId)
+            ->get(['id', 'province_id', 'city_or_regency_name']);
+
+        return response()->json($cities);
     }
 
     /**
@@ -131,7 +147,7 @@ class TicketHelpdeskController extends Controller
 
             Ticket::create($validate);
             DB::commit();
-            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
+            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -156,9 +172,9 @@ class TicketHelpdeskController extends Controller
         $categories = Category::all();
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
-        ->where('h_no_ticket', $ticket->no_ticket)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('h_no_ticket', $ticket->no_ticket)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
         $comments = Comment::where('ticket_id', $id)
@@ -186,19 +202,17 @@ class TicketHelpdeskController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $customers = User::role('Customer')
+        $customers = User::role('Helpdesk')
             ->get();
 
-        $assignTo = User::role('Department')
-            ->get();
+        $assignTo = Role::where('name', '!=', 'Admin')->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+        $provinces = Province::all();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket->id)
-            ->get();
+        $city_or_regencies = CityOrRegency::with('province');
 
         return view(
             'dashboard.helpdesk.ticket.edit',
@@ -209,7 +223,8 @@ class TicketHelpdeskController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'logs',
+                'provinces',
+                'city_or_regencies',
             )
         );
     }

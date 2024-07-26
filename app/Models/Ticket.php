@@ -11,8 +11,8 @@ class Ticket extends Model
 
     protected $fillable = [
         'no_ticket',
-        'title',
-        'customer',
+        // 'title',
+        // 'customer',
         'assign_to',
         'changed_assign_to',
         'approval_assign_to',
@@ -25,6 +25,15 @@ class Ticket extends Model
         'attachments',
         'province_id',
         'city_or_regency_id',
+        'pic',
+        'jabatan',
+        'no_hp',
+        'level1',
+        'level2',
+        'level3',
+        'level4',
+        'level5'
+
     ];
 
     protected static function boot()
