@@ -152,15 +152,6 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Delete Ticket');
         $adminRole->givePermissionTo('Show Ticket');
 
-        //Customer
-        // $CustomerRole->givePermissionTo('View Dashboard Customer');
-
-        // $CustomerRole->givePermissionTo('View Ticket');
-        // $CustomerRole->givePermissionTo('Create Ticket');
-        // $CustomerRole->givePermissionTo('Edit Ticket');
-        // $CustomerRole->givePermissionTo('Delete Ticket');
-        // $CustomerRole->givePermissionTo('Show Ticket');
-
         //Helpdesk
         $helpdeskRole->givePermissionTo('View Dashboard Helpdesk');
         $helpdeskRole->givePermissionTo('Create Role');
@@ -265,6 +256,87 @@ class UsersSeeder extends Seeder
         $koordinatorRole->givePermissionTo('Edit Ticket');
         $koordinatorRole->givePermissionTo('Delete Ticket');
         $koordinatorRole->givePermissionTo('Show Ticket');
+
+        //Staff Subdit
+        $staffSubditRole->givePermissionTo('View Dashboard Staff Subdit');
+
+        $staffSubditRole->givePermissionTo('View Category');
+        $staffSubditRole->givePermissionTo('Create Category');
+        $staffSubditRole->givePermissionTo('Edit Category');
+        $staffSubditRole->givePermissionTo('Delete Category');
+        $staffSubditRole->givePermissionTo('Show Category');
+
+        $staffSubditRole->givePermissionTo('View Priority');
+        $staffSubditRole->givePermissionTo('Create Priority');
+        $staffSubditRole->givePermissionTo('Edit Priority');
+        $staffSubditRole->givePermissionTo('Delete Priority');
+        $staffSubditRole->givePermissionTo('Show Priority');
+
+        $staffSubditRole->givePermissionTo('View Status');
+        $staffSubditRole->givePermissionTo('Create Status');
+        $staffSubditRole->givePermissionTo('Edit Status');
+        $staffSubditRole->givePermissionTo('Delete Status');
+        $staffSubditRole->givePermissionTo('Show Status');
+
+        $staffSubditRole->givePermissionTo('View Ticket');
+        $staffSubditRole->givePermissionTo('Create Ticket');
+        $staffSubditRole->givePermissionTo('Edit Ticket');
+        $staffSubditRole->givePermissionTo('Delete Ticket');
+        $staffSubditRole->givePermissionTo('Show Ticket');
+
+        //SIAK Dev
+        $siakDevRole->givePermissionTo('View Dashboard SIAK Dev');
+
+        $siakDevRole->givePermissionTo('View Category');
+        $siakDevRole->givePermissionTo('Create Category');
+        $siakDevRole->givePermissionTo('Edit Category');
+        $siakDevRole->givePermissionTo('Delete Category');
+        $siakDevRole->givePermissionTo('Show Category');
+
+        $siakDevRole->givePermissionTo('View Priority');
+        $siakDevRole->givePermissionTo('Create Priority');
+        $siakDevRole->givePermissionTo('Edit Priority');
+        $siakDevRole->givePermissionTo('Delete Priority');
+        $siakDevRole->givePermissionTo('Show Priority');
+
+        $siakDevRole->givePermissionTo('View Status');
+        $siakDevRole->givePermissionTo('Create Status');
+        $siakDevRole->givePermissionTo('Edit Status');
+        $siakDevRole->givePermissionTo('Delete Status');
+        $siakDevRole->givePermissionTo('Show Status');
+
+        $siakDevRole->givePermissionTo('View Ticket');
+        $siakDevRole->givePermissionTo('Create Ticket');
+        $siakDevRole->givePermissionTo('Edit Ticket');
+        $siakDevRole->givePermissionTo('Delete Ticket');
+        $siakDevRole->givePermissionTo('Show Ticket');
+
+        //Pejabat
+        $pejabatRole->givePermissionTo('View Dashboard Pejabat');
+
+        $pejabatRole->givePermissionTo('View Category');
+        $pejabatRole->givePermissionTo('Create Category');
+        $pejabatRole->givePermissionTo('Edit Category');
+        $pejabatRole->givePermissionTo('Delete Category');
+        $pejabatRole->givePermissionTo('Show Category');
+
+        $pejabatRole->givePermissionTo('View Priority');
+        $pejabatRole->givePermissionTo('Create Priority');
+        $pejabatRole->givePermissionTo('Edit Priority');
+        $pejabatRole->givePermissionTo('Delete Priority');
+        $pejabatRole->givePermissionTo('Show Priority');
+
+        $pejabatRole->givePermissionTo('View Status');
+        $pejabatRole->givePermissionTo('Create Status');
+        $pejabatRole->givePermissionTo('Edit Status');
+        $pejabatRole->givePermissionTo('Delete Status');
+        $pejabatRole->givePermissionTo('Show Status');
+
+        $pejabatRole->givePermissionTo('View Ticket');
+        $pejabatRole->givePermissionTo('Create Ticket');
+        $pejabatRole->givePermissionTo('Edit Ticket');
+        $pejabatRole->givePermissionTo('Delete Ticket');
+        $pejabatRole->givePermissionTo('Show Ticket');
 
         $faker = FakerFactory::create();
         $faker->addProvider(new NikProvider($faker));

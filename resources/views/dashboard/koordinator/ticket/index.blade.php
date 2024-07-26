@@ -40,16 +40,7 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="d-flex">
-                            {{-- <select name="assign_to" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Ditujukan Ke">
-                                <option></option>
-                                @foreach ($assign_to as $assign)
-                                    <option value="{{ $assign->id }}">{{ $assign->name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp; --}}
-
+                        <form method="GET" action="{{ route('koordinator.ticket.index') }}" class="d-flex">
                             <select name="category_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Kategori">
                                 <option></option>
@@ -78,32 +69,10 @@
                             &nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            <a href="{{ route('koordinator.ticket.index') }}" class="btn btn-danger">Reset</a>
                         </form>
                         <!--end::Form-->
                     </div>
-
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-                    @can('Create Ticket')
-                        <div class="card-toolbar">
-                            <!--begin::Add Ticket-->
-                            <a href="{{ route('admin.ticket.create') }}" class="btn btn-primary mb-4">
-                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                        <rect fill="#000000" opacity="0.5"
-                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                            x="4" y="11" width="16" height="2" rx="1" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->Tambah Tiket</a>
-                            <!--end::Add Ticket-->
-                        </div>
-                    @endcan
-                    <!--end::Card toolbar-->
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
@@ -117,8 +86,8 @@
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
-                                <th class="min-w-70px">Pemilik</th>
-                                <th class="min-w-70px">Tetapkan Ke</th>
+                                {{-- <th class="min-w-70px">Pemilik</th> --}}
+                                <th class="min-w-70px">Disposisi</th>
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
@@ -144,20 +113,24 @@
                                         </td>
                                         <!--end::Title=-->
                                         <!--begin::Customer Name=-->
-                                        <td>
+                                        {{-- <td>
                                             {{ $ticket->customers->name }}
-                                        </td>
+                                        </td> --}}
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
-                                            @if ($ticket->assignTo != null)
-                                                {{ $ticket->assignTo->name }}
+                                            @if ($ticket->level2 != null)
+                                                @foreach ($ticket->koordinator->getRoleNames() as $role)
+                                                    {{ $role }}
+                                                @endforeach
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">
+                                                    -
+                                                </span>
                                             @endif
                                         </td>
+
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
@@ -218,6 +191,25 @@
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
                                                     -</span>
                                             @endif
+
+                                            <form action="{{ route('koordinator.tickets.statusTicket', $ticket->id) }}"
+                                                method="POST" class="ml-2">
+                                                @csrf
+                                                <div class="custom-select-wrapper">
+                                                    <select name="status_id" class="form-select"
+                                                        onchange="this.form.submit()">
+                                                        <option value="2"
+                                                            {{ $ticket->status_id == '2' ? 'selected' : '' }}>
+                                                            Diterima</option>
+                                                        <option value="3"
+                                                            {{ $ticket->status_id == '3' ? 'selected' : '' }}>
+                                                            Proses</option>
+                                                        <option value="4"
+                                                            {{ $ticket->status_id == '4' ? 'selected' : '' }}>
+                                                            Selesai</option>
+                                                    </select>
+                                                </div>
+                                            </form>
                                         </td>
                                         <!--begin::Action=-->
                                         <td>
@@ -241,7 +233,8 @@
                                                     </a>
                                                 @endif
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('koordinator.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -258,7 +251,8 @@
                                                     </a>
                                                 @endcan
                                                 @can('Edit Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.edit', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('koordinator.ticket.edit', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -296,7 +290,8 @@
                                                 @endcan
                                             @else
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('koordinator.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -359,7 +354,8 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('koordinator.ticket.destroy', $ticket->id) }}" method="POST"
+                            class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
@@ -370,7 +366,7 @@
         </div>
     @endforeach
 
-    @foreach ($tickets as $ticket)
+    {{-- @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -380,7 +376,7 @@
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
-                    <form action="{{ route('admin.ticket.update_approval', $ticket->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('koordinator.ticket.update_approval', $ticket->id) }}" method="POST" class="d-inline">
                         @method('put')
                         @csrf
                         <div class="modal-body">
@@ -406,6 +402,6 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
 
 @endsection

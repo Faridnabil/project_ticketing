@@ -78,7 +78,7 @@
                             &nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Hapus</a>
+                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset</a>
                         </form>
                         <!--end::Form-->
                     </div>

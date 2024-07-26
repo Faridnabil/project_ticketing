@@ -55,9 +55,9 @@ class RouteServiceProvider extends ServiceProvider
         } elseif ($user->hasRole('Koordinator')) {
             return '/koordinator/dashboard';
         } elseif ($user->hasRole('Staff Subdit')) {
-            return '/staffsubdit/dashboard';
+            return '/staff-subdit/dashboard';
         } elseif ($user->hasRole('SIAK Dev')) {
-            return '/siakdev/dashboard';
+            return '/siak-dev/dashboard';
         } elseif ($user->hasRole('Pejabat')) {
             return '/pejabat/dashboard';
         }

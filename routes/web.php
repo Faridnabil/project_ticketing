@@ -18,8 +18,15 @@ use App\Http\Controllers\Admin\RequestApprovalTicketController;
 
 use App\Http\Controllers\Helpdesk\AttendanceHelpdeskController;
 use App\Http\Controllers\Helpdesk\HomeHelpdeskController;
-
+use App\Http\Controllers\Koordinator\HomeKoordinatorController;
+use App\Http\Controllers\Koordinator\TicketKoordinatorController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Pejabat\HomePejabatController;
+use App\Http\Controllers\Pejabat\TicketPejabatController;
+use App\Http\Controllers\SiakDev\HomeSiakDevController;
+use App\Http\Controllers\SiakDev\TicketSiakDevController;
+use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
+use App\Http\Controllers\StaffSubdit\TicketStaffSubditController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,11 +52,30 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin|Customer|Department'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Subdit|SIAK Dev|Pejabat'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('profile/{id}/update_foto', [ProfileController::class, 'updateFoto'])->name('profile.update_foto');
+});
+
+//ADMIN, HELPDESK
+Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk'])->group(function () {
+    Route::resources([
+        '/province' => ProvinceController::class,
+        '/cityOrRegency' => CityOrRegencyController::class,
+        '/priority' => PriorityController::class,
+        '/status' => StatusController::class,
+        '/category' => CategoryController::class,
+    ]);
+
+    Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
+    Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
+    Route::post('/province-import', [ProvinceController::class, 'import'])->name('province.import');
+
+    Route::get('/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
+    Route::get('/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
+    Route::post('/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
 });
 
 //ADMIN
@@ -89,64 +115,66 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
-//ADMIN, HELPDESK
-Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk'])->group(function () {
+
+//KOORDINATOR
+Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.')->group(function () {
+    Route::get('/koordinator/dashboard', [HomeKoordinatorController::class, 'index'])->name('dashboard.index');
+    Route::get('/koordinator/tickets/chart', [HomeKoordinatorController::class, 'getTicketChartData']);
+    Route::get('/koordinator/tickets/dailyChart', [HomeKoordinatorController::class, 'getDailyTicketChartData']);
     Route::resources([
-        '/province' => ProvinceController::class,
-        '/cityOrRegency' => CityOrRegencyController::class,
-        '/priority' => PriorityController::class,
-        '/status' => StatusController::class,
-        '/category' => CategoryController::class,
+        '/koordinator/ticket' => TicketKoordinatorController::class,
     ]);
+    Route::post('/koordinator/TicketStore', [TicketKoordinatorController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/koordinator/TicketUpdate/{id}', [TicketKoordinatorController::class, 'update_comment'])->name('tickets.update');
 
-    Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
-    Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
-    Route::post('/province-import', [ProvinceController::class, 'import'])->name('province.import');
-
-    Route::get('/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
-    Route::get('/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
-    Route::post('/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
+    Route::get('/get-cities/{provinceId}', [TicketKoordinatorController::class, 'getCities']);
+    Route::post('/koordinator/status-ticket/{id}', [TicketKoordinatorController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
 
+//STAFF SUBDIT
+Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.')->group(function () {
+    Route::get('/staff-subdit/dashboard', [HomeStaffSubditController::class, 'index'])->name('dashboard.index');
+    Route::get('/staff-subdit/tickets/chart', [HomeStaffSubditController::class, 'getTicketChartData']);
+    Route::get('/staff-subdit/tickets/dailyChart', [HomeStaffSubditController::class, 'getDailyTicketChartData']);
+    Route::resources([
+        '/staff-subdit/ticket' => TicketStaffSubditController::class,
+    ]);
+    Route::post('/staff-subdit/TicketStore', [TicketStaffSubditController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/staff-subdit/TicketUpdate/{id}', [TicketStaffSubditController::class, 'update_comment'])->name('tickets.update');
 
-//CUSTOMER
-// Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
-//     Route::get('/customer/dashboard', [HomeCustomerController::class, 'index'])->name('customer.dashboard.index');
-
-//     Route::resources([
-//         '/customer/myTicket' => TicketCustomerController::class,
-//     ]);
-
-//     Route::post('/customer/TicketStore', [TicketCustomerController::class, 'store_comment'])->name('myTickets.store');
-//     Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
-// });
+    Route::get('/get-cities/{provinceId}', [TicketStaffSubditController::class, 'getCities']);
+    Route::post('/staff-subdit/status-ticket/{id}', [TicketStaffSubditController::class, 'status_ticket'])->name('tickets.statusTicket');
+});
 
 
-//DEPARTMENT
-// Route::middleware(['verified', 'auth', 'role:Department'])->group(function () {
-//     Route::get('/department/dashboard', [HomeDepartmentController::class, 'index'])->name('department.dashboard.index');
+//SIAK DEV
+Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->group(function () {
+    Route::get('/siak-dev/dashboard', [HomeSiakDevController::class, 'index'])->name('dashboard.index');
+    Route::get('/siak-dev/tickets/chart', [HomeSiakDevController::class, 'getTicketChartData']);
+    Route::get('/siak-dev/tickets/dailyChart', [HomeSiakDevController::class, 'getDailyTicketChartData']);
+    Route::resources([
+        '/siak-dev/ticket' => TicketSiakDevController::class,
+    ]);
+    Route::post('/siak-dev/TicketStore', [TicketSiakDevController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/siak-dev/TicketUpdate/{id}', [TicketSiakDevController::class, 'update_comment'])->name('tickets.update');
 
-//     Route::resources([
-//         '/department/assignedTicket' => AssignedTicketController::class,
-//     ]);
+    Route::get('/get-cities/{provinceId}', [TicketSiakDevController::class, 'getCities']);
+    Route::post('/siak-dev/status-ticket/{id}', [TicketSiakDevController::class, 'status_ticket'])->name('tickets.statusTicket');
+});
 
-//     Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
-//     Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
 
-//     Route::post('/department/unassignedTicketStore', [UnassignedTicketController::class, 'store_comment'])->name('unassignedTickets.store');
-//     Route::put('/department/unassignedTicketUpdate/{id}', [UnassignedTicketController::class, 'update_comment'])->name('unassignedTickets.update');
+//PEJABAT
+Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group(function () {
+    Route::get('/pejabat/dashboard', [HomePejabatController::class, 'index'])->name('dashboard.index');
+    Route::get('/pejabat/tickets/chart', [HomePejabatController::class, 'getTicketChartData']);
+    Route::get('/pejabat/tickets/dailyChart', [HomePejabatController::class, 'getDailyTicketChartData']);
+    Route::resources([
+        '/pejabat/ticket' => TicketPejabatController::class,
+    ]);
+    Route::post('/pejabat/TicketStore', [TicketPejabatController::class, 'store_comment'])->name('tickets.store');
+    Route::put('/pejabat/TicketUpdate/{id}', [TicketPejabatController::class, 'update_comment'])->name('tickets.update');
 
-//     Route::post('/department/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
-
-//     Route::post('/department/assignedTicketStore', [AssignedTicketController::class, 'store_comment'])->name('assignedTickets.store');
-//     Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
-
-//     Route::put('/department/request-assignTo/{id}', [RequestTicketController::class, 'request_ticket'])->name('requestTicket.requestAssignTo');
-//     Route::get('/department/requestTicket', [RequestTicketController::class, 'index'])->name('requestTicket.index');
-//     Route::post('/department/approve-ticket/{id}', [RequestTicketController::class, 'approve_ticket'])->name('requestTicket.approveTicket');
-//     Route::post('/department/reject-ticket/{id}', [RequestTicketController::class, 'reject_ticket'])->name('requestTicket.rejectTicket');
-
-//     Route::post('/department/status-ticket/{id}', [RequestTicketController::class, 'status_ticket'])->name('requestTicket.statusTicket');
-
-// });
+    Route::get('/get-cities/{provinceId}', [TicketPejabatController::class, 'getCities']);
+    Route::post('/pejabat/status-ticket/{id}', [TicketPejabatController::class, 'status_ticket'])->name('tickets.statusTicket');
+});
