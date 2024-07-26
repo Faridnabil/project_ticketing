@@ -278,24 +278,8 @@ class UsersSeeder extends Seeder
         $user->assignRole($adminRole);
 
         $user = User::factory()->create([
-            'name' => 'Helpdesk 1',
-            'email' => 'helpdesk1@gmail.com',
-            'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
-        ]);
-        $user->assignRole($helpdeskRole);
-
-        $user = User::factory()->create([
-            'name' => 'Helpdesk 2',
-            'email' => 'helpdesk2@gmail.com',
-            'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
-        ]);
-        $user->assignRole($helpdeskRole);
-
-        $user = User::factory()->create([
-            'name' => 'Helpdesk 3',
-            'email' => 'helpdesk3@gmail.com',
+            'name' => 'Helpdesk',
+            'email' => 'helpdesk@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
@@ -303,7 +287,7 @@ class UsersSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'Koordinator',
-            'email' => 'Koordinator@gmail.com',
+            'email' => 'koordinator@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
@@ -311,7 +295,7 @@ class UsersSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'Staff Subdit',
-            'email' => 'StaffSubdit@gmail.com',
+            'email' => 'staffSubdit@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
@@ -319,7 +303,7 @@ class UsersSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'SIAK Dev',
-            'email' => 'Siakdev@gmail.com',
+            'email' => 'siakdev@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
@@ -327,7 +311,7 @@ class UsersSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'Pejabat',
-            'email' => 'Pejabat@gmail.com',
+            'email' => 'pejabat@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);

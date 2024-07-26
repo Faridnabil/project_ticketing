@@ -70,18 +70,28 @@ class Ticket extends Model
         return $this->belongsTo(Priority::class, 'priority_id');
     }
 
-    public function customers()
+    public function helpdesk()
     {
-        return $this->belongsTo(User::class, 'customer');
+        return $this->belongsTo(User::class, 'level1');
     }
 
-    public function assignTo()
+    public function koordinator()
     {
-        return $this->belongsTo(User::class, 'assign_to', 'id');
+        return $this->belongsTo(User::class, 'level2');
     }
 
-    public function changedAssignTo()
+    public function staffSubdit()
     {
-        return $this->belongsTo(User::class, 'changed_assign_to', 'id');
+        return $this->belongsTo(User::class, 'level3');
+    }
+
+    public function siakDev()
+    {
+        return $this->belongsTo(User::class, 'level4');
+    }
+
+    public function pejabat()
+    {
+        return $this->belongsTo(User::class, 'level5');
     }
 }

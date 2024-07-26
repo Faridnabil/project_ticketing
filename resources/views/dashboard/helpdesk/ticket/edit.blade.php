@@ -28,7 +28,6 @@
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
-                            <input type="hidden" name="status_changed_by_id" value="{{ Auth::user()->id }}">
 
                             <div class="col-md-6">
                                 <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
@@ -237,11 +236,6 @@
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#reason'))
             .catch(error => {
                 console.error(error);
             });

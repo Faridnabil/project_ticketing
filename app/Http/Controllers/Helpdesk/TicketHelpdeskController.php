@@ -30,43 +30,30 @@ class TicketHelpdeskController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo');
+        $query = Ticket::with('status', 'category', 'priority', 'helpdesk');
 
+        $categories = Category::all();
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
         }
 
-        if ($request->has('assign_to') && $request->assign_to) {
-            $query->where('assign_to', $request->assign_to);
-        }
+        // if ($request->has('assign_to') && $request->assign_to) {
+        //     $query->where('assign_to', $request->assign_to);
+        // }
 
+        $priorities = Priority::all();
         if ($request->has('priority_id') && $request->priority_id) {
             $query->where('priority_id', $request->priority_id);
         }
 
+        $statuses = Status::all();
         if ($request->has('status_id') && $request->status_id) {
             $query->where('status_id', $request->status_id);
         }
 
         $tickets = $query->orderBy('id', 'desc')->get();
 
-
-        // Fetch necessary data for filters
-        $level1 = User::role('Helpdesk')
-            ->get();
-        $level2 = User::role('Koordinator')
-            ->get();
-        $level3 = User::role('Staff Subdit')
-            ->get();
-        $level4 = User::role('SIAK Dev')
-            ->get();
-        $level5 = User::role('Pejabat')
-            ->get();
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $categories = Category::all();
-
-        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'level1', 'level2', 'level3', 'level4', 'level5'));
+        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses'));
     }
 
 
@@ -403,35 +390,76 @@ class TicketHelpdeskController extends Controller
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
 
-    public function approve_assignment(Request $request, RequestAssignment $requestAssignment)
+    // public function approve_assignment(Request $request, RequestAssignment $requestAssignment)
+    // {
+    //     if (Auth::user()->hasRole('Admin')) {
+    //         $ticket = $requestAssignment->ticket;
+    //         $ticket->assign_to = $requestAssignment->user_id;
+    //         $ticket->save();
+
+    //         $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
+    //         $requestAssignment->save();
+
+    //         // Notifikasi untuk Departemen yang ditugaskan
+    //         $authenticatedUserName = Auth::user()->name;
+    //         $assignedDepartmentUsers = User::role(['Department'])->where('id', $ticket->assign_to = $requestAssignment->user_id)->get();
+
+    //         $notificationDataForDepartment = [
+    //             'name' => $authenticatedUserName,
+    //             'body' => 'Tiket yang anda ajukan sudah diterima',
+    //             'thanks' => 'Terimakasih',
+    //             'Text' => 'Tolong cek kembali',
+    //             'Url' => url('/department/assignedTicket'),
+    //             'admin_id' => rand(1111, 9999),
+    //         ];
+
+    //         Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
+
+
+    //         return redirect()->back()->with('success', 'Tiket berhasil diassign.');
+    //     }
+
+    //     return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+    // }
+
+    public function status_ticket(Request $request, $id)
     {
-        if (Auth::user()->hasRole('Admin')) {
-            $ticket = $requestAssignment->ticket;
-            $ticket->assign_to = $requestAssignment->user_id;
-            $ticket->save();
+        $ticket = Ticket::findOrFail($id);
 
-            $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
-            $requestAssignment->save();
+        $ticket->changed_assign_to = null;
+        $ticket->approval_assign_to = 0;
 
-            // Notifikasi untuk Departemen yang ditugaskan
+        // Simpan status_id yang lama sebelum mengubahnya
+        $oldStatusId = $ticket->status_id;
+
+        // Update status_id dengan yang baru dari request
+        $ticket->status_id = $request->status_id;
+
+        // Periksa apakah status_id berubah menjadi 4
+        if ($request->status_id == 4) {
             $authenticatedUserName = Auth::user()->name;
-            $assignedDepartmentUsers = User::role(['Department'])->where('id', $ticket->assign_to = $requestAssignment->user_id)->get();
 
-            $notificationDataForDepartment = [
+            $notificationData = [
                 'name' => $authenticatedUserName,
-                'body' => 'Tiket yang anda ajukan sudah diterima',
+                'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
                 'thanks' => 'Terimakasih',
-                'Text' => 'Tolong cek kembali',
-                'Url' => url('/department/assignedTicket'),
-                'admin_id' => rand(1111, 9999),
+                'Text' => '',
+                'Url' => url('/admin/ticket'),
+                'customer_id' => rand(1111, 9999),
             ];
 
-            Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
+            // Ambil semua pengguna dengan peran 'admin'
+            $helpdesks = User::role('Helpdesk')
+                ->get();
 
-
-            return redirect()->back()->with('success', 'Tiket berhasil diassign.');
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationDepartment($notificationData));
+            }
         }
 
-        return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
 }

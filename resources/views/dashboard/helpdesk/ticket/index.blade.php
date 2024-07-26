@@ -118,7 +118,7 @@
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
                                 {{-- <th class="min-w-70px">Pemilik</th> --}}
-                                {{-- <th class="min-w-70px">Tetapkan Ke</th> --}}
+                                <th class="min-w-70px">Disposisi</th>
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
@@ -149,15 +149,19 @@
                                         </td> --}}
                                         <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
-                                        {{-- <td>
-                                            @if ($ticket->assignTo != null)
-                                                {{ $ticket->assignTo->name }}
+                                        <td>
+                                            @if ($ticket->level1 != null)
+                                                @foreach ($ticket->helpdesk->getRoleNames() as $role)
+                                                    {{ $role }}
+                                                @endforeach
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">
+                                                    -
+                                                </span>
                                             @endif
-                                        </td> --}}
+                                        </td>
+
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
                                         <td>
@@ -218,6 +222,28 @@
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
                                                     -</span>
                                             @endif
+
+                                            <form action="{{ route('helpdesk.tickets.statusTicket', $ticket->id) }}"
+                                                method="POST" class="ml-2">
+                                                @csrf
+                                                <div class="custom-select-wrapper">
+                                                    <select name="status_id" class="form-select"
+                                                        onchange="this.form.submit()">
+                                                        <option value="2"
+                                                            {{ $ticket->status_id == '2' ? 'selected' : '' }}>
+                                                            Diterima</option>
+                                                        <option value="3"
+                                                            {{ $ticket->status_id == '3' ? 'selected' : '' }}>
+                                                            Proses</option>
+                                                        <option value="4"
+                                                            {{ $ticket->status_id == '4' ? 'selected' : '' }}>
+                                                            Selesai</option>
+                                                        <option value="5"
+                                                            {{ $ticket->status_id == '5' ? 'selected' : '' }}>
+                                                            Buka Kembali</option>
+                                                    </select>
+                                                </div>
+                                            </form>
                                         </td>
                                         <!--begin::Action=-->
                                         <td>
@@ -241,7 +267,8 @@
                                                     </a>
                                                 @endif
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -258,7 +285,8 @@
                                                     </a>
                                                 @endcan
                                                 @can('Edit Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -296,7 +324,8 @@
                                                 @endcan
                                             @else
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -359,7 +388,8 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('helpdesk.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('helpdesk.ticket.destroy', $ticket->id) }}" method="POST"
+                            class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>

@@ -43,7 +43,8 @@
                                 action="{{ route('helpdesk.ticket.store') }}" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <input type="hidden" name="no_ticket">
-                                <input type="hidden" name="level1" value="1">
+                                <input type="hidden" name="level1" value="2">
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
                                     <select name="category_id"

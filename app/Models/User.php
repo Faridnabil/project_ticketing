@@ -48,10 +48,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function ticket()
+    public function helpdesk()
     {
-        return $this->hasMany(Ticket::class, 'customer');
+        return $this->hasMany(Ticket::class, 'level1');
     }
+
+    public function koordinator()
+    {
+        return $this->hasMany(Ticket::class, 'level2');
+    }
+
+    public function staffSubdit()
+    {
+        return $this->hasMany(Ticket::class, 'level3');
+    }
+
+    public function siakDev()
+    {
+        return $this->hasMany(Ticket::class, 'level4');
+    }
+
+    public function pejabat()
+    {
+        return $this->hasMany(Ticket::class, 'level5');
+    }
+
     public function hticket()
     {
         return $this->hasMany(HistoryTicket::class, 'customer');
