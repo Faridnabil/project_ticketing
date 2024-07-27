@@ -37,9 +37,62 @@ class TicketHelpdeskController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        // if ($request->has('assign_to') && $request->assign_to) {
-        //     $query->where('assign_to', $request->assign_to);
-        // }
+        if ($request->has('level') && $request->level) {
+            $query->where(function ($q) use ($request) {
+                $q->where('level1', $request->level)
+                    ->orWhere('level2', $request->level)
+                    ->orWhere('level3', $request->level)
+                    ->orWhere('level4', $request->level)
+                    ->orWhere('level5', $request->level);
+            });
+        }
+
+        // Ambil data untuk filter level dari tabel Role
+        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+
+
+
+        $priorities = Priority::all();
+        if ($request->has('priority_id') && $request->priority_id) {
+            $query->where('priority_id', $request->priority_id);
+        }
+
+        $statuses = Status::all();
+        if ($request->has('status_id') && $request->status_id) {
+            $query->where('status_id', $request->status_id);
+        }
+
+        $tickets = $query->orderBy('id', 'desc')
+            ->get();
+
+        // Ambil user dengan role Koordinator
+        $koordinatorUsers = Role::where('name', 'Koordinator')
+            ->pluck('id')
+            ->toArray();
+        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
+    }
+
+    public function NewTicket(Request $request)
+    {
+        $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
+            ->where('level1', '!=', null);
+
+        $categories = Category::all();
+        if ($request->has('category_id') && $request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->has('level') && $request->level) {
+            $query->where(function ($q) use ($request) {
+                $q->where('level1', $request->level)
+                    ->orWhere('level2', $request->level)
+                    ->orWhere('level3', $request->level)
+                    ->orWhere('level4', $request->level)
+                    ->orWhere('level5', $request->level);
+            });
+        }
+
+        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
 
         $priorities = Priority::all();
         if ($request->has('priority_id') && $request->priority_id) {
@@ -53,7 +106,9 @@ class TicketHelpdeskController extends Controller
 
         $tickets = $query->orderBy('id', 'desc')->get();
 
-        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses'));
+        $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
+
+        return view('dashboard.helpdesk.ticket.new_ticket', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
     }
 
 
@@ -70,6 +125,11 @@ class TicketHelpdeskController extends Controller
 
         $city_or_regencies = CityOrRegency::with('province');
 
+        //Pindah ke Staff Subdit
+        $helpdeskRoles = Role::where('name', 'Helpdesk')
+            ->pluck('id')
+            ->toArray();
+
         return view(
             'dashboard.helpdesk.ticket.create',
             compact(
@@ -78,24 +138,29 @@ class TicketHelpdeskController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
+                'helpdeskRoles',
             )
         );
     }
 
-    public function getCities($provinceId)
-    {
-        $cities = CityOrRegency::with('province')
-            ->where('province_id', $provinceId)
-            ->get(['id', 'province_id', 'city_or_regency_name']);
-
-        return response()->json($cities);
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'category_id' => 'required',
+            'province_id' => 'required',
+            'city_or_regency_id' => 'required',
+            'status_id' => 'required',
+            'priority_id' => 'required',
+            'pic' => 'required',
+            'jabatan' => 'required',
+            'no_hp' => 'required',
+            'description' => 'required'
+        ]);
+
         DB::beginTransaction();
         try {
             // Generate ticket_id baru
@@ -112,6 +177,7 @@ class TicketHelpdeskController extends Controller
             $validate = $request->all();
             $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
             $validate['no_ticket'] = $newTicketId;
+            $validate['level1'] = $request->input('level1'); // Menyimpan role_id
 
             $attachments = [];
             if ($files) {
@@ -128,12 +194,13 @@ class TicketHelpdeskController extends Controller
 
             Ticket::create($validate);
             DB::commit();
-            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
+            return redirect()->route('helpdesk.NewTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            return back()->withInput()->withErrors($th->getMessage());
         }
     }
+
 
 
     /**
@@ -426,40 +493,64 @@ class TicketHelpdeskController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->changed_assign_to = null;
-        $ticket->approval_assign_to = 0;
+        $ticket->status_id = $request->status_id;
+        // $ticket->status_id = null;
+        // $ticket->approval_assign_to = 0;
 
         // Simpan status_id yang lama sebelum mengubahnya
-        $oldStatusId = $ticket->status_id;
+        // $oldStatusId = $ticket->status_id;
 
         // Update status_id dengan yang baru dari request
-        $ticket->status_id = $request->status_id;
 
         // Periksa apakah status_id berubah menjadi 4
-        if ($request->status_id == 4) {
-            $authenticatedUserName = Auth::user()->name;
+        // if ($request->status_id == 4) {
+        //     $authenticatedUserName = Auth::user()->name;
 
-            $notificationData = [
-                'name' => $authenticatedUserName,
-                'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
-                'thanks' => 'Terimakasih',
-                'Text' => '',
-                'Url' => url('/admin/ticket'),
-                'customer_id' => rand(1111, 9999),
-            ];
+        //     $notificationData = [
+        //         'name' => $authenticatedUserName,
+        //         'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
+        //         'thanks' => 'Terimakasih',
+        //         'Text' => '',
+        //         'Url' => url('/admin/ticket'),
+        //         'customer_id' => rand(1111, 9999),
+        //     ];
 
-            // Ambil semua pengguna dengan peran 'admin'
-            $helpdesks = User::role('Helpdesk')
-                ->get();
+        //     // Ambil semua pengguna dengan peran 'admin'
+        //     $helpdesks = User::role('Helpdesk')
+        //         ->get();
 
-            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
-            foreach ($helpdesks as $helpdesk) {
-                Notification::send($helpdesk, new NotificationDepartment($notificationData));
-            }
-        }
+        //     // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+        //     foreach ($helpdesks as $helpdesk) {
+        //         Notification::send($helpdesk, new NotificationDepartment($notificationData));
+        //     }
+        // }
 
         $ticket->save();
 
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
+    }
+
+    public function send_ticket(Request $request, $id)
+    {
+        // Cari tiket berdasarkan ID
+        $ticket = Ticket::findOrFail($id);
+
+        // Update level2 dengan nilai dari request
+        $ticket->level1 = $request->level1;
+        $ticket->level2 = $request->level2;
+
+        // Simpan perubahan
+        $ticket->save();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Pengajuan telah dikirim.');
+    }
+    public function getCities($provinceId)
+    {
+        $cities = CityOrRegency::with('province')
+            ->where('province_id', $provinceId)
+            ->get(['id', 'province_id', 'city_or_regency_name']);
+
+        return response()->json($cities);
     }
 }

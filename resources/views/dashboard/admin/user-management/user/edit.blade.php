@@ -39,27 +39,20 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
                                 @method('PUT')
                                 @csrf
                                 <div class="col-md-4">
                                     <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        id="name" name="name" value="{{ old('name', $user->name) }}" required>
-
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                                     @error('name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="nik" class="form-label">NIK</label>
-                                    <input type="text" class="form-control @error('nik') is-invalid @enderror"
-                                        id="nik" name="nik" value="{{ old('nik', $user->nik) }}" required>
-
+                                    <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik', $user->nik) }}" required>
                                     @error('nik')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -67,124 +60,80 @@
 
                                 <div class="col-md-4">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        id="email" name="email" value="{{ old('email', $user->email) }}" required>
-
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}" required>
                                     @error('email')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        id="password" name="password">
-
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
                                     @error('password')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="password_confirmation" class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation"
-                                        id="password_confirmation">
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
+                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                                    <div class="valid-feedback">Looks good!</div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="roles" class="form-label">Roles</label>
-                                    <select class="form-select @error('roles') is-invalid @enderror" name="roles[]"
-                                        id="roles" data-control="select2" data-placeholder="Pilih Role" required>
+                                    <select class="form-select @error('roles') is-invalid @enderror" name="roles[]" id="roles" data-control="select2" data-placeholder="Pilih Role" required>
                                         @foreach ($roles as $item)
-                                            <option value="{{ $item }}"
-                                                @if ($user->hasRole($item)) selected @endif>{{ $item }}
-                                            </option>
+                                            <option value="{{ $item }}" @if ($user->hasRole($item)) selected @endif>{{ $item }}</option>
                                         @endforeach
                                     </select>
-
                                     @error('roles')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="gender" class="form-label">Jenis Kelamin</label>
-                                    <select class="form-select @error('gender') is-invalid @enderror" name="gender"
-                                        id="gender" data-control="select2" data-placeholder="Pilih Jenis Kelamin"
-                                        required>
-                                        <option value="Pria" {{ $user->gender == 'Pria' ? 'selected' : '' }}>Pria
-                                        </option>
-                                        <option value="Wanita" {{ $user->gender == 'Wanita' ? 'selected' : '' }}>Wanita
-                                        </option>
+                                    <select class="form-select @error('gender') is-invalid @enderror" name="gender" id="gender" data-control="select2" data-placeholder="Pilih Jenis Kelamin" required>
+                                        <option value="Pria" {{ $user->gender == 'Pria' ? 'selected' : '' }}>Pria</option>
+                                        <option value="Wanita" {{ $user->gender == 'Wanita' ? 'selected' : '' }}>Wanita</option>
                                     </select>
-
                                     @error('gender')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="fv-row mb-7">
-                                    <!--begin::Label-->
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
-                                    <!--begin::Image input-->
-                                    <div class="image-input image-input-outline" data-kt-image-input="true"
-                                        style="background-image: url(assets/media/avatars/blank.png)">
-                                        <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-125px h-125px"
-                                            style="background-image: url({{ asset($user->photo) }});">
-                                        </div>
-                                        <!--end::Preview existing avatar-->
-                                        <!--begin::Label-->
-                                        <label
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                            title="Change avatar">
+                                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(assets/media/avatars/blank.png)">
+                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ asset($user->photo) }});"></div>
+                                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
                                             <i class="bi bi-pencil-fill fs-7"></i>
-                                            <!--begin::Inputs-->
                                             <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
                                             @if (!empty($user->photo))
                                                 <input type="hidden" name="pathfoto" value="{{ $user->photo }}">
                                             @endif
-                                            <!--end::Inputs-->
                                         </label>
-                                        <!--end::Label-->
-                                        <!--begin::Cancel-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                            title="Cancel avatar">
+                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
-                                        <!--end::Cancel-->
-                                        <!--begin::Remove-->
-                                        <span
-                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow"
-                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                            title="Remove avatar">
+                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
                                             <i class="bi bi-x fs-2"></i>
                                         </span>
-                                        <!--end::Remove-->
                                     </div>
-                                    <!--end::Image input-->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="d-block fw-bold fs-6 mb-5">Upload Surat Tugas</label>
+                                    <input type="file" class="form-control" name="surat_tugas" accept=".pdf" />
                                 </div>
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                     <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
-                            </form><!--end form-->
+                            </form>
+
                         </div>
                         <!--end::Body-->
                     </div>

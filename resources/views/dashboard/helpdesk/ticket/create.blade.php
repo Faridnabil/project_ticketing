@@ -42,8 +42,13 @@
                             <form class="row g-3 needs-validation" method="POST"
                                 action="{{ route('helpdesk.ticket.store') }}" enctype="multipart/form-data" novalidate>
                                 @csrf
-                                <input type="hidden" name="no_ticket">
-                                <input type="hidden" name="level1" value="2">
+                                <input type="hidden" name="no_ticket" value="{{ old('no_ticket') }}">
+                                <select name="level1" hidden required>
+                                    @foreach ($helpdeskRoles as $roleId)
+                                        <option value="{{ $roleId }}"
+                                            {{ old('level1') == $roleId ? 'selected' : '' }}>{{ $roleId }}</option>
+                                    @endforeach
+                                </select>
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
@@ -52,14 +57,14 @@
                                         data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
                                         <option></option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->category_name }}</option>
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('category_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -73,8 +78,10 @@
                                         class="form-select @error('province_id') is-invalid @enderror" required>
                                         <option value="" selected disabled>Pilih Provinsi</option>
                                         @foreach ($provinces as $province)
-                                            <option value="{{ $province->id }}">{{ $province->no_province }} -
-                                                {{ $province->province_name }}</option>
+                                            <option value="{{ $province->id }}"
+                                                {{ old('province_id') == $province->id ? 'selected' : '' }}>
+                                                {{ $province->no_province }} - {{ $province->province_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('province_id')
@@ -100,17 +107,18 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Status"required autofocus>
+                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                                            <option value="{{ $status->id }}"
+                                                {{ old('status_id') == $status->id ? 'selected' : '' }}>
+                                                {{ $status->status_name }}
+                                            </option>
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('status_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -120,36 +128,34 @@
 
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">PIC</label>
-                                    <input type="text" name="pic"
+                                    <input type="text" name="pic" value="{{ old('pic') }}"
                                         class="form-control @error('pic') is-invalid @enderror" id="pic"
                                         placeholder="Masukan PIC">
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('pic')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
+
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Jabatan</label>
-                                    <input type="text" name="jabatan"
+                                    <input type="text" name="jabatan" value="{{ old('jabatan') }}"
                                         class="form-control @error('jabatan') is-invalid @enderror" id="jabatan"
                                         placeholder="Masukan jabatan">
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('jabatan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Prioritas</label>
                                     <select name="priority_id"
@@ -157,31 +163,30 @@
                                         data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
                                         <option></option>
                                         @foreach ($priorities as $priority)
-                                            <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
+                                            <option value="{{ $priority->id }}"
+                                                {{ old('priority_id') == $priority->id ? 'selected' : '' }}>
+                                                {{ $priority->priority_name }}
+                                            </option>
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('priority_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
-
                                 </div>
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">No Hp / WA</label>
-                                    <input type="text" name="no_hp"
+                                    <input type="text" name="no_hp" value="{{ old('no_hp') }}"
                                         class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
                                         placeholder="Masukan Nomor Handphone/WA">
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('no_hp')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -192,12 +197,10 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3"></textarea>
-
+                                        cols="10" rows="3">{{ old('description') }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('description')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -230,6 +233,8 @@
                                     <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
+
+
                             <!--end form-->
                         </div>
                         <!--end::Body-->
@@ -273,7 +278,7 @@
                         .catch(error => console.error('Error:', error));
                 } else {
                     citySelect.html(
-                        '<option value="">Pilih</option>'); // Clear cities if no province is selected
+                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
             });

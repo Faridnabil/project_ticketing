@@ -35,29 +35,31 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'nik' => ['required', 'string', 'unique:users,nik'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
+            'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+        ], [
+            'email.unique' => 'Email sudah terdaftar.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+            'photo.image' => 'File harus berupa foto.',
+            'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
+            'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
+            'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
+            'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        DB::beginTransaction();
+
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => ['required', 'string'],
-                'email' => ['required', 'email', 'unique:users,email'],
-                'nik' => ['required', 'string', 'unique:users,nik'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-                'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
-                'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
-            ], [
-                'email.unique' => 'Email sudah terdaftar.',
-                'nik.unique' => 'NIK sudah terdaftar.',
-                'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-                'photo.image' => 'File harus berupa foto.',
-                'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
-                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
-                'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
-                'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
-            ]);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
             $file1 = $request->file('photo');
             $file2 = $request->file('surat_tugas');
 
@@ -89,11 +91,15 @@ class UserController extends Controller
                 $user->assignRole($request->input('roles'));
             }
 
-            return redirect()->route('user.index')->with('success', 'User created successfully');
+            DB::commit();
+
+            return redirect()->route('admin.user.index')->with('success', 'User created successfully');
         } catch (\Throwable $th) {
-            return back()->with(['error' => 'Data gagal disimpan.']);
+            DB::rollBack();
+            return back()->with(['error' => 'Data gagal disimpan.'])->withInput();
         }
     }
+
 
 
     public function edit($id)
@@ -107,29 +113,31 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            'nik' => ['required', 'string', 'unique:users,nik,' . $user->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
+            'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+        ], [
+            'email.unique' => 'Email sudah terdaftar.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+            'photo.image' => 'File harus berupa foto.',
+            'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
+            'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
+            'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
+            'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        DB::beginTransaction();
+
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => ['required', 'string'],
-                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-                'nik' => ['required', 'string', 'unique:users,nik,' . $user->id],
-                'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-                'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png,jpeg'],
-                'surat_tugas' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
-            ], [
-                'email.unique' => 'Email sudah terdaftar.',
-                'nik.unique' => 'NIK sudah terdaftar.',
-                'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-                'photo.image' => 'File harus berupa foto.',
-                'photo.mimes' => 'Foto harus berupa file dengan tipe: jpg, png, jpeg.',
-                'photo.max' => 'Ukuran foto tidak boleh lebih besar dari 2048 kilobyte.',
-                'surat_tugas.mimes' => 'File surat tugas harus berupa PDF.',
-                'surat_tugas.max' => 'Ukuran file surat tugas tidak boleh lebih besar dari 5120 kilobyte.',
-            ]);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
             $file1 = $request->file('photo');
             $file2 = $request->file('surat_tugas');
 
@@ -175,11 +183,15 @@ class UserController extends Controller
             DB::table('model_has_roles')->where('model_id', $user->id)->delete();
             $user->assignRole($request->input('roles'));
 
-            return redirect()->route('user.index')->with('success', 'User updated successfully');
+            DB::commit();
+
+            return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
         } catch (\Throwable $th) {
-            return back()->with(['error' => 'Data gagal disimpan.']);
+            DB::rollBack();
+            return back()->with(['error' => 'Data gagal disimpan.'])->withInput();
         }
     }
+
 
 
 

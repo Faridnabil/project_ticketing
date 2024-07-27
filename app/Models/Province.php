@@ -19,4 +19,8 @@ class Province extends Model
     {
         return $this->hasMany(CityOrRegency::class, 'province_id');
     }
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class, 'province_id');
+    }
 }

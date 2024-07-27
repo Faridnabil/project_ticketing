@@ -80,6 +80,31 @@
             margin-top: 10px;
         }
     </style>
+
+        {{-- Select Status Tiket --}}
+        <style>
+            .custom-select-wrapper {
+                position: relative;
+                display: inline-block;
+            }
+
+            .custom-select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background: transparent url('data:image/svg+xml;utf8,<svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 7l5 5 5-5" stroke="%23000" stroke-width="2"/></svg>') no-repeat right;
+                padding-right: 1.5rem;
+                border: 1px solid #ccc;
+                font-size: 1rem;
+                margin-left: 10px;
+                width: 10px;
+                cursor: pointer;
+            }
+
+            .custom-select:focus {
+                width: auto;
+            }
+        </style>
 </head>
 
 <body id="kt_body"

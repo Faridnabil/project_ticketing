@@ -25,4 +25,8 @@ class CityOrRegency extends Model
     {
         return $this->hasMany(User::class, 'city_or_regency_id');
     }
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class, 'city_or_regency_id');
+    }
 }

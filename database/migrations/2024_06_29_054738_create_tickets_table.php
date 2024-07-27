@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('no_ticket');
             $table->foreignId('province_id')->nullable()->constrained();
             $table->foreignId('city_or_regency_id')->nullable()->constrained('city_or_regencies');
-            $table->foreignId('level1')->nullable()->constrained('users');
-            $table->foreignId('level2')->nullable()->constrained('users');
-            $table->foreignId('level3')->nullable()->constrained('users');
-            $table->foreignId('level4')->nullable()->constrained('users');
-            $table->foreignId('level5')->nullable()->constrained('users');
+            $table->foreignId('level1')->nullable()->constrained('roles');
+            $table->foreignId('level2')->nullable()->constrained('roles');
+            $table->foreignId('level3')->nullable()->constrained('roles');
+            $table->foreignId('level4')->nullable()->constrained('roles');
+            $table->foreignId('level5')->nullable()->constrained('roles');
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();

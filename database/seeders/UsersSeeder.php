@@ -83,6 +83,8 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'Delete Ticket']);
         Permission::create(['name' => 'Show Ticket']);
 
+        Permission::create(['name' => 'Send Ticket']);
+
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
         $helpdeskRole = Role::create(['name' => 'Helpdesk']);
@@ -154,81 +156,74 @@ class UsersSeeder extends Seeder
 
         //Helpdesk
         $helpdeskRole->givePermissionTo('View Dashboard Helpdesk');
-        $helpdeskRole->givePermissionTo('Create Role');
-        $helpdeskRole->givePermissionTo('Edit Role');
-        $helpdeskRole->givePermissionTo('Delete Role');
-        $helpdeskRole->givePermissionTo('Show Role');
-
-        $helpdeskRole->givePermissionTo('Create Permission');
-        $helpdeskRole->givePermissionTo('Edit Permission');
-        $helpdeskRole->givePermissionTo('Delete Permission');
-        $helpdeskRole->givePermissionTo('Show Permission');
 
         $helpdeskRole->givePermissionTo('View Category');
         $helpdeskRole->givePermissionTo('Create Category');
         $helpdeskRole->givePermissionTo('Edit Category');
-        $helpdeskRole->givePermissionTo('Delete Category');
+        // $helpdeskRole->givePermissionTo('Delete Category');
         $helpdeskRole->givePermissionTo('Show Category');
 
         $helpdeskRole->givePermissionTo('View Priority');
         $helpdeskRole->givePermissionTo('Create Priority');
         $helpdeskRole->givePermissionTo('Edit Priority');
-        $helpdeskRole->givePermissionTo('Delete Priority');
+        // $helpdeskRole->givePermissionTo('Delete Priority');
         $helpdeskRole->givePermissionTo('Show Priority');
 
         $helpdeskRole->givePermissionTo('View Status');
         $helpdeskRole->givePermissionTo('Create Status');
         $helpdeskRole->givePermissionTo('Edit Status');
-        $helpdeskRole->givePermissionTo('Delete Status');
+        // $helpdeskRole->givePermissionTo('Delete Status');
         $helpdeskRole->givePermissionTo('Show Status');
 
         $helpdeskRole->givePermissionTo('View Ticket');
         $helpdeskRole->givePermissionTo('Create Ticket');
         $helpdeskRole->givePermissionTo('Edit Ticket');
-        $helpdeskRole->givePermissionTo('Delete Ticket');
+        // $helpdeskRole->givePermissionTo('Delete Ticket');
         $helpdeskRole->givePermissionTo('Show Ticket');
 
         $helpdeskRole->givePermissionTo('View Category');
         $helpdeskRole->givePermissionTo('Create Category');
         $helpdeskRole->givePermissionTo('Edit Category');
-        $helpdeskRole->givePermissionTo('Delete Category');
+        // $helpdeskRole->givePermissionTo('Delete Category');
         $helpdeskRole->givePermissionTo('Show Category');
 
         $helpdeskRole->givePermissionTo('View Priority');
         $helpdeskRole->givePermissionTo('Create Priority');
         $helpdeskRole->givePermissionTo('Edit Priority');
-        $helpdeskRole->givePermissionTo('Delete Priority');
+        // $helpdeskRole->givePermissionTo('Delete Priority');
         $helpdeskRole->givePermissionTo('Show Priority');
 
         $helpdeskRole->givePermissionTo('View Status');
         $helpdeskRole->givePermissionTo('Create Status');
         $helpdeskRole->givePermissionTo('Edit Status');
-        $helpdeskRole->givePermissionTo('Delete Status');
+        // $helpdeskRole->givePermissionTo('Delete Status');
         $helpdeskRole->givePermissionTo('Show Status');
 
         $helpdeskRole->givePermissionTo('View Province');
         $helpdeskRole->givePermissionTo('Create Province');
         $helpdeskRole->givePermissionTo('Edit Province');
-        $helpdeskRole->givePermissionTo('Delete Province');
+        // $helpdeskRole->givePermissionTo('Delete Province');
         $helpdeskRole->givePermissionTo('Show Province');
 
         $helpdeskRole->givePermissionTo('View City Or Regency');
         $helpdeskRole->givePermissionTo('Create City Or Regency');
         $helpdeskRole->givePermissionTo('Edit City Or Regency');
-        $helpdeskRole->givePermissionTo('Delete City Or Regency');
+        // $helpdeskRole->givePermissionTo('Delete City Or Regency');
         $helpdeskRole->givePermissionTo('Show City Or Regency');
 
         $helpdeskRole->givePermissionTo('View Attendance');
         $helpdeskRole->givePermissionTo('Create Attendance');
         $helpdeskRole->givePermissionTo('Edit Attendance');
-        $helpdeskRole->givePermissionTo('Delete Attendance');
+        // $helpdeskRole->givePermissionTo('Delete Attendance');
         $helpdeskRole->givePermissionTo('Show Attendance');
 
         $helpdeskRole->givePermissionTo('View Ticket');
         $helpdeskRole->givePermissionTo('Create Ticket');
         $helpdeskRole->givePermissionTo('Edit Ticket');
-        $helpdeskRole->givePermissionTo('Delete Ticket');
+        // $helpdeskRole->givePermissionTo('Delete Ticket');
         $helpdeskRole->givePermissionTo('Show Ticket');
+
+        $helpdeskRole->givePermissionTo('Send Ticket');
 
         //Koordinator
         $koordinatorRole->givePermissionTo('View Dashboard Koordinator');
@@ -236,26 +231,28 @@ class UsersSeeder extends Seeder
         $koordinatorRole->givePermissionTo('View Category');
         $koordinatorRole->givePermissionTo('Create Category');
         $koordinatorRole->givePermissionTo('Edit Category');
-        $koordinatorRole->givePermissionTo('Delete Category');
+        // $koordinatorRole->givePermissionTo('Delete Category');
         $koordinatorRole->givePermissionTo('Show Category');
 
         $koordinatorRole->givePermissionTo('View Priority');
         $koordinatorRole->givePermissionTo('Create Priority');
         $koordinatorRole->givePermissionTo('Edit Priority');
-        $koordinatorRole->givePermissionTo('Delete Priority');
+        // $koordinatorRole->givePermissionTo('Delete Priority');
         $koordinatorRole->givePermissionTo('Show Priority');
 
         $koordinatorRole->givePermissionTo('View Status');
         $koordinatorRole->givePermissionTo('Create Status');
         $koordinatorRole->givePermissionTo('Edit Status');
-        $koordinatorRole->givePermissionTo('Delete Status');
+        // $koordinatorRole->givePermissionTo('Delete Status');
         $koordinatorRole->givePermissionTo('Show Status');
 
         $koordinatorRole->givePermissionTo('View Ticket');
         $koordinatorRole->givePermissionTo('Create Ticket');
         $koordinatorRole->givePermissionTo('Edit Ticket');
-        $koordinatorRole->givePermissionTo('Delete Ticket');
+        // $koordinatorRole->givePermissionTo('Delete Ticket');
         $koordinatorRole->givePermissionTo('Show Ticket');
+
+        $koordinatorRole->givePermissionTo('Send Ticket');
 
         //Staff Subdit
         $staffSubditRole->givePermissionTo('View Dashboard Staff Subdit');
@@ -263,26 +260,28 @@ class UsersSeeder extends Seeder
         $staffSubditRole->givePermissionTo('View Category');
         $staffSubditRole->givePermissionTo('Create Category');
         $staffSubditRole->givePermissionTo('Edit Category');
-        $staffSubditRole->givePermissionTo('Delete Category');
+        // $staffSubditRole->givePermissionTo('Delete Category');
         $staffSubditRole->givePermissionTo('Show Category');
 
         $staffSubditRole->givePermissionTo('View Priority');
         $staffSubditRole->givePermissionTo('Create Priority');
         $staffSubditRole->givePermissionTo('Edit Priority');
-        $staffSubditRole->givePermissionTo('Delete Priority');
+        // $staffSubditRole->givePermissionTo('Delete Priority');
         $staffSubditRole->givePermissionTo('Show Priority');
 
         $staffSubditRole->givePermissionTo('View Status');
         $staffSubditRole->givePermissionTo('Create Status');
         $staffSubditRole->givePermissionTo('Edit Status');
-        $staffSubditRole->givePermissionTo('Delete Status');
+        // $staffSubditRole->givePermissionTo('Delete Status');
         $staffSubditRole->givePermissionTo('Show Status');
 
         $staffSubditRole->givePermissionTo('View Ticket');
         $staffSubditRole->givePermissionTo('Create Ticket');
         $staffSubditRole->givePermissionTo('Edit Ticket');
-        $staffSubditRole->givePermissionTo('Delete Ticket');
+        // $staffSubditRole->givePermissionTo('Delete Ticket');
         $staffSubditRole->givePermissionTo('Show Ticket');
+
+        $staffSubditRole->givePermissionTo('Send Ticket');
 
         //SIAK Dev
         $siakDevRole->givePermissionTo('View Dashboard SIAK Dev');
@@ -290,26 +289,28 @@ class UsersSeeder extends Seeder
         $siakDevRole->givePermissionTo('View Category');
         $siakDevRole->givePermissionTo('Create Category');
         $siakDevRole->givePermissionTo('Edit Category');
-        $siakDevRole->givePermissionTo('Delete Category');
+        // $siakDevRole->givePermissionTo('Delete Category');
         $siakDevRole->givePermissionTo('Show Category');
 
         $siakDevRole->givePermissionTo('View Priority');
         $siakDevRole->givePermissionTo('Create Priority');
         $siakDevRole->givePermissionTo('Edit Priority');
-        $siakDevRole->givePermissionTo('Delete Priority');
+        // $siakDevRole->givePermissionTo('Delete Priority');
         $siakDevRole->givePermissionTo('Show Priority');
 
         $siakDevRole->givePermissionTo('View Status');
         $siakDevRole->givePermissionTo('Create Status');
         $siakDevRole->givePermissionTo('Edit Status');
-        $siakDevRole->givePermissionTo('Delete Status');
+        // $siakDevRole->givePermissionTo('Delete Status');
         $siakDevRole->givePermissionTo('Show Status');
 
         $siakDevRole->givePermissionTo('View Ticket');
         $siakDevRole->givePermissionTo('Create Ticket');
         $siakDevRole->givePermissionTo('Edit Ticket');
-        $siakDevRole->givePermissionTo('Delete Ticket');
+        // $siakDevRole->givePermissionTo('Delete Ticket');
         $siakDevRole->givePermissionTo('Show Ticket');
+
+        $siakDevRole->givePermissionTo('Send Ticket');
 
         //Pejabat
         $pejabatRole->givePermissionTo('View Dashboard Pejabat');
@@ -317,26 +318,28 @@ class UsersSeeder extends Seeder
         $pejabatRole->givePermissionTo('View Category');
         $pejabatRole->givePermissionTo('Create Category');
         $pejabatRole->givePermissionTo('Edit Category');
-        $pejabatRole->givePermissionTo('Delete Category');
+        // $pejabatRole->givePermissionTo('Delete Category');
         $pejabatRole->givePermissionTo('Show Category');
 
         $pejabatRole->givePermissionTo('View Priority');
         $pejabatRole->givePermissionTo('Create Priority');
         $pejabatRole->givePermissionTo('Edit Priority');
-        $pejabatRole->givePermissionTo('Delete Priority');
+        // $pejabatRole->givePermissionTo('Delete Priority');
         $pejabatRole->givePermissionTo('Show Priority');
 
         $pejabatRole->givePermissionTo('View Status');
         $pejabatRole->givePermissionTo('Create Status');
         $pejabatRole->givePermissionTo('Edit Status');
-        $pejabatRole->givePermissionTo('Delete Status');
+        // $pejabatRole->givePermissionTo('Delete Status');
         $pejabatRole->givePermissionTo('Show Status');
 
         $pejabatRole->givePermissionTo('View Ticket');
         $pejabatRole->givePermissionTo('Create Ticket');
         $pejabatRole->givePermissionTo('Edit Ticket');
-        $pejabatRole->givePermissionTo('Delete Ticket');
+        // $pejabatRole->givePermissionTo('Delete Ticket');
         $pejabatRole->givePermissionTo('Show Ticket');
+
+        $pejabatRole->givePermissionTo('Send Ticket');
 
         $faker = FakerFactory::create();
         $faker->addProvider(new NikProvider($faker));
@@ -350,8 +353,24 @@ class UsersSeeder extends Seeder
         $user->assignRole($adminRole);
 
         $user = User::factory()->create([
-            'name' => 'Helpdesk',
-            'email' => 'helpdesk@gmail.com',
+            'name' => 'Helpdesk 1',
+            'email' => 'helpdesk1@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($helpdeskRole);
+
+        $user = User::factory()->create([
+            'name' => 'Helpdesk 2',
+            'email' => 'helpdesk2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($helpdeskRole);
+
+        $user = User::factory()->create([
+            'name' => 'Helpdesk 3',
+            'email' => 'helpdesk3@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);

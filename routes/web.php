@@ -59,8 +59,8 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
     Route::patch('profile/{id}/update_foto', [ProfileController::class, 'updateFoto'])->name('profile.update_foto');
 });
 
-//ADMIN, HELPDESK
-Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk'])->group(function () {
+//ADMIN, HELPDESK, KOORDINATOR, STAFF SUBDIT, SIAK DEV, PEJABAT
+Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Subdit|SIAK Dev|Pejabat'])->group(function () {
     Route::resources([
         '/province' => ProvinceController::class,
         '/cityOrRegency' => CityOrRegencyController::class,
@@ -82,6 +82,7 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk'])->group(function (
 Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('dashboard.index');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
+    Route::get('/admin/tickets/dailyChart', [HomeAdminController::class, 'getDailyTicketChartData']);
     Route::resources([
         '/admin/role' => RoleController::class,
         '/admin/permission' => PermissionController::class,
@@ -93,13 +94,15 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
     Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
     Route::put('/admin/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
 
+    Route::put('/admin/sendtTicket/{id}', [TicketController::class, 'send_ticket'])->name('tickets.send');
+    Route::post('/admin/status-ticket/{id}', [TicketController::class, 'status_ticket'])->name('tickets.statusTicket');
+
     Route::get('/admin/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
     Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
 });
 
-
-//HELPDESK
+// HELPDESK
 Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->group(function () {
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
@@ -110,9 +113,11 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     ]);
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
-
+    Route::put('/helpdesk/sendTicket/{id}', [TicketHelpdeskController::class, 'send_ticket'])->name('tickets.send');
     Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
+
+    Route::get('/helpdesk/NewTicket', [TicketHelpdeskController::class, 'NewTicket'])->name('NewTicket.index');
 });
 
 
@@ -126,6 +131,8 @@ Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.'
     ]);
     Route::post('/koordinator/TicketStore', [TicketKoordinatorController::class, 'store_comment'])->name('tickets.store');
     Route::put('/koordinator/TicketUpdate/{id}', [TicketKoordinatorController::class, 'update_comment'])->name('tickets.update');
+
+    Route::put('/koordinator/sendtTicket/{id}', [TicketKoordinatorController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/koordinator/status-ticket/{id}', [TicketKoordinatorController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -140,6 +147,7 @@ Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.
     ]);
     Route::post('/staff-subdit/TicketStore', [TicketStaffSubditController::class, 'store_comment'])->name('tickets.store');
     Route::put('/staff-subdit/TicketUpdate/{id}', [TicketStaffSubditController::class, 'update_comment'])->name('tickets.update');
+    Route::put('/staff-subdit/sendtTicket/{id}', [TicketStaffSubditController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/staff-subdit/status-ticket/{id}', [TicketStaffSubditController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -154,6 +162,7 @@ Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->grou
     ]);
     Route::post('/siak-dev/TicketStore', [TicketSiakDevController::class, 'store_comment'])->name('tickets.store');
     Route::put('/siak-dev/TicketUpdate/{id}', [TicketSiakDevController::class, 'update_comment'])->name('tickets.update');
+    Route::put('/siak-dev/sendtTicket/{id}', [TicketSiakDevController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/siak-dev/status-ticket/{id}', [TicketSiakDevController::class, 'status_ticket'])->name('tickets.statusTicket');
 });
 
@@ -168,5 +177,6 @@ Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group
     ]);
     Route::post('/pejabat/TicketStore', [TicketPejabatController::class, 'store_comment'])->name('tickets.store');
     Route::put('/pejabat/TicketUpdate/{id}', [TicketPejabatController::class, 'update_comment'])->name('tickets.update');
+    Route::put('/pejabat/sendtTicket/{id}', [TicketPejabatController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/pejabat/status-ticket/{id}', [TicketPejabatController::class, 'status_ticket'])->name('tickets.statusTicket');
 });

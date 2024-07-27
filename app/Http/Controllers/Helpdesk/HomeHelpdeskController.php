@@ -12,13 +12,8 @@ class HomeHelpdeskController extends Controller
 {
     public function index(Request $request)
     {
-        $selectedTicketId = $request->input('ticket_number');
-        $selectedTicketNumber = null;
-
         // Mengambil semua tiket
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')->get();
-        $logs = collect();
-        $comments = collect(); // Inisialisasi variabel comments
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')->get();
 
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
@@ -27,45 +22,16 @@ class HomeHelpdeskController extends Controller
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
-        if ($selectedTicketId) {
-            // Mengambil tiket yang dipilih
-            $selectedTicket = $tickets->firstWhere('id', $selectedTicketId);
-
-            if ($selectedTicket) {
-                $selectedTicketNumber = $selectedTicket->no_ticket;
-
-                $ticketNumbers = [$selectedTicketNumber];
-
-                $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
-                    ->whereIn('h_no_ticket', $ticketNumbers)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            }
-        }
-
-        // Mengambil semua tiket untuk dropdown
-        $allTickets = Ticket::all();
-
-        // Mengambil tiket prioritas
-        $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-            ->whereIn('priority_id', [3, 4])
-            ->get();
-
         return view(
             'dashboard.helpdesk.home.index',
             compact(
-                'ticketPriotitas',
+
                 'tickets',
                 'total_tiket',
                 'tiket_belum',
                 'tiket_buka_proses',
                 'tiket_tertunda',
                 'tiket_selesai',
-                'logs',
-                'comments',
-                'allTickets',
-                'selectedTicketId',
-                'selectedTicketNumber'
             )
         );
     }

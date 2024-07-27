@@ -113,6 +113,12 @@
                                                             style="color: white; font-weight:500">
                                                             Selesai</span>
                                                     </div>
+                                                @elseif($status->status_name == 'Buka Kembali')
+                                                    <div   style="background-color: rgb(118, 189, 12); width: 25%; border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 25px;">
+                                                        <span class="badge"
+                                                            style="color: white; font-weight:500">
+                                                            Buka Kembali</span>
+                                                    </div>
                                                 @else
                                                     {{ $status->status_name }}
                                                 @endif

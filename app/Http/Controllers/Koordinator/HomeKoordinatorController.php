@@ -14,7 +14,7 @@ class HomeKoordinatorController extends Controller
     {
         // Mengambil semua tiket
         $tickets = Ticket::with('status', 'category', 'priority', 'koordinator')
-            ->where('level2', TRUE)
+            ->where('level2', '!=', null)
             ->get();
 
         // Menghitung jumlah tiket berdasarkan status
@@ -43,7 +43,7 @@ class HomeKoordinatorController extends Controller
 
         // Ambil data tiket masuk
         $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->where('level2', TRUE)
+            ->where('level2', '!=', null)
             ->whereYear('created_at', $year)
             ->groupBy('month')
             ->get()
@@ -53,7 +53,7 @@ class HomeKoordinatorController extends Controller
         // Ambil data tiket selesai
         $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
             ->whereYear('updated_at', $year)
-            ->where('level2', TRUE) // Asumsi 4 adalah ID untuk 'Tutup'
+            ->where('level2', '!=', null) // Asumsi 4 adalah ID untuk 'Tutup'
             ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
             ->groupBy('month')
             ->get()
@@ -85,7 +85,7 @@ class HomeKoordinatorController extends Controller
         $endDate = Carbon::create($year, $month)->endOfMonth();
 
         $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-            ->where('level2', TRUE)
+            ->where('level2', '!=', null)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('day')
             ->get()
@@ -93,7 +93,7 @@ class HomeKoordinatorController extends Controller
             ->toArray();
 
         $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
-            ->where('level2', TRUE)
+            ->where('level2', '!=', null)
             ->where('status_id', 4)
             ->whereBetween('updated_at', [$startDate, $endDate])
             ->groupBy('day')

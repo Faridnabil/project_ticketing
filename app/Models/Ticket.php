@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class Ticket extends Model
 {
@@ -54,7 +55,6 @@ class Ticket extends Model
     {
         return $this->hasMany(Comment::class);
     }
-
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
@@ -72,26 +72,35 @@ class Ticket extends Model
 
     public function helpdesk()
     {
-        return $this->belongsTo(User::class, 'level1');
+        return $this->belongsTo(Role::class, 'level1');
     }
 
     public function koordinator()
     {
-        return $this->belongsTo(User::class, 'level2');
+        return $this->belongsTo(Role::class, 'level2');
     }
 
     public function staffSubdit()
     {
-        return $this->belongsTo(User::class, 'level3');
+        return $this->belongsTo(Role::class, 'level3');
     }
 
     public function siakDev()
     {
-        return $this->belongsTo(User::class, 'level4');
+        return $this->belongsTo(Role::class, 'level4');
     }
 
     public function pejabat()
     {
-        return $this->belongsTo(User::class, 'level5');
+        return $this->belongsTo(Role::class, 'level5');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_id');
+    }
+    public function cityOrRegency()
+    {
+        return $this->belongsTo(CityOrRegency::class, 'city_or_regency_id');
     }
 }
