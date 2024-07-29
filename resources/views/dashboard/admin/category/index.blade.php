@@ -51,22 +51,22 @@
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Kategori</th>
-                                    <th style="width: 300px">Fitur</th>
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Kategori</th>
+                                    <th class="text-center" style="width: 300px">Fitur</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($categories->count())
                                     @foreach ($categories as $category)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">
                                                 <span class="badge"
                                                     style="background-color: {{ $category->color }}; color: white; font-weight:bold">
                                                     {{ $category->category_name }}</span>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @can('Edit Category')
                                                     <a class="menu-link ms-3" href="{{ route('category.edit', $category->id) }}"
                                                         type="button">

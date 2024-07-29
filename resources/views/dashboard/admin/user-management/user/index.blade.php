@@ -52,19 +52,19 @@
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Pengguna</th>
-                                    <th>Peran</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Tanggal Bergabung</th>
-                                    <th>Fitur</th>
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Pengguna</th>
+                                    <th class="text-center">Peran</th>
+                                    <th class="text-center">Jenis Kelamin</th>
+                                    <th class="text-center">Tanggal Bergabung</th>
+                                    <th class="text-center">Fitur</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($users->count())
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
@@ -105,9 +105,9 @@
                                                     @endif
                                                 @endforeach
                                             </td>
-                                            <td>{{ $user->gender }}</td>
+                                            <td class="text-center">{{ $user->gender }}</td>
                                             <td>{{ $user->created_at }}</td>
-                                            <td>
+                                            <td style="width: 100px">
                                                 @can('Edit User')
                                                 <a class="menu-link ms-3" href="{{ route('user.edit', $user->id) }}"
                                                     type="button">

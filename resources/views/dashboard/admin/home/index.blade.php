@@ -73,77 +73,82 @@
 
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
-            <div class="row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-primary bubble-shadow-small">
-                                        <i class="fas fa-ticket-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Total Tiket</p>
-                                        <h4 class="card-title">{{ $total_tiket }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                    </div>
-                                </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Tiket Proses</p>
-                                        <h4 class="card-title">{{ $tiket_proses }}</h4>
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-3">Data Tiket</h1>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                                <i class="fas fa-ticket-alt"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Total Tiket</p>
+                                                <h4 class="card-title">{{ $total_tiket }}</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-success bubble-shadow-small">
-                                        <i class="fas fa-hourglass-half fa-pulse"></i>
-                                    </div>
-                                </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Tiket Tertunda</p>
-                                        <h4 class="card-title">{{ $tiket_tertunda }}</h4>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
+                                                <i class="fas fa-spinner"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Tiket Proses</p>
+                                                <h4 class="card-title">{{ $tiket_proses }}</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                        <i class="far fa-check-circle"></i>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-success bubble-shadow-small">
+                                                <i class="fas fa-hourglass-half"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Tiket Tertunda</p>
+                                                <h4 class="card-title">{{ $tiket_tertunda }}</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Tiket Selesai</p>
-                                        <h4 class="card-title">{{ $tiket_selesai }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                                                <i class="far fa-check-circle"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Tiket Selesai</p>
+                                                <h4 class="card-title">{{ $tiket_selesai }}</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -170,7 +175,7 @@
                             <div class="table-responsive">
                                 <table id="basic-datatables" class="display table table-striped table-hover">
                                     <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>Nomor Tiket</th>
                                             <th>Kategori</th>
                                             <th>Pemilik</th>
@@ -180,21 +185,10 @@
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nomor Tiket</th>
-                                            <th>Kategori</th>
-                                            <th>Pemilik</th>
-                                            <th>Tetapkan Ke</th>
-                                            <th>Prioritas</th>
-                                            <th>Dibuat Tanggal</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         @if ($ticketPriotitas->count())
                                             @foreach ($ticketPriotitas as $ticket)
-                                                <tr>
+                                                <tr class="text-center">
                                                     <td>{{ $ticket->no_ticket }}</td>
                                                     <td>{{ $ticket->category->category_name }}</td>
                                                     <td>{{ $ticket->customers->name }}</td>

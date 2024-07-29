@@ -99,11 +99,11 @@
                                         <span class="sub-item">Peran</span>
                                     </a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a class="menu-link" href="{{ route('permission.index') }}">
                                         <span class="sub-item">Izin Akses</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </li>

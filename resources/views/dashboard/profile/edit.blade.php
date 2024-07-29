@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Data Profil | PLN ICON+
+    Data Profil | PLN Icon+
 @endsection
 
 @section('content')

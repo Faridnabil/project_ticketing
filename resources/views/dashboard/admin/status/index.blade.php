@@ -50,17 +50,17 @@
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Status</th>
-                                    <th style="width: 300px">Fitur</th>
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center" style="width: 300px">Fitur</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($statuses->count())
                                     @foreach ($statuses as $status)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">
                                                 @if ($status->status_name == 'Tertunda')
                                                     <span class="badge"
                                                         style="background-color:red ; color: white; font-weight:bold">
@@ -81,7 +81,7 @@
                                                     {{ $status->status_name }}
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @can('Edit Status')
                                                     <a class="menu-link ms-3" href="{{ route('status.edit', $status->id) }}"
                                                         type="button">

@@ -60,7 +60,7 @@
                             <div class="row align-items-center">
                                 <div class="col-icon">
                                     <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <i class="fas fa-spinner"></i>
                                     </div>
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
@@ -79,7 +79,7 @@
                             <div class="row align-items-center">
                                 <div class="col-icon">
                                     <div class="icon-big text-center icon-success bubble-shadow-small">
-                                        <i class="fas fa-hourglass-half fa-pulse"></i>
+                                        <i class="fas fa-hourglass-half"></i>
                                     </div>
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">

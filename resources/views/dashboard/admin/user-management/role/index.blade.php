@@ -56,50 +56,34 @@
                             <table id="basic-datatables" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Peran</th>
-                                        <th style="width: 300px">Fitur</th>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Peran</th>
+                                        <th class="text-center" style="width: 300px">Fitur</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if ($roles->count())
                                         @foreach ($roles as $role)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
                                                 @if ($role->name == 'Admin')
-                                                    <td>
+                                                    <td class="text-center">
                                                         <p class="badge bg-primary">{{ $role->name }}</p>
                                                     </td>
                                                 @elseif ($role->name == 'Tenaga Ahli')
-                                                    <td>
+                                                    <td class="text-center">
                                                         <p class="badge bg-success">{{ $role->name }}</p>
                                                     </td>
                                                 @elseif ($role->name == 'Customer')
-                                                    <td>
+                                                    <td class="text-center">
                                                         <p class="badge bg-warning">{{ $role->name }}</p>
                                                     </td>
-                                                @elseif ($role->name == 'Vendor')
-                                                    <td>
-                                                        <p class="badge bg-danger">{{ $role->name }}</p>
-                                                    </td>
-                                                @elseif ($role->name == 'Project Manager')
-                                                    <td>
-                                                        <p class="badge bg-info">{{ $role->name }}</p>
-                                                    </td>
-                                                @elseif ($role->name == 'Direksi')
-                                                    <td>
-                                                        <p class="badge bg-secondary">{{ $role->name }}</p>
-                                                    </td>
-                                                @elseif ($role->name == 'Vice President')
-                                                    <td>
-                                                        <p class="badge bg-black">{{ $role->name }}</p>
-                                                    </td>
                                                 @else
-                                                    <td>
+                                                    <td class="text-center">
                                                         <p class="badge bg-danger">{{ $role->name }}</p>
                                                     </td>
                                                 @endif
-                                                <td>
+                                                <td class="text-center">
                                                     @can('Edit Role')
                                                         <a class="menu-link ms-3" href="{{ route('role.edit', $role->id) }}"
                                                             type="button">
