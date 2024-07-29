@@ -193,6 +193,30 @@ class TicketHelpdeskController extends Controller
             $validate['attachments'] = json_encode($attachments);
 
             Ticket::create($validate);
+
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            // DB::table('history_tickets')->insert([
+            //     'h_no_ticket' => $request->no_ticket,
+            //     'h_province_id' => $request->province_id,
+            //     'h_city_or_regency_id' => $request->city_or_regency_id,
+            //     'h_level1' => $request->level1,
+            //     'h_level2' => $request->level2,
+            //     'h_level3' => $request->level3,
+            //     'h_level4' => $request->level4,
+            //     'h_level5' => $request->level5,
+            //     'h_priority_id' => $request->priority_id,
+            //     'h_status_id' => $request->status_id,
+            //     'h_category_id' => $request->category_id,
+            //     'h_description' => $request->description,
+            //     'h_attachments' => $request->attachments ?? null,
+            //     'h_pic' => $request->pic,
+            //     'h_jabatan' => $request->jabatan,
+            //     'h_no_hp' => $request->no_hp,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            //     'status_changedBy' => Auth::user()->id,
+            // ]);
+
             DB::commit();
             return redirect()->route('helpdesk.NewTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -214,7 +238,7 @@ class TicketHelpdeskController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -316,6 +340,7 @@ class TicketHelpdeskController extends Controller
                 'h_no_hp' => $ticket->no_hp,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
             ]);
 
             // ------ Notifikasi --------------
@@ -527,6 +552,29 @@ class TicketHelpdeskController extends Controller
 
         $ticket->save();
 
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
+
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
 
@@ -539,8 +587,32 @@ class TicketHelpdeskController extends Controller
         $ticket->level1 = $request->level1;
         $ticket->level2 = $request->level2;
 
+
         // Simpan perubahan
         $ticket->save();
+
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
 
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Pengajuan telah dikirim.');

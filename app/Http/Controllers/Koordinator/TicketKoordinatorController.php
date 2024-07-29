@@ -81,7 +81,7 @@ class TicketKoordinatorController extends Controller
         $statuses = Status::all();
         $categories = Category::all();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -164,27 +164,28 @@ class TicketKoordinatorController extends Controller
                 }
             }
 
-            // Simpan data tiket sebelum diupdate ke tabel history_ticket
-            DB::table('history_tickets')->insert([
-                'h_no_ticket' => $ticket->no_ticket,
-                'h_province_id' => $ticket->province_id,
-                'h_city_or_regency_id' => $ticket->city_or_regency_id,
-                'h_level1' => $ticket->level1,
-                'h_level2' => $ticket->level2,
-                'h_level3' => $ticket->level3,
-                'h_level4' => $ticket->level4,
-                'h_level5' => $ticket->level5,
-                'h_priority_id' => $ticket->priority_id,
-                'h_status_id' => $ticket->status_id,
-                'h_category_id' => $ticket->category_id,
-                'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
-                'h_pic' => $ticket->pic,
-                'h_jabatan' => $ticket->jabatan,
-                'h_no_hp' => $ticket->no_hp,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
 
             // ------ Notifikasi --------------
             // $statusId = $validate['status_id'];
@@ -362,6 +363,29 @@ class TicketKoordinatorController extends Controller
 
         $ticket->save();
 
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
+
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
 
@@ -377,6 +401,29 @@ class TicketKoordinatorController extends Controller
 
         // Simpan perubahan
         $ticket->save();
+
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
 
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Pengajuan telah dikirim.');

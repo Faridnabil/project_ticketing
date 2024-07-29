@@ -156,7 +156,8 @@
                                                 <!-- SVG Icon -->
                                             </span>
                                             <div class="d-flex flex-column">
-                                                <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}</h1>
+                                                <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}
+                                                </h1>
                                                 <div class="">
                                                     {{-- <span class="fw-bold text-muted me-6">Pemilik :
                                                         {{ $ticket->customers->name }}</span> --}}
@@ -300,7 +301,8 @@
                                                                 id="message-display-{{ $comment->id }}">
                                                                 {!! $comment->message !!}
                                                             </p>
-                                                            <form action="{{ route('helpdesk.tickets.update', $comment->id) }}"
+                                                            <form
+                                                                action="{{ route('helpdesk.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -361,19 +363,27 @@
                                                     <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
                                                     <p class="timeline-text">
                                                         <strong>Nomor Tiket :</strong> {{ $log->h_no_ticket }}<br>
-                                                        <strong>Nama Pemilik :</strong>
-                                                        {{ $log->customers->name ?? 'N/A' }}<br>
-                                                        <strong>Ditugaskan Ke :</strong>
-                                                        {{ $log->assignTo->name ?? 'N/A' }}<br>
+                                                        <strong>Kategori :</strong> {{ $log->category->category_name }}<br>
                                                         <strong>Prioritas :</strong>
                                                         {{ $log->priority->priority_name ?? 'N/A' }}<br>
-                                                        <strong>Jatuh Tempo :</strong>
-                                                        {{ \Carbon\Carbon::parse($log->h_due_date)->translatedFormat('d F Y') ?? 'N/A' }}
-                                                        <br>
                                                         <strong>Status :</strong>
                                                         {{ $log->status->status_name ?? 'N/A' }}<br>
-                                                        <strong>Kategori :</strong> {{ $log->category->category_name }}<br>
-                                                        <strong>Deskripsi :</strong>{!! $log->h_description !!}<br>
+                                                        @if ($log->h_level1)
+                                                            <strong>Disposisi :</strong>
+                                                            {{ $log->helpdesk->name ?? 'N/A' }}<br>
+                                                        @elseif ($log->h_level2)
+                                                            <strong>Disposisi :</strong>
+                                                            {{ $log->koordinator->name ?? 'N/A' }}<br>
+                                                        @elseif ($log->h_level3)
+                                                            <strong>Disposisi :</strong>
+                                                            {{ $log->staffSubdit->name ?? 'N/A' }}<br>
+                                                        @elseif ($log->h_level4)
+                                                            <strong>Disposisi :</strong>
+                                                            {{ $log->siakDev->name ?? 'N/A' }}<br>
+                                                        @elseif ($log->h_level5)
+                                                            <strong>Disposisi :</strong>
+                                                            {{ $log->pejabat->name ?? 'N/A' }}<br>
+                                                        @endif
                                                         <strong>Lampiran :</strong>
                                                         @if ($log->h_attachments)
                                                             @foreach (json_decode($log->h_attachments) as $attachment)
@@ -394,7 +404,7 @@
 
                                                         <br>
                                                         <strong>Status Diubah Oleh :</strong>
-                                                        {{ $log->statusChangedByUser->name ?? 'N/A' }}
+                                                        {{ $log->statusChangedBy->name ?? 'N/A' }}
                                                     </p>
                                                 </div>
                                             </li>

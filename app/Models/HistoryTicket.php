@@ -4,23 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class HistoryTicket extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
 
     protected $fillable = [
         'h_no_ticket',
-        'h_title',
-        'h_customer',
-        'h_assign_to',
-        'priority_id',
-        'h_due_date',
-        'status_id',
-        'category_id',
+        'h_priority_id',
+        'h_status_id',
+        'h_category_id',
         'h_description',
         'h_attachments',
-        'h_status_changed_by_id',
+        'h_province_id',
+        'h_city_or_regency_id',
+        'h_pic',
+        'h_jabatan',
+        'h_no_hp',
+        'h_level1',
+        'h_level2',
+        'h_level3',
+        'h_level4',
+        'h_level5',
+        'status_changedBy',
     ];
 
     protected static function boot()
@@ -65,19 +73,39 @@ class HistoryTicket extends Model
         return $this->belongsTo(Priority::class, 'h_priority_id');
     }
 
-    public function customers()
+    public function helpdesk()
     {
-        return $this->belongsTo(User::class, 'h_customer');
+        return $this->belongsTo(Role::class, 'h_level1');
     }
 
-    public function assignTo()
+    public function koordinator()
     {
-        return $this->belongsTo(User::class, 'h_assign_to', 'id');
+        return $this->belongsTo(Role::class, 'h_level2');
     }
 
-    public function statusChangedByUser()
+    public function staffSubdit()
     {
-        return $this->belongsTo(User::class, 'h_status_changed_by_id');
+        return $this->belongsTo(Role::class, 'h_level3');
+    }
+
+    public function siakDev()
+    {
+        return $this->belongsTo(Role::class, 'h_level4');
+    }
+
+    public function pejabat()
+    {
+        return $this->belongsTo(Role::class, 'h_level5');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'h_province_id');
+    }
+
+    public function statusChangedBy()
+    {
+        return $this->belongsTo(User::class, 'status_changedBy');
     }
 
 }
