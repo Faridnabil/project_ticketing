@@ -77,8 +77,29 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
 
     public function styles(Worksheet $sheet)
     {
+        // Add the title
+        $sheet->setCellValue('A1', 'Data Tiket Selesai');
+        $sheet->mergeCells('A1:J1');
+        $sheet->getStyle('A1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 14,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'color' => ['argb' => 'FF4CAF50'],
+            ],
+        ]);
+
+        // Shift headers down by one row
+        $sheet->fromArray($this->headings(), null, 'A2');
+
         // Apply styles to the first row (headers)
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A2:J2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],

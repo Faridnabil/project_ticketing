@@ -83,8 +83,29 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
 
     public function styles(Worksheet $sheet)
     {
-        // Apply styles to the first row (headers)
-        $sheet->getStyle('A1:G1')->applyFromArray([
+        // Add the title
+        $sheet->setCellValue('A1', 'Data Tiket');
+        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 14,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'color' => ['argb' => 'FF4CAF50'],
+            ],
+        ]);
+
+        // Shift headers down by one row
+        $sheet->fromArray($this->headings(), null, 'A2');
+
+        // Apply styles to the second row (headers)
+        $sheet->getStyle('A2:G2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],
@@ -112,4 +133,3 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
         ];
     }
 }
-
