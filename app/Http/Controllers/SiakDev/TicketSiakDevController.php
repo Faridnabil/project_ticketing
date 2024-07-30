@@ -13,6 +13,8 @@ use App\Models\Province;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationDepartment;
+use App\Notifications\NotificationPejabat;
+use App\Notifications\NotificationSiakDev;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -340,38 +342,34 @@ class TicketSiakDevController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
-        // $ticket->status_id = null;
-        // $ticket->approval_assign_to = 0;
-
-        // Simpan status_id yang lama sebelum mengubahnya
-        // $oldStatusId = $ticket->status_id;
-
-        // Update status_id dengan yang baru dari request
-
-        // Periksa apakah status_id berubah menjadi 4
-        // if ($request->status_id == 4) {
-        //     $authenticatedUserName = Auth::user()->name;
-
-        //     $notificationData = [
-        //         'name' => $authenticatedUserName,
-        //         'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
-        //         'thanks' => 'Terimakasih',
-        //         'Text' => '',
-        //         'Url' => url('/admin/ticket'),
-        //         'customer_id' => rand(1111, 9999),
-        //     ];
-
-        //     // Ambil semua pengguna dengan peran 'admin'
-        //     $helpdesks = User::role('Helpdesk')
-        //         ->get();
-
-        //     // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
-        //     foreach ($helpdesks as $helpdesk) {
-        //         Notification::send($helpdesk, new NotificationDepartment($notificationData));
-        //     }
-        // }
 
         $ticket->save();
+
+        // Notifikasi Ke Pejabat
+        if ($request->status_id == 4) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', Sudah diselesaikan',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/siak_dev/ticket'),
+                'pejabat_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan salah satu peran yang disebutkan
+            $roles = ['Helpdesk'];
+            $helpdesks = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('name', $roles);
+            })->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran yang disebutkan
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationPejabat($notificationData));
+            }
+        }
+
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
@@ -413,6 +411,29 @@ class TicketSiakDevController extends Controller
 
         // Simpan perubahan
         $ticket->save();
+
+        // Notifikasi Pejabat
+        if ($request->level5) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', terlah dialihkan kepada anda',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/pejabat/ticket'),
+                'pejabat' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan peran 'admin'
+            $helpdesks = User::role('Pejabat')
+                ->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationPejabat($notificationData));
+            }
+        }
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([

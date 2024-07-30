@@ -17,6 +17,8 @@ use App\Models\User;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
 use App\Notifications\NotificationDepartment;
+use App\Notifications\NotificationKoordinasi;
+use App\Notifications\NotificationKoordinator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -343,59 +345,52 @@ class TicketHelpdeskController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // ------ Notifikasi --------------
-            // $statusId = $validate['status_id'];
-            // $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
+            // Pengecekan status_id 5 untuk notifikasi
+            if ($request->status_id == 5) {
+                $levels = [
+                    'level1' => 2,
+                    'level2' => 3,
+                    'level3' => 4,
+                    'level4' => 5,
+                    'level5' => 6
+                ];
 
-            // // Ambil customer yang ditugaskan dari inputan
-            // $customerId = $validate['customer'];
-            // $customer = User::findOrFail($customerId);
+                foreach ($levels as $level => $role) {
+                    if (!empty($ticket->$level)) {
+                        $levelUser = User::find($ticket->$level);
+                        $url = match ($role) {
+                            'Helpdesk' => url('/helpdesk/ticket'),
+                            'Koordinator' => url('/koordinator/ticket'),
+                            'Staff Subdit' => url('/staff-subdit/ticket'),
+                            'SIAK Dev' => url('/siak-dev/ticket'),
+                            'Pejabat' => url('/pejabat/ticket'),
+                            default => url('/'),
+                        };
 
-            // $authenticatedUserName = Auth::user()->name;
+                        $notificationData = [
+                            'name' => $levelUser->name,
+                            'body' => 'Tiket yang ditangani ' . $levelUser->name . ', telah dibuka kembali oleh ' . $level,
+                            'thanks' => 'Terimakasih',
+                            'Text' => '',
+                            'Url' => $url,
+                            'koordinator_id' => rand(1111, 9999),
+                        ];
 
-            // if (in_array($status->status_name, ['Diterima', 'Proses'])) {
-            //     // Ambil departemen yang ditugaskan dari inputan
-            //     $assignedDepartmentId = $validate['assign_to'];
-            //     $assignedDepartment = User::findOrFail($assignedDepartmentId);
+                        // Ambil semua pengguna dengan peran yang sesuai
+                        $users = User::whereHas('roles', function ($query) use ($role) {
+                            $query->where('name', $role);
+                        })->get();
 
-            //     // Notifikasi untuk Customer
-            //     $notificationDataForCustomer = [
-            //         'name' => $authenticatedUserName,
-            //         'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
-            //         'thanks' => 'Terimakasih',
-            //         'Text' => 'Tolong cek kembali',
-            //         'Url' => url('/customer/myTicket'),
-            //         'customer_id' => rand(1111, 9999),
-            //     ];
+                        // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
+                        foreach ($users as $user) {
+                            Notification::send($user, new NotificationKoordinator($notificationData));
+                        }
 
-            //     Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-
-            //     // Notifikasi untuk Departemen yang ditugaskan
-            //     $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
-
-            //     $notificationDataForDepartment = [
-            //         'name' => $authenticatedUserName,
-            //         'body' => 'Tiket telah diberikan pada anda untuk dikerjakan ',
-            //         'thanks' => 'Terimakasih',
-            //         'Text' => 'Tolong cek kembali',
-            //         'Url' => url('/department/assignedTicket'),
-            //         'admin_id' => rand(1111, 9999),
-            //     ];
-
-            //     Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
-            // } elseif ($status->status_name == 'Selesai') {
-            //     // Notifikasi untuk Customer bahwa tiket telah dikerjakan
-            //     $notificationDataForCustomer = [
-            //         'name' => $authenticatedUserName,
-            //         'body' => 'Tiket anda sudah dikerjakan',
-            //         'thanks' => 'Terimakasih',
-            //         'Text' => 'Tolong cek hasilnya',
-            //         'Url' => url('/customer/myTicket'),
-            //         'customer_id' => rand(1111, 9999),
-            //     ];
-
-            //     Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-            // }
+                        // Hentikan loop setelah menemukan level yang sesuai
+                        break;
+                    }
+                }
+            }
 
             // Gabungkan file baru dengan file yang masih ada
             $attachments = array_merge($remainingAttachments, $attachments);
@@ -412,6 +407,7 @@ class TicketHelpdeskController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -519,38 +515,34 @@ class TicketHelpdeskController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
-        // $ticket->status_id = null;
-        // $ticket->approval_assign_to = 0;
-
-        // Simpan status_id yang lama sebelum mengubahnya
-        // $oldStatusId = $ticket->status_id;
-
-        // Update status_id dengan yang baru dari request
-
-        // Periksa apakah status_id berubah menjadi 4
-        // if ($request->status_id == 4) {
-        //     $authenticatedUserName = Auth::user()->name;
-
-        //     $notificationData = [
-        //         'name' => $authenticatedUserName,
-        //         'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
-        //         'thanks' => 'Terimakasih',
-        //         'Text' => '',
-        //         'Url' => url('/admin/ticket'),
-        //         'customer_id' => rand(1111, 9999),
-        //     ];
-
-        //     // Ambil semua pengguna dengan peran 'admin'
-        //     $helpdesks = User::role('Helpdesk')
-        //         ->get();
-
-        //     // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
-        //     foreach ($helpdesks as $helpdesk) {
-        //         Notification::send($helpdesk, new NotificationDepartment($notificationData));
-        //     }
-        // }
 
         $ticket->save();
+
+        // Notifikasi Koordinator
+        if ($request->status_id == 4) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', Sudah diselesaikan',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/helpdesk/ticket'),
+                'koordinator_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan salah satu peran yang disebutkan
+            $roles = ['Helpdesk'];
+            $helpdesks = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('name', $roles);
+            })->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran yang disebutkan
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationKoordinator($notificationData));
+            }
+        }
+
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
@@ -587,9 +579,31 @@ class TicketHelpdeskController extends Controller
         $ticket->level1 = $request->level1;
         $ticket->level2 = $request->level2;
 
-
         // Simpan perubahan
         $ticket->save();
+
+        // Notifikasi Koordinator
+        if ($request->level2) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', terlah dialihkan kepada anda',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/koordinator/ticket'),
+                'koordinator_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan peran 'admin'
+            $helpdesks = User::role('Koordinator')
+                ->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationKoordinator($notificationData));
+            }
+        }
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([

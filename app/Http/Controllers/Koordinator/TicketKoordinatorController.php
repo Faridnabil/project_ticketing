@@ -13,6 +13,7 @@ use App\Models\Province;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationDepartment;
+use App\Notifications\NotificationStaffSubdit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -164,28 +165,28 @@ class TicketKoordinatorController extends Controller
                 }
             }
 
-        // Simpan data tiket sebelum diupdate ke tabel history_ticket
-        DB::table('history_tickets')->insert([
-            'h_no_ticket' => $ticket->no_ticket,
-            'h_province_id' => $ticket->province_id,
-            'h_city_or_regency_id' => $ticket->city_or_regency_id,
-            'h_level1' => $ticket->level1,
-            'h_level2' => $ticket->level2,
-            'h_level3' => $ticket->level3,
-            'h_level4' => $ticket->level4,
-            'h_level5' => $ticket->level5,
-            'h_priority_id' => $ticket->priority_id,
-            'h_status_id' => $ticket->status_id,
-            'h_category_id' => $ticket->category_id,
-            'h_description' => $ticket->description,
-            'h_attachments' => $ticket->attachments,
-            'h_pic' => $ticket->pic,
-            'h_jabatan' => $ticket->jabatan,
-            'h_no_hp' => $ticket->no_hp,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'status_changedBy' => Auth::user()->id,
-        ]);
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $ticket->no_ticket,
+                'h_province_id' => $ticket->province_id,
+                'h_city_or_regency_id' => $ticket->city_or_regency_id,
+                'h_level1' => $ticket->level1,
+                'h_level2' => $ticket->level2,
+                'h_level3' => $ticket->level3,
+                'h_level4' => $ticket->level4,
+                'h_level5' => $ticket->level5,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'h_pic' => $ticket->pic,
+                'h_jabatan' => $ticket->jabatan,
+                'h_no_hp' => $ticket->no_hp,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
 
             // ------ Notifikasi --------------
             // $statusId = $validate['status_id'];
@@ -330,38 +331,33 @@ class TicketKoordinatorController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
-        // $ticket->status_id = null;
-        // $ticket->approval_assign_to = 0;
-
-        // Simpan status_id yang lama sebelum mengubahnya
-        // $oldStatusId = $ticket->status_id;
-
-        // Update status_id dengan yang baru dari request
-
-        // Periksa apakah status_id berubah menjadi 4
-        // if ($request->status_id == 4) {
-        //     $authenticatedUserName = Auth::user()->name;
-
-        //     $notificationData = [
-        //         'name' => $authenticatedUserName,
-        //         'body' => 'Tiket yang ditangani oleh ' . $authenticatedUserName . ', sudah terselesaikan',
-        //         'thanks' => 'Terimakasih',
-        //         'Text' => '',
-        //         'Url' => url('/admin/ticket'),
-        //         'customer_id' => rand(1111, 9999),
-        //     ];
-
-        //     // Ambil semua pengguna dengan peran 'admin'
-        //     $helpdesks = User::role('Helpdesk')
-        //         ->get();
-
-        //     // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
-        //     foreach ($helpdesks as $helpdesk) {
-        //         Notification::send($helpdesk, new NotificationDepartment($notificationData));
-        //     }
-        // }
 
         $ticket->save();
+
+        // Notifikasi Staff Subdit
+        if ($request->status_id == 4) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', Sudah diselesaikan',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/koordinator/ticket'),
+                'staff_subdit_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan salah satu peran yang disebutkan
+            $roles = ['Helpdesk'];
+            $helpdesks = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('name', $roles);
+            })->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran yang disebutkan
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationStaffSubdit($notificationData));
+            }
+        }
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
@@ -401,6 +397,29 @@ class TicketKoordinatorController extends Controller
 
         // Simpan perubahan
         $ticket->save();
+
+        // Notifikasi Staff Subdit
+        if ($request->level3) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', terlah dialihkan kepada anda',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/staff-subdit/ticket'),
+                'staff_subdit_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan peran 'admin'
+            $helpdesks = User::role('Staff Subdit')
+                ->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationStaffSubdit($notificationData));
+            }
+        }
 
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
