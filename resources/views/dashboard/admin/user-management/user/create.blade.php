@@ -150,12 +150,12 @@
                                 <!--end col-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
+                                    <label class="d-block fw-bold fs-6 mb-2">Foto Profil</label>
 
                                     <!--begin::Image input-->
                                     <div class="image-input image-input-outline" data-kt-image-input="true">
                                         <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-125px h-125px" id="imagePreview"
+                                        <div class="image-input-wrapper w-125px h-125px mb-3" id="imagePreview"
                                             style="background-image: url('assets/media/avatars/blank.png');
                                                     background-size: cover;
                                                     background-position: center;">

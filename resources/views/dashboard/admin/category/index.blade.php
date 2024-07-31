@@ -137,13 +137,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
-                            Close
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                            Tutup
                         </button>
                         <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
-                            <button class="btn btn-danger" type="submit">Hapus</button>
+                            <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                         </form>
                     </div>
                 </div>

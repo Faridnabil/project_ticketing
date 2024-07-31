@@ -71,7 +71,7 @@
                                         <th>Tetapkan Ke</th>
                                         <th>Dibuat Tanggal</th>
                                         <th>Status</th>
-                                        <th style="width: 200px">Aksi</th>
+                                        <th class="text-center" style="width: 200px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

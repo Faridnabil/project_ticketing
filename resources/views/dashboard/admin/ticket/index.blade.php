@@ -291,13 +291,13 @@
                         </div><!--end row-->
                     </div><!--end modal-body-->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
                         <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
-                            <button class="btn btn-danger" type="submit">Hapus</button>
+                            <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                         </form>
                     </div><!--end modal-footer-->
                 </div>
