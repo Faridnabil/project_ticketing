@@ -376,33 +376,90 @@ class UsersSeeder extends Seeder
         ]);
         $user->assignRole($helpdeskRole);
 
+        // User Koordinator
         $user = User::factory()->create([
-            'name' => 'Koordinator',
-            'email' => 'koordinator@gmail.com',
+            'name' => 'Firman Sanjaya',
+            'email' => 'koordinatorNetwork@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
         $user->assignRole($koordinatorRole);
 
         $user = User::factory()->create([
-            'name' => 'Staff Subdit',
-            'email' => 'staffSubdit@gmail.com',
+            'name' => 'Erwinsyah',
+            'email' => 'koordinatorDatabase@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($koordinatorRole);
+
+        $user = User::factory()->create([
+            'name' => 'Ahmad Jazuli',
+            'email' => 'koordinatorSysadmin@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($koordinatorRole);
+
+        $user = User::factory()->create([
+            'name' => 'Ridzqy Dini Hari',
+            'email' => 'koordinatorSecurity@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($koordinatorRole);
+
+        //-------------------------------------------
+
+        // User Stafsubdit
+        $user = User::factory()->create([
+            'name' => 'Staff Subdit 1',
+            'email' => 'staffSubdit1@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
         $user->assignRole($staffSubditRole);
 
         $user = User::factory()->create([
-            'name' => 'SIAK Dev',
-            'email' => 'siakdev@gmail.com',
+            'name' => 'Staff Subdit 2',
+            'email' => 'staffSubdit2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($staffSubditRole);
+
+        //------------------------------------------
+
+        // User Stafsubdit
+        $user = User::factory()->create([
+            'name' => 'SIAK Dev 1',
+            'email' => 'siakdev1@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
         $user->assignRole($siakDevRole);
 
         $user = User::factory()->create([
-            'name' => 'Pejabat',
-            'email' => 'pejabat@gmail.com',
+            'name' => 'SIAK Dev 2',
+            'email' => 'siakdev2@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($siakDevRole);
+
+        //------------------------------------------
+        // Akun User Pejabat
+        $user = User::factory()->create([
+            'name' => 'Pejabat 1',
+            'email' => 'pejabat1@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($pejabatRole);
+
+        $user = User::factory()->create([
+            'name' => 'Pejabat 2',
+            'email' => 'pejabat2@gmail.com',
             'password' => bcrypt('qwerty12'),
             'nik' => $faker->nik,
         ]);
