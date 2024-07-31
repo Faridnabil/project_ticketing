@@ -116,8 +116,16 @@
                                     @enderror
                                 </div>
 
+                                <script>
+                                    ClassicEditor
+                                        .create(document.querySelector('#description'))
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                </script>
+
                                 <div class="col-md-6">
-                                    <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
+                                    <label class="d-block fw-bold mb-2">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
@@ -151,12 +159,4 @@
         </div>
     </div>
     <!--end::Post-->
-
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#description'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 @endsection

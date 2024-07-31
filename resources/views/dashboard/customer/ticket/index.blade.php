@@ -14,14 +14,14 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Saya
+                {{-- <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Saya
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
                     <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket Saya</small>
                     <!--end::Description-->
-                </h1>
+                </h1> --}}
                 <!--end::Title-->
             </div>
             <!--end::Page title-->
@@ -71,7 +71,7 @@
                                         <th>Tetapkan Ke</th>
                                         <th>Dibuat Tanggal</th>
                                         <th>Status</th>
-                                        <th class="text-center" style="width: 200px">Aksi</th>
+                                        <th style="width: 140px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

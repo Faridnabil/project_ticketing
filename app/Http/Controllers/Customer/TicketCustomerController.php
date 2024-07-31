@@ -25,16 +25,14 @@ class TicketCustomerController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
-            ->whereIn('status_id', [1, 2, 3]) // Filter for 'Diterima' and 'Proses' statuses
             ->get();
 
         return view('dashboard.customer.ticket.index', compact('tickets'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -114,6 +112,25 @@ class TicketCustomerController extends Controller
 
 
             $validate['attachments'] = json_encode($attachments);
+
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $validate['no_ticket'] = $newTicketId,
+                'h_title' => $request->title,
+                'h_customer' => $request->customer,
+                'h_assign_to' => $request->assign_to,
+                // 'h_due_date' => $request->priority_id,
+                'h_solution' => $request->solution,
+                'h_priority_id' => $request->priority_id,
+                'h_status_id' => $request->status_id,
+                'h_category_id' => $request->category_id,
+                'h_description' => $request->description,
+                'h_attachments' => $request->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
 
             Ticket::create($validate);
             DB::commit();
