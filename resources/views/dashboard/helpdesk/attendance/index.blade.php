@@ -185,8 +185,8 @@
                                             </script>
                                         @else
                                             <form class="row g-3 needs-validation" method="POST"
-                                                action="{{ route('helpdesk.attendance.store') }}" enctype="multipart/form-data"
-                                                novalidate>
+                                                action="{{ route('helpdesk.attendance.store') }}"
+                                                enctype="multipart/form-data" novalidate>
                                                 @csrf
                                                 <div class="col-md-6">
                                                     <label for="validationCustom01" class="form-label">Nama Lengkap</label>
@@ -272,7 +272,7 @@
                                                                     @endif
                                                                 </td>
                                                             </tr>
-                                                            @if ($attendance_today->check_in)
+                                                            @if ($attendance_today->check_out)
                                                                 <tr>
                                                                     <td>{{ $attendance_today->name }}</td>
                                                                     <td>
@@ -423,13 +423,22 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ date('H:i', strtotime($attendance->date_check_in)) }}
+                                                @if ($attendance->check_in)
+                                                    {{ date('H:i', strtotime($attendance->date_check_in)) }}
+                                                @else
+                                                -
+                                                @endif
                                             </td>
                                             <td>
-                                                {{ date('H:i', strtotime($attendance->date_check_out)) }}
+                                                @if ($attendance->check_out)
+                                                    {{ date('H:i', strtotime($attendance->date_check_out)) }}
+                                                @else
+                                                -
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($attendance->attachment == null)
+                                                -
                                                 @else
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
@@ -438,9 +447,9 @@
                                                     </a>
                                                 @endif
                                             </td>
-                                            <td style="text-align: left"> {!! $attendance_today->activity !!}
+                                            <td style="text-align: left"> {!! $attendance_today->activity ?? '-' !!}
                                             </td>
-                                            <td style="text-align: left"> {!! $attendance_today->status_activity !!}
+                                            <td style="text-align: left"> {!! $attendance_today->status_activity ?? '-' !!}
                                             </td>
                                         </tr>
                                     @endforeach
