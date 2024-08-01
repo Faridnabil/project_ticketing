@@ -129,7 +129,7 @@
                                             <div class="d-flex mb-3">
                                                 <span class="fw-bold text-muted me-2">Prioritas:</span>
                                                 <span
-                                                    class="fw-bolder text-gray-600">{{ $ticket->priority->priority_name }}</span>
+                                                    class="fw-bolder text-gray-600">{{ $ticket->priority->priority_name ?? ''}}</span>
                                             </div>
                                             <div class="d-flex mb-3">
                                                 <span class="fw-bold text-muted me-2">Deskripsi:</span>

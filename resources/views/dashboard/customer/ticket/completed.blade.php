@@ -112,43 +112,43 @@
             </div>
             <!--end::Container-->
         </div>
-        <!--end::Post-->
+    </div>
+    <!--end::Post-->
 
-        @foreach ($tickets as $ticket)
-            <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header bg-danger">
-                            <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
-                                Form Hapus Tiket
-                            </h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div><!--end modal-header-->
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-lg-9">
-                                    <h5>Apakah Anda yakin menghapus Tiket ini?</h5>
-                                    <small
-                                        class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
-                                    <ul class="mt-3 mb-0">
-                                        <li>{{ $ticket->no_ticket }}</li>
-                                        <li>{{ $ticket->title }}</li>
-                                    </ul>
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div><!--end modal-body-->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
-                                Tutup
-                            </button>
-                            <form action="{{ route('myTicket.destroy', $ticket->id) }}" method="POST" class="d-inline">
-                                @method('delete')
-                                @csrf
-                                <button class="btn btn-danger" type="submit">Hapus</button>
-                            </form>
-                        </div><!--end modal-footer-->
-                    </div>
+    @foreach ($tickets as $ticket)
+        <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
+                            Form Hapus Tiket
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <h5>Apakah Anda yakin menghapus Tiket ini?</h5>
+                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                <ul class="mt-3 mb-0">
+                                    <li>{{ $ticket->no_ticket }}</li>
+                                    <li>{{ $ticket->title }}</li>
+                                </ul>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end modal-body-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
+                            Tutup
+                        </button>
+                        <form action="{{ route('myTicket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                            @method('delete')
+                            @csrf
+                            <button class="btn btn-danger" type="submit">Hapus</button>
+                        </form>
+                    </div><!--end modal-footer-->
                 </div>
             </div>
-        @endforeach
-    @endsection
+        </div>
+    @endforeach
+@endsection

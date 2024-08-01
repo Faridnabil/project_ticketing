@@ -52,13 +52,10 @@
                     <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-bell"></i>
-                        <span class="notification">
-                            @if (auth()->user()->unreadNotifications->count() != 0)
-                                <div
-                                    class="position-absolute translate-middle bottom-0 ma-3 mb-3 bg-danger rounded-circle border border-3 border-white h-15px w-15px">
-                                </div>
-                            @endif
-                        </span>
+                        @if (auth()->user()->unreadNotifications->count() != 0)
+                            <span class="notification">
+                            </span>
+                        @endif
                     </a>
                     <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
                         <li>
@@ -118,19 +115,22 @@
                                                     method="POST" class="notification-form">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <a href="{{ $notification->data['Url'] }}">
-                                                        <div class="notif-icon notif-primary">
+
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">
+                                                        <div class="notif-icon notif-primary" style="size: 20px">
                                                             <i class="fa fa-bell"></i>
                                                         </div>
-                                                        <form action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
-                                                            method="POST" class="notification-form">
-                                                          @csrf
-                                                          @method('PATCH')
-                                                          <div class="notif-content" onclick="submitForm('form-{{ $notification->id }}')">
-                                                              <span class="block">{{ $notification->data['name'] }}</span>
-                                                              <span class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
-                                                          </div>
-                                                      </form>
+                                                        <div class="notif-content"
+                                                            onclick="submitForm('form-{{ $notification->id }}')">
+                                                            <span
+                                                                class="block">{{ $notification->data['name'] }}</span>
+                                                            <span
+                                                                class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
+                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                    {{ ucwords($notification->data['body']) }}
+                                                                </div>
+                                                        </div>
                                                     </a>
                                                 </form>
                                             @endforeach
@@ -147,8 +147,9 @@
                                                     method="POST" class="notification-form">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <a href="{{ $notification->data['Url'] }}">
-                                                        <div class="notif-icon notif-primary">
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">
+                                                        <div class="notif-icon notif-primary" style="size: 20px">
                                                             <i class="fa fa-comment"></i>
                                                         </div>
                                                         <div class="notif-content">
@@ -156,6 +157,9 @@
                                                                 class="block">{{ $notification->data['name'] }}</span>
                                                             <span
                                                                 class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
+                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                    {{ ucwords($notification->data['body']) }}
+                                                                </div>
                                                         </div>
                                                     </a>
                                                 </form>
@@ -166,8 +170,8 @@
                             </div>
                         </li>
                         <li>
-                            <a class="see-all" href="javascript:void(0);">See all notifications<i
-                                    class="fa fa-angle-right"></i></a>
+                            {{-- <a class="see-all" href="javascript:void(0);">See all notifications<i
+                                    class="fa fa-angle-right"></i></a> --}}
                         </li>
                     </ul>
                 </li>
