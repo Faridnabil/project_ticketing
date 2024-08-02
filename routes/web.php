@@ -15,6 +15,7 @@ use App\Http\Controllers\Customer\TicketCustomerController;
 use App\Http\Controllers\Department\AssignedTicketController;
 use App\Http\Controllers\Department\HomeDepartmentController;
 use App\Http\Controllers\Department\UnassignedTicketController;
+use App\Http\Controllers\Department\IncidentalActivityController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -98,6 +99,7 @@ Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {
         '/department/assignedTicket' => AssignedTicketController::class,
     ]);
 
+
     Route::get('/department/unassignedTicket', [UnassignedTicketController::class, 'index'])->name('unassignedTicket.index');
     Route::get('/department/unassignedTicketShow/{id}', [UnassignedTicketController::class, 'show'])->name('unassignedTicket.show');
 
@@ -108,6 +110,10 @@ Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {
     Route::put('/department/assignedTicketUpdate/{id}', [AssignedTicketController::class, 'update_comment'])->name('assignedTickets.update');
     Route::get('/department/completed-tickets', [AssignedTicketController::class, 'completedTickets'])->name('department.completed-tickets');
     Route::get('/department/export-tickets', [AssignedTicketController::class, 'export'])->name('department.tickets.export');
+
+    Route::get('department/incidental-activities', [IncidentalActivityController::class, 'index'])->name('department.incidental-activities.index');
+    Route::get('department/incidental-activities/create', [IncidentalActivityController::class, 'create'])->name('department.incidental-activities.create');
+    Route::post('department/incidental-activities', [IncidentalActivityController::class, 'store'])->name('department.incidental-activities.store');
 
     Route::post('/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
 });

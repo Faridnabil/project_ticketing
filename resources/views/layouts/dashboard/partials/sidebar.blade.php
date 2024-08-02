@@ -200,6 +200,13 @@
                                 <p>Tiket Selesai</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="menu-link"
+                                href="{{ route('department.incidental-activities.index') }}">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Incidental Activity</p>
+                            </a>
+                        </li>
                     @endrole
                 @endcan
             </ul>
