@@ -60,15 +60,6 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Nomor Tiket</th>
-                                    <th>Judul</th>
-                                    <th>Pemohon</th>
-                                    <th>Tanggal Pengajuan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 @if ($requestAssignments->count())
                                     @foreach ($requestAssignments as $requestAssignment)

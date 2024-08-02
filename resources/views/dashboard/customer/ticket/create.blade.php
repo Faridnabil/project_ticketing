@@ -82,7 +82,7 @@
                                     <select name="category_id"
                                         class="form-control @error('category_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
+                                        <option disabled selected>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                         @endforeach
@@ -101,9 +101,8 @@
                                 <input type="hidden" name="status_id" value="1">
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
-                                        cols="10" rows="3"></textarea>
+                                    <label for="validationCustom02" class="form-label">Deskripsi</label>
+                                    <textarea id="description" name="description" autofocus required></textarea>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -117,7 +116,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
+                                    <label class="d-block fw-bold mb-2">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
@@ -152,6 +151,8 @@
     </div>
     <!--end::Post-->
 
+    {{-- CKEditor CDN --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

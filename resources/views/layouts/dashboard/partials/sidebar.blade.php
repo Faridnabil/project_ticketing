@@ -109,6 +109,7 @@
                     </li>
                 @endcan
 
+
                 @can('View Category')
                     <li class="nav-item">
                         <a class="menu-link {{ Request::is('category') ? 'active' : '' }}"

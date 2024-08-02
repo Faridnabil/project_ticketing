@@ -91,6 +91,40 @@
         }
     </style>
     {{-- <link rel="stylesheet" href="assets/css/demo.css" /> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.notification-link').forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default link behavior
+
+                    var form = this.closest('.notification-form');
+                    var url = this.getAttribute('href');
+
+                    if (form) {
+                        // Submit the form via AJAX
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', form.action, true);
+                        xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                // Redirect to the URL after the form is successfully submitted
+                                window.location.href = url;
+                            }
+                        };
+
+                        // Collect form data
+                        var formData = new FormData(form);
+                        var formBody = new URLSearchParams(formData).toString();
+
+                        xhr.send(formBody);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -144,6 +178,7 @@
 
     <!-- Kaiadmin JS -->
     <script src="{{ asset('templates/assets/js/kaiadmin.min.js') }}"></script>
+
 
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     {{-- <script src="assets/js/setting-demo.js"></script>

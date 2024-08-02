@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\HistoryTicket;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Comment;
@@ -25,16 +26,14 @@ class TicketCustomerController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
-            ->whereIn('status_id', [1, 2, 3]) // Filter for 'Diterima' and 'Proses' statuses
             ->get();
 
         return view('dashboard.customer.ticket.index', compact('tickets'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -115,6 +114,25 @@ class TicketCustomerController extends Controller
 
             $validate['attachments'] = json_encode($attachments);
 
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $validate['no_ticket'] = $newTicketId,
+                'h_title' => $request->title,
+                'h_customer' => $request->customer,
+                'h_assign_to' => $request->assign_to,
+                // 'h_due_date' => $request->priority_id,
+                'h_solution' => $request->solution,
+                'h_priority_id' => $request->priority_id,
+                'h_status_id' => $request->status_id,
+                'h_category_id' => $request->category_id,
+                'h_description' => $request->description,
+                'h_attachments' => $request->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
+
             Ticket::create($validate);
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
@@ -133,8 +151,8 @@ class TicketCustomerController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Tenaga Ahli')
-            ->get();
+        // $assignTo = User::role('Department')
+        //     ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -142,22 +160,22 @@ class TicketCustomerController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket->id)
-            ->latest()
-            ->get();
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        ->where('h_no_ticket', $ticket->no_ticket)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
             ->get();
 
-        return view(
-            'dashboard.customer.ticket.show',
+            return view(
+                'dashboard.customer.ticket.show',
             compact(
                 'ticket',
                 'logs',
                 'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
@@ -242,6 +260,23 @@ class TicketCustomerController extends Controller
 
             // Update tiket dengan data baru
             $ticket->update($validate);
+
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_customer' => $ticket->customer,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
 
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Diupdate.');

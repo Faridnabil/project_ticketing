@@ -47,74 +47,131 @@
                         </form>
                     </ul>
                 </li>
+
                 <li class="nav-item topbar-icon dropdown hidden-caret">
                     <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-bell"></i>
-                        <span class="notification">
-                            @if (auth()->user()->unreadNotifications->count() != 0)
-                                <div
-                                    class="position-absolute translate-middle bottom-0 ma-3 mb-3 bg-danger rounded-circle border border-3 border-white h-15px w-15px">
-                                </div>
-                            @endif
-                        </span>
+                        @if (auth()->user()->unreadNotifications->count() != 0)
+                            <span class="notification">
+                            </span>
+                        @endif
                     </a>
                     <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
                         <li>
                             <div class="dropdown-title">
-                                You have 4 new notification
+                                You have {{ auth()->user()->unreadNotifications->count() }} new notifications
                             </div>
                         </li>
                         <li>
                             <div class="notif-scroll scrollbar-outer">
-                                <div class="notif-center">
-                                    <a href="#">
-                                        <div class="notif-icon notif-primary">
-                                            <i class="fa fa-user-plus"></i>
+                                <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#tab-persetujuan"
+                                            style="width: 120px">Persetujuan
+                                            @php
+                                                $persetujuanCount = auth()
+                                                    ->user()
+                                                    ->unreadNotifications->filter(function ($notification) {
+                                                        return !isset($notification->data['type']) ||
+                                                            $notification->data['type'] != 'comment';
+                                                    })
+                                                    ->count();
+                                            @endphp
+                                            @if ($persetujuanCount > 0)
+                                                <span class="badge bg-danger"
+                                                    style="margin-left: 5px">{{ $persetujuanCount }}</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab-komentar"
+                                            style="width: 120px">Komentar
+                                            @php
+                                                $komentarCount = auth()
+                                                    ->user()
+                                                    ->unreadNotifications->filter(function ($notification) {
+                                                        return isset($notification->data['type']) &&
+                                                            $notification->data['type'] == 'comment';
+                                                    })
+                                                    ->count();
+                                            @endphp
+                                            @if ($komentarCount > 0)
+                                                <span class="badge bg-danger"
+                                                    style="margin-left: 5px">{{ $komentarCount }}</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="tab-persetujuan">
+                                        <div class="notif-center">
+                                            @foreach (auth()->user()->unreadNotifications as $notification)
+                                                @if (isset($notification->data['type']) && $notification->data['type'] == 'comment')
+                                                    @continue
+                                                @endif
+                                                <form
+                                                    action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
+                                                    method="POST" class="notification-form">
+                                                    @csrf
+                                                    @method('PATCH')
+
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">
+                                                        <div class="notif-icon notif-primary" style="size: 20px">
+                                                            <i class="fa fa-bell"></i>
+                                                        </div>
+                                                        <div class="notif-content"
+                                                            onclick="submitForm('form-{{ $notification->id }}')">
+                                                            <span
+                                                                class="block">{{ $notification->data['name'] }}</span>
+                                                            <span
+                                                                class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
+                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                    {{ ucwords($notification->data['body']) }}
+                                                                </div>
+                                                        </div>
+                                                    </a>
+                                                </form>
+                                            @endforeach
                                         </div>
-                                        <div class="notif-content">
-                                            <span class="block"> New user registered </span>
-                                            <span class="time">5 minutes ago</span>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-komentar">
+                                        <div class="notif-center">
+                                            @foreach (auth()->user()->unreadNotifications as $notification)
+                                                @if (!isset($notification->data['type']) || $notification->data['type'] != 'comment')
+                                                    @continue
+                                                @endif
+                                                <form
+                                                    action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
+                                                    method="POST" class="notification-form">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">
+                                                        <div class="notif-icon notif-primary" style="size: 20px">
+                                                            <i class="fa fa-comment"></i>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span
+                                                                class="block">{{ $notification->data['name'] }}</span>
+                                                            <span
+                                                                class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
+                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                    {{ ucwords($notification->data['body']) }}
+                                                                </div>
+                                                        </div>
+                                                    </a>
+                                                </form>
+                                            @endforeach
                                         </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="notif-icon notif-success">
-                                            <i class="fa fa-comment"></i>
-                                        </div>
-                                        <div class="notif-content">
-                                            <span class="block">
-                                                Rahmad commented on Admin
-                                            </span>
-                                            <span class="time">12 minutes ago</span>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="notif-img">
-                                            <img src="assets/img/profile2.jpg" alt="Img Profile" />
-                                        </div>
-                                        <div class="notif-content">
-                                            <span class="block">
-                                                Reza send messages to you
-                                            </span>
-                                            <span class="time">12 minutes ago</span>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="notif-icon notif-danger">
-                                            <i class="fa fa-heart"></i>
-                                        </div>
-                                        <div class="notif-content">
-                                            <span class="block"> Farrah liked Admin </span>
-                                            <span class="time">17 minutes ago</span>
-                                        </div>
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <a class="see-all" href="javascript:void(0);">See all notifications<i
-                                    class="fa fa-angle-right"></i>
-                            </a>
+                            {{-- <a class="see-all" href="javascript:void(0);">See all notifications<i
+                                    class="fa fa-angle-right"></i></a> --}}
                         </li>
                     </ul>
                 </li>
@@ -164,7 +221,8 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-none">
                                     @csrf
                                 </form>
                             </li>

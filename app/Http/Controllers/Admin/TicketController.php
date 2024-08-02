@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\AllTicketsExport;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\HistoryTicket;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Comment;
@@ -135,6 +136,24 @@ class TicketController extends Controller
                 $validate['status_id'] = 2; // Ganti 2 dengan ID status "Diterima" yang sesuai
             }
 
+            // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $validate['no_ticket'] = $newTicketId,
+                'h_title' => $request->title,
+                'h_customer' => $request->customer,
+                'h_assign_to' => $request->assign_to,
+                // 'h_due_date' => $request->priority_id,
+                'h_solution' => $request->solution,
+                'h_priority_id' => $request->priority_id,
+                'h_status_id' => $request->status_id,
+                'h_category_id' => $request->category_id,
+                'h_description' => $request->description,
+                'h_attachments' => $request->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
             Ticket::create($validate);
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dibuat.');
@@ -154,8 +173,8 @@ class TicketController extends Controller
         $customers = User::role('Customer')
             ->get();
 
-        $assignTo = User::role('Tenaga Ahli')
-            ->get();
+        // $assignTo = User::role('Department')
+        //     ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -163,10 +182,11 @@ class TicketController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket->id)
-            ->latest()
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+            ->where('h_no_ticket', $ticket->no_ticket)
+            ->orderBy('created_at', 'desc')
             ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -178,12 +198,11 @@ class TicketController extends Controller
                 'ticket',
                 'logs',
                 'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
                 'comments',
-                'statusChangedBy'
+                'statusChangedBy',
             )
         );
     }
@@ -260,6 +279,22 @@ class TicketController extends Controller
             if (!empty($validate['assign_to'])) {
                 $validate['status_id'] = Status::where('status_name', 'Diterima')->first()->id;
             }
+
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_customer' => $ticket->customer,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
 
             // ------ Notifikasi --------------
             $statusId = $validate['status_id'];
@@ -433,6 +468,22 @@ class TicketController extends Controller
             ];
 
             Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
+
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_customer' => $ticket->customer,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
 
             return redirect()->back()->with('success', 'Tiket berhasil diassign.');
         }
