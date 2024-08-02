@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
@@ -43,17 +44,23 @@ class AssignedTicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Tenaga Ahli')->get();
+        $customers = User::role('Customer')
+            ->get();
+
+        // $assignTo = User::role('Department')
+        //     ->get();
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $id)
-            ->latest()
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+            ->where('h_no_ticket', $ticket->no_ticket)
+            ->orderBy('created_at', 'desc')
             ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -65,12 +72,11 @@ class AssignedTicketController extends Controller
                 'ticket',
                 'logs',
                 'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
+                'comments',
                 'statusChangedBy',
-                'comments'
             )
         );
     }
@@ -136,6 +142,23 @@ class AssignedTicketController extends Controller
                     $attachments[] = $nama_folder . "/" . $nama_file;
                 }
             }
+
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_customer' => $ticket->customer,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
 
             // ------ Notifikasi --------------
             $statusId = $validate['status_id'];

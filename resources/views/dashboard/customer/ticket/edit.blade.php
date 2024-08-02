@@ -85,7 +85,7 @@
                                     <select name="category_id"
                                         class="form-control @error('category_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
+                                        <option disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
@@ -120,11 +120,11 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Status</label>
-                                    <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
-                                        <option></option>
+                                    <select name="status_id" class="form-control @error('status_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
+                                        <option disabled>Pilih Status</option>
                                         @foreach ($statuses as $status)
                                             @if (in_array($status->status_name, ['Proses', 'Selesai']))
                                                 <option value="{{ $status->id }}"
@@ -139,7 +139,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
+                                    <label class="d-block fw-bold fs-6 mb-2">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
@@ -177,6 +177,8 @@
     </div>
     <!--end::Post-->
 
+    {{-- CKEditor CDN --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

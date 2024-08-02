@@ -108,7 +108,7 @@
                         xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
                         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhr.onreadystatechange = function () {
+                        xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
                                 // Redirect to the URL after the form is successfully submitted
                                 window.location.href = url;
@@ -178,6 +178,7 @@
 
     <!-- Kaiadmin JS -->
     <script src="{{ asset('templates/assets/js/kaiadmin.min.js') }}"></script>
+
 
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     {{-- <script src="assets/js/setting-demo.js"></script>

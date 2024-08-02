@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
+use App\Models\HistoryTicket;
 use App\Models\Ticket;
 use App\Models\ActivityLog;
 use App\Models\Category;
@@ -74,17 +75,23 @@ class UnassignedTicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Tenaga Ahli')->get();
+        $customers = User::role('Customer')
+            ->get();
+
+        // $assignTo = User::role('Department')
+        //     ->get();
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+
         $statusChangedBy = Auth::user();
 
-        $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket)
-            ->latest()
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+            ->where('h_no_ticket', $ticket->no_ticket)
+            ->orderBy('created_at', 'desc')
             ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -96,12 +103,11 @@ class UnassignedTicketController extends Controller
                 'ticket',
                 'logs',
                 'customers',
-                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
+                'comments',
                 'statusChangedBy',
-                'comments'
             )
         );
     }

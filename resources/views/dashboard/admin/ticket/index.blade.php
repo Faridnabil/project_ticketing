@@ -73,7 +73,7 @@
                                     <th>Tetapkan Ke</th>
                                     <th>Prioritas</th>
                                     <th>Status</th>
-                                    <th style="width: 300px">Aksi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

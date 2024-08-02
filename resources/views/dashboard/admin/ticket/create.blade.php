@@ -62,7 +62,7 @@
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
                                     <select name="customer" class="form-control @error('customer') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Pemilik"required autofocus>
-                                        <option></option>
+                                        <option disabled selected>Pilih Kepemilikan</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                         @endforeach
@@ -83,7 +83,7 @@
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
                                     <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Departemen" required autofocus>
-                                        <option></option>
+                                        <option disabled selected>Ditugaskan Kepada</option>
                                         @foreach ($assignTo as $assign)
                                             <option value="{{ $assign->id }}">{{ $assign->name }}</option>
                                         @endforeach
@@ -104,7 +104,7 @@
                                     <select name="priority_id"
                                         class="form-select @error('priority_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
-                                        <option></option>
+                                        <option selected disabled>Pilih Prioritas</option>
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                         @endforeach
@@ -140,7 +140,7 @@
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Status"required autofocus>
-                                        <option></option>
+                                        <option selected disabled>Pilih Status</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                         @endforeach
@@ -161,7 +161,7 @@
                                     <select name="category_id"
                                         class="form-select @error('category_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
+                                        <option selected disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                         @endforeach
@@ -195,7 +195,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
+                                    <label class="d-block fw-bold fs-6 mb-2">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
@@ -230,6 +230,8 @@
     </div>
     <!--end::Post-->
 
+        {{-- CKEditor CDN --}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

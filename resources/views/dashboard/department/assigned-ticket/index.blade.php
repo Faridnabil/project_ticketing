@@ -94,8 +94,8 @@
                                                             -</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                                <td>{{ date('d F Y', strtotime($ticket->due_date)) }}</td>
+                                                <td>{{ date('d F Y', strtotime($ticket->created_at))?? '' }}</td>
+                                                <td>{{ date('d F Y', strtotime($ticket->due_date))?? '' }}</td>
                                                 <td>
                                                     @if ($ticket->status_id == '2')
                                                         <span class="badge"

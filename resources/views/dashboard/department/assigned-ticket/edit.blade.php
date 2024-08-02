@@ -60,7 +60,7 @@
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
                                     <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Departemen" required autofocus>
-                                        <option></option>
+                                        <option disabled>Ditugaskan kepada</option>
                                         @foreach ($assignTo as $assign)
                                             <option value="{{ $assign->id }}"
                                                 {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
@@ -77,7 +77,7 @@
                                     <select name="priority_id"
                                         class="form-select @error('priority_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
-                                        <option></option>
+                                        <option disabled>Pilih Prioritas</option>
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}"
                                                 {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
@@ -102,9 +102,9 @@
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
-                                        <option></option>
+                                        <option disabled>Pilih Status</option>
                                         @foreach ($statuses as $status)
-                                            @if (in_array($status->status_name, ['Diterima' ,'Proses', 'Selesai']))
+                                            @if (in_array($status->status_name, ['Diterima', 'Proses', 'Selesai']))
                                                 <option value="{{ $status->id }}"
                                                     {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
                                                     {{ $status->status_name }}</option>
@@ -121,7 +121,7 @@
                                     <select name="category_id"
                                         class="form-select @error('category_id') is-invalid @enderror"data-control="select2"
                                         data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
+                                        <option disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
@@ -194,6 +194,8 @@
         </div>
     </div>
 
+    {{-- CKEditor CDN --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
