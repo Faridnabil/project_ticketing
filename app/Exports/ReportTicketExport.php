@@ -55,11 +55,16 @@ class ReportTicketExport implements FromCollection, WithHeadings
             }
 
             return [
+                'No' => $ticket->id,
                 'Nomor Tiket' => $ticket->no_ticket,
+                'Dibuat Tanggal' => date('d F Y', strtotime($ticket->created_at)),
+                'No Provinsi' => $ticket->province->no_province,
+                'No Kabupaten'=> $ticket->cityOrRegency->no_city_or_regency,
+                'Nama Kabupaten' => $ticket->cityOrRegency->city_or_regency_name,
+              'Keterangan Permasalahan'=> strip_tags(html_entity_decode($ticket->description)),
                 'Kategori' => $ticket->category->category_name,
                 'Disposisi' => $disposisi,
                 'Prioritas' => $priority,
-                'Dibuat Tanggal' => date('d F Y', strtotime($ticket->created_at)),
                 'Status' => $status,
             ];
         });
@@ -68,11 +73,16 @@ class ReportTicketExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
+            'No',
             'Nomor Tiket',
+            'Dibuat Tanggal',
+            'No Provinsi',
+            'No Kabupaten',
+            'Nama Kabupaten',
+            'Keterangan Permasalahan',
             'Kategori',
             'Disposisi',
             'Prioritas',
-            'Dibuat Tanggal',
             'Status',
         ];
     }
