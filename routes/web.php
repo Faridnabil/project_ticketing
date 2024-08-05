@@ -117,7 +117,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
-    Route::get('/helpdesk/NewTicket', [TicketHelpdeskController::class, 'NewTicket'])->name('NewTicket.index');
+    Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
 });
 
 

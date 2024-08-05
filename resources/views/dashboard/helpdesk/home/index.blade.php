@@ -176,7 +176,8 @@
                                             </svg>
                                         </span>
                                         <span class="text-primary fw-bold fs-3">{{ $total_tiket }}</span>
-                                        <a href="#" class="text-primary fw-bold fs-6">Total Tiket</a>
+                                        <a href="{{ route('helpdesk.ticket.index') }}"
+                                            class="text-primary fw-bold fs-6">Total Tiket</a>
                                     </div>
 
                                     <div class="col"
@@ -192,7 +193,8 @@
                                             </svg>
                                         </span>
                                         <span class="text-danger fw-bold fs-3">{{ $tiket_tertunda }}</span>
-                                        <a href="#" class="text-danger fw-bold fs-6 mt-2">Tiket Masuk</a>
+                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Tertunda']) }}"
+                                            class="text-danger fw-bold fs-6 mt-2">Tiket Masuk</a>
                                     </div>
 
                                     <div class="col"
@@ -208,7 +210,8 @@
                                             </svg>
                                         </span>
                                         <span class="text-warning fw-bold fs-3">{{ $tiket_buka_proses }}</span>
-                                        <a href="#" class="text-warning fw-bold fs-6">Proses</a>
+                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses,Diterima,Buka Kembali']) }}"
+                                            class="text-warning fw-bold fs-6 mt-2">Proses</a>
                                     </div>
 
 
@@ -226,7 +229,8 @@
                                                 </svg>
                                             </span>
                                             <span class="text-success fw-bold fs-3">{{ $tiket_selesai }}</span>
-                                            <a href="#" class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
+                                            <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                class="text-success fw-bold fs-6 mt-2">Tiket Selesai</a>
                                         </div>
                                     </div>
                                 </div>

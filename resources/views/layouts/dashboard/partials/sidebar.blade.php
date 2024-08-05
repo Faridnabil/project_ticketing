@@ -503,8 +503,8 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="{{ request()->routeIs('helpdesk.NewTicket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('helpdesk.NewTicket.index') }}">
+                        <a class="{{ request()->routeIs('helpdesk.newTickets.index') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('helpdesk.newTickets.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">

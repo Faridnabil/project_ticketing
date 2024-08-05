@@ -16,11 +16,20 @@ class HomeHelpdeskController extends Controller
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')->get();
 
         // Menghitung jumlah tiket berdasarkan status
-        $total_tiket = $tickets->count();
-        $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        $total_tiket = $tickets
+            ->count();
+        $tiket_belum = $tickets
+            ->where('status.status_name', null)
+            ->count();
+        $tiket_buka_proses = $tickets
+            ->whereIn('status.status_name', ['Diterima', 'Proses', 'Buka Kembali'])
+            ->count();
+        $tiket_tertunda = $tickets
+            ->where('status.status_name', 'Tertunda')
+            ->count();
+        $tiket_selesai = $tickets
+            ->where('status.status_name', 'Selesai')
+            ->count();
 
         return view(
             'dashboard.helpdesk.home.index',
@@ -35,7 +44,6 @@ class HomeHelpdeskController extends Controller
             )
         );
     }
-
     public function getTicketChartData(Request $request)
     {
         $year = $request->input('year', Carbon::now()->year);
@@ -71,8 +79,6 @@ class HomeHelpdeskController extends Controller
 
         return response()->json($chartData);
     }
-
-
     public function getDailyTicketChartData(Request $request)
     {
         $month = $request->input('month', Carbon::now()->month);
