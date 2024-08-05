@@ -111,7 +111,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
-        '/helpdesk/report' => ReportController::class,
+        // '/helpdesk/report' => ReportController::class,
     ]);
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
@@ -119,11 +119,12 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
-    Route::get('/helpdesk/NewTicket', [TicketHelpdeskController::class, 'NewTicket'])->name('NewTicket.index');
+    Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
 
-    // Report Routes
-    Route::post('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
-    Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
+        // Report Routes
+        Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
+        Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
+        Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
 });
 
 

@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('helpdesk.report.index') }}" method="post">
+                    <form action="{{ route('helpdesk.report.filter') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -55,16 +55,13 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-toolbar">
-                        <form action="{{ route('helpdesk.report.export') }}" method="get">
-                            <input type="hidden" name="awal" value="{{ $req1 }}">
-                            <input type="hidden" name="akhir" value="{{ $req2 }}">
-                            <button type="submit" class="btn mb-4" style="background-color: #17ba4b;color:white">
-                                <span class="img-icon">
-                                    <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
-                                </span>
-                                Export
-                            </button>
-                        </form>
+                        <a href="{{ route('helpdesk.report.export') }}" class="btn mb-4" style="background-color: #17ba4b;color:white">
+                            <span class="img-icon">
+                                <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
+                            </span>
+                            Export
+                        </a>
+
                     </div>
                 </div>
                 <div class="card-body pt-0">
