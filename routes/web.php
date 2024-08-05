@@ -16,6 +16,7 @@ use App\Http\Controllers\Department\AssignedTicketController;
 use App\Http\Controllers\Department\HomeDepartmentController;
 use App\Http\Controllers\Department\UnassignedTicketController;
 use App\Http\Controllers\Department\IncidentalActivityController;
+use App\Http\Controllers\Admin\IncidentalActivityCategoryController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Tenaga Ahli'])->g
         '/admin/priority' => PriorityController::class,
         '/admin/status' => StatusController::class,
         '/admin/category' => CategoryController::class,
+        '/admin/incidental-activity-category' => IncidentalActivityCategoryController::class,
     ]);
 });
 
@@ -114,6 +116,10 @@ Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {
     Route::get('department/incidental-activities', [IncidentalActivityController::class, 'index'])->name('department.incidental-activities.index');
     Route::get('department/incidental-activities/create', [IncidentalActivityController::class, 'create'])->name('department.incidental-activities.create');
     Route::post('department/incidental-activities', [IncidentalActivityController::class, 'store'])->name('department.incidental-activities.store');
+    Route::get('department/incidental-activities/{id}/edit', [IncidentalActivityController::class, 'edit'])->name('department.incidental-activities.edit');
+    Route::put('department/incidental-activities/{id}', [IncidentalActivityController::class, 'update'])->name('department.incidental-activities.update');
+    Route::delete('department/incidental-activities/{id}', [IncidentalActivityController::class, 'destroy'])->name('department.incidental-activities.destroy');
+
 
     Route::post('/request-assignment/{ticket}', [UnassignedTicketController::class, 'request_assignment'])->name('unassignedTicket.requestAssignment');
 });

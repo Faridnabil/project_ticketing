@@ -18,4 +18,9 @@ class Status extends Model
     {
         return $this->hasMany(Ticket::class, 'status_id');
     }
+
+    public function incidentalActivities()
+    {
+        return $this->hasMany(IncidentalActivity::class, 'status_id');
+    }
 }

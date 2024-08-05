@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@yield('title')</title>
@@ -11,98 +10,39 @@
     <script src="{{ asset('templates/assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
-            google: {
-                families: ["Public Sans:300,400,500,600,700"]
-            },
+            google: { families: ["Public Sans:300,400,500,600,700"] },
             custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["{{ asset('templates/assets/css/fonts.min.css') }}"],
+                families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                urls: ["{{ asset('templates/assets/css/fonts.min.css') }}"]
             },
-            active: function() {
-                sessionStorage.fonts = true;
-            },
+            active: function() { sessionStorage.fonts = true; }
         });
     </script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('templates/assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('templates/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('templates/assets/css/kaiadmin.min.css') }}" />
 
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <!-- Dropzone CSS -->
+    <!-- Additional CSS for Demo -->
     <style>
-        .custom-dropzone {
-            border: 2px dashed #007bff;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .custom-dropzone .dz-message {
-            pointer-events: none;
-        }
-
-        .preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-        }
-
-        .preview .image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .preview img {
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-        .remove-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: red;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
+        .custom-dropzone { border: 2px dashed #007bff; padding: 20px; text-align: center; cursor: pointer; position: relative; }
+        .custom-dropzone .dz-message { pointer-events: none; }
+        .preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center; }
+        .preview .image-container { position: relative; display: inline-block; }
+        .preview img { max-width: 100px; max-height: 100px; }
+        .remove-btn { position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; border-radius: 50%; cursor: pointer; width: 20px; height: 20px; font-size: 12px; text-align: center; }
+        .error-message { color: red; margin-top: 10px; }
     </style>
-    {{-- <link rel="stylesheet" href="assets/css/demo.css" /> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.notification-link').forEach(function(link) {
                 link.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent the default link behavior
-
+                    event.preventDefault();
                     var form = this.closest('.notification-form');
                     var url = this.getAttribute('href');
-
                     if (form) {
-                        // Submit the form via AJAX
                         var xhr = new XMLHttpRequest();
                         xhr.open('POST', form.action, true);
                         xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
@@ -110,15 +50,11 @@
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                // Redirect to the URL after the form is successfully submitted
                                 window.location.href = url;
                             }
                         };
-
-                        // Collect form data
                         var formData = new FormData(form);
                         var formBody = new URLSearchParams(formData).toString();
-
                         xhr.send(formBody);
                     }
                 });
@@ -126,7 +62,6 @@
         });
     </script>
 </head>
-
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -135,107 +70,53 @@
 
         <div class="main-panel">
             @include('layouts.dashboard.partials.navbar')
-
             <div class="container">
                 <div class="page-inner">
                     @yield('content')
                 </div>
             </div>
-
             @include('layouts.dashboard.partials.footer')
         </div>
-        <!-- End Custom template -->
     </div>
-    <!--   Core JS Files   -->
+
+    <!-- Core JS Files -->
     <script src="{{ asset('templates/assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('templates/assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('templates/assets/js/core/bootstrap.min.js') }}"></script>
 
     <!-- jQuery Scrollbar -->
     <script src="{{ asset('templates/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-
-    <!-- Chart JS -->
-    <script src="{{ asset('templates/assets/js/plugin/chart.js/chart.min.js') }}"></script>
-
-    <!-- jQuery Sparkline -->
-    <script src="{{ asset('templates/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
-
-    <!-- Chart Circle -->
-    <script src="{{ asset('templates/assets/js/plugin/chart-circle/circles.min.js') }}"></script>
-
-    <!-- Datatables -->
+    <!-- Additional JS Files -->
     <script src="{{ asset('templates/assets/js/plugin/datatables/datatables.min.js') }}"></script>
-
-    <!-- Bootstrap Notify -->
     <script src="{{ asset('templates/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-
-    <!-- jQuery Vector Maps -->
-    <script src="{{ asset('templates/assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ asset('templates/assets/js/plugin/jsvectormap/world.js') }}"></script>
-
-    <!-- Sweet Alert -->
     <script src="{{ asset('templates/assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
-
-    <!-- Kaiadmin JS -->
     <script src="{{ asset('templates/assets/js/kaiadmin.min.js') }}"></script>
 
-
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    {{-- <script src="assets/js/setting-demo.js"></script>
-    <script src="assets/js/demo.js"></script> --}}
+    <!-- Demo purposes only -->
     <script>
         $(document).ready(function() {
             $("#basic-datatables").DataTable({});
-
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
                 initComplete: function() {
-                    this.api()
-                        .columns()
-                        .every(function() {
-                            var column = this;
-                            var select = $(
-                                    '<select class="form-select"><option value=""></option></select>'
-                                )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function() {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function(d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
+                    this.api().columns().every(function() {
+                        var column = this;
+                        var select = $('<select class="form-select"><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on("change", function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? "^" + val + "$" : "", true, false).draw();
+                            });
+                        column.data().unique().sort().each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + "</option>");
                         });
-                },
+                    });
+                }
             });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
-            });
-
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
+            $("#add-row").DataTable({ pageLength: 5 });
+            var action = '<td><div class="form-button-action"><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"><i class="fa fa-edit"></i></button><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"><i class="fa fa-times"></i></button></div></td>';
             $("#addRowButton").click(function() {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
+                $("#add-row").dataTable().fnAddData([$("#addName").val(), $("#addPosition").val(), $("#addOffice").val(), action]);
                 $("#addRowModal").modal("hide");
             });
         });
@@ -245,25 +126,23 @@
             width: "100%",
             lineWidth: "2",
             lineColor: "#177dff",
-            fillColor: "rgba(23, 125, 255, 0.14)",
+            fillColor: "rgba(23, 125, 255, 0.14)"
         });
-
         $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
             type: "line",
             height: "70",
             width: "100%",
             lineWidth: "2",
             lineColor: "#f3545d",
-            fillColor: "rgba(243, 84, 93, .14)",
+            fillColor: "rgba(243, 84, 93, .14)"
         });
-
         $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
             type: "line",
             height: "70",
             width: "100%",
             lineWidth: "2",
             lineColor: "#ffa534",
-            fillColor: "rgba(255, 165, 52, .14)",
+            fillColor: "rgba(255, 165, 52, .14)"
         });
     </script>
 
@@ -271,7 +150,6 @@
     <script>
         let uploadedFiles = [];
         let existingFiles = [];
-
         @if (isset($ticket) && $ticket->attachments)
             @php
                 $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
@@ -280,22 +158,18 @@
                 existingFiles.push('{{ $attachment }}');
             @endforeach
         @endif
-
         let removedFiles = [];
-
         document.addEventListener('DOMContentLoaded', function() {
             const preview = document.querySelector('.preview');
             existingFiles.forEach(filePath => {
                 const container = document.createElement('div');
                 container.classList.add('image-container');
-
                 const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
+                img.src = `{{ asset('') }}${filePath}`;
                 img.addEventListener('click', (event) => {
                     event.stopPropagation();
                     removeExistingFile(event, filePath);
                 });
-
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = 'x';
                 removeBtn.classList.add('remove-btn');
@@ -303,99 +177,65 @@
                     event.stopPropagation();
                     removeExistingFile(event, filePath);
                 });
-
                 container.appendChild(img);
                 container.appendChild(removeBtn);
                 preview.appendChild(container);
             });
-            updateExistingFileList(); // Update the list on page load
+            updateExistingFileList();
         });
-
         document.getElementById('attachments').addEventListener('change', function(event) {
-            const fileList = Array.from(event.target.files);
             const preview = document.querySelector('.preview');
-            const errorMessage = document.getElementById('error-message');
-            const maxFiles = 15;
-
-            if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
-                errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
-                return;
+            const files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                uploadedFiles.push(file);
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', () => removeFile(file));
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
             }
-
-            errorMessage.textContent = ''; // Clear any existing error message
-
-            fileList.forEach(file => {
-                if (!uploadedFiles.includes(file) && !existingFiles.includes(file.name)) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const container = document.createElement('div');
-                        container.classList.add('image-container');
-
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            container.remove();
-                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                            updateFileList();
-                        });
-
-                        const removeBtn = document.createElement('button');
-                        removeBtn.textContent = 'x';
-                        removeBtn.classList.add('remove-btn');
-                        removeBtn.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            container.remove();
-                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                            updateFileList();
-                        });
-
-                        container.appendChild(img);
-                        container.appendChild(removeBtn);
-                        preview.appendChild(container);
-                    };
-
-                    if (file.type.startsWith('image/')) {
-                        reader.readAsDataURL(file); // Read file as Data URL for image preview
-                    }
-
-                    uploadedFiles.push(file);
-                    updateFileList(); // Update file list after adding each file
-                }
-            });
         });
-
-        function uploadFile(event) {
-            if (!event.target.closest('.image-container')) {
-                document.getElementById('attachments').click();
+        function removeFile(file) {
+            const index = uploadedFiles.indexOf(file);
+            if (index !== -1) {
+                uploadedFiles.splice(index, 1);
+                const preview = document.querySelector('.preview');
+                preview.removeChild(preview.childNodes[index]);
             }
         }
-
-        function updateFileList() {
-            const dataTransfer = new DataTransfer();
-            uploadedFiles.forEach(file => dataTransfer.items.add(file));
-            document.getElementById('attachments').files = dataTransfer.files;
-        }
-
-        function updateExistingFileList() {
-            document.getElementById('remaining_attachments').value = existingFiles.join(',');
-        }
-
         function removeExistingFile(event, filePath) {
             event.stopPropagation();
-            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
-            if (imgElement && imgElement.parentElement) {
-                existingFiles = existingFiles.filter(file => file !== filePath);
-                removedFiles.push(filePath);
-                imgElement.parentElement.remove();
-                document.getElementById('removed_attachments').value = removedFiles.join(',');
-
-                updateExistingFileList(); // Update remaining files list
-            } else {
-                console.error('File not found:', filePath);
-            }
+            removedFiles.push(filePath);
+            existingFiles = existingFiles.filter(file => file !== filePath);
+            event.target.parentElement.remove();
+            updateExistingFileList();
+        }
+        function updateExistingFileList() {
+            const fileList = document.getElementById('existing_file_list');
+            fileList.innerHTML = '';
+            existingFiles.forEach(filePath => {
+                const listItem = document.createElement('li');
+                listItem.textContent = filePath;
+                fileList.appendChild(listItem);
+            });
+        }
+        function removeAllFiles() {
+            uploadedFiles = [];
+            removedFiles = [];
+            existingFiles = [];
+            const preview = document.querySelector('.preview');
+            preview.innerHTML = '';
+            updateExistingFileList();
         }
     </script>
-</body>
 
+    @stack('scripts')
+</body>
 </html>

@@ -12,15 +12,25 @@ class IncidentalActivity extends Model
     protected $fillable = [
         'title',
         'description',
-        'category',
+        'category_id',
         'start_time',
         'end_time',
         'executor',
         'department',
         'mitigation',
         'impact',
-        'status',
+        'status_id',
         'file_path',
         'user_id',
     ];
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(IncidentalActivityCategory::class, 'category_id');
+    }
 }

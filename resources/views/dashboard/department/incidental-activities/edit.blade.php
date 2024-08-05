@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Incidental Activity | PLN Icon+
+    Edit Incidental Activity | PLN Icon+
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Tambah Incidental Activity</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Edit Incidental Activity</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -39,15 +39,14 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('department.incidental-activities.store') }}" enctype="multipart/form-data"
-                                novalidate>
+                            <form class="row g-3 needs-validation" method="POST" action="{{ route('department.incidental-activities.update', $activity->id) }}"
+                                enctype="multipart/form-data" novalidate>
                                 @csrf
+                                @method('PUT')
                                 <div class="col-md-6">
                                     <label for="title" class="form-label">Judul</label>
-                                    <input type="text" name="title"
-                                        class="form-control @error('title') is-invalid @enderror" id="title" required
-                                        autofocus>
+                                    <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" id="title"
+                                        value="{{ old('title', $activity->title) }}" required autofocus>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -61,7 +60,7 @@
                                 <div class="col-md-6">
                                     <label for="description" class="form-label">Deskripsi</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3" required></textarea>
+                                        cols="10" rows="3" required>{{ old('description', $activity->description) }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -73,15 +72,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Kategori</label>
-                                    <select name="category_id"
-                                        class="form-select @error('category_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option selected disabled>Pilih Kategori</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="category" class="form-label">Kategori</label>
+                                    <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
+                                        id="category" value="{{ old('category', $activity->category) }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -94,9 +87,8 @@
 
                                 <div class="col-md-6">
                                     <label for="start_time" class="form-label">Waktu Mulai</label>
-                                    <input type="date" name="start_time"
-                                        class="form-control @error('start_time') is-invalid @enderror" id="start_time"
-                                        required>
+                                    <input type="date" name="start_time" class="form-control @error('start_time') is-invalid @enderror"
+                                        id="start_time" value="{{ old('start_time', $activity->start_time) }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -109,9 +101,8 @@
 
                                 <div class="col-md-6">
                                     <label for="end_time" class="form-label">Waktu Selesai</label>
-                                    <input type="date" name="end_time"
-                                        class="form-control @error('end_time') is-invalid @enderror" id="end_time"
-                                        required>
+                                    <input type="date" name="end_time" class="form-control @error('end_time') is-invalid @enderror"
+                                        id="end_time" value="{{ old('end_time', $activity->end_time) }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -124,9 +115,8 @@
 
                                 <div class="col-md-6">
                                     <label for="executor" class="form-label">Pelaksana</label>
-                                    <input type="text" name="executor"
-                                        class="form-control @error('executor') is-invalid @enderror" id="executor"
-                                        required>
+                                    <input type="text" name="executor" class="form-control @error('executor') is-invalid @enderror"
+                                        id="executor" value="{{ old('executor', $activity->executor) }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -139,9 +129,8 @@
 
                                 <div class="col-md-6">
                                     <label for="department" class="form-label">Departemen</label>
-                                    <input type="text" name="department"
-                                        class="form-control @error('department') is-invalid @enderror" id="department"
-                                        required>
+                                    <input type="text" name="department" class="form-control @error('department') is-invalid @enderror"
+                                        id="department" value="{{ old('department', $activity->department) }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -155,7 +144,7 @@
                                 <div class="col-md-6">
                                     <label for="mitigation" class="form-label">Mitigasi</label>
                                     <textarea name="mitigation" class="form-control @error('mitigation') is-invalid @enderror" id="mitigation"
-                                        cols="10" rows="3" required></textarea>
+                                        cols="10" rows="3" required>{{ old('mitigation', $activity->mitigation) }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -168,8 +157,8 @@
 
                                 <div class="col-md-6">
                                     <label for="impact" class="form-label">Dampak</label>
-                                    <textarea name="impact" class="form-control @error('impact') is-invalid @enderror" id="impact" cols="10"
-                                        rows="3" required></textarea>
+                                    <textarea name="impact" class="form-control @error('impact') is-invalid @enderror" id="impact"
+                                        cols="10" rows="3" required>{{ old('impact', $activity->impact) }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -200,8 +189,7 @@
 
                                 <div class="col-md-6">
                                     <label for="file" class="form-label">Upload File</label>
-                                    <input type="file" name="file"
-                                        class="form-control @error('file') is-invalid @enderror" id="file" required>
+                                    <input type="file" name="file" class="form-control @error('file') is-invalid @enderror" id="file">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -213,9 +201,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('department.incidental-activities.index') }}"
-                                        class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Update</button>
+                                    <a href="{{ route('department.incidental-activities.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                             <!--end form-->

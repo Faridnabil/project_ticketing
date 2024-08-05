@@ -4,7 +4,7 @@
         <div class="logo-header" data-background-color="dark">
             <a href="#" class="logo">
                 <img src="{{ asset('templates/assets/img/kaiadmin/logonew.png') }}" alt="navbar brand" class="navbar-brand"
-                    height="80px" style="margin-top: 25px;"/>
+                    height="80px" style="margin-top: 25px;" />
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -82,12 +82,12 @@
 
                 @can('View User Management')
                     <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#base">
+                        <a data-bs-toggle="collapse" href="#userManagement">
                             <i class="fas fa-users"></i>
                             <p>Manage Pengguna</p>
                             <span class="caret"></span>
                         </a>
-                        <div class="collapse" id="base">
+                        <div class="collapse" id="userManagement">
                             <ul class="nav nav-collapse">
                                 <li>
                                     <a class="menu-link" href="{{ route('user.index') }}">
@@ -112,11 +112,27 @@
 
                 @can('View Category')
                     <li class="nav-item">
-                        <a class="menu-link {{ Request::is('category') ? 'active' : '' }}"
-                            href="{{ route('category.index') }}">
-                            <i class="fas fa-th-list"></i>
+                        <a data-bs-toggle="collapse" href="#category">
+                            <i class="fas fa-list"></i>
                             <p>Kategori</p>
+                            <span class="caret"></span>
                         </a>
+                        <div class="collapse" id="category">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a class="menu-link {{ Request::is('category') ? 'active' : '' }}"
+                                        href="{{ route('category.index') }}">
+                                        <span class="sub-item">Kategori Tiket</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="menu-link menu-link {{ Request::is('incidental-activity-category') ? 'active' : '' }}"
+                                        href="{{ route('incidental-activity-category.index') }}">
+                                        <span class="sub-item">Kategori Insidental</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 @endcan
 
@@ -202,8 +218,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu-link"
-                                href="{{ route('department.incidental-activities.index') }}">
+                            <a class="menu-link" href="{{ route('department.incidental-activities.index') }}">
                                 <i class="fas fa-clipboard-list"></i>
                                 <p>Incidental Activity</p>
                             </a>
