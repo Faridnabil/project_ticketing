@@ -23,6 +23,7 @@ use App\Http\Controllers\Koordinator\TicketKoordinatorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Pejabat\HomePejabatController;
 use App\Http\Controllers\Pejabat\TicketPejabatController;
+use App\Http\Controllers\Helpdesk\ReportController;
 use App\Http\Controllers\SiakDev\HomeSiakDevController;
 use App\Http\Controllers\SiakDev\TicketSiakDevController;
 use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
@@ -110,6 +111,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
+        '/helpdesk/report' => ReportController::class,
     ]);
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
@@ -117,7 +119,11 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
-    Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
+    Route::get('/helpdesk/NewTicket', [TicketHelpdeskController::class, 'NewTicket'])->name('NewTicket.index');
+
+    // Report Routes
+    Route::post('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
 });
 
 
