@@ -24,30 +24,40 @@
             <div class="card mb-3">
                 <div class="card-header border-0 pt-6">
                     <div class="card-title">
-                        <h6 class="m-0 font-weight-bold text-dark">Masukan Tanggal Awal dan Akhir</h6>
+                        <h6 class="m-0 font-weight-bold text-dark">Laporan Tiket</h6>
                     </div>
                 </div>
                 <div class="card-body">
+                    <!-- User Friendly Note -->
+                    <div class="alert alert-info mb-10">
+                        <h6 class="alert-heading">Panduan Penggunaan</h6>
+                        <p class="mb-1">1. Masukkan <strong>Tanggal Awal</strong> untuk mulai periode pelaporan yang diinginkan.</p>
+                        <p class="mb-1">2. Masukkan <strong>Tanggal Akhir</strong> untuk mengakhiri periode pelaporan yang diinginkan.</p>
+                        <p class="mb-1">3. Klik tombol <strong>"Masukan Data"</strong> untuk menampilkan laporan berdasarkan rentang tanggal yang dipilih.</p>
+                        <p class="mb-0">4. Jika data ditemukan, Anda dapat mengklik tombol <strong>"Export"</strong> untuk mengunduh laporan.</p>
+                    </div>
+                    <!-- End of User Friendly Note -->
+
                     <form action="{{ route('helpdesk.report.filter') }}" method="post">
                         @csrf
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="mb-4 mt-3">Tanggal Awal</label>
-                                    <input type="date" name="awal" required class="form-control" value="{{ $req1 }}">
+                                    <label for="tanggal_awal" class="form-label mb-2">Tanggal Awal</label>
+                                    <input type="date" id="tanggal_awal" name="awal" required class="form-control" value="{{ $req1 }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="mb-4 mt-3">Tanggal Akhir</label>
-                                    <input type="date" name="akhir" required class="form-control" value="{{ $req2 }}">
+                                    <label for="tanggal_akhir" class="form-label mb-2">Tanggal Akhir</label>
+                                    <input type="date" id="tanggal_akhir" name="akhir" required class="form-control" value="{{ $req2 }}">
                                 </div>
                             </div>
                         </div>
-                        <br>
-                        <input type="submit" class="btn btn-primary" value="Masukan Data">
+                        <div class="d-flex justify-content-center">
+                            <input type="submit" class="btn btn-primary" value="Masukan Data">
+                        </div>
                     </form>
-                    <br>
                 </div>
             </div>
 
@@ -55,13 +65,12 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-toolbar">
-                        <a href="{{ route('helpdesk.report.export') }}" class="btn mb-4" style="background-color: #17ba4b;color:white">
+                        <a href="{{ route('helpdesk.report.export') }}" class="btn btn-success mb-4">
                             <span class="img-icon">
                                 <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
                             </span>
                             Export
                         </a>
-
                     </div>
                 </div>
                 <div class="card-body pt-0">
