@@ -12,7 +12,6 @@ use App\Models\Priority;
 use App\Models\Province;
 use App\Models\Status;
 use App\Models\User;
-use App\Notifications\NotificationDepartment;
 use App\Notifications\NotificationPejabat;
 use App\Notifications\NotificationSiakDev;
 use Illuminate\Http\Request;
@@ -42,7 +41,8 @@ class TicketPejabatController extends Controller
         }
 
         // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])
+            ->get();
 
 
         $categories = Category::all();
@@ -63,12 +63,12 @@ class TicketPejabatController extends Controller
         $tickets = $query->orderBy('id', 'desc')
             ->get();
 
-        //Pindah ke Pejabat
-        $PejabatUsers = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Pejabat');
-        })->get();
+        //Pindah ke Siak Dev
+        $siakDevUsers = Role::where('name', 'SIAK Dev')
+            ->pluck('id')
+            ->toArray();
 
-        return view('dashboard.pejabat.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'PejabatUsers', 'levels'));
+        return view('dashboard.pejabat.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'siakDevUsers', 'levels'));
     }
 
     public function getCities($provinceId)
@@ -400,9 +400,6 @@ class TicketPejabatController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         // Update level fields with validated values
-        $ticket->level1 = $request->level1;
-        $ticket->level2 = $request->level2;
-        $ticket->level3 = $request->level3;
         $ticket->level4 = $request->level4;
         $ticket->level5 = $request->level5;
 
@@ -415,7 +412,7 @@ class TicketPejabatController extends Controller
 
             $notificationData = [
                 'name' => $authenticatedUserName,
-                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', terlah dialihkan kepada anda',
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', telah dialihkan kepada anda',
                 'thanks' => 'Terimakasih',
                 'Text' => '',
                 'Url' => url('/siak-dev/ticket'),

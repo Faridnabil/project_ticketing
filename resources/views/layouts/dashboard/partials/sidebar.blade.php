@@ -273,8 +273,8 @@
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
                                     <path opacity="0.25" fill-rule="evenodd" clip-rule="evenodd"
                                         d="M13.5,18h-3v-3h3v3Zm0-13h-3v3h3v-3Zm0,5h-3v3h3v-3Zm10.5-1.5c0-1.93-1.57-3.5-3.5-3.5h-1.5v-1.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v6.5h-1.5c-1.93,0-3.5,1.57-3.5,3.5v10.5H24V8.5ZM3,13.5c0-.275,.224-.5,.5-.5h4.5V3.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5v4.5h4.5c.276,0,.5,.225,.5,.5v12.5H3v-7.5Zm16,1.5h-3v3h3v-3Zm-11,0h-3v3h3v-3Zm11-5h-3v3h3v-3Z"
                                         fill="#12131A" />
@@ -297,8 +297,8 @@
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
                                     <path opacity="0.25" fill-rule="evenodd" clip-rule="evenodd"
                                         d="M14.849,12.747l-5.448-4.265c-.824-.645-1.977-.646-2.801,0L1.151,12.746c-.731,.573-1.151,1.435-1.151,2.363v8.891H16V15.109c0-.929-.42-1.79-1.151-2.362Zm-.849,9.253H2v-6.891c0-.31,.14-.597,.384-.788l5.448-4.263c.098-.078,.236-.077,.336,0l5.448,4.265c.244,.19,.384,.478,.384,.787v6.891ZM6,15h4v4H6v-4Zm12-2h2v2h-2v-2Zm0,4h2v2h-2v-2ZM14,5h2v2h-2v-2Zm6,2h-2v-2h2v2Zm-6,2h2v2h-2v-2Zm4,0h2v2h-2v-2Zm6-6V24h-6v-2h4V3c0-.552-.448-1-1-1H13c-.552,0-1,.448-1,1V7.978l-2-1.565V3c0-.017,0-.035,.001-.052,.028-1.63,1.362-2.948,2.999-2.948h8c1.654,0,3,1.346,3,3Z"
                                         fill="#12131A" />
@@ -503,8 +503,8 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="{{ request()->routeIs('helpdesk.NewTicket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('helpdesk.NewTicket.index') }}">
+                        <a class="{{ request()->routeIs('helpdesk.newTickets.index') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('helpdesk.newTickets.index') }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -644,6 +644,38 @@
                         </a>
                     </div>
                 @endrole
+            @endcan
+
+            @can('View Report')
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Laporan Tiket</span>
+                    </div>
+                </div>
+                @role('Helpdesk')
+                    <div class="menu-item">
+                        <a class="{{ request()->routeIs('helpdesk.report.index') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('helpdesk.report.index') }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <path
+                                            d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
+                                            fill="#000000" opacity="0.3" />
+                                        <path
+                                            d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
+                                            fill="#000000" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title">Laporan</span>
+                        </a>
+                    </div>
+                @endrole
+
             @endcan
         </div>
         <!--end::Menu-->

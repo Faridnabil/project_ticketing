@@ -11,13 +11,8 @@ use App\Models\Comment;
 use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\Province;
-use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
-use App\Notifications\NotificationAdmin;
-use App\Notifications\NotificationCustomer;
-use App\Notifications\NotificationDepartment;
-use App\Notifications\NotificationKoordinasi;
 use App\Notifications\NotificationKoordinator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,8 +45,8 @@ class TicketHelpdeskController extends Controller
         }
 
         // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
-
+        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])
+            ->get();
 
 
         $priorities = Priority::all();
@@ -64,6 +59,14 @@ class TicketHelpdeskController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
+        // Filter berdasarkan status_name
+        if ($request->has('filter')) {
+            $statusesToFilter = explode(',', $request->filter);
+            $query->whereHas('status', function ($q) use ($statusesToFilter) {
+                $q->whereIn('status_name', $statusesToFilter);
+            });
+        }
+
         $tickets = $query->orderBy('id', 'desc')
             ->get();
 
@@ -71,10 +74,11 @@ class TicketHelpdeskController extends Controller
         $koordinatorUsers = Role::where('name', 'Koordinator')
             ->pluck('id')
             ->toArray();
+
         return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
     }
 
-    public function NewTicket(Request $request)
+    public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
             ->where('level1', '!=', null);

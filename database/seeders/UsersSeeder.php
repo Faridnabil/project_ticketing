@@ -24,6 +24,7 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'View Dashboard SIAK Dev']);
         Permission::create(['name' => 'View Dashboard Pejabat']);
         Permission::create(['name' => 'View Dashboard Department']);
+        Permission::create(['name' => 'View Report']);
 
         Permission::create(['name' => 'View User Management']);
         Permission::create(['name' => 'Create User']);
@@ -95,6 +96,7 @@ class UsersSeeder extends Seeder
 
         //Admin
         $adminRole->givePermissionTo('View Dashboard Admin');
+        $adminRole->givePermissionTo('View Report');
 
         $adminRole->givePermissionTo('View User Management');
         $adminRole->givePermissionTo('Create User');
@@ -156,6 +158,7 @@ class UsersSeeder extends Seeder
 
         //Helpdesk
         $helpdeskRole->givePermissionTo('View Dashboard Helpdesk');
+        $helpdeskRole->givePermissionTo('View Report');
 
         $helpdeskRole->givePermissionTo('View Category');
         $helpdeskRole->givePermissionTo('Create Category');

@@ -120,11 +120,6 @@
                                             {{ $ticket->category->category_name }}
                                         </td>
                                         <!--end::Title=-->
-                                        <!--begin::Customer Name=-->
-                                        {{-- <td>
-                                            {{ $ticket->customers->name }}
-                                        </td> --}}
-                                        <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
                                             @if ($ticket->level1 != null)
@@ -207,8 +202,7 @@
                                                         -</span>
                                                 @endif
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
-                                                    <form
-                                                        action="{{ route('siakDev.tickets.statusTicket', $ticket->id) }}"
+                                                    <form action="{{ route('siakDev.tickets.statusTicket', $ticket->id) }}"
                                                         method="POST" class="ml-2">
                                                         @csrf
                                                         <div class="custom-select-wrapper">
@@ -237,8 +231,7 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('siakDev.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('siakDev.ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -274,40 +267,43 @@
                                                     </a>
                                                 @endcan
                                                 @can('Show Ticket')
-                                                <a class="menu-link ms-3"
-                                                    href="{{ route('siakDev.ticket.show', $ticket->id) }}"
-                                                    type="button">
-                                                    <span class="menu-icon" style="fill: #1218ca">
-                                                        <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                                                        <span class="svg-icon svg-icon-2">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="512"
-                                                                height="512" viewBox="0 0 24 24" version="1.1">
-                                                                <path
-                                                                    d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
-                                                                <circle cx="12" cy="12" r="4" />
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->
-                                                    </span>
-                                                </a>
-                                            @endcan
-                                            @can('Send Ticket')
-                                                    <a class="menu-link ms-3" href="" type="button"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_ticket2_{{ $ticket->id }}"
-                                                        title="Pengajuan Tiket">
-                                                        <span class="menu-icon" style="fill: #0d8987">
+                                                    <a class="menu-link ms-3"
+                                                        href="{{ route('siakDev.ticket.show', $ticket->id) }}"
+                                                        type="button">
+                                                        <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="512"
                                                                     height="512" viewBox="0 0 24 24" version="1.1">
                                                                     <path
-                                                                        d="M23.017,8.785c-.595-.542-1.364-.816-2.168-.782-.804,.038-1.544,.387-2.086,.981l-3.216,3.534c-.551-.909-1.55-1.519-2.689-1.519H3c-1.654,0-3,1.346-3,3v7c0,1.654,1.346,3,3,3H13.448l9.788-10.985c1.093-1.227,.994-3.124-.219-4.229Zm-1.274,2.899l-9.191,10.315H3c-.551,0-1-.448-1-1v-7c0-.552,.449-1,1-1H12.858c.63,0,1.142,.513,1.142,1.143,0,.564-.421,1.051-.981,1.13l-5.161,.737,.283,1.98,5.16-.737c1.175-.168,2.13-.987,2.515-2.059l4.426-4.864c.182-.199,.43-.316,.7-.329,.274-.016,.528,.081,.728,.263,.407,.371,.44,1.009,.073,1.421ZM15,2.5c0-1.379-1.122-2.5-2.5-2.5H5.5c-1.378,0-2.5,1.121-2.5,2.5v6.5H15V2.5Zm-2,4.5H5V2.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5V7ZM7,3h4v2H7V3Z" />
+                                                                        d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                                    <circle cx="12" cy="12" r="4" />
                                                                 </svg>
                                                             </span>
                                                             <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
+                                                @endcan
+                                                @can('Send Ticket')
+                                                    @if ($ticket->level4 && $ticket->level5)
+                                                    @else
+                                                        <a class="menu-link ms-3" href="" type="button"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_ticket2_{{ $ticket->id }}"
+                                                            title="Pengajuan Tiket">
+                                                            <span class="menu-icon" style="fill: #0d8987">
+                                                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                                <span class="svg-icon svg-icon-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="512"
+                                                                        height="512" viewBox="0 0 24 24" version="1.1">
+                                                                        <path
+                                                                            d="M23.017,8.785c-.595-.542-1.364-.816-2.168-.782-.804,.038-1.544,.387-2.086,.981l-3.216,3.534c-.551-.909-1.55-1.519-2.689-1.519H3c-1.654,0-3,1.346-3,3v7c0,1.654,1.346,3,3,3H13.448l9.788-10.985c1.093-1.227,.994-3.124-.219-4.229Zm-1.274,2.899l-9.191,10.315H3c-.551,0-1-.448-1-1v-7c0-.552,.449-1,1-1H12.858c.63,0,1.142,.513,1.142,1.143,0,.564-.421,1.051-.981,1.13l-5.161,.737,.283,1.98,5.16-.737c1.175-.168,2.13-.987,2.515-2.059l4.426-4.864c.182-.199,.43-.316,.7-.329,.274-.016,.528,.081,.728,.263,.407,.371,.44,1.009,.073,1.421ZM15,2.5c0-1.379-1.122-2.5-2.5-2.5H5.5c-1.378,0-2.5,1.121-2.5,2.5v6.5H15V2.5Zm-2,4.5H5V2.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5V7ZM7,3h4v2H7V3Z" />
+                                                                    </svg>
+                                                                </span>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                        </a>
+                                                    @endif
                                                 @endcan
                                             @else
                                                 @can('Show Ticket')
@@ -464,7 +460,7 @@
                                     <input type="hidden" name="level4" value="">
 
                                     <select name="level5" hidden required>
-                                        @foreach($pejabatUsers as $roleId)
+                                        @foreach ($pejabatUsers as $roleId)
                                             <option value="{{ $roleId }}">{{ $roleId }}</option>
                                         @endforeach
                                     </select>
