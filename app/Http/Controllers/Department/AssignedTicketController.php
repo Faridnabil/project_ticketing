@@ -125,26 +125,37 @@ class AssignedTicketController extends Controller
             $validate = $request->all();
             $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
 
-            // Ambil file yang dihapus
-            $removedAttachments = explode(',', $request->input('removed_attachments'));
-
             // Ambil file yang masih ada
-            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
-            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+            $existingAttachments = $ticket->attachments ? json_decode($ticket->attachments, true) : [];
 
-            $attachments = [];
+            // Ambil file yang dihapus
+            $removedAttachments = $request->input('removed_attachments') ? explode(',', $request->input('removed_attachments')) : [];
+
+            // Filter file yang masih ada setelah penghapusan
+            $remainingAttachments = array_diff($existingAttachments, $removedAttachments);
+
+            // Proses file baru yang diupload
+            $newAttachments = [];
             if ($files) {
                 foreach ($files as $file) {
                     // Proses setiap file
                     $nama_file = time() . "_" . $file->getClientOriginalName();
                     $nama_folder = 'file/ticket';
                     $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
+                    $newAttachments[] = $nama_folder . "/" . $nama_file;
                 }
             }
 
+            // Gabungkan file baru dengan file yang masih ada
+            $attachments = array_merge($remainingAttachments, $newAttachments);
+            $validate['attachments'] = json_encode($attachments);
+
+            // Update tiket dengan data baru
+            $ticket->update($validate);
+
+            // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
-                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
                 'h_customer' => $ticket->customer,
                 'h_assign_to' => $ticket->assign_to,
@@ -153,12 +164,11 @@ class AssignedTicketController extends Controller
                 'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
+                'h_attachments' => json_encode($attachments),
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
             ]);
-
 
             // ------ Notifikasi --------------
             $statusId = $validate['status_id'];
@@ -213,14 +223,6 @@ class AssignedTicketController extends Controller
 
                 Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
             }
-
-
-            // Gabungkan file baru dengan file yang masih ada
-            $attachments = array_merge($remainingAttachments, $attachments);
-            $validate['attachments'] = json_encode($attachments);
-
-            // Update tiket dengan data baru
-            $ticket->update($validate);
 
             DB::commit();
             return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');

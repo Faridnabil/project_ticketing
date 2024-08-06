@@ -96,7 +96,7 @@ class TicketCustomerController extends Controller
                 }
             }
 
-            //Notifikasi
+            // Notifikasi
             $users = User::role(['Admin'])->get();
             $authenticatedUserName = Auth::user()->name;
 
@@ -111,7 +111,6 @@ class TicketCustomerController extends Controller
 
             Notification::send($users, new NotificationCustomer($notificationData));
 
-
             $validate['attachments'] = json_encode($attachments);
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
@@ -120,18 +119,16 @@ class TicketCustomerController extends Controller
                 'h_title' => $request->title,
                 'h_customer' => $request->customer,
                 'h_assign_to' => $request->assign_to,
-                // 'h_due_date' => $request->priority_id,
                 'h_solution' => $request->solution,
                 'h_priority_id' => $request->priority_id,
                 'h_status_id' => $request->status_id,
                 'h_category_id' => $request->category_id,
                 'h_description' => $request->description,
-                'h_attachments' => $request->attachments,
+                'h_attachments' => json_encode($attachments), // Ensure this is JSON encoded
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
             ]);
-
 
             Ticket::create($validate);
             DB::commit();
@@ -161,17 +158,17 @@ class TicketCustomerController extends Controller
         $statusChangedBy = Auth::user();
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
-        ->where('h_no_ticket', $ticket->no_ticket)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('h_no_ticket', $ticket->no_ticket)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
             ->get();
 
-            return view(
-                'dashboard.customer.ticket.show',
+        return view(
+            'dashboard.customer.ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -233,36 +230,35 @@ class TicketCustomerController extends Controller
             // Ambil tiket yang akan diupdate
             $ticket = Ticket::findOrFail($id);
 
+            // Validasi data dari request
             $validate = $request->all();
             $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
 
-            // Ambil file yang dihapus
-            $removedAttachments = explode(',', $request->input('removed_attachments'));
+            // Ambil file yang masih ada (jika ada) dari request
+            $existingAttachments = $ticket->attachments ? json_decode($ticket->attachments, true) : [];
 
-            // Ambil file yang masih ada
-            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
-            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
-
-            $attachments = [];
+            // Proses file baru yang diupload
+            $newAttachments = [];
             if ($files) {
                 foreach ($files as $file) {
                     // Proses setiap file
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
+                    $fileName = time() . "_" . $file->getClientOriginalName();
+                    $folderName = 'file/ticket';
+                    $file->move(public_path($folderName), $fileName);
+                    $newAttachments[] = $folderName . "/" . $fileName;
                 }
             }
 
-            // Gabungkan file baru dengan file yang masih ada
-            $attachments = array_merge($remainingAttachments, $attachments);
-            $validate['attachments'] = json_encode($attachments);
+            // Gabungkan file yang masih ada dengan file baru
+            $allAttachments = array_merge($existingAttachments, $newAttachments);
+            $validate['attachments'] = json_encode($allAttachments);
 
             // Update tiket dengan data baru
             $ticket->update($validate);
 
+            // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
-                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
                 'h_customer' => $ticket->customer,
                 'h_assign_to' => $ticket->assign_to,
@@ -271,12 +267,11 @@ class TicketCustomerController extends Controller
                 'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
+                'h_attachments' => json_encode($allAttachments), // Pastikan ini terkodekan dalam JSON
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
             ]);
-
 
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Diupdate.');
