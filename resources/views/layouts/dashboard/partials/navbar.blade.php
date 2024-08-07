@@ -53,8 +53,7 @@
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-bell"></i>
                         @if (auth()->user()->unreadNotifications->count() != 0)
-                            <span class="notification">
-                            </span>
+                            <span class="notification"></span>
                         @endif
                     </a>
                     <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
@@ -115,7 +114,6 @@
                                                     method="POST" class="notification-form">
                                                     @csrf
                                                     @method('PATCH')
-
                                                     <a href="{{ $notification->data['Url'] }}"
                                                         class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">
                                                         <div class="notif-icon notif-primary" style="size: 20px">
@@ -127,9 +125,9 @@
                                                                 class="block">{{ $notification->data['name'] }}</span>
                                                             <span
                                                                 class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
-                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
-                                                                    {{ ucwords($notification->data['body']) }}
-                                                                </div>
+                                                            <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                {{ ucwords($notification->data['body']) }}
+                                                            </div>
                                                         </div>
                                                     </a>
                                                 </form>
@@ -157,9 +155,9 @@
                                                                 class="block">{{ $notification->data['name'] }}</span>
                                                             <span
                                                                 class="time">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
-                                                                <div class="text-gray-10 fs-7" style="font-size: 10px">
-                                                                    {{ ucwords($notification->data['body']) }}
-                                                                </div>
+                                                            <div class="text-gray-10 fs-7" style="font-size: 10px">
+                                                                {{ ucwords($notification->data['body']) }}
+                                                            </div>
                                                         </div>
                                                     </a>
                                                 </form>
@@ -170,8 +168,7 @@
                             </div>
                         </li>
                         <li>
-                            {{-- <a class="see-all" href="javascript:void(0);">See all notifications<i
-                                    class="fa fa-angle-right"></i></a> --}}
+                            {{-- <a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i></a> --}}
                         </li>
                     </ul>
                 </li>
@@ -234,3 +231,13 @@
     </nav>
     <!-- End Navbar -->
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.nav-link[data-bs-toggle="tab"]').forEach(function(tab) {
+            tab.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+    });
+</script>
