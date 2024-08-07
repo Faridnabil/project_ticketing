@@ -73,16 +73,6 @@
     </style>
 
     <style>
-        .my-slider img {
-            max-width: 100%;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .btn-icon {
-            cursor: pointer;
-        }
-
         .timeline {
             list-style: none;
             padding: 0;
@@ -242,6 +232,7 @@
                                         <!--end::Product slider-->
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="col-xl-5">
@@ -536,6 +527,7 @@
             });
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var slider = tns({

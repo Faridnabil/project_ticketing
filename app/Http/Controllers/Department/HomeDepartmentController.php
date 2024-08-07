@@ -18,7 +18,9 @@ class HomeDepartmentController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')->get();
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        ->where('assign_to', $user->id)
+        ->get();
         $logs = collect();
 
         // Menghitung jumlah tiket berdasarkan status

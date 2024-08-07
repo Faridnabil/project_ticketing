@@ -318,23 +318,21 @@ class TicketCustomerController extends Controller
             $comment->updated_at = null;
             $comment->save();
 
-            $assignedDepartmentId = $request->assign_to;
-
-            // Notifikasi
-            $users = User::role(['Tenaga Ahli'])->where('id', $assignedDepartmentId)->get();
+            // Notifikasi untuk pengguna dengan peran 'Tenaga Ahli'
+            $tenagaAhliUsers = User::role('Tenaga Ahli')->get();
             $authenticatedUserName = Auth::user()->name;
 
-            $notificationData = [
+            $notificationDataForTenagaAhli = [
                 'name' => $authenticatedUserName,
                 'body' => 'Ada komentar baru pada tiket anda',
                 'thanks' => 'Terimakasih',
                 'Text' => 'Tolong cek kembali',
                 'Url' => url('/department/assignedTicket/' . $comment->ticket_id),
                 'customer_id' => rand(1111, 9999),
-                'type' => 'comment', // Menambahkan properti 'type'
+                'type' => 'comment',
             ];
 
-            Notification::send($users, new CommentCustomer($notificationData));
+            Notification::send($tenagaAhliUsers, new CommentCustomer($notificationDataForTenagaAhli));
 
             DB::commit();
 
