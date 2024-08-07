@@ -280,7 +280,7 @@
                                             alt="avatar 1" class="avatar-img rounded-circle"
                                             style="width: 45px; height: 45px;">
                                         <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100"
-                                            method="POST" action="{{ route('assignedTickets.store') }}"
+                                            method="POST" action="{{ route('myTickets.store') }}"
                                             enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
