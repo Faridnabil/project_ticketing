@@ -247,33 +247,38 @@
                                             <div class="d-flex flex-row justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-4 pt-1"
                                                 id="comment-{{ $comment->id }}">
                                                 @if ($comment->user_id != auth()->user()->id)
-                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                                        alt="avatar 1" style="width: 45px; height: 100%;">
+                                                    <img src="{{ asset($comment->user->photo ? $comment->user->photo : 'template/dist/assets/media/avatars/blank.png') }}"
+                                                        alt="avatar 1" class="avatar-img rounded-circle"
+                                                        style="width: 45px; height: 45px;">
                                                 @endif
                                                 <div>
-                                                    <p class="small text-muted">{{ $comment->user->name }}</p>
+                                                    <p class="small text-muted">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;{{ $comment->user->name }}</p>
                                                     <p class="small p-2 {{ $comment->user_id == auth()->user()->id ? 'me-3 text-white rounded-3 bg-primary' : 'ms-3 rounded-3 bg-body-tertiary' }}"
                                                         data-kt-element="message-text">
                                                         {!! $comment->message !!}
                                                     </p>
                                                     <p
                                                         class="small {{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }} mb-3 rounded-3 text-muted d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">
-                                                        {{ $comment->created_at->locale('id')->diffForHumans() }}</p>
+                                                        {{ $comment->created_at->locale('id')->diffForHumans() }}
+                                                    </p>
                                                     @if ($comment->updated_at)
                                                         <span class="badge badge-light-success">Dirubah</span>
                                                     @endif
                                                 </div>
                                                 @if ($comment->user_id == auth()->user()->id)
-                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                                                        alt="avatar 1" style="width: 45px; height: 100%;">
+                                                    <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
+                                                        alt="avatar 1" class="avatar-img rounded-circle"
+                                                        style="width: 45px; height: 45px;">
                                                 @endif
                                             </div>
                                         @endforeach
                                     </div>
                                     <div
                                         class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                            alt="avatar 3" style="width: 40px; height: 100%;">
+                                        <img src="{{ asset(Auth::user()->photo ? Auth::user()->photo : 'template/dist/assets/media/avatars/blank.png') }}"
+                                            alt="avatar 1" class="avatar-img rounded-circle"
+                                            style="width: 45px; height: 45px;">
                                         <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100"
                                             method="POST" action="{{ route('assignedTickets.store') }}"
                                             enctype="multipart/form-data" novalidate>
@@ -282,10 +287,10 @@
                                             <input type="hidden" name="assign_to" value="{{ $ticket->customer }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                             <div class="input-group">
-                                                <input type="text" name="message"
-                                                    class="form-control form-control-lg @error('message') is-invalid @enderror"
+                                                &nbsp;&nbsp;<input type="text" name="message"
+                                                    class="form-control form-control-lg @error('message') is-invalid @enderror mb-3"
                                                     id="exampleFormControlInput1" placeholder="Type message">
-                                                <button class="btn btn-primary ms-1" type="submit"
+                                                <button class="btn btn-primary ms-1 mb-3" type="submit"
                                                     data-kt-element="send"><i class="fas fa-paper-plane"></i></button>
                                             </div>
                                             @error('message')
@@ -294,99 +299,6 @@
                                         </form>
                                     </div>
                                 </div>
-                                {{-- <div class="card" id="kt_chat_messenger"
-                                    style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
-                                    <!--begin::Card header-->
-                                    <div class="card-header" id="kt_chat_messenger_header">
-                                        <!--begin::Title-->
-                                        <div class="card-title">
-                                            <!--begin::User-->
-                                            <div class="d-flex justify-content-center flex-column me-3">
-                                                <a href="#"
-                                                    class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 mb-2 lh-1">Chat
-                                                    Komentar</a>
-                                            </div>
-                                            <!--end::User-->
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Card header-->
-                                    <!--begin::Card body-->
-                                    <div class="card-body" id="kt_chat_messenger_body">
-                                        <!--begin::Messages-->
-                                        <div class="scroll-y me-n5 pe-5 h-300px h-lg-auto scrollable-card"
-                                            style="max-height: 300px; overflow-y:auto;">
-                                            @foreach ($comments as $comment)
-                                                <div class="d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-10"
-                                                    id="comment-{{ $comment->id }}">
-                                                    <div
-                                                        class="d-flex flex-column align-items-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">
-                                                        <div class="d-flex align-items-center mb-2">
-                                                            <div class="symbol symbol-35px symbol-circle">
-                                                                <div
-                                                                    class="symbol-label fs-1 fw-bolder bg-light-success text-success">
-                                                                    {{ substr($comment->user->name, 0, 1) }}
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                class="{{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }}">
-                                                                <a href="#"
-                                                                    class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{{ $comment->user->name }}</a>
-                                                                <span
-                                                                    class="text-muted fs-7 mb-1">{{ $comment->created_at->locale('id')->diffForHumans() }}</span>
-                                                                @if ($comment->user_id == $comment->ticket->customer)
-                                                                    <span class="badge badge-light-danger">Pemilik</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="p-5 rounded bg-light-{{ $comment->user_id == auth()->user()->id ? 'primary' : 'info' }} text-dark fw-bold mw-lg-400px text-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}"
-                                                            data-kt-element="message-text">
-                                                            <p class="fw-normal fs-5 text-gray-700 m-0"
-                                                                id="message-display-{{ $comment->id }}">
-                                                                {!! $comment->message !!}
-                                                            </p>
-                                                            <form action="{{ route('assignedTickets.update', $comment->id) }}"
-                                                                method="POST" class="comment-form"
-                                                                data-comment-id="{{ $comment->id }}">
-                                                                @method('PUT')
-                                                                @csrf
-                                                                <textarea name="message" class="form-control" id="message-{{ $comment->id }}" style="display: none">{{ $comment->message }}</textarea>
-                                                            </form>
-                                                        </div>
-                                                        @if ($comment->updated_at)
-                                                            <span class="badge badge-light-success">Dirubah</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <!--end::Messages-->
-                                    </div>
-                                    <!--end::Card body-->
-                                    <!--begin::Card footer-->
-                                    <div class="card-footer pt-4" id="kt_chat_messenger_footer">
-                                        <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('assignedTickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
-                                            @csrf
-                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                            <input type="hidden" name="assign_to" value="{{ $ticket->assign_to }}">
-                                            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                                            <textarea name="message" class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
-                                                id="message" cols="10" rows="1"></textarea>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('message')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                            <div class="d-flex flex-stack">
-                                                <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send">Kirim</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--end::Card footer-->
-                                </div> --}}
-                                <!--end::Messenger-->
                             </div>
                         </div>
                     </div>
