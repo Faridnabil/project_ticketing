@@ -80,7 +80,7 @@ class HistoryTicket extends Model
 
     public function assignTo()
     {
-        return $this->belongsTo(User::class, 'assign_to', 'id');
+        return $this->belongsTo(User::class, 'h_assign_to', 'id');
     }
 
 }

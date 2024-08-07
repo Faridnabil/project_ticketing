@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@yield('title')</title>
@@ -10,14 +11,24 @@
     <script src="{{ asset('templates/assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
-            google: { families: ["Public Sans:300,400,500,600,700"] },
+            google: {
+                families: ["Public Sans:300,400,500,600,700"]
+            },
             custom: {
-                families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands",
+                    "simple-line-icons"
+                ],
                 urls: ["{{ asset('templates/assets/css/fonts.min.css') }}"]
             },
-            active: function() { sessionStorage.fonts = true; }
+            active: function() {
+                sessionStorage.fonts = true;
+            }
         });
     </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
+
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('templates/assets/css/bootstrap.min.css') }}" />
@@ -26,13 +37,55 @@
 
     <!-- Additional CSS for Demo -->
     <style>
-        .custom-dropzone { border: 2px dashed #007bff; padding: 20px; text-align: center; cursor: pointer; position: relative; }
-        .custom-dropzone .dz-message { pointer-events: none; }
-        .preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center; }
-        .preview .image-container { position: relative; display: inline-block; }
-        .preview img { max-width: 100px; max-height: 100px; }
-        .remove-btn { position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; border-radius: 50%; cursor: pointer; width: 20px; height: 20px; font-size: 12px; text-align: center; }
-        .error-message { color: red; margin-top: 10px; }
+        .custom-dropzone {
+            border: 2px dashed #007bff;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-dropzone .dz-message {
+            pointer-events: none;
+        }
+
+        .preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .preview .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .preview img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
     </style>
 
     <script>
@@ -62,6 +115,7 @@
         });
     </script>
 </head>
+
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -101,22 +155,30 @@
                 initComplete: function() {
                     this.api().columns().every(function() {
                         var column = this;
-                        var select = $('<select class="form-select"><option value=""></option></select>')
+                        var select = $(
+                                '<select class="form-select"><option value=""></option></select>'
+                                )
                             .appendTo($(column.footer()).empty())
                             .on("change", function() {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val ? "^" + val + "$" : "", true, false).draw();
+                                column.search(val ? "^" + val + "$" : "", true, false)
+                                .draw();
                             });
                         column.data().unique().sort().each(function(d, j) {
-                            select.append('<option value="' + d + '">' + d + "</option>");
+                            select.append('<option value="' + d + '">' + d +
+                                "</option>");
                         });
                     });
                 }
             });
-            $("#add-row").DataTable({ pageLength: 5 });
-            var action = '<td><div class="form-button-action"><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"><i class="fa fa-edit"></i></button><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"><i class="fa fa-times"></i></button></div></td>';
+            $("#add-row").DataTable({
+                pageLength: 5
+            });
+            var action =
+                '<td><div class="form-button-action"><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"><i class="fa fa-edit"></i></button><button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"><i class="fa fa-times"></i></button></div></td>';
             $("#addRowButton").click(function() {
-                $("#add-row").dataTable().fnAddData([$("#addName").val(), $("#addPosition").val(), $("#addOffice").val(), action]);
+                $("#add-row").dataTable().fnAddData([$("#addName").val(), $("#addPosition").val(), $(
+                    "#addOffice").val(), action]);
                 $("#addRowModal").modal("hide");
             });
         });
@@ -202,6 +264,7 @@
                 preview.appendChild(container);
             }
         });
+
         function removeFile(file) {
             const index = uploadedFiles.indexOf(file);
             if (index !== -1) {
@@ -210,6 +273,7 @@
                 preview.removeChild(preview.childNodes[index]);
             }
         }
+
         function removeExistingFile(event, filePath) {
             event.stopPropagation();
             removedFiles.push(filePath);
@@ -217,6 +281,7 @@
             event.target.parentElement.remove();
             updateExistingFileList();
         }
+
         function updateExistingFileList() {
             const fileList = document.getElementById('existing_file_list');
             fileList.innerHTML = '';
@@ -226,6 +291,7 @@
                 fileList.appendChild(listItem);
             });
         }
+
         function removeAllFiles() {
             uploadedFiles = [];
             removedFiles = [];
@@ -238,4 +304,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

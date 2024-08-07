@@ -238,7 +238,7 @@
                                                         @endif
                                                         <br>
                                                         <strong>Status Diubah Oleh :</strong>
-                                                        {{ $log->statusChangedByUser->name ?? 'N/A' }}
+                                                        {{ $log->statusChangedBy->name ?? 'N/A' }}
                                                     </p>
                                                 </div>
                                             </li>
