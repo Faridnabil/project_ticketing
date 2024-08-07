@@ -13,11 +13,15 @@ class HomeCustomerController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+
+
         $selectedTicketId = $request->input('ticket_number');
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')->get();
+        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+                          ->where('customer', $user->id)
+                          ->get();
         $logs = collect();
 
         // Menghitung jumlah tiket berdasarkan status
@@ -27,12 +31,11 @@ class HomeCustomerController extends Controller
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
-
         if ($selectedTicketId) {
             // Get the selected ticket
             $selectedTicket = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-                ->where('customer', $user->id)
-                ->find($selectedTicketId);
+                                    ->where('customer', $user->id)
+                                    ->find($selectedTicketId);
 
             if ($selectedTicket) {
                 $selectedTicketNumber = $selectedTicket->no_ticket;
@@ -41,9 +44,9 @@ class HomeCustomerController extends Controller
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
                 $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
-                    ->whereIn('h_no_ticket', $ticketNumbers)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+                                     ->whereIn('h_no_ticket', $ticketNumbers)
+                                     ->orderBy('created_at', 'desc')
+                                     ->get();
             }
         }
 
@@ -62,4 +65,5 @@ class HomeCustomerController extends Controller
             'selectedTicketNumber'
         ));
     }
+
 }
