@@ -413,7 +413,7 @@ class TicketStaffSubditController extends Controller
             ];
 
             // Ambil semua pengguna dengan peran 'admin'
-            $helpdesks = User::role('Pejabat')
+            $helpdesks = User::role('Siak Dev')
                 ->get();
 
             // Kirim notifikasi kepada semua pengguna dengan peran 'admin'

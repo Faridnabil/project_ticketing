@@ -156,7 +156,7 @@ public function index(Request $request)
         $statuses = Status::all();
         $categories = Category::all();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -337,17 +337,18 @@ public function index(Request $request)
     {
         try {
             if (!$ticket) {
-                // Jika principle tidak ditemukan, kembalikan pesan kesalahan
-                return back()->with(['error' => 'Tiket Tidak ada.']);
+                // Jika tiket tidak ditemukan, kembalikan pesan kesalahan
+                return back()->with(['error' => 'Tiket tidak ada.']);
             }
 
-            $ticket->delete(); // Hapus principle
-            return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil dihapus');
+            $ticket->delete(); // Hapus tiket
+            return redirect()->route('ticket.index')->with('success', 'Tiket berhasil dihapus');
         } catch (\Throwable $th) {
-            // Log activity
+            // Log activity (jika ada logging)
             return back()->with('error', 'Tiket gagal dihapus');
         }
     }
+
 
     public function store_comment(Request $request)
     {

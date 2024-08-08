@@ -110,10 +110,12 @@
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ old('status_id') == $status->id ? 'selected' : '' }}>
-                                                {{ $status->status_name }}
-                                            </option>
+                                            @if ($status->status_name !== 'Buka Kembali') {{-- Jika status bukan "Buka Kembali" --}}
+                                                <option value="{{ $status->id }}"
+                                                    {{ old('status_id') == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">
@@ -125,6 +127,7 @@
                                         </div>
                                     @enderror
                                 </div>
+
 
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">PIC</label>

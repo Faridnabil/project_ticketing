@@ -202,7 +202,7 @@ class TicketHelpdeskController extends Controller
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             // DB::table('history_tickets')->insert([
-            //     'h_no_ticket' => $request->no_ticket,
+            //     'h_no_ticket' => $validate['no_ticket'],
             //     'h_province_id' => $request->province_id,
             //     'h_city_or_regency_id' => $request->city_or_regency_id,
             //     'h_level1' => $request->level1,
@@ -223,8 +223,9 @@ class TicketHelpdeskController extends Controller
             //     'status_changedBy' => Auth::user()->id,
             // ]);
 
+
             DB::commit();
-            return redirect()->route('helpdesk.NewTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
+            return redirect()->route('helpdesk.newTickets.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());
@@ -352,11 +353,11 @@ class TicketHelpdeskController extends Controller
             // Pengecekan status_id 5 untuk notifikasi
             if ($request->status_id == 5) {
                 $levels = [
-                    'level1' => 2,
-                    'level2' => 3,
-                    'level3' => 4,
-                    'level4' => 5,
-                    'level5' => 6
+                    'level1' => 'Helpdesk',
+                    'level2' => 'Koordinator',
+                    'level3' => 'Staff Subdit',
+                    'level4' => 'SIAK Dev',
+                    'level5' => 'Pejabat'
                 ];
 
                 foreach ($levels as $level => $role) {
@@ -373,7 +374,7 @@ class TicketHelpdeskController extends Controller
 
                         $notificationData = [
                             'name' => $levelUser->name,
-                            'body' => 'Tiket yang ditangani ' . $levelUser->name . ', telah dibuka kembali oleh ' . $level,
+                            'body' => 'Tiket yang ditangani ' . $levelUser->name . ', telah dibuka kembali oleh ' . Auth::user()->name,
                             'thanks' => 'Terimakasih',
                             'Text' => '',
                             'Url' => $url,
@@ -411,6 +412,8 @@ class TicketHelpdeskController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
+
 
 
     /**
