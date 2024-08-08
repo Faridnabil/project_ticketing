@@ -350,52 +350,41 @@ class TicketHelpdeskController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // Pengecekan status_id 5 untuk notifikasi
-            if ($request->status_id == 5) {
-                $levels = [
-                    'level1' => 'Helpdesk',
-                    'level2' => 'Koordinator',
-                    'level3' => 'Staff Subdit',
-                    'level4' => 'SIAK Dev',
-                    'level5' => 'Pejabat'
-                ];
+// Pengecekan status_id 5 untuk notifikasi
+if ($request->status_id == 5) {
+    $roles = [
+        'Helpdesk' => '/helpdesk/ticket',
+        'Koordinator' => '/koordinator/ticket',
+        'Staff Subdit' => '/staff-subdit/ticket',
+        'SIAK Dev' => '/siak-dev/ticket',
+        'Pejabat' => '/pejabat/ticket',
+    ];
 
-                foreach ($levels as $level => $role) {
-                    if (!empty($ticket->$level)) {
-                        $levelUser = User::find($ticket->$level);
-                        $url = match ($role) {
-                            'Helpdesk' => url('/helpdesk/ticket'),
-                            'Koordinator' => url('/koordinator/ticket'),
-                            'Staff Subdit' => url('/staff-subdit/ticket'),
-                            'SIAK Dev' => url('/siak-dev/ticket'),
-                            'Pejabat' => url('/pejabat/ticket'),
-                            default => url('/'),
-                        };
+    // Dapatkan pengguna yang sedang terautentikasi
+    $authUser = Auth::user();
 
-                        $notificationData = [
-                            'name' => $levelUser->name,
-                            'body' => 'Tiket yang ditangani ' . $levelUser->name . ', telah dibuka kembali oleh ' . Auth::user()->name,
-                            'thanks' => 'Terimakasih',
-                            'Text' => '',
-                            'Url' => $url,
-                            'koordinator_id' => rand(1111, 9999),
-                        ];
+    foreach ($roles as $role => $url) {
+        // Ambil semua pengguna dengan peran yang sesuai
+        $users = User::whereHas('roles', function ($query) use ($role) {
+            $query->where('name', $role);
+        })->get();
 
-                        // Ambil semua pengguna dengan peran yang sesuai
-                        $users = User::whereHas('roles', function ($query) use ($role) {
-                            $query->where('name', $role);
-                        })->get();
+        $notificationData = [
+            'name' => $authUser->name,
+            'body' => 'Tiket yang ditangani oleh anda telah dibuka kembali oleh ' . $authUser->name. ' anda dapat mengecek kembali tiketnya',
+            'thanks' => 'Terimakasih',
+            'Text' => '',
+            'Url' => url($url),
+            'koordinator_id' => rand(1111, 9999),
+        ];
 
-                        // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
-                        foreach ($users as $user) {
-                            Notification::send($user, new NotificationKoordinator($notificationData));
-                        }
+        // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
+        foreach ($users as $user) {
+            Notification::send($user, new NotificationKoordinator($notificationData));
+        }
+    }
+}
 
-                        // Hentikan loop setelah menemukan level yang sesuai
-                        break;
-                    }
-                }
-            }
 
             // Gabungkan file baru dengan file yang masih ada
             $attachments = array_merge($remainingAttachments, $attachments);
