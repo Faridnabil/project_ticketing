@@ -28,7 +28,7 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index(Request $request)
+    public function index(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk');
 
@@ -69,6 +69,14 @@ public function index(Request $request)
         $helpdeskUsers = Role::where('name', 'Helpdesk')
             ->pluck('id')
             ->toArray();
+
+        // Filter berdasarkan status_name
+        if ($request->has('filter')) {
+            $statusesToFilter = explode(',', $request->filter);
+            $query->whereHas('status', function ($q) use ($statusesToFilter) {
+                $q->whereIn('status_name', $statusesToFilter);
+            });
+        }
         return view('dashboard.admin.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'helpdeskUsers', 'levels'));
     }
 

@@ -60,6 +60,14 @@ class TicketKoordinatorController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
+        // Filter berdasarkan status_name
+        if ($request->has('filter')) {
+            $statusesToFilter = explode(',', $request->filter);
+            $query->whereHas('status', function ($q) use ($statusesToFilter) {
+                $q->whereIn('status_name', $statusesToFilter);
+            });
+        }
+
         $tickets = $query->orderBy('id', 'desc')
             ->get();
 

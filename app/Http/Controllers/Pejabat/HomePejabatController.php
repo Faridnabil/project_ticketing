@@ -14,13 +14,15 @@ class HomePejabatController extends Controller
     {
         // Mengambil semua tiket
         $tickets = Ticket::with('status', 'category', 'priority', 'pejabat')
-            ->where('level5', '!=', null)
+            ->whereNotNull('level5')
+            ->whereNull('level4')
             ->get();
+
 
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
+        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses', 'Buka Kembali'])->count();
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 

@@ -48,6 +48,7 @@
                                     <option value="{{ $level->id }}">{{ $level->name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;&nbsp;
 
                             <select name="category_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Kategori">
@@ -56,7 +57,7 @@
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                             &nbsp;&nbsp;
 
                             <select name="priority_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
@@ -65,7 +66,7 @@
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                             &nbsp;&nbsp;
 
                             <select name="status_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Status">
@@ -74,7 +75,7 @@
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                             &nbsp;&nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
                             <a href="{{ route('siakDev.ticket.index') }}" class="btn btn-danger">Reset</a>

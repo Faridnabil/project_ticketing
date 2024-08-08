@@ -158,7 +158,7 @@
 
                                         </div>
                                         <span
-                                            class="badge badge-light fs-8">{{ $notification->created_at->locale('id')->diffForHumans() }}</span>
+                                            class="badge badge-light fs-8">{{ $notification->created_at ? $notification->created_at->locale('id')->diffForHumans() : '' }}                                        </span>
                                     </div>
                                 @endforeach
 
