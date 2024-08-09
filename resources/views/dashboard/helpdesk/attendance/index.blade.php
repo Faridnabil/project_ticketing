@@ -492,9 +492,9 @@
                                                 id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
-                                                        <div class="modal-header bg-danger">
+                                                        <div class="modal-header bg-primary">
                                                             <h6 class="modal-title m-0 text-white">
-                                                                File
+                                                                File Tidak Dapat Dilihat Langsung
                                                             </h6>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
@@ -510,12 +510,10 @@
                                                                     str_ends_with($attendance->attachment, '.png'))
                                                                 <img src="{{ asset('storage/' . $attendance->attachment) }}"
                                                                     style="width: 100%; height: auto;" />
-                                                            @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                                <p>File tidak dapat ditampilkan langsung. <a
-                                                                        href="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                        download>Unduh file .docx</a></p>
-                                                            @else
-                                                                <p>File tidak dapat ditampilkan.</p>
+                                                                    @elseif (str_ends_with($attendance_today->attachment, '.docx'))
+                                                                    <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah ini.<a
+                                                                            href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
+                                                                @else
                                                             @endif
                                                         </div><!--end modal-body-->
                                                     </div>
@@ -602,27 +600,27 @@
 
     @foreach ($attendances as $attendance_today)
         <!-- Modal Template -->
-        <div class="modal fade" tabindex="-1"
-            id="modal_checkout_{{ $attendance_today->id }}">
+        <div class="modal fade" tabindex="-1" id="modal_checkout_{{ $attendance_today->id }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white">File</h6>
+                    <div class="modal-header bg-primary">
+                        <h6 class="modal-title m-0 text-white">File Tidak Dapat Dilihat Langsung</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
                     <div class="modal-body">
                         @if (str_ends_with($attendance_today->attachment, '.pdf'))
-                            <iframe src="{{ Storage::url($attendance_today->attachment) }}" style="width: 100%; height: 560px;"
-                                frameborder="0"></iframe>
+                            <iframe src="{{ Storage::url($attendance_today->attachment) }}"
+                                style="width: 100%; height: 560px;" frameborder="0"></iframe>
                         @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
                                 str_ends_with($attendance_today->attachment, '.jpeg') ||
                                 str_ends_with($attendance_today->attachment, '.png'))
-                            <img src="{{ Storage::url($attendance_today->attachment) }}" style="width: 100%; height: auto;" />
+                            <img src="{{ Storage::url($attendance_today->attachment) }}"
+                                style="width: 100%; height: auto;" />
                         @elseif (str_ends_with($attendance_today->attachment, '.docx'))
-                            <p>File tidak dapat ditampilkan langsung. <a
-                                    href="{{ Storage::url($attendance_today->attachment) }}" download>Unduh file .docx</a></p>
+                            <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah ini.<a
+                                    href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
                         @else
-                            <p>File tidak dapat ditampilkan.</p>
+
                         @endif
                     </div><!--end modal-body-->
                 </div>

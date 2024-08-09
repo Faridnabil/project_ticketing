@@ -110,10 +110,13 @@ class AttendanceHelpdeskController extends Controller
             // Handle file upload
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
-                $filePath = $file->store('public/absen'); // Store file in storage/app/public/absen
+                $originalFilename = $file->getClientOriginalName(); // Mendapatkan nama file asli
 
-                // Save the file path to the database
-                $attendance->attachment = str_replace('public/', '', $filePath); // Store path relative to storage
+                // Simpan file di storage/app/public/absen dengan nama asli
+                $filePath = $file->storeAs('public/absen', $originalFilename);
+
+                // Simpan path relatif ke storage dengan nama asli ke kolom attachment
+                $attendance->attachment = str_replace('public/', '', $filePath); // Path relatif
             }
 
             $attendance->save();
@@ -122,6 +125,7 @@ class AttendanceHelpdeskController extends Controller
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check Out berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
+            //    dd($th->getMessage()); // Menampilkan pesan error untuk debugging
             return back()->with("error", $th->getMessage());
         }
     }
