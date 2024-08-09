@@ -494,7 +494,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-primary">
                                                             <h6 class="modal-title m-0 text-white">
-                                                                File Tidak Dapat Dilihat Langsung
+                                                                File
                                                             </h6>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
@@ -510,9 +510,9 @@
                                                                     str_ends_with($attendance->attachment, '.png'))
                                                                 <img src="{{ asset('storage/' . $attendance->attachment) }}"
                                                                     style="width: 100%; height: auto;" />
-                                                                    @elseif (str_ends_with($attendance_today->attachment, '.docx'))
+                                                                    @elseif (str_ends_with($attendance->attachment, '.docx'))
                                                                     <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah ini.<a
-                                                                            href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
+                                                                            href="{{ Storage::url($attendance->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
                                                                 @else
                                                             @endif
                                                         </div><!--end modal-body-->
