@@ -72,7 +72,7 @@
                                         @foreach ($city_or_regencies as $city)
                                             <option value="{{ $city->id }}"
                                                 {{ $ticket->city_or_regency_id == $city->id ? 'selected' : '' }}>
-                                                {{ $city->province->no_province }} - {{ $city->city_or_regency_name }}
+                                                {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -227,12 +227,12 @@
                         .then(response => response.json())
                         .then(data => {
                             // Clear previous options
-                            citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
+                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
 
                             // Add new options
                             data.forEach(city => {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.province.no_province} - ${city.city_or_regency_name}</option>`
+                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                                 );
                             });
 
@@ -242,31 +242,10 @@
                         .catch(error => console.error('Error:', error));
                 } else {
                     citySelect.html(
-                        '<option value="">Pilih Kabupaten/Kota</option>'
-                        ); // Clear cities if no province is selected
+                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
             });
-
-            // Pre-select city or regency if available
-            const selectedCity = "{{ $ticket->city_or_regency_id }}";
-            if (selectedCity) {
-                const provinceId = "{{ $ticket->province_id }}";
-                provinceSelect.val(provinceId).trigger('change');
-
-                fetch(`/get-cities/${provinceId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
-                        data.forEach(city => {
-                            citySelect.append(
-                                `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.province.no_province} - ${city.city_or_regency_name}</option>`
-                            );
-                        });
-                        citySelect.trigger('change');
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
         });
     </script>
 

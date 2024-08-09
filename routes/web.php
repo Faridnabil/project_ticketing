@@ -70,6 +70,8 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
         '/category' => CategoryController::class,
     ]);
 
+    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+
     Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
     Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
     Route::post('/province-import', [ProvinceController::class, 'import'])->name('province.import');
@@ -116,7 +118,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
     Route::put('/helpdesk/sendTicket/{id}', [TicketHelpdeskController::class, 'send_ticket'])->name('tickets.send');
-    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');

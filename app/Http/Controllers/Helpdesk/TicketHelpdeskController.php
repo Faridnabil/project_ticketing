@@ -650,7 +650,7 @@ class TicketHelpdeskController extends Controller
     {
         $cities = CityOrRegency::with('province')
             ->where('province_id', $provinceId)
-            ->get(['id', 'province_id', 'city_or_regency_name']);
+            ->get(['id', 'province_id', 'city_or_regency_name','no_city_or_regency']);
 
         return response()->json($cities);
     }

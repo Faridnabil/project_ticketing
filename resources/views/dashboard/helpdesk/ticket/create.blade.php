@@ -271,7 +271,7 @@
                             // Add new options
                             data.forEach(city => {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.province.no_province} - ${city.city_or_regency_name}</option>`
+                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                                 );
                             });
 

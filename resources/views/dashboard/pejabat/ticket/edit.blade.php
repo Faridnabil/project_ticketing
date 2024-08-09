@@ -72,7 +72,7 @@
                                         @foreach ($city_or_regencies as $city)
                                             <option value="{{ $city->id }}"
                                                 {{ $ticket->city_or_regency_id == $city->id ? 'selected' : '' }}>
-                                                {{ $city->province->no_province }} - {{ $city->city_or_regency_name }}
+                                                {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -232,7 +232,7 @@
                             // Add new options
                             data.forEach(city => {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.province.no_province} - ${city.city_or_regency_name}</option>`
+                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                                 );
                             });
 
@@ -260,7 +260,7 @@
                         citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
                         data.forEach(city => {
                             citySelect.append(
-                                `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.province.no_province} - ${city.city_or_regency_name}</option>`
+                                `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                             );
                         });
                         citySelect.trigger('change');
