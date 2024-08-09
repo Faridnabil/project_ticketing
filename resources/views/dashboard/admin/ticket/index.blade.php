@@ -126,7 +126,7 @@
                                                         style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
                                                 @endif
                                             </td>
-                                            <td style="width: 100px; display: flex; align-items: center; justify-content: center;">
+                                            <td style="width: 150px;  align-items: center; justify-content: center;">
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3" href="{{ route('ticket.show', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">

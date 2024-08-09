@@ -30,6 +30,7 @@ class TicketCustomerController extends Controller
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
+            ->where('status_id', '!=', 4)
             ->get();
 
         return view('dashboard.customer.ticket.index', compact('tickets'));

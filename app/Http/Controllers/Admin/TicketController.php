@@ -267,6 +267,61 @@ class TicketController extends Controller
         $ticket->delete();
         return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dihapus.');
     }
+    public function approve_assignment(Request $request, RequestAssignment $requestAssignment)
+{
+    if (Auth::user()->hasRole('Admin')) {
+        $ticket = $requestAssignment->ticket;
+        $ticket->assign_to = $requestAssignment->user_id;
+
+        // Ubah status tiket menjadi "Diterima"
+        $statusDiterima = Status::where('status_name', 'Diterima')->first();
+        if ($statusDiterima) {
+            $ticket->status_id = $statusDiterima->id;
+        }
+
+        $ticket->save();
+
+        $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
+        $requestAssignment->save();
+
+        // Notifikasi untuk Tenaga Ahli yang ditugaskan
+        $authenticatedUserName = Auth::user()->name;
+        $assignedExpertUsers = User::role('Tenaga Ahli')->where('id', $requestAssignment->user_id)->get();
+
+        $notificationDataForExpert = [
+            'name' => $authenticatedUserName,
+            'body' => 'Tiket yang anda ajukan telah diterima dan sedang diproses.',
+            'thanks' => 'Terimakasih',
+            'Text' => 'Tolong cek kembali tiket anda.',
+            'Url' => url('/department/assignedTicket/' . $ticket->id),
+            'ticket_id' => $ticket->no_ticket,
+            'type' => 'assignment_approved',
+        ];
+
+        Notification::send($assignedExpertUsers, new NotificationCustomer($notificationDataForExpert));
+
+        // Catat riwayat perubahan status tiket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' =>  $ticket->no_ticket,
+            'h_title' => $ticket->title,
+            'h_customer' => $ticket->customer,
+            'h_assign_to' => $ticket->assign_to,
+            'h_solution' => $ticket->solution,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
+
+        return redirect()->back()->with('success', 'Tiket berhasil diassign.');
+    }
+
+    return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+}
 
     // method to download tickets in excel
     public function export(Request $request)

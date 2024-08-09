@@ -78,7 +78,10 @@
                                                         style="background-color:green ; color: white; font-weight:bold">
                                                         Selesai</span>
                                                 @else
-                                                    {{ $status->status_name }}
+                                                    <span class="badge"
+                                                        style="background-color: {{ $status->color }}; color: white; font-weight:bold">
+                                                        {{ $status->status_name }}
+                                                    </span>
                                                 @endif
                                             </td>
                                             <td class="text-center">

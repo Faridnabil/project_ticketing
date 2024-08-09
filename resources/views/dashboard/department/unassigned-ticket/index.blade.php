@@ -47,7 +47,7 @@
                                     <th>Nomor Tiket</th>
                                     <th>Judul</th>
                                     <th>Pemilik</th>
-                                    <th>Tetapkan Ke</th>
+                                    <th>Kategori</th>
                                     <th>Prioritas</th>
                                     <th>Dibuat Tanggal</th>
                                     <th>Status</th>
@@ -61,13 +61,7 @@
                                             <td>{{ $ticket->no_ticket }}</td>
                                             <td>{{ $ticket->title }}</td>
                                             <td>{{ $ticket->customers->name }}</td>
-                                            <td>
-                                                @if ($ticket->assignTo != null)
-                                                    {{ $ticket->assignTo->name }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
+                                            <td>{{ $ticket->category->category_name }}</td>
                                             <td>
                                                 @if ($ticket->priority_id == '4')
                                                     <span class="badge"

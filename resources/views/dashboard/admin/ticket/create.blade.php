@@ -121,7 +121,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
                                     <input type="date" name="due_date"
                                         class="form-control @error('due_date') is-invalid @enderror" required autofocus>
@@ -136,7 +136,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Status"required autofocus>
@@ -155,8 +155,8 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
-                                <div class="col-md-4">
+                                </div> --}}
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-select @error('category_id') is-invalid @enderror"

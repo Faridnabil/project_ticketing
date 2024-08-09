@@ -64,23 +64,30 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">
                                                 @if ($priority->priority_name == 'Critical')
-                                                    <span class="badge" style="background-color:red ; color: white; font-weight:bold">
+                                                    <span class="badge"
+                                                        style="background-color:red ; color: white; font-weight:bold">
                                                         Critical
                                                     </span>
                                                 @elseif($priority->priority_name == 'Medium')
-                                                    <span class="badge" style="background-color:#eed600 ; color: white; font-weight:bold">
+                                                    <span class="badge"
+                                                        style="background-color:#eed600 ; color: white; font-weight:bold">
                                                         Medium
                                                     </span>
                                                 @elseif($priority->priority_name == 'High')
-                                                    <span class="badge" style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
                                                         High
                                                     </span>
                                                 @elseif($priority->priority_name == 'Low')
-                                                    <span class="badge" style="background-color:green ; color: white; font-weight:bold">
+                                                    <span class="badge"
+                                                        style="background-color:green ; color: white; font-weight:bold">
                                                         Low
                                                     </span>
                                                 @else
-                                                    {{ $priority->priority_name }}
+                                                    <span class="badge"
+                                                        style="background-color: {{ $priority->color }}; color: white; font-weight:bold">
+                                                        {{ $priority->priority_name }}
+                                                    </span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -132,26 +139,31 @@
                                                         <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
                                                             Form Hapus Prioritas
                                                         </h6>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="col-lg-9">
                                                                 <h5>Apakah Anda yakin menghapus Prioritas ini?</h5>
-                                                                <small class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
+                                                                <small
+                                                                    class="text-muted ml-2">{{ date('d F Y', strtotime(Carbon\Carbon::now())) }}</small>
                                                                 <ul class="mt-3 mb-0">
                                                                     <li>{{ $priority->priority_name }}</li>
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                                data-bs-dismiss="modal">
                                                                 Tutup
                                                             </button>
-                                                            <form action="{{ route('priority.destroy', $priority->id) }}" method="POST" class="d-inline">
+                                                            <form action="{{ route('priority.destroy', $priority->id) }}"
+                                                                method="POST" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
-                                                                <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
+                                                                <button class="btn btn-danger btn-sm"
+                                                                    type="submit">Hapus</button>
                                                             </form>
                                                         </div>
                                                     </div>
