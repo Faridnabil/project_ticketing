@@ -48,6 +48,82 @@
         }
     </style>
 
+    {{-- Icon Show --}}
+    <style>
+        /* From Uiverse.io by vinodjangid07 */
+        .Documents-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: fit-content;
+            height: 45px;
+            border: none;
+            padding: 0px 15px;
+            border-radius: 5px;
+            background-color: rgb(34, 34, 62);
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .folderContainer {
+            width: 40px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .fileBack {
+            z-index: 1;
+            width: 80%;
+            height: auto;
+        }
+
+        .filePage {
+            width: 50%;
+            height: auto;
+            position: absolute;
+            z-index: 2;
+            transition: all 0.3s ease-out;
+        }
+
+        .fileFront {
+            width: 85%;
+            height: auto;
+            position: absolute;
+            z-index: 3;
+            opacity: 0.95;
+            transform-origin: bottom;
+            transition: all 0.3s ease-out;
+        }
+
+        .text {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .Documents-btn:hover .filePage {
+            transform: translateY(-5px);
+        }
+
+        .Documents-btn:hover {
+            background-color: rgb(78, 78, 141);
+        }
+
+        .Documents-btn:active {
+            transform: scale(0.95);
+        }
+
+        .Documents-btn:hover .fileFront {
+            transform: rotateX(30deg);
+        }
+    </style>
+
     <!--begin::Toolbar-->
     <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
@@ -300,9 +376,20 @@
                                                                     <td>
 
                                                                         <a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}">
-                                                                            Keluar
+                                                                            data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}_{{ $loop->index }}">
+                                                                            @if (str_ends_with($attendance_today->attachment, '.pdf'))
+                                                                                Keluar
+                                                                            @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
+                                                                                    str_ends_with($attendance_today->attachment, '.jpeg') ||
+                                                                                    str_ends_with($attendance_today->attachment, '.png'))
+                                                                                Keluar
+                                                                            @elseif (str_ends_with($attendance_today->attachment, '.docx'))
+                                                                                Keluar
+                                                                            @else
+                                                                                Keluar
+                                                                            @endif
                                                                         </a>
+
                                                                     </td>
                                                                 </tr>
                                                             @endif
@@ -351,7 +438,7 @@
                                     value="{{ request('active_tab', 'absen') }}">
 
                                 <button type="submit" class="btn btn-primary me-1">Filter</button>
-                                <a href="#" id="clear-filters" class="btn btn-danger">Hapus</a>
+                                <a href="#" id="clear-filters" class="btn btn-danger">Reset</a>
                             </form>
                             <!--end::Form-->
 
@@ -412,9 +499,8 @@
                                     <th class="min-w-40px">Shift</th>
                                     <th class="min-w-40px">Jam Masuk</th>
                                     <th class="min-w-40px">Jam Pulang</th>
-                                    <th class="min-w-40px">Keterangan</th>
-                                    <th class="min-w-40px">Aktifitas</th>
-                                    <th class="min-w-40px">Status Tugas</th>
+                                    <th class="min-w-40px">Dokumen</th>
+                                    <th class="min-w-40px">Aksi</th>
                                     {{-- <th class="min-w-100px">Fitur</th> --}}
                                 </tr>
                                 <!--end::Table row-->
@@ -461,59 +547,108 @@
                                                         @elseif (str_ends_with($attendance->attachment, '.jpg') ||
                                                                 str_ends_with($attendance->attachment, '.jpeg') ||
                                                                 str_ends_with($attendance->attachment, '.png'))
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/IMAGE.png') }}"
-                                                                width="40px" height="50px" alt="file">
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/png.png') }}"
+                                                                width="50px" height="50px" alt="file">
                                                         @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/DOCX.png') }}"
-                                                                width="40px" height="50px" alt="file">
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/word.png') }}"
+                                                                width="50px" height="50px" alt="file">
                                                         @else
                                                             <img src="{{ asset('template/dist/assets/media/illustrations/FILE.png') }}"
-                                                                width="40px" height="50px" alt="file">
+                                                                width="50px" height="50px" alt="file">
                                                         @endif
                                                     </a>
                                                 @endif
                                             </td>
 
-                                            @foreach ($attendances as $attendance)
-                                                <div class="modal fade" tabindex="-1"
-                                                    id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-danger">
-                                                                <h6 class="modal-title m-0 text-white">
-                                                                    File
-                                                                </h6>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div><!--end modal-header-->
-                                                            <div class="modal-body">
-                                                                @if (str_ends_with($attendance->attachment, '.pdf'))
-                                                                    <iframe
-                                                                        src="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                        style="width: 100%; height: 560px;"
-                                                                        frameborder="0"></iframe>
-                                                                @elseif (str_ends_with($attendance->attachment, '.jpg') ||
-                                                                        str_ends_with($attendance->attachment, '.jpeg') ||
-                                                                        str_ends_with($attendance->attachment, '.png'))
-                                                                    <img src="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                        style="width: 100%; height: auto;" />
-                                                                @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                                    <p>File tidak dapat ditampilkan langsung. <a
-                                                                            href="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                            download>Unduh file .docx</a></p>
-                                                                @else
-                                                                    <p>File tidak dapat ditampilkan.</p>
-                                                                @endif
-                                                            </div><!--end modal-body-->
-                                                        </div>
+                                            <div class="modal fade" tabindex="-1"
+                                                id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-danger">
+                                                            <h6 class="modal-title m-0 text-white">
+                                                                File
+                                                            </h6>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div><!--end modal-header-->
+                                                        <div class="modal-body">
+                                                            @if (str_ends_with($attendance->attachment, '.pdf'))
+                                                                <iframe
+                                                                    src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                    style="width: 100%; height: 560px;"
+                                                                    frameborder="0"></iframe>
+                                                            @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                                                    str_ends_with($attendance->attachment, '.jpeg') ||
+                                                                    str_ends_with($attendance->attachment, '.png'))
+                                                                <img src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                    style="width: 100%; height: auto;" />
+                                                            @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                                <p>File tidak dapat ditampilkan langsung. <a
+                                                                        href="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                        download>Unduh file .docx</a></p>
+                                                            @else
+                                                                <p>File tidak dapat ditampilkan.</p>
+                                                            @endif
+                                                        </div><!--end modal-body-->
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            </div>
 
-                                            <td style="text-align: left"> {!! $attendance_today->activity ?? '-' !!}
+
+                                            <td style="text-align: left">
+                                                <button class="Documents-btn" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_attendanceLog_{{ $attendance->id }}_{{ $loop->index }}">
+                                                    <span class="folderContainer">
+                                                        <svg class="fileBack" width="146" height="113"
+                                                            viewBox="0 0 146 113" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0 4C0 1.79086 1.79086 0 4 0H50.3802C51.8285 0 53.2056 0.627965 54.1553 1.72142L64.3303 13.4371C65.2799 14.5306 66.657 15.1585 68.1053 15.1585H141.509C143.718 15.1585 145.509 16.9494 145.509 19.1585V109C145.509 111.209 143.718 113 141.509 113H3.99999C1.79085 113 0 111.209 0 109V4Z"
+                                                                fill="url(#paint0_linear_117_4)"></path>
+                                                            <defs>
+                                                                <linearGradient id="paint0_linear_117_4" x1="0"
+                                                                    y1="0" x2="72.93" y2="95.4804"
+                                                                    gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#8F88C2"></stop>
+                                                                    <stop offset="1" stop-color="#5C52A2"></stop>
+                                                                </linearGradient>
+                                                            </defs>
+                                                        </svg>
+                                                        <svg class="filePage" width="88" height="99"
+                                                            viewBox="0 0 88 99" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <rect width="88" height="99"
+                                                                fill="url(#paint0_linear_117_6)"></rect>
+                                                            <defs>
+                                                                <linearGradient id="paint0_linear_117_6" x1="0"
+                                                                    y1="0" x2="81" y2="160.5"
+                                                                    gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="white"></stop>
+                                                                    <stop offset="1" stop-color="#686868"></stop>
+                                                                </linearGradient>
+                                                            </defs>
+                                                        </svg>
+
+                                                        <svg class="fileFront" width="160" height="79"
+                                                            viewBox="0 0 160 79" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.29306 12.2478C0.133905 9.38186 2.41499 6.97059 5.28537 6.97059H30.419H58.1902C59.5751 6.97059 60.9288 6.55982 62.0802 5.79025L68.977 1.18034C70.1283 0.410771 71.482 0 72.8669 0H77H155.462C157.87 0 159.733 2.1129 159.43 4.50232L150.443 75.5023C150.19 77.5013 148.489 79 146.474 79H7.78403C5.66106 79 3.9079 77.3415 3.79019 75.2218L0.29306 12.2478Z"
+                                                                fill="url(#paint0_linear_117_5)"></path>
+                                                            <defs>
+                                                                <linearGradient id="paint0_linear_117_5" x1="38.7619"
+                                                                    y1="8.71323" x2="66.9106" y2="82.8317"
+                                                                    gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#C3BBFF"></stop>
+                                                                    <stop offset="1" stop-color="#51469A"></stop>
+                                                                </linearGradient>
+                                                            </defs>
+                                                        </svg>
+                                                    </span>
+                                                    <p class="text mt-4">Deskripsi</p>
+                                                </button>
                                             </td>
-                                            <td style="text-align: left"> {!! $attendance_today->status_activity ?? '-' !!}
-                                            </td>
+
                                         </tr>
                                     @endforeach
                                 @endif
@@ -535,11 +670,59 @@
     </script>
 
     @foreach ($attendances as $attendance)
+        <!-- Modal Template -->
         <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white">
+                        <h6 class="modal-title m-0 text-white">File</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!--end modal-header-->
+                    <div class="modal-body">
+                        @if (str_ends_with($attendance->attachment, '.pdf'))
+                            <iframe src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: 560px;"
+                                frameborder="0"></iframe>
+                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                str_ends_with($attendance->attachment, '.jpeg') ||
+                                str_ends_with($attendance->attachment, '.png'))
+                            <img src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: auto;" />
+                        @elseif (str_ends_with($attendance->attachment, '.docx'))
+                            <p>File tidak dapat ditampilkan langsung. <a
+                                    href="{{ Storage::url($attendance->attachment) }}" download>Unduh file .docx</a></p>
+                        @else
+                            <p>File tidak dapat ditampilkan.</p>
+                        @endif
+                    </div><!--end modal-body-->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" tabindex="-1" id="kt_modal_attendanceLog_{{ $attendance->id }}_{{ $loop->index }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="activityModalLabel{{ $attendance->id }}">Detail Aktifitas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {!! $attendance->activity !!}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach ($attendances as $attendance_today)
+        <div class="modal fade" tabindex="-1"
+            id="kt_modal_attendances_{{ $attendance_today->id }}_{{ $loop->index }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
                             File
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -554,7 +737,8 @@
                             <img src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: auto;" />
                         @elseif (str_ends_with($attendance->attachment, '.docx'))
                             <p>File tidak dapat ditampilkan langsung. <a
-                                    href="{{ url('storage/app/public/' . $attendance->attachment) }}" download>Unduh file .docx</a></p>
+                                    href="{{ url('storage/app/public/' . $attendance->attachment) }}" download>Unduh file
+                                    .docx</a></p>
                         @else
                             <p>File tidak dapat ditampilkan.</p>
                         @endif
@@ -564,26 +748,7 @@
         </div>
     @endforeach
 
-    @foreach ($attendances as $attendance_today)
-        <div class="modal fade" tabindex="-1" id="kt_modal_attendances_{{ $attendance_today->id }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
-                            File
-                        </h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><!--end modal-header-->
-                    <div class="modal-body">
-                        <center>
-                            <iframe src="{{ asset($attendance_today->attachment) }}"
-                                style="width: 100%; height: 560px;"></iframe>
-                        </center>
-                    </div><!--end modal-body-->
-                </div>
-            </div>
-        </div>
-    @endforeach
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

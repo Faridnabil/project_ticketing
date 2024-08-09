@@ -178,6 +178,12 @@ class TicketSiakDevController extends Controller
             // Ambil tiket yang akan diupdate
             $ticket = Ticket::findOrFail($id);
 
+            $request->validate([
+                'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png',
+            ], [
+                'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, atau PNG.',
+            ]);
+
             $validate = $request->all();
             $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
 
@@ -288,7 +294,7 @@ class TicketSiakDevController extends Controller
             return redirect()->route('siakDev.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th->getMessage()); // Menampilkan pesan error untuk debugging
+            // dd($th->getMessage()); // Menampilkan pesan error untuk debugging
             return back()->with('error', $th->getMessage());
         }
     }

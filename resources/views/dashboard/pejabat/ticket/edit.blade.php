@@ -154,7 +154,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">No Hp / WA</label>
-                                    <input type="text" name="no_hp"
+                                    <input type="number" name="no_hp"
                                         class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
                                         placeholder="Masukan Nomor Handphone/WA"
                                         value="{{ old('no_hp', $ticket->no_hp) }}">
@@ -227,7 +227,7 @@
                         .then(response => response.json())
                         .then(data => {
                             // Clear previous options
-                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+                            citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
 
                             // Add new options
                             data.forEach(city => {
@@ -257,7 +257,7 @@
                 fetch(`/get-cities/${provinceId}`)
                     .then(response => response.json())
                     .then(data => {
-                        citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+                        citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
                         data.forEach(city => {
                             citySelect.append(
                                 `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.province.no_province} - ${city.city_or_regency_name}</option>`

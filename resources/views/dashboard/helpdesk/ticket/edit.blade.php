@@ -110,7 +110,6 @@
                                     @enderror
                                 </div>
 
-
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">PIC</label>
                                     <input type="text" name="pic"
@@ -155,7 +154,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">No Hp / WA</label>
-                                    <input type="text" name="no_hp"
+                                    <input type="number" name="no_hp"
                                         class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
                                         placeholder="Masukan Nomor Handphone/WA"
                                         value="{{ old('no_hp', $ticket->no_hp) }}">
@@ -183,7 +182,7 @@
                                         <div class="dz-message">
                                             <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau
                                                 klik untuk mengunggah.</h3>
-                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                         </div>
                                         <div class="preview" id="preview"></div>
                                     </div>
@@ -228,7 +227,7 @@
                         .then(response => response.json())
                         .then(data => {
                             // Clear previous options
-                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+                            citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
 
                             // Add new options
                             data.forEach(city => {
@@ -258,7 +257,7 @@
                 fetch(`/get-cities/${provinceId}`)
                     .then(response => response.json())
                     .then(data => {
-                        citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+                        citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
                         data.forEach(city => {
                             citySelect.append(
                                 `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.province.no_province} - ${city.city_or_regency_name}</option>`
