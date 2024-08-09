@@ -147,36 +147,110 @@
                 <div class="tab-content">
                     <!-- Detail Keluhan -->
                     <div class="tab-pane fade show active" id="keluhan" role="tabpanel">
-                        <div class="row gy-5 g-xl-12">
+                        <div class="row g-xl-12">
                             <div class="col-xl-7">
-                                <div class="card-body py-14 me-xl-7 me-0 px-0 px-xxl-9">
-                                    <div class="">
-                                        <div class="d-flex align-items-center mb-12">
+                                <div class="card-body">
+                                    <div>
+                                        <!-- Ticket Header -->
+                                        <div class="d-flex align-items-center mb-6">
                                             <span class="svg-icon svg-icon-4qx svg-icon-success ms-n2 me-3">
                                                 <!-- SVG Icon -->
                                             </span>
                                             <div class="d-flex flex-column">
                                                 <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}
+                                                    ({{ $ticket->no_ticket }}) - @if ($ticket->level1 != null)
+                                                        {{ $ticket->helpdesk->name }}
+                                                    @elseif ($ticket->level2 != null)
+                                                        {{ $ticket->koordinator->name }}
+                                                    @elseif ($ticket->level3 != null)
+                                                        {{ $ticket->staffSubdit->name }}
+                                                    @elseif ($ticket->level4 != null)
+                                                        {{ $ticket->siakDev->name }}
+                                                    @elseif ($ticket->level5 != null)
+                                                        {{ $ticket->pejabat->name }}
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </h1>
-                                                <div class="">
-                                                    {{-- <span class="fw-bold text-muted me-6">Pemilik :
-                                                        {{ $ticket->customers->name }}</span> --}}
-                                                    <span class="fw-bold text-muted">
-                                                        Dibuat :
-                                                        <span
-                                                            class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
-                                                    </span>
+                                                <div class="text-muted">
+                                                    Pelapor: <span class="fw-bolder text-gray-600">{{ $ticket->pic }},
+                                                        {{ $ticket->jabatan ?? '-' }} - {{ $ticket->no_hp }}</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                    <span class="fw-bolder text-gray-600">Provinsi :
+                                                        {{ $ticket->province->province_name }} - Kota/Kabupaten :
+                                                        {{ $ticket->cityOrRegency->city_or_regency_name }}</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Dibuat: <span
+                                                        class="fw-bolder text-gray-600">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <p class="fs-5 fw-normal text-gray-800">
+                                            {!! $ticket->description ?? '' !!}
+                                        </p>
+
+                                        <!-- Ticket Description -->
+                                        <div class="table-responsive mb-10">
+                                            <strong>Prioritas / Status :</strong>
+                                            <strong></strong>
+                                            @if ($ticket->priority_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Critical</span>
+                                            @elseif($ticket->priority_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    High</span>
+                                            @elseif($ticket->priority_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Medium</span>
+                                            @elseif($ticket->priority_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Low</span>
+                                            @else
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
+                                            @endif
+
+                                            -
+
+                                            @if ($ticket->status_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Tertunda</span>
+                                            @elseif($ticket->status_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Diterima</span>
+                                            @elseif($ticket->status_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    Proses</span>
+                                            @elseif($ticket->status_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Selesai
+                                                </span>
+                                            @elseif($ticket->status_id == '5')
+                                                <span class="badge"
+                                                    style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">
+                                                    Buka Kembali
+                                                </span>
+                                            @else
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
+                                            @endif
                                         </div>
 
-                                        <div class="mb-10">
-                                            <div class="mb-15 fs-5 fw-normal text-gray-800">
-                                                <div class="mb-10">
-                                                    {!! $ticket->description ?? '' !!}
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <hr>
+
+                                        <!-- Attachments Slider -->
                                         <div class="mb-10">
                                             <!--begin::Product slider-->
                                             <div class="tns tns-default">
@@ -245,7 +319,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="col-xl-5">
@@ -302,7 +375,7 @@
                                                                 {!! $comment->message !!}
                                                             </p>
                                                             <form
-                                                                action="{{ route('helpdesk.tickets.update', $comment->id) }}"
+                                                                action="{{ route('pejabat.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -323,7 +396,7 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('helpdesk.tickets.store') }}" enctype="multipart/form-data"
+                                            action="{{ route('pejabat.tickets.store') }}" enctype="multipart/form-data"
                                             novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">

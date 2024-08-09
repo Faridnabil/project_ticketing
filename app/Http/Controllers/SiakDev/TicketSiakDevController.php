@@ -97,10 +97,12 @@ class TicketSiakDevController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+        $provinces = Province::all();
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
             ->where('h_no_ticket', $ticket->no_ticket)
@@ -121,6 +123,8 @@ class TicketSiakDevController extends Controller
                 'statuses',
                 'categories',
                 'comments',
+                'provinces',
+                'city_or_regencies',
             )
         );
     }

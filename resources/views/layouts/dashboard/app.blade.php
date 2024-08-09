@@ -278,7 +278,7 @@
             const fileList = Array.from(event.target.files);
             const preview = document.querySelector('.preview');
             const errorMessage = document.getElementById('error-message');
-            const maxFiles = 15;
+            const maxFiles = 5;
 
             if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
                 errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;

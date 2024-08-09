@@ -147,7 +147,7 @@
                                     <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                     <div class="dz-message">
                                         <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau klik untuk mengunggah.</h3>
-                                        <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
+                                        <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                     </div>
                                     <div class="preview" id="preview"></div>
                                 </div>

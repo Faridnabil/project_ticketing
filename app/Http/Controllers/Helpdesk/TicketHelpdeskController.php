@@ -240,10 +240,12 @@ class TicketHelpdeskController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
+        $provinces = Province::all();
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
             ->where('h_no_ticket', $ticket->no_ticket)
@@ -264,6 +266,8 @@ class TicketHelpdeskController extends Controller
                 'statuses',
                 'categories',
                 'comments',
+                'provinces',
+                'city_or_regencies',
             )
         );
     }
@@ -350,40 +354,40 @@ class TicketHelpdeskController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-// Pengecekan status_id 5 untuk notifikasi
-if ($request->status_id == 5) {
-    $roles = [
-        'Helpdesk' => '/helpdesk/ticket',
-        'Koordinator' => '/koordinator/ticket',
-        'Staff Subdit' => '/staff-subdit/ticket',
-        'SIAK Dev' => '/siak-dev/ticket',
-        'Pejabat' => '/pejabat/ticket',
-    ];
+            // Pengecekan status_id 5 untuk notifikasi
+            if ($request->status_id == 5) {
+                $roles = [
+                    'Helpdesk' => '/helpdesk/ticket',
+                    'Koordinator' => '/koordinator/ticket',
+                    'Staff Subdit' => '/staff-subdit/ticket',
+                    'SIAK Dev' => '/siak-dev/ticket',
+                    'Pejabat' => '/pejabat/ticket',
+                ];
 
-    // Dapatkan pengguna yang sedang terautentikasi
-    $authUser = Auth::user();
+                // Dapatkan pengguna yang sedang terautentikasi
+                $authUser = Auth::user();
 
-    foreach ($roles as $role => $url) {
-        // Ambil semua pengguna dengan peran yang sesuai
-        $users = User::whereHas('roles', function ($query) use ($role) {
-            $query->where('name', $role);
-        })->get();
+                foreach ($roles as $role => $url) {
+                    // Ambil semua pengguna dengan peran yang sesuai
+                    $users = User::whereHas('roles', function ($query) use ($role) {
+                        $query->where('name', $role);
+                    })->get();
 
-        $notificationData = [
-            'name' => $authUser->name,
-            'body' => 'Tiket yang ditangani oleh anda telah dibuka kembali oleh ' . $authUser->name. ' anda dapat mengecek kembali tiketnya',
-            'thanks' => 'Terimakasih',
-            'Text' => '',
-            'Url' => url($url),
-            'koordinator_id' => rand(1111, 9999),
-        ];
+                    $notificationData = [
+                        'name' => $authUser->name,
+                        'body' => 'Tiket yang ditangani oleh anda telah dibuka kembali oleh ' . $authUser->name . ' anda dapat mengecek kembali tiketnya',
+                        'thanks' => 'Terimakasih',
+                        'Text' => '',
+                        'Url' => url($url),
+                        'koordinator_id' => rand(1111, 9999),
+                    ];
 
-        // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
-        foreach ($users as $user) {
-            Notification::send($user, new NotificationKoordinator($notificationData));
-        }
-    }
-}
+                    // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
+                    foreach ($users as $user) {
+                        Notification::send($user, new NotificationKoordinator($notificationData));
+                    }
+                }
+            }
 
 
             // Gabungkan file baru dengan file yang masih ada

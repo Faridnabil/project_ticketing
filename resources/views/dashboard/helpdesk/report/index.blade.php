@@ -38,24 +38,85 @@
                     </div>
                     <!-- End of User Friendly Note -->
 
-                    <form action="{{ route('helpdesk.report.filter') }}" method="post">
+                    <form action="{{ route('helpdesk.report.filter') }}" method="post" id="filter-form">
                         @csrf
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_awal" class="form-label mb-2">Tanggal Awal</label>
-                                    <input type="date" id="tanggal_awal" name="awal" required class="form-control" value="{{ $req1 }}">
+                                    <input type="date" id="tanggal_awal" name="awal" required class="form-control" value="{{ old('awal', $req1) }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_akhir" class="form-label mb-2">Tanggal Akhir</label>
-                                    <input type="date" id="tanggal_akhir" name="akhir" required class="form-control" value="{{ $req2 }}">
+                                    <input type="date" id="tanggal_akhir" name="akhir" required class="form-control" value="{{ old('akhir', $req2) }}">
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="category_id" class="form-label mb-2">Kategori</label>
+                                <div class="d-flex align-items-center">
+                                    <select name="category_id" id="category_id" class="form-select" data-control="select2" data-placeholder="Pilih Kategori">
+                                        <option value="">Tidak Jadi Memilih</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
+                                                {{ $category->category_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="clearSelect('category_id')">X</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="priority_id" class="form-label mb-2">Prioritas</label>
+                                <div class="d-flex align-items-center">
+                                    <select name="priority_id" id="priority_id" class="form-select" data-control="select2" data-placeholder="Pilih Prioritas">
+                                        <option value="">Tidak Jadi Memilih</option>
+                                        @foreach ($priorities as $priority)
+                                            <option value="{{ $priority->id }}" {{ old('priority_id', request('priority_id')) == $priority->id ? 'selected' : '' }}>
+                                                {{ $priority->priority_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="clearSelect('priority_id')">X</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status_id" class="form-label mb-2">Status</label>
+                                <div class="d-flex align-items-center">
+                                    <select name="status_id" id="status_id" class="form-select" data-control="select2" data-placeholder="Pilih Status">
+                                        <option value="">Tidak Jadi Memilih</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status->id }}" {{ old('status_id', request('status_id')) == $status->id ? 'selected' : '' }}>
+                                                {{ $status->status_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="clearSelect('status_id')">X</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="level" class="form-label mb-2">Disposisi</label>
+                                <div class="d-flex align-items-center">
+                                    <select name="level" id="level" class="form-select" data-control="select2" data-placeholder="Pilih Disposisi">
+                                        <option value="">Tidak Jadi Memilih</option>
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}" {{ old('level', request('level')) == $level->id ? 'selected' : '' }}>
+                                                {{ $level->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="clearSelect('level')">X</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-flex justify-content-center">
-                            <input type="submit" class="btn btn-primary" value="Masukan Data">
+                            <input type="submit" class="btn btn-primary me-2" value="Masukan Data">
+                            <a href="{{ route('helpdesk.report.index') }}" type="button" class="btn btn-secondary">Refresh</a>
                         </div>
                     </form>
                 </div>
@@ -65,12 +126,17 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-toolbar">
-                        <a href="{{ route('helpdesk.report.export') }}" class="btn btn-success mb-4">
-                            <span class="img-icon">
-                                <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
-                            </span>
-                            Export
-                        </a>
+                        <form action="{{ route('helpdesk.report.export') }}" method="GET" class="d-inline">
+                            <input type="hidden" name="awal" value="{{ old('awal', $req1) }}">
+                            <input type="hidden" name="akhir" value="{{ old('akhir', $req2) }}">
+                            <button type="submit" class="btn btn-success mb-4">
+                                <span class="img-icon">
+                                    <img src="{{ asset('template/dist/assets/media/illustrations/office365.png')}}" alt="Export Icon" width="24" height="24">
+                                </span>
+                                Export
+                            </button>
+                        </form>
+
                     </div>
                 </div>
                 <div class="card-body pt-0">
@@ -151,4 +217,17 @@
             @endif
         </div>
     </div>
+
+    <script>
+        function clearSelect(selectId) {
+            // Reset hanya select yang dipilih berdasarkan ID
+            var selectElement = document.getElementById(selectId);
+            selectElement.value = '';
+
+            // Jika menggunakan Select2 atau library serupa, reset juga select tersebut
+            if (selectElement.hasAttribute('data-control') && selectElement.getAttribute('data-control') === 'select2') {
+                $(selectElement).val(null).trigger('change');
+            }
+        }
+    </script>
 @endsection
