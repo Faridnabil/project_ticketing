@@ -143,6 +143,12 @@ class TicketPejabatController extends Controller
         $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)
             ->get();
 
+        // Dapatkan ID untuk status yang diperlukan
+        $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
+        $tertundaStatusId = Status::where('status_name', 'Tertunda')->value('id');
+        $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
+        $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
+
         return view(
             'dashboard.pejabat.ticket.edit',
             compact(
@@ -151,7 +157,11 @@ class TicketPejabatController extends Controller
                 'statuses',
                 'categories',
                 'provinces',
-                'city_or_regencies'
+                'city_or_regencies',
+                'selesaiStatusId',
+                'tertundaStatusId',
+                'diterimaStatusId',
+                'bukaKembaliStatusId'
             )
         );
     }

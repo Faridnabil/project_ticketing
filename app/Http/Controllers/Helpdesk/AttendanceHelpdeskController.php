@@ -61,6 +61,7 @@ class AttendanceHelpdeskController extends Controller
     {
         DB::beginTransaction();
         try {
+
             $validate = $request->all();
             $validate['date_check_in'] = now();
 
@@ -97,21 +98,22 @@ class AttendanceHelpdeskController extends Controller
     {
         DB::beginTransaction();
         try {
+            $request->validate([
+                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+            ]);
+
             // Update date_check_out with the provided value
             $attendance->date_check_out = $request->input('date_check_out');
             $attendance->check_out = $request->input('check_out');
             $attendance->activity = $request->input('activity');
-            $attendance->status_activity = $request->input('status_activity');
 
             // Handle file upload
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/absen';
-                $file->move(public_path($nama_folder), $nama_file);
+                $filePath = $file->store('public/absen'); // Store file in storage/app/public/absen
 
                 // Save the file path to the database
-                $attendance->attachment = $nama_folder . "/" . $nama_file;
+                $attendance->attachment = str_replace('public/', '', $filePath); // Store path relative to storage
             }
 
             $attendance->save();
@@ -123,9 +125,6 @@ class AttendanceHelpdeskController extends Controller
             return back()->with("error", $th->getMessage());
         }
     }
-
-
-
 
 
     /**

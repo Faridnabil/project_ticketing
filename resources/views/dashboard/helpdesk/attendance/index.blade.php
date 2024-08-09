@@ -148,17 +148,31 @@
                                                 @if ($absen->check_out == null)
                                                     <div class="col-md-6">
                                                         <label for="validationCustom01" class="form-label">File</label>
-                                                        <input type="file" class="form-control" name="attachment">
+                                                        <input type="file" class="form-control" name="attachment"
+                                                            accept=".jpg, .jpeg, .png, .pdf, .docx">
+                                                        <p>File harus berupa <b>jpg, jpeg, png, pdf, dan docx</b></p>
                                                     </div>
 
-                                                    <div class="col-md-6">
+                                                    <script>
+                                                        document.querySelector('input[name="attachment"]').addEventListener('change', function(event) {
+                                                            const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'docx'];
+                                                            const file = event.target.files[0];
+                                                            if (file) {
+                                                                const extension = file.name.split('.').pop().toLowerCase();
+                                                                if (!allowedExtensions.includes(extension)) {
+                                                                    alert(
+                                                                        'File type not allowed. Please upload a file with one of the following extensions: jpg, jpeg, png, pdf, docx, xlsx.'
+                                                                    );
+                                                                    event.target.value = ''; // Clear the input
+                                                                }
+                                                            }
+                                                        });
+                                                    </script>
+
+
+                                                    <div class="col-md-12">
                                                         <label for="" class="form-label">Aktifitas</label>
                                                         <textarea name="activity" class="form-control" id="activity"></textarea>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label for="" class="form-label">Status</label>
-                                                        <textarea name="status_activity" class="form-control" id="status_activity"></textarea>
                                                     </div>
 
                                                     <div class="col-md-6">
@@ -205,8 +219,7 @@
 
                                                 <div class="col-md-2">
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                                    <select class="form-select" id="shiftSelect" name="check_in"
-                                                        required>
+                                                    <select class="form-select" id="shiftSelect" name="check_in" required>
                                                         <option selected disabled>Opsi</option>
                                                         <option value="Shift 1">Shift 1</option>
                                                         <option value="Shift 2">Shift 2</option>
@@ -426,27 +439,77 @@
                                                 @if ($attendance->check_in)
                                                     {{ date('H:i', strtotime($attendance->date_check_in)) }}
                                                 @else
-                                                -
+                                                    -
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($attendance->check_out)
                                                     {{ date('H:i', strtotime($attendance->date_check_out)) }}
                                                 @else
-                                                -
+                                                    -
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($attendance->attachment == null)
-                                                -
+                                                    -
                                                 @else
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-                                                        <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
-                                                            width="40px" height="50px" alt="file">
+                                                        @if (str_ends_with($attendance->attachment, '.pdf'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
+                                                                width="40px" height="50px" alt="file">
+                                                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                                                str_ends_with($attendance->attachment, '.jpeg') ||
+                                                                str_ends_with($attendance->attachment, '.png'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/IMAGE.png') }}"
+                                                                width="40px" height="50px" alt="file">
+                                                        @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/DOCX.png') }}"
+                                                                width="40px" height="50px" alt="file">
+                                                        @else
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/FILE.png') }}"
+                                                                width="40px" height="50px" alt="file">
+                                                        @endif
                                                     </a>
                                                 @endif
                                             </td>
+
+                                            @foreach ($attendances as $attendance)
+                                                <div class="modal fade" tabindex="-1"
+                                                    id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger">
+                                                                <h6 class="modal-title m-0 text-white">
+                                                                    File
+                                                                </h6>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div><!--end modal-header-->
+                                                            <div class="modal-body">
+                                                                @if (str_ends_with($attendance->attachment, '.pdf'))
+                                                                    <iframe
+                                                                        src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                        style="width: 100%; height: 560px;"
+                                                                        frameborder="0"></iframe>
+                                                                @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                                                        str_ends_with($attendance->attachment, '.jpeg') ||
+                                                                        str_ends_with($attendance->attachment, '.png'))
+                                                                    <img src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                        style="width: 100%; height: auto;" />
+                                                                @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                                    <p>File tidak dapat ditampilkan langsung. <a
+                                                                            href="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                            download>Unduh file .docx</a></p>
+                                                                @else
+                                                                    <p>File tidak dapat ditampilkan.</p>
+                                                                @endif
+                                                            </div><!--end modal-body-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
                                             <td style="text-align: left"> {!! $attendance_today->activity ?? '-' !!}
                                             </td>
                                             <td style="text-align: left"> {!! $attendance_today->status_activity ?? '-' !!}
@@ -470,29 +533,31 @@
                 console.error(error);
             });
     </script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#status_activity'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 
     @foreach ($attendances as $attendance)
         <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
+                        <h6 class="modal-title m-0 text-white">
                             File
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
                     <div class="modal-body">
-                        <center>
-                            <iframe src="{{ asset($attendance->attachment) }}"
-                                style="width: 100%; height: 560px;"></iframe>
-                        </center>
+                        @if (str_ends_with($attendance->attachment, '.pdf'))
+                            <iframe src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: 560px;"
+                                frameborder="0"></iframe>
+                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                str_ends_with($attendance->attachment, '.jpeg') ||
+                                str_ends_with($attendance->attachment, '.png'))
+                            <img src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: auto;" />
+                        @elseif (str_ends_with($attendance->attachment, '.docx'))
+                            <p>File tidak dapat ditampilkan langsung. <a
+                                    href="{{ url('storage/app/public/' . $attendance->attachment) }}" download>Unduh file .docx</a></p>
+                        @else
+                            <p>File tidak dapat ditampilkan.</p>
+                        @endif
                     </div><!--end modal-body-->
                 </div>
             </div>

@@ -65,6 +65,18 @@ class ReportController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
 
+        $req1 = $request->awal ?? null;
+        $req2 = $request->akhir ?? null;
+        $tickets = null;
+
+        if ($req1 && $req2) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $req1)->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', $req2)->endOfDay();
+
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+            $tickets = $query->orderBy('id', 'asc')->get();
+        }
+
         return view('dashboard.helpdesk.report.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'req1', 'req2'));
     }
 
@@ -87,7 +99,8 @@ class ReportController extends Controller
 
         // Query tiket dengan filter tanggal
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-                       ->whereBetween('created_at', [$startDate, $endDate]);
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
 
         // Urutkan data secara ascending
         $tickets = $query->orderBy('id', 'asc')->get();

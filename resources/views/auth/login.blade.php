@@ -11,6 +11,13 @@
     </a>
     <!--end::Logo-->
 
+    @if (session('message'))
+        <div class="alert alert-warning">
+            {{ session('message') }}
+        </div>
+    @endif
+
+
 
     <form method="POST" action="{{ route('login') }}" class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
         @csrf

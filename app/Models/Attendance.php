@@ -18,7 +18,6 @@ class Attendance extends Model
         'check_out',
         'date_check_out',
         'activity',
-        'status_activity',
         'attachment'
     ];
 

@@ -57,7 +57,7 @@
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
-                             &nbsp;&nbsp;
+                            &nbsp;&nbsp;
 
                             <select name="priority_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
@@ -66,7 +66,7 @@
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
-                             &nbsp;&nbsp;
+                            &nbsp;&nbsp;
 
                             <select name="status_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Status">
@@ -75,7 +75,7 @@
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
-                             &nbsp;&nbsp;
+                            &nbsp;&nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
                             <a href="{{ route('siakDev.ticket.index') }}" class="btn btn-danger">Reset</a>
@@ -211,16 +211,16 @@
                                                                 onchange="this.form.submit()">
                                                                 <option value="2"
                                                                     {{ $ticket->status_id == '2' ? 'selected' : '' }}>
-                                                                    Diterima</option>
+                                                                    Diterima
+                                                                </option>
                                                                 <option value="3"
                                                                     {{ $ticket->status_id == '3' ? 'selected' : '' }}>
-                                                                    Proses</option>
+                                                                    Proses
+                                                                </option>
                                                                 <option value="4"
                                                                     {{ $ticket->status_id == '4' ? 'selected' : '' }}>
-                                                                    Selesai</option>
-                                                                <option value="5"
-                                                                    {{ $ticket->status_id == '5' ? 'selected' : '' }}>
-                                                                    Buka Kembali</option>
+                                                                    Selesai
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </form>
@@ -232,7 +232,8 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('siakDev.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('siakDev.ticket.edit', $ticket->id) }}" type="button"
+                                                        title="Ubah Tiket">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -251,7 +252,8 @@
                                                 @can('Delete Ticket')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
+                                                        title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -269,8 +271,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('siakDev.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('siakDev.ticket.show', $ticket->id) }}" type="button"
+                                                        title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -309,8 +311,8 @@
                                             @else
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('siakDev.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('siakDev.ticket.show', $ticket->id) }}" type="button"
+                                                        title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

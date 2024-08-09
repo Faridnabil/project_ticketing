@@ -240,16 +240,16 @@
                                                                     onchange="this.form.submit()">
                                                                     <option value="2"
                                                                         {{ $ticket->status_id == '2' ? 'selected' : '' }}>
-                                                                        Diterima</option>
+                                                                        Diterima
+                                                                    </option>
                                                                     <option value="3"
                                                                         {{ $ticket->status_id == '3' ? 'selected' : '' }}>
-                                                                        Proses</option>
+                                                                        Proses
+                                                                    </option>
                                                                     <option value="4"
                                                                         {{ $ticket->status_id == '4' ? 'selected' : '' }}>
-                                                                        Selesai</option>
-                                                                    <option value="5"
-                                                                        {{ $ticket->status_id == '5' ? 'selected' : '' }}>
-                                                                        Buka Kembali</option>
+                                                                        Selesai
+                                                                    </option>
                                                                 </select>
                                                             </div>
                                                         </form>
@@ -263,7 +263,7 @@
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('helpdesk.ticket.edit', $ticket->id) }}" type="button">
-                                                        <span class="menu-icon" style="fill: #bd6710">
+                                                        <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px"
@@ -281,7 +281,8 @@
                                                 @can('Delete Ticket')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
+                                                        title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -300,7 +301,7 @@
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">

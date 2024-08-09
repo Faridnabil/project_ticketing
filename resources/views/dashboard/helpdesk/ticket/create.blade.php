@@ -184,7 +184,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">No Hp / WA</label>
-                                    <input type="text" name="no_hp" value="{{ old('no_hp') }}"
+                                    <input type="tel" name="no_hp" value="{{ old('no_hp') }}"
                                         class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
                                         placeholder="Masukan Nomor Handphone/WA">
                                     <div class="valid-feedback">

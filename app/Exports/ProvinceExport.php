@@ -13,7 +13,8 @@ class ProvinceExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Province::select('no_province', 'province_name')->get();
+        return Province::select('no_province', 'province_name')
+            ->get();
     }
 
     public function headings(): array

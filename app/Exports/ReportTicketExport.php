@@ -62,7 +62,7 @@ class ReportTicketExport implements FromCollection, WithHeadings
                 'Nama Provinsi' => $ticket->province->province_name,
                 'No Kabupaten'=> $ticket->cityOrRegency->no_city_or_regency,
                 'Nama Kabupaten' => $ticket->cityOrRegency->city_or_regency_name,
-              'Keterangan Permasalahan'=> strip_tags(html_entity_decode($ticket->description)),
+                'Keterangan Permasalahan' => strip_tags(html_entity_decode($ticket->description)),
                 'Kategori' => $ticket->category->category_name,
                 'Disposisi' => $disposisi,
                 'Prioritas' => $priority,

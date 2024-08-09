@@ -262,7 +262,7 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button" title="Ubah Tiket">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -281,7 +281,7 @@
                                                 @can('Delete Ticket')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}" title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -300,7 +300,7 @@
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
