@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('h_status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
             $table->foreignId('h_category_id')->constrained('categories')->cascadeOnDelete();
             $table->text('h_description');
-            $table->string('h_attachments')->nullable();
+            $table->text('h_attachments')->nullable();
             $table->string('h_pic')->nullable();
             $table->string('h_jabatan')->nullable();
             $table->string('h_no_hp')->nullable();

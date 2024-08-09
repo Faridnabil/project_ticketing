@@ -22,6 +22,7 @@ class AutoLogout
 
             if ($lastActivity && (time() - $lastActivity) > $timeout) {
                 Auth::logout();
+                $request->session()->flush();
                 return redirect()->route('login')->with('message', 'You have been logged out due to inactivity.');
             }
 
