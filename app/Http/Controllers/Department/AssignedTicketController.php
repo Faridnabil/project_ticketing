@@ -305,12 +305,12 @@ class AssignedTicketController extends Controller
         $userId = auth()->user()->id;
         $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
+                $query->where('id', $userId);
             })
-            ->where('status_id', 4) // Asumsi status_id 4 adalah "Selesai"
+            ->where('status_id', 4) // Status 4 adalah "Selesai"
             ->get();
 
-        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
+        $statuses = Status::all(); // Semua status untuk dropdown filter
 
         return view('dashboard.department.assigned-ticket.completed', compact('tickets', 'statuses'));
     }

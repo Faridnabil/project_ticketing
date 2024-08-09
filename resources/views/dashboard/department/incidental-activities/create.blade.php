@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Incidental Activity | PLN Icon+
+    Create Incidental Activity | PLN Icon+
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Tambah Incidental Activity</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Create Incidental Activity</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -40,14 +40,14 @@
                         <!--begin::Body-->
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('department.incidental-activities.store') }}" enctype="multipart/form-data"
-                                novalidate>
+                                action="{{ route('department.incidental-activities.store') }}"
+                                enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="title" class="form-label">Judul</label>
                                     <input type="text" name="title"
-                                        class="form-control @error('title') is-invalid @enderror" id="title" required
-                                        autofocus>
+                                        class="form-control @error('title') is-invalid @enderror" id="title"
+                                        value="{{ old('title') }}" required autofocus>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -59,24 +59,10 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="description" class="form-label">Deskripsi</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3" required></textarea>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    @error('description')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Kategori</label>
+                                    <label for="category_id" class="form-label">Kategori</label>
                                     <select name="category_id"
                                         class="form-select @error('category_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
+                                        data-control="select2" data-placeholder="Pilih Kategori" required>
                                         <option selected disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -85,7 +71,7 @@
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-                                    @error('category')
+                                    @error('category_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -96,7 +82,7 @@
                                     <label for="start_time" class="form-label">Waktu Mulai</label>
                                     <input type="date" name="start_time"
                                         class="form-control @error('start_time') is-invalid @enderror" id="start_time"
-                                        required>
+                                        value="{{ old('start_time') }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -111,7 +97,7 @@
                                     <label for="end_time" class="form-label">Waktu Selesai</label>
                                     <input type="date" name="end_time"
                                         class="form-control @error('end_time') is-invalid @enderror" id="end_time"
-                                        required>
+                                        value="{{ old('end_time') }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -126,7 +112,7 @@
                                     <label for="executor" class="form-label">Pelaksana</label>
                                     <input type="text" name="executor"
                                         class="form-control @error('executor') is-invalid @enderror" id="executor"
-                                        required>
+                                        value="{{ old('executor') }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -141,7 +127,7 @@
                                     <label for="department" class="form-label">Departemen</label>
                                     <input type="text" name="department"
                                         class="form-control @error('department') is-invalid @enderror" id="department"
-                                        required>
+                                        value="{{ old('department') }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -153,45 +139,13 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="mitigation" class="form-label">Mitigasi</label>
-                                    <textarea name="mitigation" class="form-control @error('mitigation') is-invalid @enderror" id="mitigation"
-                                        cols="10" rows="3" required></textarea>
+                                    <label for="description" class="form-label">Deskripsi</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
+                                        cols="10" rows="3" required>{{ old('description') }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-                                    @error('mitigation')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="impact" class="form-label">Dampak</label>
-                                    <textarea name="impact" class="form-control @error('impact') is-invalid @enderror" id="impact" cols="10"
-                                        rows="3" required></textarea>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    @error('impact')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="status_id">Status</label>
-                                    <select name="status_id" id="status_id" class="form-control">
-                                        <option value="">Pilih Status</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    @error('status')
+                                    @error('description')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -201,7 +155,7 @@
                                 <div class="col-md-6">
                                     <label for="file" class="form-label">Upload File</label>
                                     <input type="file" name="file"
-                                        class="form-control @error('file') is-invalid @enderror" id="file" required>
+                                        class="form-control @error('file') is-invalid @enderror" id="file">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -228,7 +182,7 @@
         </div>
     </div>
     <!--end::Post-->
-
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

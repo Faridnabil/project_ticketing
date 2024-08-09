@@ -18,6 +18,7 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
     use Exportable;
 
     protected $request;
+    protected $rowNumber = 1;
 
     public function __construct(Request $request)
     {
@@ -58,6 +59,7 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
     public function headings(): array
     {
         return [
+            'No',
             'Nomor Tiket',
             'Kategori',
             'Pemilik',
@@ -71,6 +73,7 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
     public function map($ticket): array
     {
         return [
+            $this->rowNumber++,
             $ticket->no_ticket,
             $ticket->category->category_name,
             $ticket->customers->name,
@@ -84,8 +87,9 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
     public function styles(Worksheet $sheet)
     {
         // Add the title
+        $sheet->insertNewRowBefore(1, 1);
         $sheet->setCellValue('A1', 'Data Tiket');
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:H1');
         $sheet->getStyle('A1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -101,11 +105,8 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
             ],
         ]);
 
-        // Shift headers down by one row
-        $sheet->fromArray($this->headings(), null, 'A2');
-
-        // Apply styles to the second row (headers)
-        $sheet->getStyle('A2:G2')->applyFromArray([
+        // Apply styles to the header row
+        $sheet->getStyle('A2:H2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],
@@ -117,14 +118,14 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
         ]);
 
         // Apply border to all cells
-        $sheet->getStyle('A1:G' . ($sheet->getHighestRow()))
+        $sheet->getStyle('A1:H' . ($sheet->getHighestRow()))
             ->getBorders()->getAllBorders()->applyFromArray([
                 'borderStyle' => Border::BORDER_THIN,
                 'color' => ['argb' => 'FF000000'],
             ]);
 
         // Adjust column widths automatically
-        foreach (range('A', 'G') as $column) {
+        foreach (range('A', 'H') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 

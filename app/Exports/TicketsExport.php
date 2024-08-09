@@ -16,6 +16,7 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     protected $start_date;
     protected $end_date;
     protected $user_id;
+    protected $rowNumber = 1; // Menambahkan properti untuk melacak nomor urut
 
     public function __construct($start_date, $end_date, $user_id)
     {
@@ -46,6 +47,7 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     public function headings(): array
     {
         return [
+            'No',               // Tambahkan kolom No
             'Nomor Tiket',
             'Pemilik',
             'Judul',
@@ -62,13 +64,14 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     public function map($ticket): array
     {
         return [
+            $this->rowNumber++,                 // Tambahkan nomor urut
             $ticket->no_ticket,
             $ticket->customers->name,
             $ticket->title,
             $ticket->category->category_name,
             $ticket->priority->priority_name,
-            $ticket->description,
-            $ticket->solution,
+            strip_tags($ticket->description),   // Hilangkan tag HTML
+            strip_tags($ticket->solution),      // Hilangkan tag HTML
             $ticket->created_at->format('d F Y'),
             $ticket->updated_at->format('d F Y'),
             $ticket->status->status_name,
@@ -77,9 +80,10 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
 
     public function styles(Worksheet $sheet)
     {
-        // Add the title
+        // Menambahkan judul
+        $sheet->insertNewRowBefore(1, 1);
         $sheet->setCellValue('A1', 'Data Tiket Selesai');
-        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A1:K1');  // Sesuaikan kolom dengan menambahkan satu kolom untuk No
         $sheet->getStyle('A1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -95,11 +99,8 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
             ],
         ]);
 
-        // Shift headers down by one row
-        $sheet->fromArray($this->headings(), null, 'A2');
-
-        // Apply styles to the first row (headers)
-        $sheet->getStyle('A2:J2')->applyFromArray([
+        // Menerapkan gaya pada baris header
+        $sheet->getStyle('A2:K2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],
@@ -110,20 +111,20 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
             ],
         ]);
 
-        // Apply border to all cells
-        $sheet->getStyle('A1:J' . ($sheet->getHighestRow()))
+        // Menerapkan border pada semua sel
+        $sheet->getStyle('A1:K' . ($sheet->getHighestRow()))
             ->getBorders()->getAllBorders()->applyFromArray([
                 'borderStyle' => Border::BORDER_THIN,
                 'color' => ['argb' => 'FF000000'],
             ]);
 
-        // Adjust column widths automatically
-        foreach (range('A', 'J') as $column) {
+        // Menyesuaikan lebar kolom secara otomatis
+        foreach (range('A', 'K') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 
         return [
-            // Other styles can be defined here
+            // Gaya lainnya dapat didefinisikan di sini
         ];
     }
 }

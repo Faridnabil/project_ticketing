@@ -37,16 +37,16 @@ class IncidentalActivityController extends Controller
             'end_time' => 'required|date',
             'executor' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'mitigation' => 'required|string',
-            'impact' => 'required|string',
-            'status_id' => 'required|exists:statuses,id',
-            'file' => 'nullable|file|mimes:jpg,png,pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:jpg,png,pdf,doc,docx,txt,xlsx,csv|max:2048',
         ]);
 
         $filePath = null;
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('incidental_activities_files', 'public');
         }
+
+        // Set status default ke Tertunda
+        $statusDefault = Status::where('status_name', 'Tertunda')->first()->id;
 
         IncidentalActivity::create([
             'title' => $request->title,
@@ -56,9 +56,7 @@ class IncidentalActivityController extends Controller
             'end_time' => $request->end_time,
             'executor' => $request->executor,
             'department' => $request->department,
-            'mitigation' => $request->mitigation,
-            'impact' => $request->impact,
-            'status_id' => $request->status_id,
+            'status_id' => $statusDefault,
             'file_path' => $filePath,
             'user_id' => Auth::id(),
         ]);
@@ -71,7 +69,7 @@ class IncidentalActivityController extends Controller
         $activity = IncidentalActivity::findOrFail($id);
         $statuses = Status::all();
         $categories = IncidentalActivityCategory::all();
-        return view('dashboard.department.incidental-activities.edit', compact('activity', 'statuses' , 'categories'));
+        return view('dashboard.department.incidental-activities.edit', compact('activity', 'statuses', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -87,21 +85,39 @@ class IncidentalActivityController extends Controller
             'mitigation' => 'required|string',
             'impact' => 'required|string',
             'status_id' => 'required|exists:statuses,id',
-            'file' => 'nullable|file|mimes:jpg,png,pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:jpg,png,pdf,doc,docx,txt,xlsx,csv|max:2048',
+            'removed_files' => 'nullable|string',
         ]);
 
         $activity = IncidentalActivity::findOrFail($id);
         $data = $request->only(['title', 'description', 'category_id', 'start_time', 'end_time', 'executor', 'department', 'mitigation', 'impact', 'status_id']);
 
+        // Proses file yang dihapus
+        $removedFiles = $request->input('removed_files') ? explode(',', $request->input('removed_files')) : [];
+        $existingFiles = $activity->file_path ? json_decode($activity->file_path, true) : [];
+
+        // Pastikan $existingFiles selalu berupa array
+        $existingFiles = is_array($existingFiles) ? $existingFiles : [];
+
+        // Filter file yang masih ada setelah penghapusan
+        $remainingFiles = array_diff($existingFiles, $removedFiles);
+
+        // Proses file baru yang diupload
+        $newFiles = [];
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('incidental_activities_files', 'public');
-            $data['file_path'] = $filePath;
+            $newFilePath = $request->file('file')->store('incidental_activities_files', 'public');
+            $newFiles[] = $newFilePath;
         }
+
+        // Gabungkan file baru dengan file yang masih ada
+        $allFiles = array_merge($remainingFiles, $newFiles);
+        $data['file_path'] = json_encode($allFiles);
 
         $activity->update($data);
 
         return redirect()->route('department.incidental-activities.index')->with('success', 'Activity updated successfully');
     }
+
 
     public function destroy($id)
     {

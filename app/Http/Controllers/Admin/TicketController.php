@@ -269,8 +269,8 @@ class TicketController extends Controller
     }
 
     // method to download tickets in excel
-    public function downloadExcel()
+    public function export(Request $request)
     {
-        return Excel::download(new AllTicketsExport, 'all_tickets.xlsx');
+        return Excel::download(new AllTicketsExport($request), 'alltickets.xlsx');
     }
 }
