@@ -16,7 +16,7 @@ class CreateIncidentalActivitiesTable extends Migration
             $table->date('start_time'); // Tanggal Mulai
             $table->date('end_time'); // Tanggal Selesai
             $table->string('executor'); // Pelaksana Aktivitas
-            $table->string('department'); // Departemen/Tim
+            $table->string('sysdba'); // Departemen/Tim
             $table->text('mitigation'); // Mitigasi
             $table->text('impact'); // Dampak terhadap Sistem
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete(); // Status Aktivitas

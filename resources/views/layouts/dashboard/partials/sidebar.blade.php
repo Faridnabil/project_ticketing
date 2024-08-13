@@ -32,19 +32,28 @@
                         </a>
                     </li>
                 @endcan
-                @can('View Dashboard Customer')
+                @can('View Dashboard User')
                     <li class="nav-item active">
-                        <a class="menu-link {{ Request::is('customer.dashboard') ? 'active' : '' }}"
-                            href="{{ route('customer.dashboard.index') }}" aria-expanded="false">
+                        <a class="menu-link {{ Request::is('user.dashboard') ? 'active' : '' }}"
+                            href="{{ route('user.dashboard.index') }}" aria-expanded="false">
                             <i class="fas fa-home"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
                 @endcan
-                @can('View Dashboard Department')
+                @can('View Dashboard SysAdmin')
                     <li class="nav-item active">
-                        <a class="menu-link {{ Request::is('department.dashboard') ? 'active' : '' }}"
-                            href="{{ route('department.dashboard.index') }}" aria-expanded="false">
+                        <a class="menu-link {{ Request::is('sysadmin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('sysadmin.dashboard.index') }}" aria-expanded="false">
+                            <i class="fas fa-home"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                @endcan
+                @can('View Dashboard DBA')
+                    <li class="nav-item active">
+                        <a class="menu-link {{ Request::is('dba.dashboard') ? 'active' : '' }}"
+                            href="{{ route('dba.dashboard.index') }}" aria-expanded="false">
                             <i class="fas fa-home"></i>
                             <p>Dashboard</p>
                         </a>
@@ -179,7 +188,7 @@
                             </a>
                         </li>
                     @endrole
-                    @role('Customer')
+                    @role('User')
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('myTicket') ? 'active' : '' }}"
                                 href="{{ route('myTicket.index') }}">
@@ -195,7 +204,7 @@
                             </a>
                         </li>
                     @endrole
-                    @role('Tenaga Ahli')
+                    @role('SysAdmin')
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
                                 href="{{ route('unassignedTicket.index') }}">
@@ -212,13 +221,43 @@
                         </li>
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
-                                href="{{ route('department.completed-tickets') }}">
+                                href="{{ route('sysadmin.completed-tickets') }}">
                                 <i class="fas fa-check-circle"></i>
                                 <p>Tiket Selesai</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu-link" href="{{ route('department.incidental-activities.index') }}">
+                            <a class="menu-link" href="{{ route('sysadmin.incidental-activities.index') }}">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Incidental Activity</p>
+                            </a>
+                        </li>
+                    @endrole
+
+                    @role('DBA')
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
+                                href="{{ route('unassignedTicket.index') }}">
+                                <i class="fas fa-hourglass-start"></i>
+                                <p>Belum Ditetapkan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
+                                href="{{ route('assignedTicket.index') }}">
+                                <i class="fas fa-spinner"></i>
+                                <p>Tiket Proses</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
+                                href="{{ route('dba.completed-tickets') }}">
+                                <i class="fas fa-check-circle"></i>
+                                <p>Tiket Selesai</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu-link" href="{{ route('dba.incidental-activities.index') }}">
                                 <i class="fas fa-clipboard-list"></i>
                                 <p>Incidental Activity</p>
                             </a>

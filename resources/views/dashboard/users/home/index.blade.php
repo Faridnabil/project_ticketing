@@ -179,7 +179,7 @@
                                 @endif
                             </span>
                         </h3>
-                        <form action="{{ route('customer.dashboard.index') }}" method="GET">
+                        <form action="{{ route('user.dashboard.index') }}" method="GET">
                             <div class="input-group">
                                 <!-- Dropdown untuk memilih nomor tiket -->
                                 <select name="ticket_number" class="form-control mt-3">
@@ -192,7 +192,7 @@
                                     @endforeach
                                 </select>
                                 <button type="submit" class="btn btn-primary mt-3">Filter</button>
-                                <a href="{{ route('customer.dashboard.index') }}"
+                                <a href="{{ route('user.dashboard.index') }}"
                                     class="btn btn-secondary mt-3 ms-2">Refresh</a>
                             </div>
                         </form>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\HistoryTicket;
@@ -8,7 +8,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HomeCustomerController extends Controller
+class HomeUserController extends Controller
 {
     public function index(Request $request)
     {
@@ -19,8 +19,8 @@ class HomeCustomerController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-                          ->where('customer', $user->id)
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+                          ->where('t_users', $user->id)
                           ->get();
         $logs = collect();
 
@@ -33,8 +33,8 @@ class HomeCustomerController extends Controller
 
         if ($selectedTicketId) {
             // Get the selected ticket
-            $selectedTicket = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-                                    ->where('customer', $user->id)
+            $selectedTicket = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+                                    ->where('t_users', $user->id)
                                     ->find($selectedTicketId);
 
             if ($selectedTicket) {
@@ -43,7 +43,7 @@ class HomeCustomerController extends Controller
 
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
-                $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+                $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
                                      ->whereIn('h_no_ticket', $ticketNumbers)
                                      ->orderBy('created_at', 'desc')
                                      ->get();
@@ -51,9 +51,9 @@ class HomeCustomerController extends Controller
         }
 
         // Get all tickets for the dropdown
-        $allTickets = Ticket::where('customer', $user->id)->get();
+        $allTickets = Ticket::where('t_users', $user->id)->get();
 
-        return view('dashboard.customer.home.index', compact(
+        return view('dashboard.users.home.index', compact(
             'allTickets',
             'tickets',
             'total_tiket',

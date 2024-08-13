@@ -12,7 +12,7 @@ class Ticket extends Model
     protected $fillable = [
         'no_ticket',
         'title',
-        'customer',
+        't_users',
         'assign_to',
         'priority_id',
         'due_date',
@@ -22,6 +22,7 @@ class Ticket extends Model
         'solution',
         'attachments',
         'status_changed_by_id',
+        'no_telp',
     ];
 
     protected static function boot()
@@ -66,9 +67,9 @@ class Ticket extends Model
         return $this->belongsTo(Priority::class, 'priority_id');
     }
 
-    public function customers()
+    public function user_s()
     {
-        return $this->belongsTo(User::class, 'customer');
+        return $this->belongsTo(User::class, 't_users');
     }
 
     public function assignTo()

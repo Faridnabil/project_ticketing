@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->id();
             $table->string('no_ticket');
             $table->string('title');
-            $table->foreignId('customer')->constrained('users')->cascadeOnDelete();
+            $table->string('no_telp')->nullable();
+            $table->foreignId('t_users')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('due_date')->nullable();
@@ -23,7 +24,7 @@ return new class extends Migration {
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
             $table->text('solution')->nullable();
-            $table->string('attachments')->nullable();
+            $table->text('attachments')->nullable();
             $table->foreignId('status_changed_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });

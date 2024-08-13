@@ -10,8 +10,8 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Customer\HomeCustomerController;
-use App\Http\Controllers\Customer\TicketCustomerController;
+use App\Http\Controllers\User\HomeUserController;
+use App\Http\Controllers\User\TicketUserController;
 use App\Http\Controllers\Department\AssignedTicketController;
 use App\Http\Controllers\Department\HomeDepartmentController;
 use App\Http\Controllers\Department\UnassignedTicketController;
@@ -83,15 +83,15 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|Tenaga Ahli'])->g
     ]);
 });
 
-Route::middleware(['verified', 'auth', 'role:Customer'])->group(function () {
-    Route::get('/customer/dashboard', [HomeCustomerController::class, 'index'])->name('customer.dashboard.index');
+Route::middleware(['verified', 'auth', 'role:User'])->group(function () {
+    Route::get('/users/dashboard', [HomeUserController::class, 'index'])->name('user.dashboard.index');
 
     Route::resources([
-        '/customer/myTicket' => TicketCustomerController::class,
+        '/users/myTicket' => TicketUserController::class,
     ]);
-    Route::get('/customer/completed-tickets', [TicketCustomerController::class, 'completedTickets'])->name('myTicket.completed');
-    Route::post('/customer/TicketStore', [TicketCustomerController::class, 'store_comment'])->name('myTickets.store');
-    Route::put('/customer/TicketUpdate/{id}', [TicketCustomerController::class, 'update_comment'])->name('myTickets.update');
+    Route::get('/users/completed-tickets', [TicketUserController::class, 'completedTickets'])->name('myTicket.completed');
+    Route::post('/users/TicketStore', [TicketUserController::class, 'store_comment'])->name('myTickets.store');
+    Route::put('/users/TicketUpdate/{id}', [TicketUserController::class, 'update_comment'])->name('myTickets.update');
 });
 
 Route::middleware(['verified', 'auth', 'role:Tenaga Ahli'])->group(function () {

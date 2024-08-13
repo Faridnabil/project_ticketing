@@ -61,7 +61,7 @@
 
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
-                                    <select name="customer" class="form-control @error('customer') is-invalid @enderror"
+                                    <select name="t_users" class="form-control @error('t_users') is-invalid @enderror"
                                         required autofocus style="pointer-events: none;">
                                         <option value="{{ Auth::user()->id }}">{{ Auth::user()->name }}</option>
                                     </select>
@@ -70,7 +70,7 @@
                                         Looks good!
                                     </div>
 
-                                    @error('customer')
+                                    @error('t_users')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>

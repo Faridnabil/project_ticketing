@@ -19,10 +19,11 @@ class HistoryTicket extends Model
         'h_attachments',
         'status_changedBy',
         'h_title',
-        'h_customer',
+        'h_t_users',
         'h_assign_to',
         'h_due_date',
         'h_solution',
+        'h_no_telp',
     ];
 
     protected static function boot()
@@ -73,9 +74,9 @@ class HistoryTicket extends Model
     }
 
 
-    public function customers()
+    public function user_s()
     {
-        return $this->belongsTo(User::class, 'customer');
+        return $this->belongsTo(User::class, 't_users');
     }
 
     public function assignTo()

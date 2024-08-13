@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-class TicketCustomerController extends Controller
+class TicketUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,14 +26,14 @@ class TicketCustomerController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
-            ->whereHas('customers', function ($query) use ($userId) {
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+            ->whereHas('user_s', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
             ->where('status_id', '!=', 4)
             ->get();
 
-        return view('dashboard.customer.ticket.index', compact('tickets'));
+        return view('dashboard.users.ticket.index', compact('tickets'));
     }
     /**
      * Show the form for creating a new resource.
@@ -41,11 +41,14 @@ class TicketCustomerController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $customers = User::role('Customer')
+        $t_user = User::role('User')
             ->where('id', $user->id)
             ->get();
 
-        $assignTo = User::role('Tenaga Ahli')
+        $assignTo = User::role('SysAdmin')
+            ->get();
+
+        $assignTo2 = User::role('DBA')
             ->get();
 
         $priorities = Priority::all();
@@ -53,10 +56,11 @@ class TicketCustomerController extends Controller
         $categories = Category::all();
 
         return view(
-            'dashboard.customer.ticket.create',
+            'dashboard.users.ticket.create',
             compact(
-                'customers',
+                't_user',
                 'assignTo',
+                'assignTo2',
                 'priorities',
                 'statuses',
                 'categories',
@@ -118,7 +122,7 @@ class TicketCustomerController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $validate['no_ticket'] = $newTicketId,
                 'h_title' => $request->title,
-                'h_customer' => $request->customer,
+                'h_users' => $request->t_users,
                 'h_assign_to' => $request->assign_to,
                 'h_solution' => $request->solution,
                 'h_priority_id' => $request->priority_id,
@@ -146,7 +150,7 @@ class TicketCustomerController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
+        $t_users = User::role('User')
             ->get();
 
         // $assignTo = User::role('Department')
@@ -158,7 +162,7 @@ class TicketCustomerController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -169,11 +173,11 @@ class TicketCustomerController extends Controller
             ->get();
 
         return view(
-            'dashboard.customer.ticket.show',
+            'dashboard.users.ticket.show',
             compact(
                 'ticket',
                 'logs',
-                'customers',
+                't_users',
                 'priorities',
                 'statuses',
                 'categories',
@@ -190,10 +194,13 @@ class TicketCustomerController extends Controller
     {
         $ticket = Ticket::find($id);
 
-        $customers = User::role('Customer')
+        $t_users = User::role('User')
             ->get();
 
-        $assignTo = User::role('Tenaga Ahli')
+        $assignTo = User::role('SysAdmin')
+            ->get();
+
+        $assignTo2 = User::role('DBA')
             ->get();
 
         $priorities = Priority::all();
@@ -207,11 +214,12 @@ class TicketCustomerController extends Controller
             ->get();
 
         return view(
-            'dashboard.customer.ticket.edit',
+            'dashboard.users.ticket.edit',
             compact(
                 'ticket',
-                'customers',
+                't_users',
                 'assignTo',
+                'assignTo2',
                 'priorities',
                 'statuses',
                 'categories',
@@ -261,7 +269,7 @@ class TicketCustomerController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
-                'h_customer' => $ticket->customer,
+                'h_users' => $ticket->t_users,
                 'h_assign_to' => $ticket->assign_to,
                 'h_solution' => $ticket->solution,
                 'h_priority_id' => $ticket->priority_id,
@@ -320,7 +328,7 @@ class TicketCustomerController extends Controller
             $comment->save();
 
             // Notifikasi untuk pengguna dengan peran 'Tenaga Ahli'
-            $tenagaAhliUsers = User::role('Tenaga Ahli')->get();
+            $tenagaAhliUsers = User::role('SysAdmin')->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationDataForTenagaAhli = [
@@ -348,42 +356,16 @@ class TicketCustomerController extends Controller
         }
     }
 
-
-    public function update_comment(Request $request, $id)
-    {
-        // Cari komentar berdasarkan ID
-        $comment = Comment::find($id);
-
-        // Pastikan komentar ditemukan
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Comment not found.');
-        }
-
-        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
-        $ticket = Ticket::find($request->ticket_id);
-        if (!$ticket) {
-            return redirect()->back()->with('error', 'Ticket not found.');
-        }
-
-        // Perbarui atribut-atribut komentar
-        $comment->ticket_id = $request->ticket_id;
-        $comment->user_id = auth()->id();
-        $comment->message = $request->message;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment updated successfully!');
-    }
-
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
-            ->whereHas('customers', function ($query) use ($userId) {
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
+            ->whereHas('user_s', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
             ->where('status_id', 4) // Filter for 'Selesai' status
             ->get();
 
-        return view('dashboard.customer.ticket.completed', compact('tickets'));
+        return view('dashboard.users.ticket.completed', compact('tickets'));
     }
 }
