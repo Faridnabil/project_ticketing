@@ -206,7 +206,7 @@
                                                     <label for="validationCustom01" class="form-label">Nama Lengkap</label>
                                                     <input type="text"
                                                         class="form-control @error('name') is-invalid @enderror"
-                                                        id="name" name="name" required>
+                                                        id="name" name="name" required autofocus>
                                                     <div class="valid-feedback">
                                                         Looks good!
                                                     </div>
@@ -219,7 +219,7 @@
 
                                                 <div class="col-md-2">
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                                    <select class="form-select" id="shiftSelect" name="check_in" required>
+                                                    <select class="form-select" id="shiftSelect" name="check_in" required autofocus>
                                                         <option selected disabled>Opsi</option>
                                                         <option value="Shift 1">Shift 1</option>
                                                         <option value="Shift 2">Shift 2</option>

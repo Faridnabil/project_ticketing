@@ -71,7 +71,7 @@ class AttendanceHelpdeskController extends Controller
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return back()->with("error", "Check In Gagal, Data Tidak Boleh Kosong");
         }
     }
 

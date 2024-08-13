@@ -169,12 +169,16 @@ class TicketHelpdeskController extends Controller
 
         DB::beginTransaction();
         try {
-            // Generate ticket_id baru
-            $lastTicket = Ticket::orderBy('id', 'desc')->first();
-            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
+            // Ambil nomor tiket terakhir
+            $lastTicket = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
+                ->orderByRaw('CAST(SUBSTR(no_ticket, 6) AS UNSIGNED) DESC')
+                ->first();
+
+            // Generate nomor tiket baru
+            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->no_ticket, 5)) + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
-            // Pastikan ticket_id unik
+            // Pastikan nomor tiket unik
             while (Ticket::where('no_ticket', $newTicketId)->exists()) {
                 $newTicketIdNumber++;
                 $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
@@ -199,31 +203,6 @@ class TicketHelpdeskController extends Controller
             $validate['attachments'] = json_encode($attachments);
 
             Ticket::create($validate);
-
-            // Simpan data tiket sebelum diupdate ke tabel history_ticket
-            // DB::table('history_tickets')->insert([
-            //     'h_no_ticket' => $validate['no_ticket'],
-            //     'h_province_id' => $request->province_id,
-            //     'h_city_or_regency_id' => $request->city_or_regency_id,
-            //     'h_level1' => $request->level1,
-            //     'h_level2' => $request->level2,
-            //     'h_level3' => $request->level3,
-            //     'h_level4' => $request->level4,
-            //     'h_level5' => $request->level5,
-            //     'h_priority_id' => $request->priority_id,
-            //     'h_status_id' => $request->status_id,
-            //     'h_category_id' => $request->category_id,
-            //     'h_description' => $request->description,
-            //     'h_attachments' => $request->attachments ?? null,
-            //     'h_pic' => $request->pic,
-            //     'h_jabatan' => $request->jabatan,
-            //     'h_no_hp' => $request->no_hp,
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            //     'status_changedBy' => Auth::user()->id,
-            // ]);
-
-
             DB::commit();
             return redirect()->route('helpdesk.newTickets.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -231,6 +210,7 @@ class TicketHelpdeskController extends Controller
             return back()->withInput()->withErrors($th->getMessage());
         }
     }
+
 
 
 
@@ -650,7 +630,7 @@ class TicketHelpdeskController extends Controller
     {
         $cities = CityOrRegency::with('province')
             ->where('province_id', $provinceId)
-            ->get(['id', 'province_id', 'city_or_regency_name','no_city_or_regency']);
+            ->get(['id', 'province_id', 'city_or_regency_name', 'no_city_or_regency']);
 
         return response()->json($cities);
     }
