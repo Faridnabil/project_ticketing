@@ -41,7 +41,8 @@
                     <div class="card-title">
                         <!--begin::Form-->
                         <form method="GET" action="{{ route('helpdesk.ticket.index') }}" class="d-flex">
-                            <select name="level" class="form-select me-2" data-control="select2" data-placeholder="Pilih Disposisi">
+                            <select name="level" class="form-select me-2" data-control="select2"
+                                data-placeholder="Pilih Disposisi">
                                 <option></option>
                                 @foreach ($levels as $level)
                                     <option value="{{ $level->id }}">{{ $level->name }}</option>
@@ -231,11 +232,11 @@
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                     <form
                                                         action="{{ route('helpdesk.tickets.statusTicket', $ticket->id) }}"
-                                                        method="POST" class="ml-2">
+                                                        method="POST" id="statusForm_{{ $ticket->id }}">
                                                         @csrf
                                                         <div class="custom-select-wrapper">
                                                             <select name="status_id" class="custom-select"
-                                                                onchange="this.form.submit()">
+                                                                id="statusSelect_{{ $ticket->id }}">
                                                                 <option value="2"
                                                                     {{ $ticket->status_id == '2' ? 'selected' : '' }}>
                                                                     Diterima</option>
@@ -245,9 +246,6 @@
                                                                 <option value="4"
                                                                     {{ $ticket->status_id == '4' ? 'selected' : '' }}>
                                                                     Selesai</option>
-                                                                <option value="5"
-                                                                    {{ $ticket->status_id == '5' ? 'selected' : '' }}>
-                                                                    Buka Kembali</option>
                                                             </select>
                                                         </div>
                                                     </form>
@@ -426,9 +424,7 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
-    @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -485,8 +481,8 @@
                                         <h3>{{ $ticket->no_ticket }}</h3>
                                         <p class="info">
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
-                                            <span>Status:</span> {{ $ticket->status->status_name }}<br>
-                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name }}<br>
+                                            <span>Status:</span> {{ $ticket->status->status_name ?? '-'}}<br>
+                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
                                             <span>Nama Provinsi:</span> {{ $ticket->province->province_name }}<br>
                                             <span>Nama Kota:</span> {{ $ticket->cityOrRegency->city_or_regency_name }}
                                         </p>
@@ -502,7 +498,7 @@
                                     <input type="hidden" name="level1" value="">
 
                                     <select name="level2" hidden required>
-                                        @foreach($koordinatorUsers as $roleId)
+                                        @foreach ($koordinatorUsers as $roleId)
                                             <option value="{{ $roleId }}">{{ $roleId }}</option>
                                         @endforeach
                                     </select>
@@ -521,6 +517,44 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
+        <!-- Modal Konfirmasi -->
+        <div class="modal fade" id="confirmModal_{{ $ticket->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Perubahan Status</h5>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
+                            id="status-name-{{ $ticket->id }}"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
+                            Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                // Set status name in modal
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // Show modal
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                // On confirm button click
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    statusForm.submit();
+                };
+            });
+        </script>
+    @endforeach
 @endsection

@@ -233,23 +233,20 @@
                                                     @if ($ticket->level1 == 2)
                                                         <form
                                                             action="{{ route('helpdesk.tickets.statusTicket', $ticket->id) }}"
-                                                            method="POST" class="ml-2">
+                                                            method="POST" id="statusForm_{{ $ticket->id }}">
                                                             @csrf
                                                             <div class="custom-select-wrapper">
                                                                 <select name="status_id" class="custom-select"
-                                                                    onchange="this.form.submit()">
+                                                                    id="statusSelect_{{ $ticket->id }}">
                                                                     <option value="2"
                                                                         {{ $ticket->status_id == '2' ? 'selected' : '' }}>
-                                                                        Diterima
-                                                                    </option>
+                                                                        Diterima</option>
                                                                     <option value="3"
                                                                         {{ $ticket->status_id == '3' ? 'selected' : '' }}>
-                                                                        Proses
-                                                                    </option>
+                                                                        Proses</option>
                                                                     <option value="4"
                                                                         {{ $ticket->status_id == '4' ? 'selected' : '' }}>
-                                                                        Selesai
-                                                                    </option>
+                                                                        Selesai</option>
                                                                 </select>
                                                             </div>
                                                         </form>
@@ -432,9 +429,7 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
-    @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -491,8 +486,8 @@
                                         <h3>{{ $ticket->no_ticket }}</h3>
                                         <p class="info">
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
-                                            <span>Status:</span> {{ $ticket->status->status_name }}<br>
-                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name }}<br>
+                                            <span>Status:</span> {{ $ticket->status->status_name ?? '-' }}<br>
+                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
                                             <span>Nama Provinsi:</span> {{ $ticket->province->province_name }}<br>
                                             <span>Nama Kota:</span> {{ $ticket->cityOrRegency->city_or_regency_name }}
                                         </p>
@@ -527,6 +522,45 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Konfirmasi -->
+        <div class="modal fade" id="confirmModal_{{ $ticket->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Perubahan Status</h5>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
+                            id="status-name-{{ $ticket->id }}"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
+                            Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                // Set status name in modal
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // Show modal
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                // On confirm button click
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    statusForm.submit();
+                };
+            });
+        </script>
     @endforeach
 
 @endsection
