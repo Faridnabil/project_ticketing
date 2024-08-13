@@ -358,11 +358,14 @@
                         <div class="col-xl-12">
                             <!--begin::Product slider-->
                             <div class="tns tns-default">
+                                <h3>Lampiran :</h3>
                                 <!--begin::Slider-->
-                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
-                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false"
-                                    data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
+                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
+                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                    data-tns-center="false" data-tns-dots="false"
+                                    data-tns-prev-button="#kt_team_slider_prev1"
+                                    data-tns-next-button="#kt_team_slider_next1">
 
                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
@@ -409,6 +412,10 @@
                                 <!--end::Slider button-->
                             </div>
                             <!--end::Product slider-->
+                            <br>
+                            <hr>
+                            <br>
+                            <a href="{{ route('pejabat.ticket.index') }}" class="btn btn-danger">Kembali</a>
                         </div>
                     </div>
 

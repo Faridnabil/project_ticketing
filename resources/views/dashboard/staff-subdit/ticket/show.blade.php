@@ -329,8 +329,8 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('staffSubdit.tickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
+                                            action="{{ route('staffSubdit.tickets.store') }}"
+                                            enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
@@ -358,11 +358,14 @@
                         <div class="col-xl-12">
                             <!--begin::Product slider-->
                             <div class="tns tns-default">
+                                <h3>Lampiran :</h3>
                                 <!--begin::Slider-->
-                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
-                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false"
-                                    data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
+                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
+                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                    data-tns-center="false" data-tns-dots="false"
+                                    data-tns-prev-button="#kt_team_slider_prev1"
+                                    data-tns-next-button="#kt_team_slider_next1">
 
                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
@@ -409,6 +412,10 @@
                                 <!--end::Slider button-->
                             </div>
                             <!--end::Product slider-->
+                            <br>
+                            <hr>
+                            <br>
+                            <a href="{{ route('staffSubdit.ticket.index') }}" class="btn btn-danger">Kembali</a>
                         </div>
                     </div>
 

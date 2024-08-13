@@ -358,6 +358,7 @@
                         <div class="col-xl-12">
                             <!--begin::Product slider-->
                             <div class="tns tns-default">
+                                <h3>Lampiran :</h3>
                                 <!--begin::Slider-->
                                 <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
                                     data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true"
@@ -410,6 +411,10 @@
                             </div>
                             <!--end::Product slider-->
                         </div>
+                        <br>
+                        <hr>
+                        <br>
+                        <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Kembali</a>
                     </div>
 
                     <!-- Riwayat -->
