@@ -33,17 +33,22 @@ class TicketHelpdeskController extends Controller
         // Retrieve filter input
         $reqTanggal = $request->tanggal ?? null;
 
-        // Apply filter for the specific date if selected
-        if ($reqTanggal) {
-            $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
-            $query->whereDate('created_at', $date);
+        // Filter by date if provided
+        if (!empty($reqTanggal)) {
+            try {
+                $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
+                $query->whereDate('tickets.created_at', '=', $date);
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors(['Invalid date format provided']);
+            }
         }
 
-        if ($request->has('category_id') && $request->category_id) {
+        // Other filters
+        if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        if ($request->has('level') && $request->level) {
+        if ($request->filled('level')) {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
                     ->orWhere('level2', $request->level)
@@ -53,19 +58,16 @@ class TicketHelpdeskController extends Controller
             });
         }
 
-        if ($request->has('priority_id') && $request->priority_id) {
+        if ($request->filled('priority_id')) {
             $query->where('priority_id', $request->priority_id);
         }
 
-        if ($request->has('status_id') && $request->status_id) {
+        if ($request->filled('status_id')) {
             $query->where('status_id', $request->status_id);
         }
 
-        // Retrieve tickets only if any filters are applied
-        $tickets = null;
-        if ($reqTanggal || $request->category_id || $request->level || $request->priority_id || $request->status_id) {
-            $tickets = $query->orderBy('id', 'desc')->get();
-        }
+        // Apply sorting after all filters
+        $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
 
         // Retrieve filter data
         $categories = Category::all();
@@ -73,19 +75,15 @@ class TicketHelpdeskController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
 
-        $tickets = $query->orderBy('id', 'desc')
-        ->get();
+        $tickets = $query->get();
 
-                // Ambil user dengan role Koordinator
-                $koordinatorUsers = Role::where('name', 'Koordinator')
-                ->pluck('id')
-                ->toArray();
+        // Ambil user dengan role Koordinator
+        $koordinatorUsers = Role::where('name', 'Koordinator')
+            ->pluck('id')
+            ->toArray();
 
-
-        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'reqTanggal','koordinatorUsers'));
+        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'reqTanggal', 'koordinatorUsers'));
     }
-
-
     public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')

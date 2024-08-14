@@ -141,7 +141,32 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                    <style>
+                        /* Flexbox untuk menempatkan elemen search di sebelah kanan */
+                        .search-container {
+                            display: flex;
+                            justify-content: flex-end;
+                            margin-bottom: 10px;
+                        }
+
+                        .search-container label {
+                            margin-right: 10px;
+                            margin-top: 5px;
+                        }
+
+                        .search-container input {
+                            border-radius: 10px;
+                            padding: 5px 15px;
+                            border: 1px solid #b8b6b6;
+                        }
+                    </style>
+
+                    <div class="search-container mt-3">
+                        <label for="tableSearch">Search:</label>
+                        <input type="text" id="tableSearch" placeholder="Masukkan kata kunci...">
+                    </div>
+
+                    <table id="ticketTable" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -195,29 +220,25 @@
 
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
-                                        <td>
+                                        <td data-order="{{ $ticket->priority_id }}">
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">Critical</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">High</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">Medium</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">Low</span>
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                             @endif
                                         </td>
+
                                         <!--end::Priority=-->
                                         <!--begin::Payment method=-->
                                         <td>
@@ -418,6 +439,7 @@
     </div>
     <!--end::Post-->
 
+
     @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">
             <div class="modal-dialog">
@@ -588,6 +610,31 @@
             });
         </script>
     @endforeach
+
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi DataTable
+            var table = $('#ticketTable').DataTable({
+                "columnDefs": [{
+                    "targets": 3, // Kolom prioritas
+                    "orderData": [3],
+                    "type": "num"
+                }],
+                "order": [
+                    [3, 'desc']
+                ], // Urutkan berdasarkan prioritas
+                "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data yang ditampilkan
+            });
+
+            // Custom search input
+            $('#tableSearch').on('keyup', function() {
+                table.search(this.value).draw(); // Pencarian otomatis saat mengetik
+            });
+        });
+    </script>
 
 
 @endsection
