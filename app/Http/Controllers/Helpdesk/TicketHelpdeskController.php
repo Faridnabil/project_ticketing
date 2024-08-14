@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
 
 class TicketHelpdeskController extends Controller
 {
@@ -27,9 +28,17 @@ class TicketHelpdeskController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'helpdesk');
+        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
-        $categories = Category::all();
+        // Retrieve filter input
+        $reqTanggal = $request->tanggal ?? null;
+
+        // Apply filter for the specific date if selected
+        if ($reqTanggal) {
+            $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
+            $query->whereDate('created_at', $date);
+        }
+
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
         }
@@ -44,39 +53,38 @@ class TicketHelpdeskController extends Controller
             });
         }
 
-        // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])
-            ->get();
-
-
-        $priorities = Priority::all();
         if ($request->has('priority_id') && $request->priority_id) {
             $query->where('priority_id', $request->priority_id);
         }
 
-        $statuses = Status::all();
         if ($request->has('status_id') && $request->status_id) {
             $query->where('status_id', $request->status_id);
         }
 
-        // Filter berdasarkan status_name
-        if ($request->has('filter')) {
-            $statusesToFilter = explode(',', $request->filter);
-            $query->whereHas('status', function ($q) use ($statusesToFilter) {
-                $q->whereIn('status_name', $statusesToFilter);
-            });
+        // Retrieve tickets only if any filters are applied
+        $tickets = null;
+        if ($reqTanggal || $request->category_id || $request->level || $request->priority_id || $request->status_id) {
+            $tickets = $query->orderBy('id', 'desc')->get();
         }
 
+        // Retrieve filter data
+        $categories = Category::all();
+        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        $priorities = Priority::all();
+        $statuses = Status::all();
+
         $tickets = $query->orderBy('id', 'desc')
-            ->get();
+        ->get();
 
-        // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
+                // Ambil user dengan role Koordinator
+                $koordinatorUsers = Role::where('name', 'Koordinator')
+                ->pluck('id')
+                ->toArray();
 
-        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
+
+        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'reqTanggal','koordinatorUsers'));
     }
+
 
     public function newTicket(Request $request)
     {

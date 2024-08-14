@@ -40,48 +40,80 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('helpdesk.ticket.index') }}" class="d-flex">
-                            <select name="level" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Disposisi">
-                                <option></option>
-                                @foreach ($levels as $level)
-                                    <option value="{{ $level->id }}">{{ $level->name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                        <form method="GET" action="{{ route('helpdesk.ticket.index') }}"
+                            class="row g-3 align-items-center">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {{-- <label for="tanggal" class="form-label mb-2">Tanggal</label> --}}
+                                    <input type="date" id="tanggal" name="tanggal" class="form-control"
+                                        value="{{ old('tanggal', $reqTanggal) }}">
+                                </div>
+                            </div>
 
-                            <select name="category_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Kategori">
-                                <option></option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <div class="col-md-2">
+                                {{-- <label for="disposisi" class="form-label mb-2">Disposisi</label> --}}
+                                <select name="level" id="disposisi" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Disposisi">
+                                    <option></option>
+                                    @foreach ($levels as $level)
+                                        <option value="{{ $level->id }}"
+                                            {{ old('level', request('level')) == $level->id ? 'selected' : '' }}>
+                                            {{ $level->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <select name="priority_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Prioritas">
-                                <option></option>
-                                @foreach ($priorities as $priority)
-                                    <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <div class="col-md-2">
+                                {{-- <label for="kategori" class="form-label mb-2">Kategori</label> --}}
+                                <select name="category_id" id="kategori" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Kategori">
+                                    <option></option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <select name="status_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Status">
-                                <option></option>
-                                @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <div class="col-md-2">
+                                {{-- <label for="prioritas" class="form-label mb-2">Prioritas</label> --}}
+                                <select name="priority_id" id="prioritas" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Prioritas">
+                                    <option></option>
+                                    @foreach ($priorities as $priority)
+                                        <option value="{{ $priority->id }}"
+                                            {{ old('priority_id', request('priority_id')) == $priority->id ? 'selected' : '' }}>
+                                            {{ $priority->priority_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            <div class="col-md-2">
+                                {{-- <label for="status" class="form-label mb-2">Status</label> --}}
+                                <select name="status_id" id="status" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Status">
+                                    <option></option>
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}"
+                                            {{ old('status_id', request('status_id')) == $status->id ? 'selected' : '' }}>
+                                            {{ $status->status_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2  d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">Filter</button>
+                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            </div>
                         </form>
                         <!--end::Form-->
                     </div>
+
 
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
@@ -109,8 +141,7 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table id="kt_datatable_example_5"
-                        class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                    <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -129,7 +160,7 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if ($tickets->count())
+                            @if ($reqTanggal || request('level') || request('category_id') || request('priority_id') || request('status_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -142,12 +173,6 @@
                                         <td>
                                             {{ $ticket->category->category_name }}
                                         </td>
-                                        <!--end::Title=-->
-                                        <!--begin::Customer Name=-->
-                                        {{-- <td>
-                                            {{ $ticket->customers->name }}
-                                        </td> --}}
-                                        <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
                                             @if ($ticket->level1 != null)
@@ -259,7 +284,8 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('helpdesk.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -562,5 +588,6 @@
             });
         </script>
     @endforeach
+
 
 @endsection

@@ -23,11 +23,15 @@ class HomeKoordinatorController extends Controller
         $tiket_belum = $tickets
             ->where('status.status_name', null)
             ->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses', 'Buka Kembali'])
+        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+        $tiket_proses = $tickets
+            ->whereIn('status.status_name', ['Proses', 'Buka Kembali'])
             ->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')
+        $tiket_tertunda = $tickets
+            ->where('status.status_name', 'Tertunda')
             ->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')
+        $tiket_selesai = $tickets
+            ->where('status.status_name', 'Selesai')
             ->count();
 
         return view(
@@ -36,7 +40,8 @@ class HomeKoordinatorController extends Controller
                 'tickets',
                 'total_tiket',
                 'tiket_belum',
-                'tiket_buka_proses',
+                'tiket_masuk',
+                'tiket_proses',
                 'tiket_tertunda',
                 'tiket_selesai',
             )

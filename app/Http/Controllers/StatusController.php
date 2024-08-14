@@ -37,9 +37,11 @@ class StatusController extends Controller
             $status = Status::create($request->all());
 
             DB::commit();
-            return redirect()->route("index")->with("success", "Status Berhasil Dibuat.");
+            return redirect()->route("status.index")->with("success", "Status Berhasil Dibuat.");
         } catch (\Throwable $th) {
+              throw $th;
             DB::rollBack();
+              dd($th->getMessage()); // Menampilkan pesan error untuk debugging
             return back()->with("error", $th->getMessage());
         }
     }
@@ -70,7 +72,7 @@ class StatusController extends Controller
             $status->update($request->all());
 
             DB::commit();
-            return redirect()->route("index")->with("success", "Status Berhasil Di Rubah.");
+            return redirect()->route("status.index")->with("success", "Status Berhasil Di Rubah.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());
@@ -87,7 +89,7 @@ class StatusController extends Controller
             $status->delete();
 
             DB::commit();
-            return redirect()->route("index")->with("success", "Status Berhasil Dihapus.");
+            return redirect()->route("status.index")->with("success", "Status Berhasil Dihapus.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with("error", $th->getMessage());

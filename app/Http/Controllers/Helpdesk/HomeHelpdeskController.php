@@ -21,8 +21,9 @@ class HomeHelpdeskController extends Controller
         $tiket_belum = $tickets
             ->where('status.status_name', null)
             ->count();
-        $tiket_buka_proses = $tickets
-            ->whereIn('status.status_name', ['Diterima', 'Proses', 'Buka Kembali'])
+        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+        $tiket_proses = $tickets
+            ->whereIn('status.status_name', ['Proses', 'Buka Kembali'])
             ->count();
         $tiket_tertunda = $tickets
             ->where('status.status_name', 'Tertunda')
@@ -38,12 +39,14 @@ class HomeHelpdeskController extends Controller
                 'tickets',
                 'total_tiket',
                 'tiket_belum',
-                'tiket_buka_proses',
+                'tiket_masuk',
+                'tiket_proses',
                 'tiket_tertunda',
                 'tiket_selesai',
             )
         );
     }
+
     public function getTicketChartData(Request $request)
     {
         $year = $request->input('year', Carbon::now()->year);
