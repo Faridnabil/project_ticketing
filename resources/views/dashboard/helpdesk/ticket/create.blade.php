@@ -253,14 +253,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const provinceSelect = $('#province_id');
             const citySelect = $('#city_or_regency_id');
+            const oldProvinceId = "{{ old('province_id') }}";
+            const oldCityId = "{{ old('city_or_regency_id') }}";
 
             // Initialize Select2
             provinceSelect.select2();
             citySelect.select2();
 
-            provinceSelect.on('change', function() {
-                const provinceId = $(this).val();
-
+            function loadCities(provinceId, selectedCityId = null) {
                 if (provinceId) {
                     fetch(`/get-cities/${provinceId}`)
                         .then(response => response.json())
@@ -271,7 +271,7 @@
                             // Add new options
                             data.forEach(city => {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
+                                    `<option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                                 );
                             });
 
@@ -280,13 +280,24 @@
                         })
                         .catch(error => console.error('Error:', error));
                 } else {
-                    citySelect.html(
-                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
+                    citySelect.html('<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
+            }
+
+            // Handle province change
+            provinceSelect.on('change', function() {
+                const provinceId = $(this).val();
+                loadCities(provinceId);
             });
+
+            // If there is an old province value, load the cities
+            if (oldProvinceId) {
+                loadCities(oldProvinceId, oldCityId);
+            }
         });
     </script>
+
 
     <script>
         ClassicEditor

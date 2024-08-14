@@ -237,12 +237,12 @@
                                         <td>
                                             @if ($ticket->latestHistory)
                                                 @php
-                                                    $updatedByUser = App\Models\User::find(
-                                                        $ticket->latestHistory->status_changedBy,
-                                                    );
+                                                    $updatedByUser = $ticket->latestHistory->status_changedBy
+                                                        ? App\Models\User::find($ticket->latestHistory->status_changedBy)
+                                                        : null;
                                                 @endphp
 
-                                                {{ $updatedByUser->name }}
+                                                {{ $updatedByUser ? $updatedByUser->name : '-' }}
                                             @else
                                                 -
                                             @endif

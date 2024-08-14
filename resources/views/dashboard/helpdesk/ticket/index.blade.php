@@ -140,33 +140,7 @@
                 <!--end::Card header-->
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <!--begin::Table-->
-                    <style>
-                        /* Flexbox untuk menempatkan elemen search di sebelah kanan */
-                        .search-container {
-                            display: flex;
-                            justify-content: flex-end;
-                            margin-bottom: 10px;
-                        }
-
-                        .search-container label {
-                            margin-right: 10px;
-                            margin-top: 5px;
-                        }
-
-                        .search-container input {
-                            border-radius: 10px;
-                            padding: 5px 15px;
-                            border: 1px solid #b8b6b6;
-                        }
-                    </style>
-
-                    <div class="search-container mt-3">
-                        <label for="tableSearch">Search:</label>
-                        <input type="text" id="tableSearch" placeholder="Masukkan kata kunci...">
-                    </div>
-
-                    <table id="ticketTable" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                    <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -306,18 +280,21 @@
                                         <td>
                                             @if ($ticket->latestHistory)
                                                 @php
-                                                    $updatedByUser = App\Models\User::find(
-                                                        $ticket->latestHistory->status_changedBy,
-                                                    );
+                                                    $updatedByUser = $ticket->latestHistory->status_changedBy
+                                                        ? App\Models\User::find(
+                                                            $ticket->latestHistory->status_changedBy,
+                                                        )
+                                                        : null;
                                                 @endphp
 
-                                                {{ $updatedByUser->name }}
+                                                {{ $updatedByUser ? $updatedByUser->name : '-' }}
                                             @else
                                                 -
                                             @endif
                                             :
                                             {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
                                         </td>
+
 
                                         <!--begin::Action=-->
                                         <td>
@@ -629,31 +606,5 @@
             });
         </script>
     @endforeach
-
-    <!-- DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            // Inisialisasi DataTable
-            var table = $('#ticketTable').DataTable({
-                "columnDefs": [{
-                    "targets": 3, // Kolom prioritas
-                    "orderData": [3],
-                    "type": "num"
-                }],
-                "order": [
-                    [3, 'desc']
-                ], // Urutkan berdasarkan prioritas
-                "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data yang ditampilkan
-            });
-
-            // Custom search input
-            $('#tableSearch').on('keyup', function() {
-                table.search(this.value).draw(); // Pencarian otomatis saat mengetik
-            });
-        });
-    </script>
-
 
 @endsection

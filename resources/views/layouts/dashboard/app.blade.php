@@ -81,30 +81,30 @@
         }
     </style>
 
-        {{-- Select Status Tiket --}}
-        <style>
-            .custom-select-wrapper {
-                position: relative;
-                display: inline-block;
-            }
+    {{-- Select Status Tiket --}}
+    <style>
+        .custom-select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
 
-            .custom-select {
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                background: transparent url('data:image/svg+xml;utf8,<svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 7l5 5 5-5" stroke="%23000" stroke-width="2"/></svg>') no-repeat right;
-                padding-right: 1.5rem;
-                border: 1px solid #ccc;
-                font-size: 1rem;
-                margin-left: 10px;
-                width: 10px;
-                cursor: pointer;
-            }
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: transparent url('data:image/svg+xml;utf8,<svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 7l5 5 5-5" stroke="%23000" stroke-width="2"/></svg>') no-repeat right;
+            padding-right: 1.5rem;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            margin-left: 10px;
+            width: 10px;
+            cursor: pointer;
+        }
 
-            .custom-select:focus {
-                width: auto;
-            }
-        </style>
+        .custom-select:focus {
+            width: auto;
+        }
+    </style>
 </head>
 
 <body id="kt_body"
@@ -124,7 +124,8 @@
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                     <!--begin::Logo-->
                     <a href="">
-                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="h-30px logo" />
+                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}"
+                            class="h-30px logo" />
                     </a>
                     <!--end::Logo-->
 
@@ -146,7 +147,8 @@
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                             <a href="index.html" class="d-lg-none">
-                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logos.png') }}" class="h-30px" />
+                                <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logos.png') }}"
+                                    class="h-30px" />
                             </a>
                         </div>
                         <!--end::Mobile logo-->
@@ -195,40 +197,40 @@
     <script src="{{ asset('template/dist/assets/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('template/dist/assets/js/custom/modals/upgrade-plan.js') }}"></script>
 
-{{-- Javascript Notifikasi --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.notification-link').forEach(function(link) {
-            link.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
+    {{-- Javascript Notifikasi --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.notification-link').forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default link behavior
 
-                var form = this.closest('.notification-form');
-                var url = this.getAttribute('href');
+                    var form = this.closest('.notification-form');
+                    var url = this.getAttribute('href');
 
-                if (form) {
-                    // Submit the form via AJAX
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', form.action, true);
-                    xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
-                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            // Redirect to the URL after the form is successfully submitted
-                            window.location.href = url;
-                        }
-                    };
+                    if (form) {
+                        // Submit the form via AJAX
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', form.action, true);
+                        xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                // Redirect to the URL after the form is successfully submitted
+                                window.location.href = url;
+                            }
+                        };
 
-                    // Collect form data
-                    var formData = new FormData(form);
-                    var formBody = new URLSearchParams(formData).toString();
+                        // Collect form data
+                        var formData = new FormData(form);
+                        var formBody = new URLSearchParams(formData).toString();
 
-                    xhr.send(formBody);
-                }
+                        xhr.send(formBody);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
     {{-- Javascript Dropzone --}}
     <script>
@@ -360,25 +362,54 @@
         }
     </script>
 
-
+    {{-- DataTables --}}
     <script>
-        $("#kt_datatable_example_5").DataTable({
-            "language": {
-                "lengthMenu": "Show _MENU_",
-            },
-            "dom": "<'row'" +
-                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                ">" +
+        $(document).ready(function() {
+            // Ambil nilai lengthMenu dari localStorage
+            var selectedLength = localStorage.getItem('selectedLength') ||
+                5; // Default ke 5 jika tidak ada nilai di localStorage
 
-                "<'table-responsive'tr>" +
+            // Inisialisasi DataTable
+            $("#kt_datatable_example_5").DataTable({
+                "language": {
+                    "lengthMenu": "Show _MENU_",
+                    "emptyTable": "Tidak ada data yang ditampilkan. Silakan gunakan filter untuk mencari data."
+                },
+                "dom": "<'row'" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-start'l>" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                    ">" +
+                    "<'table-responsive'tr>" +
+                    "<'row'" +
+                    "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                    "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                    ">",
+                "pageLength": parseInt(
+                    selectedLength), // Atur panjang halaman sesuai dengan nilai yang tersimpan
+                "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data yang ditampilkan
+                "order": [
+                    [3, 'desc']
+                ], // Urutkan berdasarkan prioritas
+                "columnDefs": [{
+                    "targets": 3, // Kolom prioritas
+                    "orderData": [3],
+                    "type": "num"
+                }]
+            });
 
-                "<'row'" +
-                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                ">"
+            // Simpan nilai pageLength ke localStorage setiap kali berubah
+            $('#kt_datatable_example_5').on('length.dt', function(e, settings, len) {
+                localStorage.setItem('selectedLength', len);
+            });
+
+            // Custom search input
+            $('#tableSearch').on('keyup', function() {
+                $("#kt_datatable_example_5").DataTable().search(this.value)
+                    .draw(); // Pencarian otomatis saat mengetik
+            });
         });
     </script>
+
 
 </body>
 

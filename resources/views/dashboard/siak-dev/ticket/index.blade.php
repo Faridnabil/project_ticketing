@@ -228,18 +228,19 @@
                                         <td>
                                             @if ($ticket->latestHistory)
                                                 @php
-                                                    $updatedByUser = App\Models\User::find(
-                                                        $ticket->latestHistory->status_changedBy,
-                                                    );
+                                                    $updatedByUser = $ticket->latestHistory->status_changedBy
+                                                        ? App\Models\User::find($ticket->latestHistory->status_changedBy)
+                                                        : null;
                                                 @endphp
 
-                                                {{ $updatedByUser->name }}
+                                                {{ $updatedByUser ? $updatedByUser->name : '-' }}
                                             @else
                                                 -
                                             @endif
                                             :
                                             {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
                                         </td>
+
 
                                         <!--begin::Action=-->
                                         <td>
