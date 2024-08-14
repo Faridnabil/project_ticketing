@@ -100,7 +100,7 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Koordinator</th>
+                                <th class="min-w-70px">Keterangan</th>
                                 <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
