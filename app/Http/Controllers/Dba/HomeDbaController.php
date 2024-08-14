@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Department;
+namespace App\Http\Controllers\Dba;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -9,7 +9,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HomeDepartmentController extends Controller
+class HomeDbaController extends Controller
 {
     public function index(Request $request)
     {
@@ -18,7 +18,7 @@ class HomeDepartmentController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
         ->where('assign_to', $user->id)
         ->get();
         $logs = collect();
@@ -33,7 +33,7 @@ class HomeDepartmentController extends Controller
 
         if ($selectedTicketId) {
             // Get the selected ticket
-            $selectedTicket = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+            $selectedTicket = Ticket::with('status', 'category', 'priority', 'users', 'assignTo')
                 ->where('assign_to', $user->id)
                 ->find($selectedTicketId);
 
@@ -43,7 +43,7 @@ class HomeDepartmentController extends Controller
 
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
-                $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+                $logs = HistoryTicket::with('status', 'category', 'priority', 'users', 'assignTo')
                     ->whereIn('h_no_ticket', $ticketNumbers)
                     ->orderBy('created_at', 'desc')
                     ->get();
@@ -53,7 +53,7 @@ class HomeDepartmentController extends Controller
         // Get all tickets for the dropdown
         $allTickets = Ticket::where('assign_to', $user->id)->get();
 
-        return view('dashboard.department.home.index', compact(
+        return view('dashboard.dba.home.index', compact(
             'allTickets',
             'tickets',
             'total_tiket',

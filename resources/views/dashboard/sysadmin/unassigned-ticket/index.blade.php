@@ -60,7 +60,7 @@
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
                                             <td>{{ $ticket->title }}</td>
-                                            <td>{{ $ticket->customers->name }}</td>
+                                            <td>{{ $ticket->user_s->name }}</td>
                                             <td>{{ $ticket->category->category_name }}</td>
                                             <td>
                                                 @if ($ticket->priority_id == '4')
@@ -112,7 +112,7 @@
                                             <td>
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('unassignedTicket.show', $ticket->id) }}" type="button">
+                                                        href="{{ route('unassignedSyasadmin.show', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -135,7 +135,7 @@
                                                         ->where('user_id', Auth::id())
                                                         ->exists();
                                                 @endphp
-                                                @if (Auth::user()->hasRole('Tenaga Ahli') && $ticket->assign_to == null && !$existingRequest)
+                                                @if (Auth::user()->hasRole(['SysAdmin', 'DBA']) && $ticket->assign_to == null && !$existingRequest)
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_request_{{ $ticket->id }}">
@@ -230,7 +230,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('unassignedTicket.requestAssignment', $ticket->id) }}" method="POST"
+                        <form action="{{ route('sysadmin.unassignedTicket.requestAssignment', $ticket->id) }}" method="POST"
                             class="d-inline">
                             @csrf
                             <button class="btn btn-primary" type="submit">Ajukan</button>

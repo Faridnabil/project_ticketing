@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Department;
+namespace App\Http\Controllers\Dba;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use App\Models\IncidentalActivityCategory;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
-class IncidentalActivityController extends Controller
+class IncidentalDbaController extends Controller
 {
     public function index()
     {
@@ -17,14 +17,14 @@ class IncidentalActivityController extends Controller
         $statuses = Status::all();
         $categories = IncidentalActivityCategory::all();
 
-        return view('dashboard.department.incidental-activities.index', compact('activities', 'statuses', 'categories'));
+        return view('dashboard.dba.incidental-activities.index', compact('activities', 'statuses', 'categories'));
     }
 
     public function create()
     {
         $statuses = Status::all();
         $categories = IncidentalActivityCategory::all();
-        return view('dashboard.department.incidental-activities.create', compact('statuses', 'categories'));
+        return view('dashboard.dba.incidental-activities.create', compact('statuses', 'categories'));
     }
 
     public function store(Request $request)
@@ -61,7 +61,7 @@ class IncidentalActivityController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('department.incidental-activities.index')->with('success', 'Activity added successfully');
+        return redirect()->route('dba.incidental-activities.index')->with('success', 'Activity added successfully');
     }
 
     public function edit($id)
@@ -69,7 +69,7 @@ class IncidentalActivityController extends Controller
         $activity = IncidentalActivity::findOrFail($id);
         $statuses = Status::all();
         $categories = IncidentalActivityCategory::all();
-        return view('dashboard.department.incidental-activities.edit', compact('activity', 'statuses', 'categories'));
+        return view('dashboard.dba.incidental-activities.edit', compact('activity', 'statuses', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -115,7 +115,7 @@ class IncidentalActivityController extends Controller
 
         $activity->update($data);
 
-        return redirect()->route('department.incidental-activities.index')->with('success', 'Activity updated successfully');
+        return redirect()->route('dba.incidental-activities.index')->with('success', 'Activity updated successfully');
     }
 
 
@@ -124,7 +124,7 @@ class IncidentalActivityController extends Controller
         $activity = IncidentalActivity::findOrFail($id);
         $activity->delete();
 
-        return redirect()->route('department.incidental-activities.index')
+        return redirect()->route('dba.incidental-activities.index')
             ->with('success', 'Incidental Activity deleted successfully.');
     }
 }

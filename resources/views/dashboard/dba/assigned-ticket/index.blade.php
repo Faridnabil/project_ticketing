@@ -54,10 +54,11 @@
                                 <tr>
                                     <th>Nomor Tiket</th>
                                     <th>Judul</th>
+                                    <th>Kategori</th>
                                     <th>Pemilik</th>
                                     <th>Prioritas</th>
                                     <th>Tanggal Kirim</th>
-                                    <th>Tenggat Waktu</th>
+                                    {{-- <th>Tenggat Waktu</th> --}}
                                     <th>Status</th>
                                     <th style="width: 100px">Aksi</th>
                                 </tr>
@@ -70,7 +71,8 @@
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->title }}</td>
-                                                <td>{{ $ticket->customers->name }}</td>
+                                                <td>{{ $ticket->category->category_name }}</td>
+                                                <td>{{ $ticket->user_s->name }}</td>
                                                 <td class="text-center">
                                                     @if ($ticket->priority_id == '4')
                                                         <span class="badge"
@@ -95,7 +97,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at))?? '' }}</td>
-                                                <td>{{ date('d F Y', strtotime($ticket->due_date))?? '' }}</td>
+                                                {{-- <td>{{ date('d F Y', strtotime($ticket->due_date))?? '' }}</td> --}}
                                                 <td>
                                                     @if ($ticket->status_id == '2')
                                                         <span class="badge"

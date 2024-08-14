@@ -40,7 +40,7 @@
                         <!--begin::Body-->
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('department.incidental-activities.store') }}"
+                                action="{{ route('dba.incidental-activities.store') }}"
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="col-md-6">
@@ -123,7 +123,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label for="department" class="form-label">Departemen</label>
                                     <input type="text" name="department"
                                         class="form-control @error('department') is-invalid @enderror" id="department"
@@ -136,7 +136,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
                                     <label for="description" class="form-label">Deskripsi</label>
@@ -168,7 +168,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('department.incidental-activities.index') }}"
+                                    <a href="{{ route('dba.incidental-activities.index') }}"
                                         class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>

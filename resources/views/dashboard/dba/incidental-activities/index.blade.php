@@ -27,7 +27,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Semua Incidental Activities</h4>
                     <div class="d-flex align-items-center">
-                        <a href="{{ route('department.incidental-activities.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('dba.incidental-activities.create') }}" class="btn btn-primary btn-sm">
                             <span class="btn-label">
                                 <i class="fas fa-plus"></i>
                             </span>
@@ -76,7 +76,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('department.incidental-activities.edit', $activity->id) }}"
+                                            <a href="{{ route('dba.incidental-activities.edit', $activity->id) }}"
                                                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                                 <span class="menu-icon" style="fill: #bd6710">
                                                     <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -133,7 +133,7 @@
                                                     <button type="button" class="btn btn-secondary btn-sm"
                                                         data-bs-dismiss="modal">Tutup</button>
                                                     <form
-                                                        action="{{ route('department.incidental-activities.destroy', $activity->id) }}"
+                                                        action="{{ route('dba.incidental-activities.destroy', $activity->id) }}"
                                                         method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

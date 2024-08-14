@@ -38,14 +38,14 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Semua Tiket</h4>
                     <div class="d-flex align-items-center">
-                        @can('Create Ticket')
+                        {{-- @can('Create Ticket')
                             <a href="{{ route('ticket.create') }}" class="btn btn-primary btn-sm me-2">
                                 <span class="btn-label">
                                     <i class="fas fa-plus"></i>
                                 </span>
                                 Tambah Tiket
                             </a>
-                        @endcan
+                        @endcan --}}
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#filterModal">
                             <span class="btn-label">
@@ -82,7 +82,7 @@
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
                                             <td>{{ $ticket->category->category_name }}</td>
-                                            <td>{{ $ticket->customers->name }}</td>
+                                            <td>{{ $ticket->user_s->name }}</td>
                                             <td class="text-center">
                                                 @if ($ticket->assignTo != null)
                                                     {{ $ticket->assignTo->name }}

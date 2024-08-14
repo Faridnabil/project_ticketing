@@ -191,7 +191,7 @@
                                                 <tr class="text-center">
                                                     <td>{{ $ticket->no_ticket }}</td>
                                                     <td>{{ $ticket->category->category_name }}</td>
-                                                    <td>{{ $ticket->customers->name }}</td>
+                                                    <td>{{ $ticket->user_s->name }}</td>
                                                     <td>{{ $ticket->assignTo->name ?? '-' }}</td>
                                                     <td>
                                                         @if ($ticket->priority_id == '4')

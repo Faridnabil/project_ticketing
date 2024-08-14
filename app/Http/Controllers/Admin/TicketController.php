@@ -29,7 +29,7 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser');
+        $query = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser');
 
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
@@ -58,7 +58,7 @@ class TicketController extends Controller
         $tickets = $query->orderBy('id', 'desc')->get();
 
         // Fetch necessary data for filters
-        $assign_to = User::role('Tenaga Ahli')->get();
+        $assign_to = User::role(['DBA', 'SysAdmin'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -71,13 +71,13 @@ class TicketController extends Controller
      */
     public function create()
     {
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Tenaga Ahli')->get();
+        $user_s = User::role('User')->get();
+        $assign_to = User::role(['DBA', 'SysAdmin'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
 
-        return view('dashboard.admin.ticket.create', compact('customers', 'assignTo', 'priorities', 'statuses', 'categories'));
+        return view('dashboard.admin.ticket.create', compact('users_s', 'assign_to', 'priorities', 'statuses', 'categories'));
     }
 
     /**
@@ -124,7 +124,7 @@ class TicketController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $validate['no_ticket'],
                 'h_title' => $request->title,
-                'h_customer' => $request->customer,
+                'h_users' => $request->t_users,
                 'h_assign_to' => $request->assign_to,
                 'h_solution' => $request->solution,
                 'h_priority_id' => $request->priority_id,
@@ -152,13 +152,13 @@ class TicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')->get();
+        $users = User::role('User')->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -167,7 +167,7 @@ class TicketController extends Controller
             ->with('user')
             ->get();
 
-        return view('dashboard.admin.ticket.show', compact('ticket', 'logs', 'customers', 'priorities', 'statuses', 'categories', 'comments', 'statusChangedBy'));
+        return view('dashboard.admin.ticket.show', compact('ticket', 'logs', 'users', 'priorities', 'statuses', 'categories', 'comments', 'statusChangedBy'));
     }
 
     /**
@@ -175,16 +175,17 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Tenaga Ahli')->get();
+        $users = User::role('User')->get();
+        $assignTo = User::role(['DBA', 'SysAdmin'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
         $statusChangedBy = Auth::user();
         $logs = ActivityLog::where('model_type', Ticket::class)->where('model_id', $ticket->id)->get();
 
-        return view('dashboard.admin.ticket.edit', compact('ticket', 'customers', 'assignTo', 'priorities', 'statuses', 'categories', 'statusChangedBy', 'logs'));
+        return view('dashboard.admin.ticket.edit', compact('ticket', 'users', 'assignTo', 'priorities', 'statuses', 'categories', 'statusChangedBy', 'logs'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -225,7 +226,7 @@ class TicketController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
-                'h_customer' => $ticket->customer,
+                'h_users' => $ticket->t_users,
                 'h_assign_to' => $ticket->assign_to,
                 'h_solution' => $ticket->solution,
                 'h_priority_id' => $ticket->priority_id,
@@ -286,7 +287,7 @@ class TicketController extends Controller
 
         // Notifikasi untuk Tenaga Ahli yang ditugaskan
         $authenticatedUserName = Auth::user()->name;
-        $assignedExpertUsers = User::role('Tenaga Ahli')->where('id', $requestAssignment->user_id)->get();
+        $assignedExpertUsers = User::role(['SysAdmin', 'DBA'])->where('id', $requestAssignment->user_id)->get();
 
         $notificationDataForExpert = [
             'name' => $authenticatedUserName,
@@ -304,7 +305,7 @@ class TicketController extends Controller
         DB::table('history_tickets')->insert([
             'h_no_ticket' =>  $ticket->no_ticket,
             'h_title' => $ticket->title,
-            'h_customer' => $ticket->customer,
+            'h_users' => $ticket->t_users   ,
             'h_assign_to' => $ticket->assign_to,
             'h_solution' => $ticket->solution,
             'h_priority_id' => $ticket->priority_id,

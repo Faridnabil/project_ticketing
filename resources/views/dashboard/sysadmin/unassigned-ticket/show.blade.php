@@ -209,7 +209,8 @@
                                             </button>
                                             <!--end::Slider button-->
                                             <!--begin::Slider button-->
-                                            <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_next1">
+                                            <button class="btn btn-icon btn-active-color-primary"
+                                                id="kt_team_slider_next1">
                                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
                                                 <span class="svg-icon svg-icon-3x">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -241,52 +242,38 @@
                                     <div class="card-header d-flex justify-content-between align-items-center p-3">
                                         <h5 class="mb-0">Chat Komentar</h5>
                                     </div>
-                                    <div class="card-body" data-mdb-perfect-scrollbar-init
-                                        style="position: relative; height: 400px; overflow-y:auto;">
+                                    <div class="card-body" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px; overflow-y:auto;">
                                         @foreach ($comments as $comment)
-                                            <div class="d-flex flex-row justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-4 pt-1"
-                                                id="comment-{{ $comment->id }}">
+                                            <div class="d-flex flex-row justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-4 pt-1" id="comment-{{ $comment->id }}">
                                                 @if ($comment->user_id != auth()->user()->id)
-                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                                        alt="avatar 1" style="width: 45px; height: 100%;">
+                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1" style="width: 45px; height: 100%;">
                                                 @endif
                                                 <div>
                                                     <p class="small text-muted">{{ $comment->user->name }}</p>
-                                                    <p class="small p-2 {{ $comment->user_id == auth()->user()->id ? 'me-3 text-white rounded-3 bg-primary' : 'ms-3 rounded-3 bg-body-tertiary' }}"
-                                                        data-kt-element="message-text">
+                                                    <p class="small p-2 {{ $comment->user_id == auth()->user()->id ? 'me-3 text-white rounded-3 bg-primary' : 'ms-3 rounded-3 bg-body-tertiary' }}" data-kt-element="message-text">
                                                         {!! $comment->message !!}
                                                     </p>
-                                                    <p
-                                                        class="small {{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }} mb-3 rounded-3 text-muted d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">
-                                                        {{ $comment->created_at->locale('id')->diffForHumans() }}</p>
+                                                    <p class="small {{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }} mb-3 rounded-3 text-muted d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">{{ $comment->created_at->locale('id')->diffForHumans() }}</p>
                                                     @if ($comment->updated_at)
                                                         <span class="badge badge-light-success">Dirubah</span>
                                                     @endif
                                                 </div>
                                                 @if ($comment->user_id == auth()->user()->id)
-                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                                                        alt="avatar 1" style="width: 45px; height: 100%;">
+                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1" style="width: 45px; height: 100%;">
                                                 @endif
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div
-                                        class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                            alt="avatar 3" style="width: 40px; height: 100%;">
-                                        <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100"
-                                            method="POST" action="{{ route('tickets.store') }}"
-                                            enctype="multipart/form-data" novalidate>
+                                    <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
+                                        <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100" method="POST" action="{{ route('unassignedTickets.store') }}" enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="assign_to" value="{{ $ticket->customer }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                             <div class="input-group">
-                                                <input type="text" name="message"
-                                                    class="form-control form-control-lg @error('message') is-invalid @enderror"
-                                                    id="exampleFormControlInput1" placeholder="Type message" disabled>
-                                                <button class="btn btn-primary ms-1" type="submit"
-                                                    data-kt-element="send" disabled><i class="fas fa-paper-plane"></i></button>
+                                                <input type="text" name="message" class="form-control form-control-lg @error('message') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Type message">
+                                                <button class="btn btn-primary ms-1" type="submit" data-kt-element="send"><i class="fas fa-paper-plane"></i></button>
                                             </div>
                                             @error('message')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -345,7 +332,7 @@
                                                                 id="message-display-{{ $comment->id }}">
                                                                 {!! $comment->message !!}
                                                             </p>
-                                                            <form action="{{ route('tickets.update', $comment->id) }}"
+                                                            <form action="{{ route('unassignedTickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -366,7 +353,7 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('tickets.store') }}" enctype="multipart/form-data"
+                                            action="{{ route('unassignedTickets.store') }}" enctype="multipart/form-data"
                                             novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
@@ -402,13 +389,12 @@
                                         @foreach ($logs as $log)
                                             <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
                                                 <span
-                                                    class="timeline-date">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
+                                                    class="timeline-date">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
                                                 <div class="timeline-content">
                                                     <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
                                                     <p class="timeline-text">
                                                         <strong>Nomor Tiket :</strong> {{ $log->h_no_ticket }}<br>
-                                                        <strong>Kategori :</strong>
-                                                        {{ $log->category->category_name ?? '' }}<br>
+                                                        <strong>Kategori :</strong> {{ $log->category->category_name ?? '' }}<br>
                                                         <strong>Prioritas :</strong>
                                                         {{ $log->priority->priority_name ?? 'N/A' }}<br>
                                                         <strong>Status :</strong>
@@ -615,25 +601,5 @@
             });
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var slider = tns({
-                container: '#kt_team_slider',
-                items: 1,
-                slideBy: 'page',
-                autoplay: false,
-                controls: false, // disable built-in controls
-                nav: false,
-                autoplayButtonOutput: false
-            });
 
-            document.getElementById('kt_team_slider_prev1').onclick = function() {
-                slider.goTo('prev');
-            };
-
-            document.getElementById('kt_team_slider_next1').onclick = function() {
-                slider.goTo('next');
-            };
-        });
-    </script>
 @endsection

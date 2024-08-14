@@ -45,10 +45,7 @@ class TicketUserController extends Controller
             ->where('id', $user->id)
             ->get();
 
-        $assignTo = User::role('SysAdmin')
-            ->get();
-
-        $assignTo2 = User::role('DBA')
+        $assignTo = User::role(['Sysadmin', 'DBA'])
             ->get();
 
         $priorities = Priority::all();
@@ -60,7 +57,6 @@ class TicketUserController extends Controller
             compact(
                 't_user',
                 'assignTo',
-                'assignTo2',
                 'priorities',
                 'statuses',
                 'categories',
@@ -197,10 +193,7 @@ class TicketUserController extends Controller
         $t_users = User::role('User')
             ->get();
 
-        $assignTo = User::role('SysAdmin')
-            ->get();
-
-        $assignTo2 = User::role('DBA')
+        $assignTo = User::role(['SysAdmin', 'DBA'])
             ->get();
 
         $priorities = Priority::all();
@@ -219,7 +212,6 @@ class TicketUserController extends Controller
                 'ticket',
                 't_users',
                 'assignTo',
-                'assignTo2',
                 'priorities',
                 'statuses',
                 'categories',
@@ -328,7 +320,7 @@ class TicketUserController extends Controller
             $comment->save();
 
             // Notifikasi untuk pengguna dengan peran 'Tenaga Ahli'
-            $tenagaAhliUsers = User::role('SysAdmin')->get();
+            $tenagaAhliUsers = User::role(['SysAdmin', 'DBA'])->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationDataForTenagaAhli = [

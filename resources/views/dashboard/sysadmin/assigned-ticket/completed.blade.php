@@ -37,7 +37,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Data Tiket Selesai</h4>
-                    <form action="{{ route('department.tickets.export') }}" method="GET" class="d-flex mb-0">
+                    <form action="{{ route('sysadmin.tickets.export') }}" method="GET" class="d-flex mb-0">
                         <div class="d-flex align-items-center">
                             <div class="me-2">
                                 <label for="start_date" class="form-label mb-0">Start Date</label>

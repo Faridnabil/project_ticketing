@@ -206,21 +206,21 @@
                     @endrole
                     @role('SysAdmin')
                         <li class="nav-item">
-                            <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
-                                href="{{ route('unassignedTicket.index') }}">
+                            <a class="menu-link {{ Request::is('unassignedSysadmin') ? 'active' : '' }}"
+                                href="{{ route('unassignedSysadmin.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Belum Ditetapkan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
-                                href="{{ route('assignedTicket.index') }}">
+                            <a class="menu-link {{ Request::is('assignedSysadmin') ? 'active' : '' }}"
+                                href="{{ route('assignedSysadmin.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
+                            <a class="menu-link {{ Request::is('assignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('sysadmin.completed-tickets') }}">
                                 <i class="fas fa-check-circle"></i>
                                 <p>Tiket Selesai</p>
@@ -237,7 +237,7 @@
                     @role('DBA')
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
-                                href="{{ route('unassignedTicket.index') }}">
+                                href="{{ route('unassignedDba.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Belum Ditetapkan</p>
                             </a>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Department;
+namespace App\Http\Controllers\Sysadmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HistoryTicket;
@@ -19,21 +19,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-class UnassignedTicketController extends Controller
+class UnassignedSysadminController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'statusChangedByUser')
             ->whereDoesntHave('assignTo')
             ->get();
 
-        return view('dashboard.department.unassigned-ticket.index', compact('tickets'));
+        return view('dashboard.sysadmin.unassigned-ticket.index', compact('tickets'));
     }
 
     public function request_assignment(Request $request, Ticket $ticket)
     {
         // Pastikan user yang sedang login memiliki role 'Department' dan tiket belum diassign ke siapa pun
-        if (Auth::user()->hasRole('Tenaga Ahli') && $ticket->assign_to === null) {
+        if (Auth::user()->hasRole(['SysAdmin', 'DBA']) && $ticket->assign_to === null) {
             // Periksa apakah pengajuan sudah ada
             $existingRequest = RequestAssignment::where('ticket_id', $ticket->id)
                 ->where('user_id', Auth::id())
@@ -75,7 +75,7 @@ class UnassignedTicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
+        $customers = User::role('User')
             ->get();
 
         // $assignTo = User::role('Department')
@@ -87,7 +87,7 @@ class UnassignedTicketController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -98,7 +98,7 @@ class UnassignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.department.unassigned-ticket.show',
+            'dashboard.sysadmin.unassigned-ticket.show',
             compact(
                 'ticket',
                 'logs',
@@ -127,7 +127,7 @@ class UnassignedTicketController extends Controller
             $assignedDepartmentId = $request->assign_to;
 
             // Notifikasi
-            $users = User::role(['Customer'])->where('id', $assignedDepartmentId)->get();
+            $users = User::role(['User'])->where('id', $assignedDepartmentId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [

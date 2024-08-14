@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Edit Tiket | PLN Icon+
+    Edit Tiket | PLN ICON+
 @endsection
 
 @section('content')
@@ -17,6 +17,7 @@
             </div>
         </div>
     </div>
+
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row g-5 g-xl-12">
@@ -24,7 +25,8 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('ticket.update', $ticket->id) }}" enctype="multipart/form-data" novalidate>
+                                action="{{ route('assignedTicket.update', $ticket->id) }}" enctype="multipart/form-data"
+                                novalidate>
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
@@ -40,26 +42,26 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
-                                    <select name="users" class="form-control @error('users') is-invalid @enderror"
+                                    <select name="customer" class="form-control @error('customer') is-invalid @enderror"
                                         required autofocus style="pointer-events: none">
-                                        <option disabled>Pilih Pemilik</option>
-                                        @foreach ($users as $user)
+                                        <option value="" disabled>Pilih Pemilik</option>
+                                        @foreach ($user_s as $user)
                                             <option value="{{ $user->id }}"
                                                 {{ $ticket->user == $user->id ? 'selected' : '' }}>
                                                 {{ $user->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
-                                    @error('users')
+                                    @error('user')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
-                                    <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Departemen"required autofocus>
-                                        <option disabled selected>Pilih Ditugaskan</option>
-                                        @foreach ($assignTo as $assign)
+                                    <select name="assign_to" class="form-control @error('assign_to') is-invalid @enderror"
+                                         required autofocus style="pointer-events: none">
+                                        <option disabled>Ditugaskan kepada</option>
+                                        @foreach ($assign_to as $assign)
                                             <option value="{{ $assign->id }}"
                                                 {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
                                                 {{ $assign->name }}</option>
@@ -75,7 +77,7 @@
                                     <select name="priority_id"
                                         class="form-select @error('priority_id') is-invalid @enderror"
                                         data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
-                                        <option disabled selected>Pilih Prioritas</option>
+                                        <option disabled>Pilih Prioritas</option>
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}"
                                                 {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
@@ -99,12 +101,14 @@
                                 <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Status</label>
                                     <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Status"required autofocus>
-                                        <option disabled selected>Pilih Status</option>
+                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
+                                        <option disabled>Pilih Status</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ $ticket->status_id == $status->id ? '' : '' }}>
-                                                {{ $status->status_name }}</option>
+                                            @if (in_array($status->status_name, ['Diterima', 'Proses', 'Selesai']))
+                                                <option value="{{ $status->id }}"
+                                                    {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
@@ -115,8 +119,8 @@
                                 <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Kategori</label>
                                     <select name="category_id"
-                                        class="form-select @error('category_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
+                                        class="form-select @error('category_id') is-invalid @enderror"data-control="select2"
+                                        data-placeholder="Pilih Kategori" required autofocus>
                                         <option disabled>Pilih Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
@@ -142,7 +146,7 @@
                                 <div class="col-md-6">
                                     <label for="solution" class="form-label">Solusi</label>
                                     <textarea name="solution" class="form-control @error('solution') is-invalid @enderror" id="solution" cols="10"
-                                        rows="3">{{ old('solution') }}</textarea>
+                                        rows="3">{{ old('solution', $ticket->solution) }}</textarea>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -156,7 +160,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="d-block fw-bold fs-6 mb-2">Lampiran</label>
+                                    <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
@@ -179,8 +183,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Update</button>
-                                    <a href="{{ route('ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Ubah</button>
+                                    <a href="{{ route('assignedTicket.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                         </div>
@@ -190,8 +194,8 @@
         </div>
     </div>
 
-            {{-- CKEditor CDN --}}
-            <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    {{-- CKEditor CDN --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

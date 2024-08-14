@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Department;
+namespace App\Http\Controllers\Sysadmin;
 
 use App\Http\Controllers\Controller;
 use App\Exports\TicketsExport;
@@ -22,12 +22,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Facades\Excel;
 
-class AssignedTicketController extends Controller
+class AssignedSysadminController extends Controller
 {
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
@@ -37,18 +37,18 @@ class AssignedTicketController extends Controller
         $categories = Category::all(); // Ambil semua kategori untuk dropdown filter
         $priorities = Priority::all(); // Ambil semua prioritas untuk dropdown filter
 
-        return view('dashboard.department.assigned-ticket.index', compact('tickets', 'statuses', 'categories', 'priorities'));
+        return view('dashboard.sysadmin.assigned-ticket.index', compact('tickets', 'statuses', 'categories', 'priorities'));
     }
 
 
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
+        $users_s = User::role('User')
             ->get();
 
-        // $assignTo = User::role('Department')
-        //     ->get();
+        $assignTo = User::role(['DBA', 'SysAdmin'])
+            ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -56,7 +56,7 @@ class AssignedTicketController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -67,11 +67,11 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.department.assigned-ticket.show',
+            'dashboard.sysadmin.assigned-ticket.show',
             compact(
                 'ticket',
                 'logs',
-                'customers',
+                'users_s',
                 'priorities',
                 'statuses',
                 'categories',
@@ -84,10 +84,10 @@ class AssignedTicketController extends Controller
     public function edit($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
+        $users_s = User::role('User')
             ->get();
 
-        $assignTo = User::role('Tenaga Ahli')
+        $assignTo = User::role(['DBA', 'SysAdmin'])
             ->get();
 
         $priorities = Priority::all();
@@ -101,10 +101,10 @@ class AssignedTicketController extends Controller
             ->get();
 
         return view(
-            'dashboard.department.assigned-ticket.edit',
+            'dashboard.sysadmin.assigned-ticket.edit',
             compact(
                 'ticket',
-                'customers',
+                'user_s',
                 'assignTo',
                 'priorities',
                 'statuses',
@@ -157,7 +157,7 @@ class AssignedTicketController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
-                'h_customer' => $ticket->customer,
+                'h_users' => $ticket->customer,
                 'h_assign_to' => $ticket->assign_to,
                 'h_solution' => $ticket->solution,
                 'h_priority_id' => $ticket->priority_id,
@@ -247,7 +247,7 @@ class AssignedTicketController extends Controller
             $assignedDepartmentId = $request->assign_to;
 
             // Notifikasi
-            $users = User::role(['Customer'])->where('id', $assignedDepartmentId)->get();
+            $users = User::role(['User'])->where('id', $assignedDepartmentId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [
@@ -303,7 +303,7 @@ class AssignedTicketController extends Controller
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
@@ -312,7 +312,7 @@ class AssignedTicketController extends Controller
 
         $statuses = Status::all(); // Semua status untuk dropdown filter
 
-        return view('dashboard.department.assigned-ticket.completed', compact('tickets', 'statuses'));
+        return view('dashboard.sysadmin.assigned-ticket.completed', compact('tickets', 'statuses'));
     }
 
     public function export(Request $request)
