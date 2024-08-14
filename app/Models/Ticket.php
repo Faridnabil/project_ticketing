@@ -103,4 +103,10 @@ class Ticket extends Model
     {
         return $this->belongsTo(CityOrRegency::class, 'city_or_regency_id');
     }
+
+    public function latestHistory()
+    {
+        return $this->hasOne(HistoryTicket::class, 'h_no_ticket', 'no_ticket')
+            ->latest('created_at');
+    }
 }

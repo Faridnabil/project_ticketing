@@ -100,7 +100,8 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Aksi</th>
+                                <th class="min-w-70px">Keterangan</th>
+                                <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -227,6 +228,23 @@
                                                     @endif
                                                 </div>
                                             </td>
+
+                                            <td>
+                                                @if ($ticket->latestHistory)
+                                                    @php
+                                                        $updatedByUser = App\Models\User::find(
+                                                            $ticket->latestHistory->status_changedBy,
+                                                        );
+                                                    @endphp
+
+                                                    {{ $updatedByUser->name }}
+                                                @else
+                                                    -
+                                                @endif
+                                                :
+                                                {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
+                                            </td>
+
                                             <!--begin::Action=-->
                                             <td>
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
