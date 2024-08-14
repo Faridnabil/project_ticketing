@@ -319,21 +319,30 @@ class TicketUserController extends Controller
             $comment->updated_at = null;
             $comment->save();
 
-            // Notifikasi untuk pengguna dengan peran 'Tenaga Ahli'
+            // Notifikasi untuk pengguna dengan peran 'SysAdmin' dan 'DBA'
             $tenagaAhliUsers = User::role(['SysAdmin', 'DBA'])->get();
             $authenticatedUserName = Auth::user()->name;
 
-            $notificationDataForTenagaAhli = [
-                'name' => $authenticatedUserName,
-                'body' => 'Ada komentar baru pada tiket anda',
-                'thanks' => 'Terimakasih',
-                'Text' => 'Tolong cek kembali',
-                'Url' => url('/department/assignedTicket/' . $comment->ticket_id),
-                'customer_id' => rand(1111, 9999),
-                'type' => 'comment',
-            ];
+            foreach ($tenagaAhliUsers as $user) {
+                $role = $user->getRoleNames()->first(); // Assuming the user has only one role
 
-            Notification::send($tenagaAhliUsers, new CommentCustomer($notificationDataForTenagaAhli));
+                $url = match ($role) {
+                    'SysAdmin' => url('/sysadmin/assignedSysadmin/' . $comment->ticket_id),
+                    'DBA' => url('/dba/assignedDba/' . $comment->ticket_id),
+                };
+
+                $notificationDataForTenagaAhli = [
+                    'name' => $authenticatedUserName,
+                    'body' => 'Ada komentar baru pada tiket anda',
+                    'thanks' => 'Terimakasih',
+                    'Text' => 'Tolong cek kembali',
+                    'Url' => $url,
+                    'customer_id' => rand(1111, 9999),
+                    'type' => 'comment',
+                ];
+
+                Notification::send($user, new CommentCustomer($notificationDataForTenagaAhli));
+            }
 
             DB::commit();
 
@@ -347,6 +356,7 @@ class TicketUserController extends Controller
             return back()->with('error', 'Komentar anda tidak tersimpan!');
         }
     }
+
 
     public function completedTickets()
     {

@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
-                                        <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100" method="POST" action="{{ route('unassignedTickets.store') }}" enctype="multipart/form-data" novalidate>
+                                        <form class="row g-3 mt-0 needs-validation d-flex align-items-center w-100" method="POST" action="{{ route('sysadmin.unassignedTickets.store') }}" enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="assign_to" value="{{ $ticket->customer }}">

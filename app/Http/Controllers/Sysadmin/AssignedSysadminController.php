@@ -104,7 +104,7 @@ class AssignedSysadminController extends Controller
             'dashboard.sysadmin.assigned-ticket.edit',
             compact(
                 'ticket',
-                'user_s',
+                'users_s',
                 'assignTo',
                 'priorities',
                 'statuses',
@@ -157,7 +157,7 @@ class AssignedSysadminController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
-                'h_users' => $ticket->customer,
+                'h_users' => $ticket->t_users,
                 'h_assign_to' => $ticket->assign_to,
                 'h_solution' => $ticket->solution,
                 'h_priority_id' => $ticket->priority_id,
@@ -225,7 +225,7 @@ class AssignedSysadminController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('assignedSysadmin.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());

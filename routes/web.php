@@ -113,11 +113,11 @@ Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
     Route::get('/sysadmin/unassignedTicket', [UnassignedSysadminController::class, 'index'])->name('unassignedSysadmin.index');
     Route::get('/sysadmin/unassignedTicketShow/{id}', [UnassignedSysadminController::class, 'show'])->name('unassignedSyasadmin.show');
 
-    Route::post('/sysadmin/unassignedTicketStore', [UnassignedSysadminController::class, 'store_comment'])->name('unassignedTickets.store');
+    Route::post('/sysadmin/unassignedTicketStore', [UnassignedSysadminController::class, 'store_comment'])->name('sysadmin.unassignedTickets.store');
     Route::put('/sysadmin/unassignedTicketUpdate/{id}', [UnassignedSysadminController::class, 'update_comment'])->name('unassignedTickets.update');
 
-    Route::post('/sysadmin/assignedTicketStore', [AssignedSysadminController::class, 'store_comment'])->name('assignedTickets.store');
-    Route::put('/sysadmin/assignedTicketUpdate/{id}', [AssignedSysadminController::class, 'update_comment'])->name('assignedTickets.update');
+    Route::post('/sysadmin/assignedTicketStore', [AssignedSysadminController::class, 'store_comment'])->name('sysadmin.assignedTickets.store');
+    Route::put('/sysadmin/assignedTicketUpdate/{id}', [AssignedSysadminController::class, 'update_comment'])->name('sysadmin.assignedTickets.update');
     Route::get('/sysadmin/completed-tickets', [AssignedSysadminController::class, 'completedTickets'])->name('sysadmin.completed-tickets');
     Route::get('/sysadmin/export-tickets', [AssignedSysadminController::class, 'export'])->name('sysadmin.tickets.export');
 
@@ -129,21 +129,21 @@ Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
     Route::delete('sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'destroy'])->name('sysadmin.incidental-activities.destroy');
 
 
-    Route::post('/request-assignment/{ticket}', [UnassignedSysadminController::class, 'request_assignment'])->name('sysadmin.unassignedTicket.requestAssignment');
+    Route::post('sysadmin/request-assignment/{ticket}', [UnassignedSysadminController::class, 'request_assignment'])->name('sysadmin.unassignedTicket.requestAssignment');
 });
 
 Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
     Route::get('/dba/dashboard', [HomeDBAController::class, 'index'])->name('dba.dashboard.index');
 
     Route::resources([
-        '/dba/assignedTicket' => AssignedDbaController::class,
+        '/dba/assignedDba' => AssignedDbaController::class,
     ]);
 
 
     Route::get('/dba/unassignedTicket', [UnassignedDbaController::class, 'index'])->name('unassignedDba.index');
     Route::get('/dba/unassignedTicketShow/{id}', [UnassignedDbaController::class, 'show'])->name('unassignedDba.show');
 
-    Route::post('/dba/unassignedTicketStore', [UnassignedDbaController::class, 'store_comment'])->name('unassignedTickets.store');
+    Route::post('/dba/unassignedTicketStore', [UnassignedDbaController::class, 'store_comment'])->name('dba.unassignedTickets.store');
     Route::put('/dba/unassignedTicketUpdate/{id}', [UnassignedDbaController::class, 'update_comment'])->name('unassignedTickets.update');
 
     Route::post('/dba/assignedTicketStore', [AssignedDbaController::class, 'store_comment'])->name('assignedTickets.store');
@@ -159,5 +159,5 @@ Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
     Route::delete('dba/incidental-activities/{id}', [IncidentalDbaController::class, 'destroy'])->name('dba.incidental-activities.destroy');
 
 
-    Route::post('/request-assignment/{ticket}', [UnassignedDbaController::class, 'request_assignment'])->name('dba.unassignedTicket.requestAssignment');
+    Route::post('dba/request-assignment/{ticket}', [UnassignedDbaController::class, 'request_assignment'])->name('dba.unassignedTicket.requestAssignment');
 });

@@ -124,10 +124,10 @@ class UnassignedDbaController extends Controller
             $comment->updated_at = null;
             $comment->save();
 
-            $assignedDepartmentId = $request->assign_to;
+            $assignedSysdbaId = $request->assign_to;
 
             // Notifikasi
-            $users = User::role(['User'])->where('id', $assignedDepartmentId)->get();
+            $users = User::role(['User'])->where('id', $assignedSysdbaId)->get();
             $authenticatedUserName = Auth::user()->name;
 
             $notificationData = [
