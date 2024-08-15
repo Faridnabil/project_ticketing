@@ -27,7 +27,7 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
 
     public function query()
     {
-        $query = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser')
+        $query = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($q) {
                 $q->where('id', $this->user_id);
             })
@@ -66,7 +66,7 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
         return [
             $this->rowNumber++,                 // Tambahkan nomor urut
             $ticket->no_ticket,
-            $ticket->customers->name,
+            $ticket->user_s->name,
             $ticket->title,
             $ticket->category->category_name,
             $ticket->priority->priority_name,

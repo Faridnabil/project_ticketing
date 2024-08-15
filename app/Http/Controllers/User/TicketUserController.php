@@ -257,6 +257,57 @@ class TicketUserController extends Controller
             // Update tiket dengan data baru
             $ticket->update($validate);
 
+            // Ambil status tiket berdasarkan nama status
+            $statusName = $ticket->status->status_name;
+
+            // Ambil nama pengguna yang ditugaskan
+            $authenticatedUserName = Auth::user()->name;
+            $assignedUser = User::find($ticket->assign_to);
+
+            if ($statusName == 'Selesai') {
+                // Ambil semua pengguna dengan role Admin
+                $adminUsers = User::role('Admin')->get();
+
+                if ($adminUsers->isNotEmpty()) {
+                    $notificationDataForAdmins = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket telah diselesaikan oleh User.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek tiket yang telah diselesaikan.',
+                        'Url' => url('/admin/ticket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
+
+                    // Kirim notifikasi ke semua pengguna Admin
+                    Notification::send($adminUsers, new NotificationCustomer($notificationDataForAdmins));
+                }
+
+                if ($assignedUser) {
+                    // Tentukan URL berdasarkan peran pengguna yang ditugaskan
+                    $url = '';
+                    if ($assignedUser->hasRole('DBA')) {
+                        $url = url('/dba/assignedDba');
+                    } elseif ($assignedUser->hasRole('SysAdmin')) {
+                        $url = url('/sysadmin/assignedSysadmin');
+                    }
+
+                    $notificationDataForAssignedUser = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket telah diselesaikan oleh User.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek tiket yang ditugaskan kepada anda.',
+                        'Url' => $url,
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
+
+                    // Kirim notifikasi ke pengguna yang ditugaskan
+                    Notification::send($assignedUser, new NotificationCustomer($notificationDataForAssignedUser));
+                }
+            }
+
+
             // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,

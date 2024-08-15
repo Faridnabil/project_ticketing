@@ -16,6 +16,7 @@ use App\Notifications\CommentDepartment;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
 use App\Notifications\NotificationDepartment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -150,34 +151,50 @@ class AssignedDbaController extends Controller
             // Update tiket dengan data baru
             $ticket->update($validate);
 
+            // ------ Notifikasi --------------
+            $statusName = $ticket->status->status_name;
 
-            // Notifikasi untuk pengguna yang ditugaskan
+            // Ambil nama pengguna yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
-            $assignedUser = User::find($ticket->assign_to);
 
-            if ($assignedUser) {
-                // Tentukan URL berdasarkan peran pengguna yang ditugaskan
-                $url = '';
-                if ($assignedUser->hasRole('DBA')) {
-                    $url = url('/dba/assignedDba');
-                } elseif ($assignedUser->hasRole('SysAdmin')) {
-                    $url = url('/sysadmin/assignedSysadmin');
+            if ($statusName == 'Proses') {
+                // Ambil semua pengguna dengan role Admin
+                $adminUsers = User::role('Admin')->get();
+
+                if ($adminUsers->isNotEmpty()) {
+                    $notificationDataForAdmins = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket diterima dan sedang diproses.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek perkembangan tiket.',
+                        'Url' => url('/admin/ticket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_in_progress',
+                    ];
+
+                    // Kirim notifikasi ke semua pengguna Admin
+                    Notification::send($adminUsers, new NotificationCustomer($notificationDataForAdmins));
                 }
+            } elseif ($statusName == 'Selesai') {
+                // Cek apakah statusnya "Selesai"
+                $tUsers = User::find($ticket->t_users);
 
-                $notificationDataForAssignedUser = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket baru telah ditugaskan kepada anda.',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Silakan cek tiket yang ditugaskan kepada anda.',
-                    'Url' => $url,
-                    'ticket_id' => $ticket->no_ticket,
-                    'type' => 'ticket_assigned',
-                ];
+                if ($tUsers) {
+                    // Data notifikasi untuk pengguna yang memiliki tiket (t_users)
+                    $notificationDataForTUsers = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket yang anda ajukan telah selesai.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek hasilnya.',
+                        'Url' => url('/users/myTicket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
 
-                // Kirim notifikasi ke pengguna yang ditugaskan
-                Notification::send($assignedUser, new NotificationCustomer($notificationDataForAssignedUser));
+                    // Kirim notifikasi ke pengguna yang memiliki tiket
+                    Notification::send($tUsers, new NotificationCustomer($notificationDataForTUsers));
+                }
             }
-
 
             // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
@@ -205,6 +222,7 @@ class AssignedDbaController extends Controller
     }
 
 
+
     public function store_comment(Request $request)
     {
         DB::beginTransaction();
@@ -228,7 +246,7 @@ class AssignedDbaController extends Controller
                 'body' => 'Ada komentar baru pada tiket anda',
                 'thanks' => 'Terimakasih',
                 'Text' => 'Tolong cek kembali',
-                'Url' => url('/customer/myTicket/' . $comment->ticket_id),
+                'Url' => url('/users/myTicket/' . $comment->ticket_id),
                 'department_id' => rand(1111, 9999),
                 'type' => 'comment', // Menambahkan properti 'type'
             ];
@@ -248,30 +266,6 @@ class AssignedDbaController extends Controller
         }
     }
 
-    public function update_comment(Request $request, $id)
-    {
-        // Cari komentar berdasarkan ID
-        $comment = Comment::find($id);
-
-        // Pastikan komentar ditemukan
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Comment not found.');
-        }
-
-        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
-        $ticket = Ticket::find($request->ticket_id);
-        if (!$ticket) {
-            return redirect()->back()->with('error', 'Ticket not found.');
-        }
-
-        // Perbarui atribut-atribut komentar
-        $comment->ticket_id = $request->ticket_id;
-        $comment->user_id = auth()->id();
-        $comment->message = $request->message;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment updated successfully!');
-    }
 
     public function completedTickets()
     {
@@ -294,6 +288,13 @@ class AssignedDbaController extends Controller
         $end_date = $request->input('end_date');
         $user_id = auth()->user()->id;
 
-        return Excel::download(new TicketsExport($start_date, $end_date, $user_id), 'tickets.xlsx');
+        // Mendapatkan tanggal saat ini dengan format 'd-m-Y'
+        $currentDate = Carbon::now()->format('d-m-Y');
+
+        // Menyusun nama file dengan format 'laporan-tanggal_export.xlsx'
+        $fileName = 'Laporan Tiket -' . $currentDate . '.xlsx';
+
+        // Melakukan export dan men-download file dengan nama yang telah disusun
+        return Excel::download(new TicketsExport($start_date, $end_date, $user_id), $fileName);
     }
 }

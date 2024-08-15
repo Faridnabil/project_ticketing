@@ -27,7 +27,7 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
 
     public function query()
     {
-        $query = Ticket::query()->with('status', 'category', 'priority', 'customers', 'assignTo', 'statusChangedByUser');
+        $query = Ticket::query()->with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser');
 
         if ($this->request->has('category_id') && $this->request->category_id) {
             $query->where('category_id', $this->request->category_id);
@@ -76,7 +76,7 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
             $this->rowNumber++,
             $ticket->no_ticket,
             $ticket->category->category_name,
-            $ticket->customers->name,
+            $ticket->user_s->name,
             $ticket->assignTo->name,
             $ticket->priority->priority_name,
             $ticket->created_at->format('d F Y'),

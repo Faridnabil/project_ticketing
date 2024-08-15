@@ -30,6 +30,11 @@ class UnassignedSysadminController extends Controller
         return view('dashboard.sysadmin.unassigned-ticket.index', compact('tickets'));
     }
 
+    public function countUnassignedTickets()
+    {
+        return Ticket::whereDoesntHave('assignTo')->count();
+    }
+
     public function request_assignment(Request $request, Ticket $ticket)
     {
         // Pastikan user yang sedang login memiliki role 'Department' dan tiket belum diassign ke siapa pun
