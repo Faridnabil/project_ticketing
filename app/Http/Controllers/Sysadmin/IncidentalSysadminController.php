@@ -71,7 +71,7 @@ class IncidentalSysadminController extends Controller
             'start_time' => 'required|date',
             'end_time' => 'required|date',
             'executor' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
+            'sysdba' => 'required|string|max:255',
             'mitigation' => 'required|string',
             'impact' => 'required|string',
             'status_id' => 'required|exists:statuses,id',
@@ -80,7 +80,7 @@ class IncidentalSysadminController extends Controller
         ]);
 
         $activity = IncidentalActivity::findOrFail($id);
-        $data = $request->only(['title', 'description', 'category_id', 'start_time', 'end_time', 'executor', 'department', 'mitigation', 'impact', 'status_id']);
+        $data = $request->only(['title', 'description', 'category_id', 'start_time', 'end_time', 'executor', 'sysdba', 'mitigation', 'impact', 'status_id']);
 
         // Proses file yang dihapus
         $removedFiles = $request->input('removed_files') ? explode(',', $request->input('removed_files')) : [];

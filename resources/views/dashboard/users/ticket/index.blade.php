@@ -5,30 +5,6 @@
 @endsection
 
 @section('content')
-    <!--begin::Toolbar-->
-    <div class="toolbar" id="kt_toolbar">
-        <!--begin::Container-->
-        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-            <!--begin::Page title-->
-            <div data-kt-place="true" data-kt-place-mode="prepend"
-                data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
-                <!--begin::Title-->
-                {{-- <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Tiket Saya
-                    <!--begin::Separator-->
-                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-                    <!--end::Separator-->
-                    <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Tiket Saya</small>
-                    <!--end::Description-->
-                </h1> --}}
-                <!--end::Title-->
-            </div>
-            <!--end::Page title-->
-        </div>
-        <!--end::Container-->
-    </div>
-    <!--end::Toolbar-->
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -36,13 +12,6 @@
             <!--begin::Card-->
             <div class="card">
                 <div class="card-header border-0 pt-6">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                    </div>
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-
-                    <!--end::Card toolbar-->
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Tiket Saya</h4>
                         <div class="d-flex align-items-center">
@@ -107,21 +76,21 @@
                                                 <td class="actions text-center">
                                                     @can('Show Ticket')
                                                         {{-- @if ($ticket->status->status_name != 'Tertunda') --}}
-                                                            <a class="menu-link ms-3"
-                                                                href="{{ route('myTicket.show', $ticket->id) }}" type="button">
-                                                                <span class="menu-icon" style="fill: #1218ca">
-                                                                    <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                                                                    <span class="svg-icon svg-icon-2">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px"
-                                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                            <path
-                                                                                d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
-                                                                            <circle cx="12" cy="12" r="4" />
-                                                                        </svg>
-                                                                    </span>
-                                                                    <!--end::Svg Icon-->
+                                                        <a class="menu-link ms-3"
+                                                            href="{{ route('myTicket.show', $ticket->id) }}" type="button">
+                                                            <span class="menu-icon" style="fill: #1218ca">
+                                                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                                <span class="svg-icon svg-icon-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                        <path
+                                                                            d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                                        <circle cx="12" cy="12" r="4" />
+                                                                    </svg>
                                                                 </span>
-                                                            </a>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                        </a>
                                                         {{-- @endif --}}
                                                     @endcan
                                                     @if ($ticket->status_id != null)
