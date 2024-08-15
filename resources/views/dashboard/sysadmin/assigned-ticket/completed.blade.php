@@ -81,7 +81,7 @@
                                             <!-- Selesai -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->customers->name }}</td>
+                                                <td>{{ $ticket->user_s->name }}</td>
                                                 <td>{{ $ticket->title }}</td>
                                                 <td>{{ $ticket->category->category_name }}</td>
                                                 <td class="text-center">
@@ -106,7 +106,7 @@
                                                 <td>{{ date('d F Y', strtotime($ticket->updated_at)) }}</td>
                                                 <td class="text-center">
                                                     @can('Show Ticket')
-                                                        <a href="{{ route('assignedTicket.show', $ticket->id) }}"
+                                                        <a href="{{ route('assignedSysadmin.show', $ticket->id) }}"
                                                             class="menu-link" title="Lihat">
                                                             <span class="menu-icon" style="fill: #1218ca">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -122,7 +122,7 @@
                                                             </span>
                                                         </a>
                                                     @endcan
-                                                    @if (in_array($ticket->status_id, [2, 3]))
+                                                    {{-- @if (in_array($ticket->status_id, [2, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
@@ -130,7 +130,7 @@
                                                                 Ubah
                                                             </a>
                                                         @endcan
-                                                    @endif
+                                                    @endif --}}
                                                 </td>
                                             </tr>
                                         @endif

@@ -197,7 +197,7 @@ class AssignedDbaController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('assignedDba.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());

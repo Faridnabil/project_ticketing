@@ -40,8 +40,8 @@
                         <!--begin::Body-->
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('dba.incidental-activities.store') }}"
-                                enctype="multipart/form-data" novalidate>
+                                action="{{ route('dba.incidental-activities.store') }}" enctype="multipart/form-data"
+                                novalidate>
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="title" class="form-label">Judul</label>

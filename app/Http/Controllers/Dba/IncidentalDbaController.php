@@ -61,8 +61,10 @@ class IncidentalDbaController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('dba.incidental-activities.index')->with('success', 'Activity added successfully');
+        return redirect()->route('dba.incidental-activities.index')
+            ->with('success', 'Activity added successfully');
     }
+
 
     public function edit($id)
     {
