@@ -106,7 +106,7 @@
                                                 </td>
                                                 <td class="actions text-center">
                                                     @can('Show Ticket')
-                                                        @if ($ticket->status->status_name != 'Tertunda')
+                                                        {{-- @if ($ticket->status->status_name != 'Tertunda') --}}
                                                             <a class="menu-link ms-3"
                                                                 href="{{ route('myTicket.show', $ticket->id) }}" type="button">
                                                                 <span class="menu-icon" style="fill: #1218ca">
@@ -122,7 +122,7 @@
                                                                     <!--end::Svg Icon-->
                                                                 </span>
                                                             </a>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     @endcan
                                                     @if ($ticket->status_id != null)
                                                         @if ($ticket->status->status_name != 'Selesai')

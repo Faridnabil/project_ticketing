@@ -86,7 +86,7 @@ class AssignedDbaController extends Controller
         $user_s = User::role('User')
             ->get();
 
-            $assign_to = User::role(['DBA', 'SysAdmin'])->get();
+        $assign_to = User::role(['DBA', 'SysAdmin'])->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -112,7 +112,6 @@ class AssignedDbaController extends Controller
             )
         );
     }
-
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
@@ -151,6 +150,35 @@ class AssignedDbaController extends Controller
             // Update tiket dengan data baru
             $ticket->update($validate);
 
+
+            // Notifikasi untuk pengguna yang ditugaskan
+            $authenticatedUserName = Auth::user()->name;
+            $assignedUser = User::find($ticket->assign_to);
+
+            if ($assignedUser) {
+                // Tentukan URL berdasarkan peran pengguna yang ditugaskan
+                $url = '';
+                if ($assignedUser->hasRole('DBA')) {
+                    $url = url('/dba/assignedDba');
+                } elseif ($assignedUser->hasRole('SysAdmin')) {
+                    $url = url('/sysadmin/assignedSysadmin');
+                }
+
+                $notificationDataForAssignedUser = [
+                    'name' => $authenticatedUserName,
+                    'body' => 'Tiket baru telah ditugaskan kepada anda.',
+                    'thanks' => 'Terimakasih',
+                    'Text' => 'Silakan cek tiket yang ditugaskan kepada anda.',
+                    'Url' => $url,
+                    'ticket_id' => $ticket->no_ticket,
+                    'type' => 'ticket_assigned',
+                ];
+
+                // Kirim notifikasi ke pengguna yang ditugaskan
+                Notification::send($assignedUser, new NotificationCustomer($notificationDataForAssignedUser));
+            }
+
+
             // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
@@ -168,60 +196,6 @@ class AssignedDbaController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // ------ Notifikasi --------------
-            $statusId = $validate['status_id'];
-            $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
-
-            // Ambil customer yang ditugaskan dari inputan
-            $customerId = $validate['customer'];
-            $customer = User::findOrFail($customerId);
-
-            $authenticatedUserName = Auth::user()->name;
-
-            if (in_array($status->status_name, ['Diterima', 'Proses'])) {
-                // Ambil departemen yang ditugaskan dari inputan
-                $assignedDepartmentId = $validate['assign_to'];
-                $assignedDepartment = User::findOrFail($assignedDepartmentId);
-
-                // Notifikasi untuk Customer
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
-
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-
-                // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Admin'])->where('id', $assignedDepartmentId)->get();
-
-                $notificationDataForDepartment = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket telah diambil/kerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/admin/ticket'),
-                    'admin_id' => rand(1111, 9999),
-                ];
-
-                Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
-            } elseif ($status->status_name == 'Selesai') {
-                // Notifikasi untuk Customer bahwa tiket telah dikerjakan
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah dikerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek hasilnya',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
-
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-            }
-
             DB::commit();
             return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
@@ -229,6 +203,7 @@ class AssignedDbaController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
 
     public function store_comment(Request $request)
     {

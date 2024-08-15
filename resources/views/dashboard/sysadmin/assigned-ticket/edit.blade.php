@@ -59,7 +59,7 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
                                     <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Departemen" required autofocus>
+                                        data-control="select2" data-placeholder="Pilih" required autofocus>
                                         <option disabled>Ditugaskan kepada</option>
                                         @foreach ($assignTo as $assign)
                                             <option value="{{ $assign->id }}"

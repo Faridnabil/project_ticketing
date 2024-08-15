@@ -106,7 +106,7 @@
                                                 <td>{{ date('d F Y', strtotime($ticket->updated_at)) }}</td>
                                                 <td class="text-center">
                                                     @can('Show Ticket')
-                                                        <a href="{{ route('assignedTicket.show', $ticket->id) }}"
+                                                        <a href="{{ route('assignedDba.show', $ticket->id) }}"
                                                             class="menu-link" title="Lihat">
                                                             <span class="menu-icon" style="fill: #1218ca">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -125,7 +125,7 @@
                                                     @if (in_array($ticket->status_id, [2, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
-                                                            <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
+                                                            <a href="{{ route('assignedDba.edit', $ticket->id) }}"
                                                                 class="btn btn-primary px-6 align-self-center text-nowrap mb-2">
                                                                 Ubah
                                                             </a>

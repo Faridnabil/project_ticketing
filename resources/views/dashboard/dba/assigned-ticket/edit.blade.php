@@ -25,7 +25,7 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('assignedTicket.update', $ticket->id) }}" enctype="multipart/form-data"
+                                action="{{ route('assignedDba.update', $ticket->id) }}" enctype="multipart/form-data"
                                 novalidate>
                                 @csrf
                                 @method('PUT')
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Pemilik</label>
-                                    <select name="customer" class="form-control @error('customer') is-invalid @enderror"
+                                    <select name="t_users" class="form-control @error('t_users') is-invalid @enderror"
                                         required autofocus style="pointer-events: none">
                                         <option value="" disabled>Pilih Pemilik</option>
                                         @foreach ($user_s as $user)
@@ -184,7 +184,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Ubah</button>
-                                    <a href="{{ route('assignedTicket.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ route('assignedDba.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                         </div>

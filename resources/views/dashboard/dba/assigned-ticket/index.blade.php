@@ -115,7 +115,7 @@
                                                 </td>
                                                 <td>
                                                     @can('Show Ticket')
-                                                        <a href="{{ route('assignedTicket.show', $ticket->id) }}" title="Lihat"
+                                                        <a href="{{ route('assignedDba.show', $ticket->id) }}" title="Lihat"
                                                             class="menu-link ms-3">
                                                             <span class="menu-icon" style="fill: #1218ca">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -134,7 +134,7 @@
                                                     @if (in_array($ticket->status_id, [2, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
-                                                            <a href="{{ route('assignedTicket.edit', $ticket->id) }}"
+                                                            <a href="{{ route('assignedDba.edit', $ticket->id) }}"
                                                                 title="Edit" class="menu-link ms-3">
                                                                 <span class="menu-icon" style="fill: #bd6710">
                                                                     <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
@@ -177,7 +177,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row g-3" method="GET" action="{{ route('assignedTicket.index') }}"
+                    <form class="row g-3" method="GET" action="{{ route('assignedDba.index') }}"
                         class="d-flex flex-wrap justify-content-between">
                         <div class="col-md-4">
                             <label for="category_id" class="form-label">Kategori</label>

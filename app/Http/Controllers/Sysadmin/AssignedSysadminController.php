@@ -170,58 +170,51 @@ class AssignedSysadminController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
+            $ticket->update($validate);
+
             // ------ Notifikasi --------------
-            $statusId = $validate['status_id'];
-            $status = Status::findOrFail($statusId); // Asumsikan ada model Status yang memetakan id status ke nama status
+            $statusName = $ticket->status->status_name;
 
-            // Ambil customer yang ditugaskan dari inputan
-            $customerId = $validate['customer'];
-            $customer = User::findOrFail($customerId);
-
+            // Ambil nama pengguna yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
 
-            if (in_array($status->status_name, ['Diterima', 'Proses'])) {
-                // Ambil departemen yang ditugaskan dari inputan
-                $assignedDepartmentId = $validate['assign_to'];
-                $assignedDepartment = User::findOrFail($assignedDepartmentId);
+            if ($statusName == 'Proses') {
+                // Ambil semua pengguna dengan role Admin
+                $adminUsers = User::role('Admin')->get();
 
-                // Notifikasi untuk Customer
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
+                if ($adminUsers->isNotEmpty()) {
+                    $notificationDataForAdmins = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket diterima dan sedang diproses.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek perkembangan tiket anda.',
+                        'Url' => url('/admin/ticket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_in_progress',
+                    ];
 
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+                    // Kirim notifikasi ke semua pengguna Admin
+                    Notification::send($adminUsers, new NotificationCustomer($notificationDataForAdmins));
+                }
+            } elseif ($statusName == 'Selesai') {
+                // Cek apakah statusnya "Selesai"
+                $tUsers = User::find($ticket->t_users);
 
-                // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Admin'])->where('id', $assignedDepartmentId)->get();
+                if ($tUsers) {
+                    // Data notifikasi untuk pengguna yang memiliki tiket (t_users)
+                    $notificationDataForTUsers = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket yang anda ajukan telah selesai.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek hasilnya.',
+                        'Url' => url('/users/myTicket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
 
-                $notificationDataForDepartment = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket telah diambil/kerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/admin/ticket'),
-                    'admin_id' => rand(1111, 9999),
-                ];
-
-                Notification::send($assignedDepartmentUsers, new NotificationAdmin($notificationDataForDepartment));
-            } elseif ($status->status_name == 'Selesai') {
-                // Notifikasi untuk Customer bahwa tiket telah dikerjakan
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah dikerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek hasilnya',
-                    'Url' => url('/customer/myTicket'),
-                    'customer_id' => rand(1111, 9999),
-                ];
-
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+                    // Kirim notifikasi ke pengguna yang memiliki tiket
+                    Notification::send($tUsers, new NotificationCustomer($notificationDataForTUsers));
+                }
             }
 
             DB::commit();

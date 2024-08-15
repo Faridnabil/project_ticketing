@@ -219,8 +219,76 @@ class TicketController extends Controller
             $allAttachments = array_merge($existingAttachments, $newAttachments);
             $validate['attachments'] = json_encode($allAttachments);
 
+            // --- Notifikasi
             // Update tiket dengan data baru
             $ticket->update($validate);
+
+            // Ambil status tiket berdasarkan nama status
+            $statusName = $ticket->status->status_name;
+
+            // Ambil nama pengguna yang ditugaskan
+            $authenticatedUserName = Auth::user()->name;
+            $assignedUser = User::find($ticket->assign_to);
+
+            if (in_array($statusName, ['Diterima', 'Proses'])) {
+                if ($assignedUser) {
+                    // Tentukan URL berdasarkan peran pengguna yang ditugaskan
+                    $url = '';
+                    if ($assignedUser->hasRole('DBA')) {
+                        $url = url('/dba/assignedDba');
+                    } elseif ($assignedUser->hasRole('SysAdmin')) {
+                        $url = url('/sysadmin/assignedSysadmin');
+                    }
+
+                    $notificationDataForAssignedUser = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket baru telah ditugaskan kepada anda.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek tiket yang ditugaskan kepada anda.',
+                        'Url' => $url,
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_assigned',
+                    ];
+
+                    // Kirim notifikasi ke pengguna yang ditugaskan
+                    Notification::send($assignedUser, new NotificationCustomer($notificationDataForAssignedUser));
+                }
+
+                // Notifikasi untuk pengguna yang memiliki tiket (t_users)
+                $tUsers = User::find($ticket->t_users);
+
+                if ($tUsers) {
+                    $notificationDataForCustomer = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket anda sudah diterima dan sedang diproses.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek perkembangan tiket anda.',
+                        'Url' => url('/users/myTicket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_in_progress',
+                    ];
+
+                    Notification::send($tUsers, new NotificationCustomer($notificationDataForCustomer));
+                }
+            } elseif ($statusName == 'Selesai') {
+                // Jika status_name adalah 'Selesai', kirim notifikasi ke pengguna yang memiliki tiket (t_users)
+                $tUsers = User::find($ticket->t_users);
+
+                if ($tUsers) {
+                    $notificationDataForTUsers = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket yang anda ajukan telah selesai.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek hasilnya.',
+                        'Url' => url('/users/myTicket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
+
+                    // Kirim notifikasi ke pengguna yang ada di field t_users
+                    Notification::send($tUsers, new NotificationCustomer($notificationDataForTUsers));
+                }
+            }
 
             // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
@@ -247,6 +315,7 @@ class TicketController extends Controller
         }
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
@@ -269,60 +338,60 @@ class TicketController extends Controller
         return redirect()->route('ticket.index')->with('success', 'Tiket Berhasil Dihapus.');
     }
     public function approve_assignment(Request $request, RequestAssignment $requestAssignment)
-{
-    if (Auth::user()->hasRole('Admin')) {
-        $ticket = $requestAssignment->ticket;
-        $ticket->assign_to = $requestAssignment->user_id;
+    {
+        if (Auth::user()->hasRole('Admin')) {
+            $ticket = $requestAssignment->ticket;
+            $ticket->assign_to = $requestAssignment->user_id;
 
-        // Ubah status tiket menjadi "Diterima"
-        $statusDiterima = Status::where('status_name', 'Diterima')->first();
-        if ($statusDiterima) {
-            $ticket->status_id = $statusDiterima->id;
+            // Ubah status tiket menjadi "Diterima"
+            $statusDiterima = Status::where('status_name', 'Diterima')->first();
+            if ($statusDiterima) {
+                $ticket->status_id = $statusDiterima->id;
+            }
+
+            $ticket->save();
+
+            $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
+            $requestAssignment->save();
+
+            // Notifikasi untuk Tenaga Ahli yang ditugaskan
+            $authenticatedUserName = Auth::user()->name;
+            $assignedExpertUsers = User::role(['SysAdmin', 'DBA'])->where('id', $requestAssignment->user_id)->get();
+
+            $notificationDataForExpert = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang anda ajukan telah diterima dan sedang diproses.',
+                'thanks' => 'Terimakasih',
+                'Text' => 'Tolong cek kembali tiket anda.',
+                'Url' => url('/department/assignedTicket/' . $ticket->id),
+                'ticket_id' => $ticket->no_ticket,
+                'type' => 'assignment_approved',
+            ];
+
+            Notification::send($assignedExpertUsers, new NotificationCustomer($notificationDataForExpert));
+
+            // Catat riwayat perubahan status tiket
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' =>  $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_users' => $ticket->t_users,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => $ticket->attachments,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
+
+            return redirect()->back()->with('success', 'Tiket berhasil diassign.');
         }
 
-        $ticket->save();
-
-        $requestAssignment->status_id = 2; // status_id 2 untuk 'Approved'
-        $requestAssignment->save();
-
-        // Notifikasi untuk Tenaga Ahli yang ditugaskan
-        $authenticatedUserName = Auth::user()->name;
-        $assignedExpertUsers = User::role(['SysAdmin', 'DBA'])->where('id', $requestAssignment->user_id)->get();
-
-        $notificationDataForExpert = [
-            'name' => $authenticatedUserName,
-            'body' => 'Tiket yang anda ajukan telah diterima dan sedang diproses.',
-            'thanks' => 'Terimakasih',
-            'Text' => 'Tolong cek kembali tiket anda.',
-            'Url' => url('/department/assignedTicket/' . $ticket->id),
-            'ticket_id' => $ticket->no_ticket,
-            'type' => 'assignment_approved',
-        ];
-
-        Notification::send($assignedExpertUsers, new NotificationCustomer($notificationDataForExpert));
-
-        // Catat riwayat perubahan status tiket
-        DB::table('history_tickets')->insert([
-            'h_no_ticket' =>  $ticket->no_ticket,
-            'h_title' => $ticket->title,
-            'h_users' => $ticket->t_users   ,
-            'h_assign_to' => $ticket->assign_to,
-            'h_solution' => $ticket->solution,
-            'h_priority_id' => $ticket->priority_id,
-            'h_status_id' => $ticket->status_id,
-            'h_category_id' => $ticket->category_id,
-            'h_description' => $ticket->description,
-            'h_attachments' => $ticket->attachments,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'status_changedBy' => Auth::user()->id,
-        ]);
-
-        return redirect()->back()->with('success', 'Tiket berhasil diassign.');
+        return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
     }
-
-    return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
-}
 
     // method to download tickets in excel
     public function export(Request $request)

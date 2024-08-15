@@ -244,7 +244,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
-                                href="{{ route('assignedTicket.index') }}">
+                                href="{{ route('assignedDba.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
                             </a>
