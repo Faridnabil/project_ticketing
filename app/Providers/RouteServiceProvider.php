@@ -60,6 +60,8 @@ class RouteServiceProvider extends ServiceProvider
             return '/siak-dev/dashboard';
         } elseif ($user->hasRole('Pejabat')) {
             return '/pejabat/dashboard';
+        } elseif ($user->hasRole('Teknisi Hardware')) {
+            return '/teknisi-hardware/dashboard';
         }
 
         return self::HOME;

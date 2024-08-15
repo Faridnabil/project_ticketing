@@ -126,7 +126,7 @@ class AttendanceHelpdeskController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             //    dd($th->getMessage()); // Menampilkan pesan error untuk debugging
-            return back()->with("error", $th->getMessage());
+            return back()->with("error", 'Check Out Gagal!.');
         }
     }
 

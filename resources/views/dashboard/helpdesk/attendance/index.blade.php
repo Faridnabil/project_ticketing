@@ -207,6 +207,7 @@
                                                     <input type="text"
                                                         class="form-control @error('name') is-invalid @enderror"
                                                         id="name" name="name" required autofocus>
+
                                                     <div class="valid-feedback">
                                                         Looks good!
                                                     </div>
@@ -219,7 +220,8 @@
 
                                                 <div class="col-md-2">
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                                    <select class="form-select" id="shiftSelect" name="check_in" required autofocus>
+                                                    <select class="form-select" id="shiftSelect" name="check_in" required
+                                                        autofocus>
                                                         <option selected disabled>Opsi</option>
                                                         <option value="Shift 1">Shift 1</option>
                                                         <option value="Shift 2">Shift 2</option>
@@ -510,10 +512,12 @@
                                                                     str_ends_with($attendance->attachment, '.png'))
                                                                 <img src="{{ asset('storage/' . $attendance->attachment) }}"
                                                                     style="width: 100%; height: auto;" />
-                                                                    @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                                    <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah ini.<a
-                                                                            href="{{ Storage::url($attendance->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
-                                                                @else
+                                                            @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                                <p>File ini tidak dapat ditampilkan secara langsung di
+                                                                    browser. Silakan unduh file dibawah ini.<a
+                                                                        href="{{ Storage::url($attendance->attachment) }}"
+                                                                        download><br><br>Unduh File Sekarang</a></p>
+                                                            @else
                                                             @endif
                                                         </div><!--end modal-body-->
                                                     </div>
@@ -617,10 +621,10 @@
                             <img src="{{ Storage::url($attendance_today->attachment) }}"
                                 style="width: 100%; height: auto;" />
                         @elseif (str_ends_with($attendance_today->attachment, '.docx'))
-                            <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah ini.<a
-                                    href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh File Sekarang</a></p>
+                            <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah
+                                ini.<a href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh
+                                    File Sekarang</a></p>
                         @else
-
                         @endif
                     </div><!--end modal-body-->
                 </div>

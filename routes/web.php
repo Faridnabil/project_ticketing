@@ -28,6 +28,8 @@ use App\Http\Controllers\SiakDev\HomeSiakDevController;
 use App\Http\Controllers\SiakDev\TicketSiakDevController;
 use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
 use App\Http\Controllers\StaffSubdit\TicketStaffSubditController;
+use App\Http\Controllers\TeknisiHardware\DeviceAssetsController;
+use App\Http\Controllers\TeknisiHardware\HomeTeknisiHardwareController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +48,9 @@ Route::get('/notification', [NotificationController::class, 'sendnotification'])
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
+Route::view('/error-403', 'errors.403')->middleware('auth')->name('error-403');
+Route::view('/error-404', 'errors.404')->middleware('auth')->name('error-404');
+Route::view('/error-500', 'errors.500')->middleware('auth')->name('error-500');
 
 Route::get('/', function () {
     return redirect()->route('login'); // Mengarahkan ke halaman login
@@ -188,4 +193,14 @@ Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group
     Route::put('/pejabat/TicketUpdate/{id}', [TicketPejabatController::class, 'update_comment'])->name('tickets.update');
     Route::put('/pejabat/sendtTicket/{id}', [TicketPejabatController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/pejabat/status-ticket/{id}', [TicketPejabatController::class, 'status_ticket'])->name('tickets.statusTicket');
+});
+
+//TEKNISI HARDWARE
+Route::middleware(['verified', 'auth', 'role:Teknisi Hardware'])->name('teknisiHardware.')->group(function () {
+    Route::get('/teknisi-hardware/dashboard', [HomeTeknisiHardwareController::class, 'index'])->name('dashboard.index');
+    Route::get('/teknisi-hardware/tickets/chart', [HomeTeknisiHardwareController::class, 'getTicketChartData']);
+    Route::get('/teknisi-hardware/tickets/dailyChart', [HomeTeknisiHardwareController::class, 'getDailyTicketChartData']);
+    Route::resources([
+        '/teknisi-hardware/deviceAssets' => DeviceAssetsController::class,
+    ]);
 });
