@@ -16,7 +16,7 @@ class IncidentalActivity extends Model
         'start_time',
         'end_time',
         'executor',
-        'department',
+        'sysdba',
         'mitigation',
         'impact',
         'status_id',

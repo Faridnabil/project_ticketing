@@ -123,20 +123,20 @@
                                     @enderror
                                 </div>
 
-                                {{-- <div class="col-md-6">
-                                    <label for="department" class="form-label">Departemen</label>
-                                    <input type="text" name="department"
-                                        class="form-control @error('department') is-invalid @enderror" id="department"
-                                        value="{{ old('department') }}" required>
+                                <div class="col-md-6">
+                                    <label for="sysdba" class="form-label">Nama SysDba</label>
+                                    <input type="text" name="sysdba"
+                                        class="form-control @error('sysdba') is-invalid @enderror" id="sysdba"
+                                        value="{{ old('sysdba') }}" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-                                    @error('department')
+                                    @error('sysdba')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div> --}}
+                                </div>
 
                                 <div class="col-md-6">
                                     <label for="description" class="form-label">Deskripsi</label>

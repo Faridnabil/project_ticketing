@@ -29,16 +29,6 @@ class IncidentalSysadminController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:incidental_activity_categories,id',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date',
-            'executor' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:jpg,png,pdf,doc,docx,txt,xlsx,csv|max:2048',
-        ]);
 
         $filePath = null;
         if ($request->hasFile('file')) {
@@ -55,7 +45,7 @@ class IncidentalSysadminController extends Controller
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'executor' => $request->executor,
-            'department' => $request->department,
+            'sysdba' => $request->sysdba,
             'status_id' => $statusDefault,
             'file_path' => $filePath,
             'user_id' => Auth::id(),

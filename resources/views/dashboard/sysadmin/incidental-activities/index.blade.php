@@ -133,7 +133,7 @@
                                                     <button type="button" class="btn btn-secondary btn-sm"
                                                         data-bs-dismiss="modal">Tutup</button>
                                                     <form
-                                                        action="{{ route('department.incidental-activities.destroy', $activity->id) }}"
+                                                        action="{{ route('sysadmin.incidental-activities.destroy', $activity->id) }}"
                                                         method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

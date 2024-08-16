@@ -17,10 +17,10 @@ class CreateIncidentalActivitiesTable extends Migration
             $table->date('end_time'); // Tanggal Selesai
             $table->string('executor'); // Pelaksana Aktivitas
             $table->string('sysdba'); // Departemen/Tim
-            $table->text('mitigation'); // Mitigasi
-            $table->text('impact'); // Dampak terhadap Sistem
+            $table->text('mitigation')->nullable(); // Mitigasi
+            $table->text('impact')->nullable(); // Dampak terhadap Sistem
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete(); // Status Aktivitas
-            $table->string('file_path')->nullable(); // Path untuk File yang Diunggah
+            $table->text('file_path')->nullable(); // Path untuk File yang Diunggah
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign Key ke User
             $table->timestamps();
         });
