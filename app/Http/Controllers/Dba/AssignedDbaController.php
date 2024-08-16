@@ -245,7 +245,7 @@ class AssignedDbaController extends Controller
                 'body' => 'Ada komentar baru pada tiket anda',
                 'thanks' => 'Terimakasih',
                 'Text' => 'Tolong cek kembali',
-                'Url' => url('/customer/myTicket/' . $comment->ticket_id),
+                'Url' => url('/users/myTicket/' . $comment->ticket_id),
                 'department_id' => rand(1111, 9999),
                 'type' => 'comment', // Menambahkan properti 'type'
             ];
@@ -265,30 +265,6 @@ class AssignedDbaController extends Controller
         }
     }
 
-    public function update_comment(Request $request, $id)
-    {
-        // Cari komentar berdasarkan ID
-        $comment = Comment::find($id);
-
-        // Pastikan komentar ditemukan
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Comment not found.');
-        }
-
-        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
-        $ticket = Ticket::find($request->ticket_id);
-        if (!$ticket) {
-            return redirect()->back()->with('error', 'Ticket not found.');
-        }
-
-        // Perbarui atribut-atribut komentar
-        $comment->ticket_id = $request->ticket_id;
-        $comment->user_id = auth()->id();
-        $comment->message = $request->message;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment updated successfully!');
-    }
 
     public function completedTickets()
     {

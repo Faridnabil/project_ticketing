@@ -356,19 +356,26 @@ class TicketController extends Controller
 
             // Notifikasi untuk Tenaga Ahli yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
-            $assignedExpertUsers = User::role(['SysAdmin', 'DBA'])->where('id', $requestAssignment->user_id)->get();
+            $assignedUser = User::find($ticket->assign_to);
+
+            $url = '';
+            if ($assignedUser->hasRole('DBA')) {
+                $url = url('/dba/assignedDba');
+            } elseif ($assignedUser->hasRole('SysAdmin')) {
+                $url = url('/sysadmin/assignedSysadmin');
+            }
 
             $notificationDataForExpert = [
                 'name' => $authenticatedUserName,
                 'body' => 'Tiket yang anda ajukan telah diterima dan sedang diproses.',
                 'thanks' => 'Terimakasih',
                 'Text' => 'Tolong cek kembali tiket anda.',
-                'Url' => url('/department/assignedTicket/' . $ticket->id),
+                'Url' => $url,
                 'ticket_id' => $ticket->no_ticket,
                 'type' => 'assignment_approved',
             ];
 
-            Notification::send($assignedExpertUsers, new NotificationCustomer($notificationDataForExpert));
+            Notification::send($assignedUser, new NotificationCustomer($notificationDataForExpert));
 
             // Catat riwayat perubahan status tiket
             DB::table('history_tickets')->insert([

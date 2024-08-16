@@ -205,13 +205,21 @@
                         </li>
                     @endrole
                     @role('SysAdmin')
+                        @php
+                            $unassignedTicketsCount = app(
+                                'App\Http\Controllers\Sysadmin\UnassignedSysadminController',
+                            )->countUnassignedTickets();
+                        @endphp
+
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('unassignedSysadmin.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Belum Ditetapkan</p>
+                                <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('assignedSysadmin.index') }}">
@@ -235,11 +243,18 @@
                     @endrole
 
                     @role('DBA')
+                        @php
+                            $unassignedTicketsCount = app(
+                                'App\Http\Controllers\Sysadmin\UnassignedSysadminController',
+                            )->countUnassignedTickets();
+                        @endphp
+
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
                                 href="{{ route('unassignedDba.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Belum Ditetapkan</p>
+                                <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
