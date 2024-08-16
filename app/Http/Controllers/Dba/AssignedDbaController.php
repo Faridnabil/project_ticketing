@@ -150,34 +150,50 @@ class AssignedDbaController extends Controller
             // Update tiket dengan data baru
             $ticket->update($validate);
 
+            // ------ Notifikasi --------------
+            $statusName = $ticket->status->status_name;
 
-            // Notifikasi untuk pengguna yang ditugaskan
+            // Ambil nama pengguna yang ditugaskan
             $authenticatedUserName = Auth::user()->name;
-            $assignedUser = User::find($ticket->assign_to);
 
-            if ($assignedUser) {
-                // Tentukan URL berdasarkan peran pengguna yang ditugaskan
-                $url = '';
-                if ($assignedUser->hasRole('DBA')) {
-                    $url = url('/dba/assignedDba');
-                } elseif ($assignedUser->hasRole('SysAdmin')) {
-                    $url = url('/sysadmin/assignedSysadmin');
+            if ($statusName == 'Proses') {
+                // Ambil semua pengguna dengan role Admin
+                $adminUsers = User::role('Admin')->get();
+
+                if ($adminUsers->isNotEmpty()) {
+                    $notificationDataForAdmins = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket diterima dan sedang diproses.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek perkembangan tiket.',
+                        'Url' => url('/admin/ticket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_in_progress',
+                    ];
+
+                    // Kirim notifikasi ke semua pengguna Admin
+                    Notification::send($adminUsers, new NotificationCustomer($notificationDataForAdmins));
                 }
+            } elseif ($statusName == 'Selesai') {
+                // Cek apakah statusnya "Selesai"
+                $tUsers = User::find($ticket->t_users);
 
-                $notificationDataForAssignedUser = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket baru telah ditugaskan kepada anda.',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Silakan cek tiket yang ditugaskan kepada anda.',
-                    'Url' => $url,
-                    'ticket_id' => $ticket->no_ticket,
-                    'type' => 'ticket_assigned',
-                ];
+                if ($tUsers) {
+                    // Data notifikasi untuk pengguna yang memiliki tiket (t_users)
+                    $notificationDataForTUsers = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket yang anda ajukan telah selesai.',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Silakan cek hasilnya.',
+                        'Url' => url('/users/myTicket'),
+                        'ticket_id' => $ticket->no_ticket,
+                        'type' => 'ticket_completed',
+                    ];
 
-                // Kirim notifikasi ke pengguna yang ditugaskan
-                Notification::send($assignedUser, new NotificationCustomer($notificationDataForAssignedUser));
+                    // Kirim notifikasi ke pengguna yang memiliki tiket
+                    Notification::send($tUsers, new NotificationCustomer($notificationDataForTUsers));
+                }
             }
-
 
             // Simpan data tiket yang diupdate ke tabel history_tickets
             DB::table('history_tickets')->insert([
@@ -197,12 +213,13 @@ class AssignedDbaController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('assignedTicket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('assignedDba.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }
     }
+
 
 
     public function store_comment(Request $request)
