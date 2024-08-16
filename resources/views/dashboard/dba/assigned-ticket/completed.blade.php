@@ -122,7 +122,7 @@
                                                             </span>
                                                         </a>
                                                     @endcan
-                                                    @if (in_array($ticket->status_id, [2, 3]))
+                                                    {{-- @if (in_array($ticket->status_id, [2, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedDba.edit', $ticket->id) }}"
@@ -130,7 +130,7 @@
                                                                 Ubah
                                                             </a>
                                                         @endcan
-                                                    @endif
+                                                    @endif --}}
                                                 </td>
                                             </tr>
                                         @endif

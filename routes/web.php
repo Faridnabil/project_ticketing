@@ -121,15 +121,15 @@ Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
     Route::get('/sysadmin/completed-tickets', [AssignedSysadminController::class, 'completedTickets'])->name('sysadmin.completed-tickets');
     Route::get('/sysadmin/export-tickets', [AssignedSysadminController::class, 'export'])->name('sysadmin.tickets.export');
 
-    Route::get('sysadmin/incidental-activities', [IncidentalSysadminController::class, 'index'])->name('sysadmin.incidental-activities.index');
-    Route::get('sysadmin/incidental-activities/create', [IncidentalSysadminController::class, 'create'])->name('sysadmin.incidental-activities.create');
-    Route::post('sysadmin/incidental-activities', [IncidentalSysadminController::class, 'store'])->name('sysadmin.incidental-activities.store');
-    Route::get('sysadmin/incidental-activities/{id}/edit', [IncidentalSysadminController::class, 'edit'])->name('sysadmin.incidental-activities.edit');
-    Route::put('sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'update'])->name('sysadmin.incidental-activities.update');
-    Route::delete('sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'destroy'])->name('sysadmin.incidental-activities.destroy');
+    Route::get('/sysadmin/incidental-activities', [IncidentalSysadminController::class, 'index'])->name('sysadmin.incidental-activities.index');
+    Route::get('/sysadmin/incidental-activities/create', [IncidentalSysadminController::class, 'create'])->name('sysadmin.incidental-activities.create');
+    Route::post('/sysadmin/incidental-activities', [IncidentalSysadminController::class, 'store'])->name('sysadmin.incidental-activities.store');
+    Route::get('/sysadmin/incidental-activities/{id}/edit', [IncidentalSysadminController::class, 'edit'])->name('sysadmin.incidental-activities.edit');
+    Route::put('/sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'update'])->name('sysadmin.incidental-activities.update');
+    Route::delete('/sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'destroy'])->name('sysadmin.incidental-activities.destroy');
 
 
-    Route::post('sysadmin/request-assignment/{ticket}', [UnassignedSysadminController::class, 'request_assignment'])->name('sysadmin.unassignedTicket.requestAssignment');
+    Route::post('/sysadmin/request-assignment/{ticket}', [UnassignedSysadminController::class, 'request_assignment'])->name('sysadmin.unassignedTicket.requestAssignment');
 });
 
 Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
@@ -151,13 +151,14 @@ Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
     Route::get('/dba/completed-tickets', [AssignedDbaController::class, 'completedTickets'])->name('dba.completed-tickets');
     Route::get('/dba/export-tickets', [AssignedDbaController::class, 'export'])->name('dba.tickets.export');
 
-    Route::get('dba/incidental-activities', [IncidentalDbaController::class, 'index'])->name('dba.incidental-activities.index');
-    Route::get('dba/incidental-activities/create', [IncidentalDbaController::class, 'create'])->name('dba.incidental-activities.create');
-    Route::post('dba/incidental-activities', [IncidentalDbaController::class, 'store'])->name('dba.incidental-activities.store');
-    Route::get('dba/incidental-activities/{id}/edit', [IncidentalDbaController::class, 'edit'])->name('dba.incidental-activities.edit');
-    Route::put('dba/incidental-activities/{id}', [IncidentalDbaController::class, 'update'])->name('dba.incidental-activities.update');
-    Route::delete('dba/incidental-activities/{id}', [IncidentalDbaController::class, 'destroy'])->name('dba.incidental-activities.destroy');
+    // Route
+    Route::get('/dba/incidental-activities', [IncidentalDbaController::class, 'index'])->name('dba.incidental-activities.index');
+    Route::get('/dba/incidental-activities/create', [IncidentalDbaController::class, 'create'])->name('dba.incidental-activities.create');
+    Route::post('/dba/incidental-activities', [IncidentalDbaController::class, 'store'])->name('dba.incidental-activities.store');
+    Route::get('/dba/incidental-activities/{id}/edit', [IncidentalDbaController::class, 'edit'])->name('dba.incidental-activities.edit');
+    Route::put('/dba/incidental-activities/{id}', [IncidentalDbaController::class, 'update'])->name('dba.incidental-activities.update');
+    Route::delete('/dba/incidental-activities/{id}', [IncidentalDbaController::class, 'destroy'])->name('dba.incidental-activities.destroy');
 
 
-    Route::post('dba/request-assignment/{ticket}', [UnassignedDbaController::class, 'request_assignment'])->name('dba.unassignedTicket.requestAssignment');
+    Route::post('/dba/request-assignment/{ticket}', [UnassignedDbaController::class, 'request_assignment'])->name('dba.unassignedTicket.requestAssignment');
 });
