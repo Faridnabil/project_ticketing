@@ -16,6 +16,7 @@ use App\Notifications\CommentDepartment;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
 use App\Notifications\NotificationDepartment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -287,6 +288,13 @@ class AssignedDbaController extends Controller
         $end_date = $request->input('end_date');
         $user_id = auth()->user()->id;
 
-        return Excel::download(new TicketsExport($start_date, $end_date, $user_id), 'tickets.xlsx');
+        // Mendapatkan tanggal saat ini dengan format 'd-m-Y'
+        $currentDate = Carbon::now()->format('d-m-Y');
+
+        // Menyusun nama file dengan format 'laporan-tanggal_export.xlsx'
+        $fileName = 'Laporan Tiket -' . $currentDate . '.xlsx';
+
+        // Melakukan export dan men-download file dengan nama yang telah disusun
+        return Excel::download(new TicketsExport($start_date, $end_date, $user_id), $fileName);
     }
 }
