@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\PriorityController;
 use App\Http\Controllers\Admin\StatusController;
@@ -92,8 +93,10 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|SysAdmin|DBA'])->
         '/admin/status' => StatusController::class,
         '/admin/category' => CategoryController::class,
         '/admin/incidental-activity-category' => IncidentalActivityCategoryController::class,
+        '/admin/service' => ServiceController::class,
     ]);
 });
+
 
 Route::middleware(['verified', 'auth', 'role:User'])->group(function () {
     Route::get('/users/dashboard', [HomeUserController::class, 'index'])->name('user.dashboard.index');

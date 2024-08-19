@@ -42,6 +42,12 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'Delete Category']);
         Permission::create(['name' => 'Show Category']);
 
+        Permission::create(['name' => 'View Service']);
+        Permission::create(['name' => 'Create Service']);
+        Permission::create(['name' => 'Edit Service']);
+        Permission::create(['name' => 'Delete Service']);
+        Permission::create(['name' => 'Show Service']);
+
         Permission::create(['name' => 'View Priority']);
         Permission::create(['name' => 'Create Priority']);
         Permission::create(['name' => 'Edit Priority']);
@@ -63,6 +69,7 @@ class UsersSeeder extends Seeder
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
         $UserRole = Role::create(['name' => 'User']);
+        $EngineerRole = Role::create(['name' => 'Engineer']);
         $SysAdminRole = Role::create(['name' => 'SysAdmin']);
         $DBARole = Role::create(['name' => 'DBA']);
 
@@ -90,6 +97,12 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Edit Category');
         $adminRole->givePermissionTo('Delete Category');
         $adminRole->givePermissionTo('Show Category');
+
+        $adminRole->givePermissionTo('View Service');
+        $adminRole->givePermissionTo('Create Service');
+        $adminRole->givePermissionTo('Edit Service');
+        $adminRole->givePermissionTo('Delete Service');
+        $adminRole->givePermissionTo('Show Service');
 
         $adminRole->givePermissionTo('View Priority');
         $adminRole->givePermissionTo('Create Priority');
@@ -121,9 +134,13 @@ class UsersSeeder extends Seeder
         //SysAdmin
         $SysAdminRole->givePermissionTo('View Dashboard SysAdmin');
 
-        $SysAdminRole->givePermissionTo('View Category');;
+        $SysAdminRole->givePermissionTo('View Category');
         $SysAdminRole->givePermissionTo('Edit Category');
         $SysAdminRole->givePermissionTo('Show Category');
+
+        $SysAdminRole->givePermissionTo('View Service');
+        $SysAdminRole->givePermissionTo('Edit Service');
+        $SysAdminRole->givePermissionTo('Show Service');
 
         $SysAdminRole->givePermissionTo('View Priority');
         $SysAdminRole->givePermissionTo('Edit Priority');
@@ -140,9 +157,13 @@ class UsersSeeder extends Seeder
         //DBA
         $DBARole->givePermissionTo('View Dashboard DBA');
 
-        $DBARole->givePermissionTo('View Category');;
+        $DBARole->givePermissionTo('View Category');
         $DBARole->givePermissionTo('Edit Category');
         $DBARole->givePermissionTo('Show Category');
+
+        $DBARole->givePermissionTo('View Service');
+        $DBARole->givePermissionTo('Edit Service');
+        $DBARole->givePermissionTo('Show Service');
 
         $DBARole->givePermissionTo('View Priority');
         $DBARole->givePermissionTo('Edit Priority');
@@ -190,5 +211,12 @@ class UsersSeeder extends Seeder
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DBARole);
+
+        $user = User::factory()->create([
+            'name' => 'Engineer',
+            'email' => 'engineer@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($EngineerRole);
     }
 }

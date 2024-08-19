@@ -73,6 +73,13 @@
                         </span>
                         <h4 class="text-section">Master Data</h4>
                     </li>
+                    @elsecan('View Service')
+                    <li class="nav-section">
+                        <span class="sidebar-mini-icon">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </span>
+                        <h4 class="text-section">Master Data</h4>
+                    </li>
                 @elsecan('View Priority')
                     <li class="nav-section">
                         <span class="sidebar-mini-icon">
@@ -88,6 +95,7 @@
                         <h4 class="text-section">Master Data</h4>
                     </li>
                 @endcan
+
 
                 @can('View User Management')
                     <li class="nav-item">
@@ -142,6 +150,16 @@
                                 </li>
                             </ul>
                         </div>
+                    </li>
+                @endcan
+
+                @can('View Priority')
+                    <li class="nav-item">
+                        <a class="menu-link {{ Request::is('service') ? 'active' : '' }}"
+                            href="{{ route('service.index') }}">
+                            <i class="fas fa-cogs"></i>
+                            <p>Layanan</p>
+                        </a>
                     </li>
                 @endcan
 

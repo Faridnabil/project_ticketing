@@ -15,6 +15,7 @@ class HistoryTicket extends Model
         'h_priority_id',
         'h_status_id',
         'h_category_id',
+        'h_service_id',
         'h_description',
         'h_attachments',
         'status_changedBy',
@@ -56,6 +57,11 @@ class HistoryTicket extends Model
     public function status()
     {
         return $this->belongsTo(Status::class, 'h_status_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'h_service_id');
     }
 
     public function category()

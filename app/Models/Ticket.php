@@ -18,6 +18,7 @@ class Ticket extends Model
         'due_date',
         'status_id',
         'category_id',
+        'service_id',
         'description',
         'solution',
         'attachments',
@@ -55,6 +56,11 @@ class Ticket extends Model
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function category()

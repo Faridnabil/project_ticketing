@@ -6,7 +6,7 @@
 
 @section('content')
     <!--begin::Logo-->
-    <a href="#" class="mb-12">
+    <a href="/" class="mb-12">
         <img alt="Logo" src="{{ asset('templates/assets/img/kaiadmin/logonew.png') }}" class="h-100px w-200px mb-5" />
     </a>
     <!--end::Logo-->
