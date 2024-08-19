@@ -45,10 +45,13 @@ Route::get('/notification', [NotificationController::class, 'sendnotification'])
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
-
 Route::get('/', function () {
-    return redirect()->route('login'); // Mengarahkan ke halaman login
+    return view('landingpage.app');
 });
+
+// Route::get('/', function () {
+//     return redirect()->route('login'); // Mengarahkan ke halaman login
+// });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
