@@ -33,81 +33,99 @@
         #description {
             width: 100%;
             height: 100px;
-            /* Sesuaikan tinggi sesuai kebutuhan */
             border-radius: 0.375rem;
-            /* Sesuaikan dengan input form lainnya */
+            color: black;
+            /* Pastikan warna teks hitam agar terlihat */
+            background-color: white;
+            /* Pastikan latar belakang putih */
         }
 
         .ck-editor__editable {
             min-height: 70px;
-            /* Sesuaikan dengan tinggi minimum */
             border-radius: 0.375rem;
-            /* Agar border sama dengan input lain */
+            color: black;
+            /* Warna teks dalam CKEditor */
+            background-color: white;
+            /* Latar belakang CKEditor */
         }
 
         .ck-editor__editable_inline {
             padding: 0.375rem 0.75rem;
-            /* Agar padding sama dengan input lain */
             box-sizing: border-box;
+            color: black;
+            /* Warna teks */
+            background-color: white;
+            /* Latar belakang */
         }
     </style>
 
-<style>
-    .custom-dropzone {
-    border: 2px dashed #dbdbdb;
-    padding: 10px; /* Kecilkan padding untuk mengecilkan dropzone */
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    width: 100%; /* Sesuaikan lebar agar sama dengan form lainnya */
-    height: 150px; /* Sesuaikan tinggi agar tidak terlalu besar */
-}
+    <style>
+        .custom-dropzone {
+            border: 2px dashed #dbdbdb;
+            padding: 10px;
+            /* Kecilkan padding untuk mengecilkan dropzone */
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            width: 100%;
+            /* Sesuaikan lebar agar sama dengan form lainnya */
+            height: 150px;
+            /* Sesuaikan tinggi agar tidak terlalu besar */
+        }
 
-.custom-dropzone .dz-message {
-    pointer-events: none;
-}
+        .custom-dropzone .dz-message {
+            pointer-events: none;
+        }
 
-.custom-dropzone .dz-message h3 {
-    font-size: 14px; /* Kecilkan ukuran font */
-    margin-top: 10px; /* Sesuaikan margin atas */
-}
+        .custom-dropzone .dz-message h3 {
+            font-size: 14px;
+            /* Kecilkan ukuran font */
+            margin-top: 10px;
+            /* Sesuaikan margin atas */
+        }
 
-.custom-dropzone .dz-message span {
-    font-size: 12px; /* Kecilkan ukuran font */
-}
+        .custom-dropzone .dz-message span {
+            font-size: 12px;
+            /* Kecilkan ukuran font */
+        }
 
-.custom-dropzone .bi {
-    font-size: 2rem; /* Sesuaikan ukuran ikon */
-}
+        .custom-dropzone .bi {
+            font-size: 2rem;
+            /* Sesuaikan ukuran ikon */
+        }
 
-.preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px; /* Kurangi jarak antar gambar preview */
-    margin-top: 10px;
-    justify-content: center;
-}
+        .preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            /* Kurangi jarak antar gambar preview */
+            margin-top: 10px;
+            justify-content: center;
+        }
 
-.preview img {
-    max-width: 70px; /* Kecilkan ukuran gambar preview */
-    max-height: 70px;
-}
+        .preview img {
+            max-width: 70px;
+            /* Kecilkan ukuran gambar preview */
+            max-height: 70px;
+        }
 
-.remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 15px; /* Kecilkan tombol hapus */
-    height: 15px;
-    font-size: 10px; /* Kecilkan ukuran font tombol hapus */
-    text-align: center;
-}
-</style>
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 15px;
+            /* Kecilkan tombol hapus */
+            height: 15px;
+            font-size: 10px;
+            /* Kecilkan ukuran font tombol hapus */
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -166,22 +184,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
-                        {{-- <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="about.html" class="nav-item nav-link">About</a>
-                        <a href="service.html" class="nav-item nav-link">Service</a>
-                        <a href="blog.html" class="nav-item nav-link">Blog</a> --}}
-
                         <div class="nav-item dropdown">
-                            {{-- <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="feature.html" class="dropdown-item">Our Feature</a>
-                                <a href="cars.html" class="dropdown-item">Our Cars</a>
-                                <a href="team.html" class="dropdown-item">Our Team</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a> --}}
                         </div>
                     </div>
-                    {{-- <a href="contact.html" class="nav-item nav-link">Contact</a> --}}
                 </div>
                 <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
         </div>
@@ -192,109 +197,19 @@
 
     <!-- Carousel Start -->
     <div id="carouselId" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
-        {{-- <ol class="carousel-indicators">
-            <li data-bs-target="#carouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="First slide"></li>
-            <li data-bs-target="#carouselId" data-bs-slide-to="1" aria-label="Second slide"></li>
-        </ol> --}}
         <div class="carousel-inner" role="listbox">
             <div class="carousel-item active">
                 <img src="{{ asset('cental/img/carousel.jpeg') }}" class="img-fluid w-100" alt="First slide" />
                 <div class="carousel-caption">
                     <div class="container py-4">
                         <div class="row g-5">
-                            <div class="col-lg-6 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s"
-                                style="animation-delay: 1s;">
-                                <div class="bg-secondary rounded p-5">
-                                    <h4 class="text-white mb-4">Ajukan Laporan</h4>
-                                    <form>
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <div class="input-group">
-                                                    <div
-                                                        class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                                        <span class="ms-1">Judul Laporan</span>
-                                                    </div>
-                                                    <input class="form-control" type="text"
-                                                        aria-label="Enter a City or Airport">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="input-group">
-                                                    <div
-                                                        class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                                        <span class="ms-1">Pemilik Laporan</span>
-                                                    </div>
-                                                    <input class="form-control" type="text"
-                                                        aria-label="Enter a City or Airport">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>Pilih Layanan</option>
-                                                    <option value="1">VW Golf VII</option>
-                                                    <option value="2">Audi A1 S-Line</option>
-                                                    <option value="3">Toyota Camry</option>
-                                                    <option value="4">BMW 320 ModernLine</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12">
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>Pilih Kategori</option>
-                                                    <option value="1">VW Golf VII</option>
-                                                    <option value="2">Audi A1 S-Line</option>
-                                                    <option value="3">Toyota Camry</option>
-                                                    <option value="4">BMW 320 ModernLine</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-6">
-                                                <label for="description" class="form-label"><b>Deskripsi
-                                                        Laporan</b></label>
-                                                <textarea id="description" name="description" autofocus required></textarea>
-                                                <div class="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                @error('description')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="d-block fw-bold mb-2">Lampiran</label>
-                                                <div class="custom-dropzone"
-                                                    onclick="document.getElementById('attachments').click()">
-                                                    <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                    <div class="dz-message">
-                                                        <h5 class="fs-6 fw-bolder mb-1 mt-0" style="color: #eeeeee">Letakkan
-                                                            file di sini
-                                                            atau
-                                                            klik untuk mengunggah.</h5>
-                                                        <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5
-                                                            file</span>
-                                                    </div>
-                                                    <div class="preview"></div>
-                                                </div>
-                                                <input type="file" id="attachments" name="attachments[]"
-                                                    class="form-control d-none" multiple>
-                                                <div class="valid-feedback">Looks good!</div>
-                                                @error('attachments')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <div class="error-message" id="error-message"></div>
-                                            </div>
-                                            <div class="col-12">
-                                                <button class="btn btn-light w-100 py-2">Book Now</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 d-none d-lg-flex fadeInRight animated" data-animation="fadeInRight"
+                            <div class="col-lg-12 d-none d-lg-flex fadeInRight animated" data-animation="fadeInRight"
                                 data-delay="1s" style="animation-delay: 1s;">
-                                <div class="text-start">
+                                <div class="text-center">
                                     <h1 class="display-5 text-white">Selamat Datang di Sistem Monitoring SysAdmin dan
                                         DBA</h1>
                                     <p>Memastikan kinerja dan keamanan optimal untuk infrastruktur Anda</p>
+                                    <a href="#form" class="btn btn-primary rounded-pill py-2 px-4">Ajukan Laporan</a>
                                 </div>
                             </div>
                         </div>
@@ -303,8 +218,160 @@
             </div>
         </div>
     </div>
-
     <!-- Carousel End -->
+
+    <!-- Features Start -->
+    <div class="container-fluid feature py-5" id="form">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+                <h1 class="display-5 text-capitalize mb-3">Pengajuan <span class="text-primary">Laporan</span></h1>
+                <div class="col-lg-12 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s"
+                    style="animation-delay: 1s;">
+                    <div class="bg-secondary rounded p-5">
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label for="title" class="form-label"><b>Judul Laporan</b></label>
+                                    <input class="form-control @error('title') is-invalid @enderror" id="title"
+                                        name="title">
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('title')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label for="validationCustom01" class="form-label"><b>Pemilik Laporan</b></label>
+                                    <input name="t_users" class="form-control @error('t_users') is-invalid @enderror"
+                                        id="title">
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('t_users')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label for="notlp" class="form-label"><b>Nomor Telp/WhatsApp</b></label>
+                                    <input class="form-control @error('notlp') is-invalid @enderror" id="notlp"
+                                        name="notlp">
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('notlp')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label for="email" class="form-label"><b>Email</b></label>
+                                    <input class="form-control @error('email') is-invalid @enderror" id="email"
+                                        name="email">
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('email')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="services" class="form-label"><b>Tetapkan ke</b></label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Divisi</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Seseorang</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="services" class="form-label"><b>Prioritas</b></label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Pilih Prioritas</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label for="services" class="form-label"><b>Layanan</b></label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Pilih Layanan</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label for="category" class="form-label"><b>Kategori</b></label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Pilih Kategori</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="description" class="form-label"><b>Deskripsi
+                                            Laporan</b></label>
+                                    <textarea id="description" name="description" required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    @error('description')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="d-block fw-bold mb-2">Lampiran</label>
+                                    <div class="custom-dropzone"
+                                        onclick="document.getElementById('attachments').click()">
+                                        <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                        <div class="dz-message">
+                                            <h5 class="fs-6 fw-bolder mb-1 mt-0" style="color: #eeeeee">
+                                                Letakkan
+                                                file di sini
+                                                atau
+                                                klik untuk mengunggah.</h5>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5
+                                                file</span>
+                                        </div>
+                                        <div class="preview"></div>
+                                    </div>
+                                    <input type="file" id="attachments" name="attachments[]"
+                                        class="form-control d-none" multiple>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('attachments')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="error-message" id="error-message"></div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-light w-100 py-2">Ajukan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Features End -->
 
     <!-- Copyright Start -->
     <div class="container-fluid copyright py-4">
@@ -335,6 +402,99 @@
             });
     </script>
 
+    {{-- Javascript Dropzone --}}
+    <script>
+        let uploadedFiles = [];
+        let existingFiles = [];
+        @if (isset($ticket) && $ticket->attachments)
+            @php
+                $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
+            @endphp
+            @foreach ($attachments as $attachment)
+                existingFiles.push('{{ $attachment }}');
+            @endforeach
+        @endif
+        let removedFiles = [];
+        document.addEventListener('DOMContentLoaded', function() {
+            const preview = document.querySelector('.preview');
+            existingFiles.forEach(filePath => {
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+                const img = document.createElement('img');
+                img.src = `{{ asset('') }}${filePath}`;
+                img.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    removeExistingFile(event, filePath);
+                });
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
+            });
+            updateExistingFileList();
+        });
+        document.getElementById('attachments').addEventListener('change', function(event) {
+            const preview = document.querySelector('.preview');
+            const files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                uploadedFiles.push(file);
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', () => removeFile(file));
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
+            }
+        });
+
+        function removeFile(file) {
+            const index = uploadedFiles.indexOf(file);
+            if (index !== -1) {
+                uploadedFiles.splice(index, 1);
+                const preview = document.querySelector('.preview');
+                preview.removeChild(preview.childNodes[index]);
+            }
+        }
+
+        function removeExistingFile(event, filePath) {
+            event.stopPropagation();
+            removedFiles.push(filePath);
+            existingFiles = existingFiles.filter(file => file !== filePath);
+            event.target.parentElement.remove();
+            updateExistingFileList();
+        }
+
+        function updateExistingFileList() {
+            const fileList = document.getElementById('existing_file_list');
+            fileList.innerHTML = '';
+            existingFiles.forEach(filePath => {
+                const listItem = document.createElement('li');
+                listItem.textContent = filePath;
+                fileList.appendChild(listItem);
+            });
+        }
+
+        function removeAllFiles() {
+            uploadedFiles = [];
+            removedFiles = [];
+            existingFiles = [];
+            const preview = document.querySelector('.preview');
+            preview.innerHTML = '';
+            updateExistingFileList();
+        }
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('cental/lib/wow/wow.min.js') }}"></script>
