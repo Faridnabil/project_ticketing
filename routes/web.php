@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\HomeAdminController;
@@ -46,9 +47,11 @@ Route::get('/notification', [NotificationController::class, 'sendnotification'])
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
-Route::get('/', function () {
-    return view('landingpage.app');
-});
+Route::get('/',[LandingPageController::class,'index'])->name('landing.index');
+
+// Route::get('/', function () {
+//     return view('landingpage.app');
+// });
 
 // Route::get('/', function () {
 //     return redirect()->route('login'); // Mengarahkan ke halaman login

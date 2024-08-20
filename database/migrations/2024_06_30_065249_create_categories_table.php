@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('layanan_id')->constrained('services')->cascadeOnDelete();
             $table->string('category_name');
-            $table->string('color')->nullable();
+            // $table->string('color')->nullable();
             $table->timestamps();
         });
     }
