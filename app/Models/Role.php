@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
-class Category extends Model
+class Role extends Model
 {
     use HasFactory, HasRoles;
 
-    protected $table = 'categories';
+    protected $table = 'roles';
+    protected $fillable = ['name', 'guard_name'];
     protected $primaryKey = 'id';
-    protected $fillable = [
-        'category_name', 'color'
-    ] ;
 
-    public function layanan()
+    public function getrole()
     {
-        return $this->belongsTo(Service::class);
-    }
+        
+    }    
 }

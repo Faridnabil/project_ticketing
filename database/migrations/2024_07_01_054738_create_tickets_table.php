@@ -13,20 +13,21 @@ return new class extends Migration {
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('no_ticket');
-            $table->string('title');
-            $table->integer('no_telp');
-            $table->string('email');
-            $table->foreignId('t_users')->constrained('users')->cascadeOnDelete();
+            $table->string('no_ticket')->nullable();
+            $table->string('title')->nullable();
+            $table->integer('no_telp')->nullable();
+            $table->string('email')->nullable();
+            $table->string('name')->nullable();
+            // $table->foreignId('t_users')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
-            $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->string('due_date')->nullable();
-            $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('service_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
+            $table->foreignId('service_id')->nullable()->constrained('services')->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->text('description');
             $table->text('solution')->nullable();
-            $table->text('attachments')->nullable();
+            $table->json('attachments')->nullable();
             $table->foreignId('status_changed_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });

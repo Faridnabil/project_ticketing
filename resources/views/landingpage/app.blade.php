@@ -224,14 +224,14 @@
     <div class="container-fluid feature py-5" id="form">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
-                <h1 class="display-5 text-capitalize mb-3">Pengajuan <span class="text-primary">Laporan</span></h1>
+                <h1 class="display-5 text-capitalize mb-3">Pengajuan <span class="text-primary">Tiket</span></h1>
                 <div class="col-lg-12 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s"
                     style="animation-delay: 1s;">
                     <div class="bg-secondary rounded p-5">
                         <form>
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <label for="title" class="form-label"><b>Judul Laporan</b></label>
+                                    <label for="title" class="form-label"><b>Judul Tiket</b></label>
                                     <input class="form-control @error('title') is-invalid @enderror" id="title"
                                         name="title">
 
@@ -246,7 +246,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="validationCustom01" class="form-label"><b>Pemilik Laporan</b></label>
+                                    <label for="validationCustom01" class="form-label"><b>Pemilik Tiket</b></label>
                                     <input name="t_users" class="form-control @error('t_users') is-invalid @enderror"
                                         id="title">
 
@@ -295,33 +295,53 @@
                                     <label for="services" class="form-label"><b>Tetapkan ke</b></label>
                                     <div class="row">
                                         <div class="col-6">
-                                            <select class="form-select" aria-label="Default select example">
+                                            <select class="form-select" id="division-select">
                                                 <option selected>Divisi</option>
+                                                @foreach($userRoles as $item)
+                                                    <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
+                                        
                                         <div class="col-6">
-                                            <select class="form-select" aria-label="Default select example">
+                                            <select class="form-select" id="user-select">
                                                 <option selected>Seseorang</option>
+                                                @foreach($users as $item)
+                                                    <option value="{{ $item->id }}" data-role="{{ $item->roles->pluck('name')->implode(', ') }}">{{ $item->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Prioritas</b></label>
                                     <select class="form-select" aria-label="Default select example">
-                                        <option selected>Pilih Prioritas</option>
+                                        <option value="" selected>Pilih Prioritas</option>
+                                        @foreach($prioritas as $item)
+                                        <option value="{{$item->id}}">{{$item->priority_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Layanan</b></label>
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>Pilih Layanan</option>
+                                    <select id="services" name="service_id" class="form-select" aria-label="Default select example">
+                                        <option value="">Pilih Layanan</option>
+                                        @foreach($service as $item)
+                                            <option value="{{ $item->id }}" {{ $selectedServiceId == $item->id ? 'selected' : '' }}>
+                                                {{ $item->service_name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
+                        
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>Pilih Kategori</option>
+                                    <select id="category" class="form-select" aria-label="Default select example">
+                                        <option value="">Pilih Kategori</option>
+                                        @foreach($categories as $item)
+                                            <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12">
@@ -495,6 +515,30 @@
             updateExistingFileList();
         }
     </script>
+
+<script>
+    document.getElementById('division-select').addEventListener('change', function() {
+        var selectedDivision = this.value;
+        var userSelect = document.getElementById('user-select');
+        var options = userSelect.querySelectorAll('option');
+
+        // Tampilkan semua opsi terlebih dahulu
+        options.forEach(function(option) {
+            option.style.display = 'block';
+        });
+
+        // Jika ada divisi yang dipilih
+        if (selectedDivision !== 'Divisi') {
+            options.forEach(function(option) {
+                var userRole = option.getAttribute('data-role');
+                if (userRole && userRole !== selectedDivision) {
+                    option.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('cental/lib/wow/wow.min.js') }}"></script>
