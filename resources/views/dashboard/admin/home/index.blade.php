@@ -162,7 +162,14 @@
                     <!-- First Card -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mt-3">Tiket Pertahun</h1>
+                            <div class="d-flex justify-content-between">
+                                <h1 class="text-dark fw-bolder my-1 fs-3 mt-3">Tiket</h1>
+                                <select id="chartFilter" class="form-select w-auto">
+                                    <option value="yearly">Pertahun</option>
+                                    <option value="monthly">Perbulan</option>
+                                    <option value="weekly">Perminggu</option>
+                                </select>
+                            </div>
                             <canvas id="ticketChart" width="80%" height="20px"></canvas>
                         </div>
                     </div>
@@ -249,39 +256,54 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('ticketChart').getContext('2d');
+            const chartFilter = document.getElementById('chartFilter');
 
-            fetch('{{ url('/admin/tickets/chart') }}')
-                .then(response => response.json())
-                .then(data => {
-                    const ticketChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.months,
-                            datasets: [{
-                                    label: 'Tiket Masuk',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                    data: data.tickets
-                                },
-                                {
-                                    label: 'Tiket Selesai',
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                    borderColor: 'rgba(153, 102, 255, 1)',
-                                    borderWidth: 1,
-                                    data: data.ticketsClosed
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
+            function fetchChartData(filter) {
+                fetch(`{{ url('/admin/tickets/chart') }}?filter=${filter}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        ticketChart.data.labels = data.labels;
+                        ticketChart.data.datasets[0].data = data.tickets;
+                        ticketChart.data.datasets[1].data = data.ticketsClosed;
+                        ticketChart.update();
                     });
-                });
+            }
+
+            const ticketChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                            label: 'Tiket Masuk',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            data: []
+                        },
+                        {
+                            label: 'Tiket Selesai',
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1,
+                            data: []
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            chartFilter.addEventListener('change', function() {
+                fetchChartData(chartFilter.value);
+            });
+
+            // Load initial chart data
+            fetchChartData('yearly');
         });
     </script>
 @endsection

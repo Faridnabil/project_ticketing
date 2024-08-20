@@ -93,8 +93,8 @@ class HomeAdminController extends Controller
         }
 
         $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
-        ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
-        ->get();
+            ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
+            ->get();
 
         return view(
             'dashboard.admin.home.index',
@@ -119,38 +119,120 @@ class HomeAdminController extends Controller
 
     public function getTicketChartData(Request $request)
     {
-        $year = $request->input('year', Carbon::now()->year);
+        $filterType = $request->input('filter', 'yearly'); // Default ke 'yearly' jika tidak ada filter yang dipilih
+        $date = Carbon::now();
 
-        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
-            ->where(function ($query) {
-                $query->where('status_id', 1)
-                    ->orWhere('status_id', 2)
-                    ->orWhere('status_id', 3);
-            })
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        switch ($filterType) {
+            case 'weekly':
+                $startOfWeek = Carbon::now()->startOfWeek(); // Mulai minggu (default: Senin)
+                $endOfWeek = Carbon::now()->endOfWeek(); // Akhir minggu (default: Minggu)
 
-        $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
-            ->whereYear('updated_at', $year)
-            ->where('status_id', 4) // Assuming 4 is the ID for 'Tutup'
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+                $tickets = Ticket::selectRaw('DAYOFWEEK(created_at) as day, COUNT(*) as total')
+                    ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                    ->where(function ($query) {
+                        $query->where('status_id', 1)
+                            ->orWhere('status_id', 2)
+                            ->orWhere('status_id', 3);
+                    })
+                    ->groupBy('day')
+                    ->get()
+                    ->keyBy('day')
+                    ->toArray();
 
-        $chartData = [
-            'months' => [],
-            'tickets' => [],
-            'ticketsClosed' => []
-        ];
+                $ticketsClosed = Ticket::selectRaw('DAYOFWEEK(updated_at) as day, COUNT(*) as total')
+                    ->whereBetween('updated_at', [$startOfWeek, $endOfWeek])
+                    ->where('status_id', 4)
+                    ->groupBy('day')
+                    ->get()
+                    ->keyBy('day')
+                    ->toArray();
 
-        for ($i = 1; $i <= 12; $i++) {
-            $chartData['months'][] = Carbon::create()->month($i)->format('F');
-            $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+                $chartData = [
+                    'labels' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    'tickets' => [],
+                    'ticketsClosed' => []
+                ];
+
+                for ($i = 1; $i <= 7; $i++) {
+                    $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
+                    $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+                }
+                break;
+
+            case 'monthly':
+                $month = $date->month;
+
+                $tickets = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
+                    ->whereMonth('created_at', $month)
+                    ->whereYear('created_at', $date->year)
+                    ->where(function ($query) {
+                        $query->where('status_id', 1)
+                            ->orWhere('status_id', 2)
+                            ->orWhere('status_id', 3);
+                    })
+                    ->groupBy('day')
+                    ->get()
+                    ->keyBy('day')
+                    ->toArray();
+
+                $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
+                    ->whereMonth('updated_at', $month)
+                    ->whereYear('updated_at', $date->year)
+                    ->where('status_id', 4)
+                    ->groupBy('day')
+                    ->get()
+                    ->keyBy('day')
+                    ->toArray();
+
+                $chartData = [
+                    'labels' => [],
+                    'tickets' => [],
+                    'ticketsClosed' => []
+                ];
+
+                for ($i = 1; $i <= $date->daysInMonth; $i++) {
+                    $chartData['labels'][] = $i;
+                    $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
+                    $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+                }
+                break;
+
+            case 'yearly':
+            default:
+                $year = $request->input('year', $date->year);
+
+                $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                    ->whereYear('created_at', $year)
+                    ->where(function ($query) {
+                        $query->where('status_id', 1)
+                            ->orWhere('status_id', 2)
+                            ->orWhere('status_id', 3);
+                    })
+                    ->groupBy('month')
+                    ->get()
+                    ->keyBy('month')
+                    ->toArray();
+
+                $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
+                    ->whereYear('updated_at', $year)
+                    ->where('status_id', 4)
+                    ->groupBy('month')
+                    ->get()
+                    ->keyBy('month')
+                    ->toArray();
+
+                $chartData = [
+                    'labels' => [],
+                    'tickets' => [],
+                    'ticketsClosed' => []
+                ];
+
+                for ($i = 1; $i <= 12; $i++) {
+                    $chartData['labels'][] = Carbon::create()->month($i)->format('F');
+                    $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
+                    $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+                }
+                break;
         }
 
         return response()->json($chartData);
