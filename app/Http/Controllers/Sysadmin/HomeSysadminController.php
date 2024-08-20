@@ -18,7 +18,7 @@ class HomeSysadminController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo')
         ->where('assign_to', $user->id)
         ->get();
         $logs = collect();
@@ -33,7 +33,7 @@ class HomeSysadminController extends Controller
 
         if ($selectedTicketId) {
             // Get the selected ticket
-            $selectedTicket = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+            $selectedTicket = Ticket::with('status', 'category', 'priority', 'assignTo')
                 ->where('assign_to', $user->id)
                 ->find($selectedTicketId);
 
@@ -43,7 +43,7 @@ class HomeSysadminController extends Controller
 
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
-                $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+                $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
                     ->whereIn('h_no_ticket', $ticketNumbers)
                     ->orderBy('created_at', 'desc')
                     ->get();

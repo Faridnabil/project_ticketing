@@ -41,13 +41,13 @@ class LandingPageController extends Controller
                 ];
             }
         }
-        return $serviceRoles;
-        // return view('landingpage.app', compact('category','service', 'prioritas','status', 'userRoles','users','selectedServiceId','categories'));
+        // return $serviceRoles;
+        return view('landingpage.app', compact('category','service', 'prioritas','status', 'userRoles','users'));
     }
 
     public function store(Request $request)
     {
-        
+
     }
 
 }

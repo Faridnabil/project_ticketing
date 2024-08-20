@@ -37,7 +37,11 @@
                                     @foreach ($services as $service)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $service->service_name }}</td>
+                                            <td class="text-center">
+                                                <span class="badge"
+                                                style="background-color: {{ $service->color }}; color: white; font-weight:bold">
+                                                {{ $service->service_name }}</span>
+                                            </td>
                                             <td class="text-center">
                                                 @can('Edit Service')
                                                     <a class="menu-link ms-3" href="{{ route('service.edit', $service->id) }}" type="button">

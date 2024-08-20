@@ -28,6 +28,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
+                                    <th class="text-center">Layanan</th>
                                     <th class="text-center">Kategori</th>
                                     <th class="text-center" style="width: 300px">Fitur</th>
                                 </tr>
@@ -37,9 +38,14 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>
+                                                <span class="badge"
+                                                    style="background-color: {{ $category->layanan->color }}; color: white; font-weight:bold">
+                                                    {{ $category->layanan->service_name }}</span>
+                                            </td>
                                             <td class="text-center">
                                                 <span class="badge"
-                                                    style="background-color: {{ $category->color }}; color: white; font-weight:bold">
+                                                    style="background-color: {{ $category->layanan->color }}; color: white; font-weight:bold">
                                                     {{ $category->category_name }}</span>
                                             </td>
                                             <td class="text-center">

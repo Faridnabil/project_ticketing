@@ -303,7 +303,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        
+
                                         <div class="col-6">
                                             <select class="form-select" id="user-select">
                                                 <option selected>Seseorang</option>
@@ -312,7 +312,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -328,21 +328,21 @@
                                     <label for="services" class="form-label"><b>Layanan</b></label>
                                     <select id="services" name="service_id" class="form-select" aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
-                                        @foreach($service as $item)
+                                        {{-- @foreach($service as $item)
                                             <option value="{{ $item->id }}" {{ $selectedServiceId == $item->id ? 'selected' : '' }}>
                                                 {{ $item->service_name }}
                                             </option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
-                        
+
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
                                     <select id="category" class="form-select" aria-label="Default select example">
                                         <option value="">Pilih Kategori</option>
-                                        @foreach($categories as $item)
+                                        {{-- @foreach($categories as $item)
                                             <option value="{{ $item->id }}">{{ $item->category_name }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-12">

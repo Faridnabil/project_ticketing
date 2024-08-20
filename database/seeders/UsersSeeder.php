@@ -18,6 +18,7 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'View Dashboard Admin']);
         Permission::create(['name' => 'View Dashboard User']);
         Permission::create(['name' => 'View Dashboard SysAdmin']);
+        Permission::create(['name' => 'View Dashboard Engineer']);
         Permission::create(['name' => 'View Dashboard DBA']);
 
         Permission::create(['name' => 'View User Management']);
@@ -65,6 +66,12 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'Edit Ticket']);
         Permission::create(['name' => 'Delete Ticket']);
         Permission::create(['name' => 'Show Ticket']);
+
+        Permission::create(['name' => 'View Incidental']);
+        Permission::create(['name' => 'Create Incidental']);
+        Permission::create(['name' => 'Edit Incidental']);
+        Permission::create(['name' => 'Delete Incidental']);
+        Permission::create(['name' => 'Show Incidental']);
 
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
@@ -122,6 +129,29 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Delete Ticket');
         $adminRole->givePermissionTo('Show Ticket');
 
+        //Engineer
+        $EngineerRole->givePermissionTo('View Dashboard Engineer');
+
+        $EngineerRole->givePermissionTo('View Category');
+        $EngineerRole->givePermissionTo('Edit Category');
+        $EngineerRole->givePermissionTo('Show Category');
+
+        $EngineerRole->givePermissionTo('View Service');
+        $EngineerRole->givePermissionTo('Edit Service');
+        $EngineerRole->givePermissionTo('Show Service');
+
+        $EngineerRole->givePermissionTo('View Priority');
+        $EngineerRole->givePermissionTo('Edit Priority');
+        $EngineerRole->givePermissionTo('Show Priority');
+
+        $EngineerRole->givePermissionTo('View Status');
+        $EngineerRole->givePermissionTo('Edit Status');
+        $EngineerRole->givePermissionTo('Show Status');
+
+        $EngineerRole->givePermissionTo('View Ticket');
+        $EngineerRole->givePermissionTo('Edit Ticket');
+        $EngineerRole->givePermissionTo('Show Ticket');
+
         //User
         $UserRole->givePermissionTo('View Dashboard User');
 
@@ -154,6 +184,12 @@ class UsersSeeder extends Seeder
         $SysAdminRole->givePermissionTo('Edit Ticket');
         $SysAdminRole->givePermissionTo('Show Ticket');
 
+        $SysAdminRole->givePermissionTo('View Incidental');
+        $SysAdminRole->givePermissionTo('Create Incidental');
+        $SysAdminRole->givePermissionTo('Edit Incidental');
+        $SysAdminRole->givePermissionTo('Delete Incidental');
+        $SysAdminRole->givePermissionTo('Show Incidental');
+
         //DBA
         $DBARole->givePermissionTo('View Dashboard DBA');
 
@@ -176,6 +212,12 @@ class UsersSeeder extends Seeder
         $DBARole->givePermissionTo('View Ticket');
         $DBARole->givePermissionTo('Edit Ticket');
         $DBARole->givePermissionTo('Show Ticket');
+
+        $DBARole->givePermissionTo('View Incidental');
+        $DBARole->givePermissionTo('Create Incidental');
+        $DBARole->givePermissionTo('Edit Incidental');
+        $DBARole->givePermissionTo('Delete Incidental');
+        $DBARole->givePermissionTo('Show Incidental');
 
         $user = User::factory()->create([
             'name' => 'Admin',

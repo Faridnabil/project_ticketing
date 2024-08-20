@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("dashboard.admin.category.create");
+        $services = Service::all();
+        return view("dashboard.admin.category.create", compact("services"));
     }
 
     /**
@@ -32,17 +34,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        try {
-            $category = Category::create($request->all());
 
-            DB::commit();
-            return redirect()->route("category.index")->with("success", "Kategori Berhasil Dibuat!");
-        } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollBack();
-            return back()->with("error", $th->getMessage());
-        }
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'layanan_id' => 'required|exists:services,id',
+        ]);
+        $c =  new Category;
+        $c -> layanan_id = $request->layanan_id;
+        $c -> category_name= $request->category_name;
+        $c->save();
+        return redirect()->route("category.index")->with("success", "Kategori Berhasil Dibuat!");
     }
 
     /**

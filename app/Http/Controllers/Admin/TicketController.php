@@ -30,10 +30,14 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser');
+        $query = Ticket::with('status', 'category','service', 'priority', 'assignTo', 'statusChangedByUser');
 
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->has('service_id') && $request->service_id) {
+            $query->where('service_id', $request->service_id);
         }
 
         if ($request->has('assign_to') && $request->assign_to) {

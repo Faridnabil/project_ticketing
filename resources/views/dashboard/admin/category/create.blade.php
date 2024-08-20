@@ -39,9 +39,12 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label for="validationCustom01" class="form-label">Warna Label</label>
-                                        <input type="color" class="form-control @error('color') is-invalid @enderror"
-                                            id="color" name="color" value="#ff0000" autofocus required>
-
+                                        <select type="text" class="form-control @error('layanan_id') is-invalid @enderror"
+                                            id="layanan_id" name="layanan_id" autofocus >
+                                            @foreach ($services as $service)
+                                            <option value="{{ $service->id }}">{{ $service->service_name }}</option>
+                                            @endforeach
+                                        </select>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>

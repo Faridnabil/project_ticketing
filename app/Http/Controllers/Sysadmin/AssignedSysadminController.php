@@ -28,7 +28,7 @@ class AssignedSysadminController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
             })
@@ -57,7 +57,7 @@ class AssignedSysadminController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -297,7 +297,7 @@ class AssignedSysadminController extends Controller
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })

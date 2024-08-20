@@ -74,10 +74,10 @@ class Ticket extends Model
         return $this->belongsTo(Priority::class, 'priority_id');
     }
 
-    public function user_s()
-    {
-        return $this->belongsTo(User::class, 't_users');
-    }
+    // public function user_s()
+    // {
+    //     return $this->belongsTo(User::class, 't_users');
+    // }
 
     public function assignTo()
     {
