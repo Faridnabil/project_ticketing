@@ -229,7 +229,9 @@
                 <div class="col-lg-12 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s"
                     style="animation-delay: 1s;">
                     <div class="bg-secondary rounded p-5">
-                        <form>
+                        <form action={{ route('landing.save') }} method='POST'>
+                            @method('POST')
+                            @csrf
                             <div class="row g-3">
                                 <div class="col-6">
                                     <label for="title" class="form-label"><b>Judul Tiket</b></label>
@@ -248,14 +250,14 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="validationCustom01" class="form-label"><b>Pemilik Tiket</b></label>
-                                    <input name="t_users" class="form-control @error('t_users') is-invalid @enderror"
+                                    <input name="name" class="form-control @error('name') is-invalid @enderror"
                                         id="title">
 
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
 
-                                    @error('t_users')
+                                    @error('name')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -264,7 +266,7 @@
                                 <div class="col-6">
                                     <label for="notlp" class="form-label"><b>Nomor Telp/WhatsApp</b></label>
                                     <input class="form-control @error('notlp') is-invalid @enderror" id="notlp"
-                                        name="notlp">
+                                        name="no_telp">
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -348,7 +350,7 @@
                                 <div class="col-12">
                                     <label for="description" class="form-label"><b>Deskripsi
                                             Laporan</b></label>
-                                    <textarea id="description" name="description" required></textarea>
+                                    <textarea id="description" name="description"></textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -383,7 +385,7 @@
                                     <div class="error-message" id="error-message"></div>
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-light w-100 py-2">Ajukan</button>
+                                    <button class="btn btn-light w-100 py-2" type='submit'>Ajukan</button>
                                 </div>
                             </div>
                         </form>

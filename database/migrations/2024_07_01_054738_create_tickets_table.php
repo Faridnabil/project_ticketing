@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->foreignId('assign_to')->nullable()->constrained('users');
             $table->foreignId('priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->string('due_date')->nullable();
+            $table->enum('status',['Revisi ticket','Salah divisi','test','test1','test2'])->default('Diterima');
             $table->foreignId('status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
             $table->foreignId('service_id')->nullable()->constrained('services')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();

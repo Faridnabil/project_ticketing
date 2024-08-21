@@ -48,6 +48,8 @@ Route::patch('/notifications/{notification}', [NotificationController::class, 'm
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
 Route::get('/',[LandingPageController::class,'index'])->name('landing.index');
+Route::post('/post-ticket',[LandingPageController::class,'store'])->name('landing.save');
+
 
 // Route::get('/', function () {
 //     return view('landingpage.app');
