@@ -189,7 +189,19 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
+                @auth
+                    @if (Auth::user()->role('Admin'))
+                        <a href="{{ route('admin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('Engineer'))
+                        <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('SysAdmin'))
+                        <a href="{{ route('sysadmin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('DBA'))
+                        <a href="{{ route('dba.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @endif
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
+                @endauth
         </div>
         </nav>
     </div>
@@ -265,8 +277,8 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="notlp" class="form-label"><b>Nomor Telp/WhatsApp</b></label>
-                                    <input type="number" class="form-control @error('notlp') is-invalid @enderror" id="notlp"
-                                        name="no_telp">
+                                    <input type="number" class="form-control @error('notlp') is-invalid @enderror"
+                                        id="notlp" name="no_telp">
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -300,7 +312,7 @@
                                         <div class="col-6">
                                             <select class="form-select" id="division-select" name="assign_to">
                                                 <option selected disabled>Divisi</option>
-                                                @foreach($userRoles as $item)
+                                                @foreach ($userRoles as $item)
                                                     <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
                                                 @endforeach
                                             </select>
@@ -309,8 +321,10 @@
                                         <div class="col-6">
                                             <select class="form-select" id="user-select" name="assign_to">
                                                 <option selected disabled>Seseorang</option>
-                                                @foreach($users as $item)
-                                                    <option value="{{ $item->id }}" data-role="{{ $item->roles->pluck('name')->implode(', ') }}">{{ $item->name }}</option>
+                                                @foreach ($users as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        data-role="{{ $item->roles->pluck('name')->implode(', ') }}">
+                                                        {{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -319,18 +333,20 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Prioritas</b></label>
-                                    <select class="form-select" aria-label="Default select example" name="priority_id">
+                                    <select class="form-select" aria-label="Default select example"
+                                        name="priority_id">
                                         <option value="" selected disabled>Pilih Prioritas</option>
-                                        @foreach($prioritas as $item)
-                                        <option value="{{$item->id}}">{{$item->priority_name}}</option>
+                                        @foreach ($prioritas as $item)
+                                            <option value="{{ $item->id }}">{{ $item->priority_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Layanan</b></label>
-                                    <select id="services" name="service_id" class="form-select" aria-label="Default select example">
+                                    <select id="services" name="service_id" class="form-select"
+                                        aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
-                                        @foreach($service as $item)
+                                        @foreach ($service as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->service_name }}
                                             </option>
@@ -340,9 +356,10 @@
 
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select id="category" class="form-select" aria-label="Default select example" name="category_id">
+                                    <select id="category" class="form-select" aria-label="Default select example"
+                                        name="category_id">
                                         <option value="">Pilih Kategori</option>
-                                        @foreach($category as $item)
+                                        @foreach ($category as $item)
                                             <option value="{{ $item->id }}">{{ $item->category_name }}</option>
                                         @endforeach
                                     </select>
@@ -519,28 +536,28 @@
         }
     </script>
 
-<script>
-    document.getElementById('division-select').addEventListener('change', function() {
-        var selectedDivision = this.value;
-        var userSelect = document.getElementById('user-select');
-        var options = userSelect.querySelectorAll('option');
+    <script>
+        document.getElementById('division-select').addEventListener('change', function() {
+            var selectedDivision = this.value;
+            var userSelect = document.getElementById('user-select');
+            var options = userSelect.querySelectorAll('option');
 
-        // Tampilkan semua opsi terlebih dahulu
-        options.forEach(function(option) {
-            option.style.display = 'block';
-        });
-
-        // Jika ada divisi yang dipilih
-        if (selectedDivision !== 'Divisi') {
+            // Tampilkan semua opsi terlebih dahulu
             options.forEach(function(option) {
-                var userRole = option.getAttribute('data-role');
-                if (userRole && userRole !== selectedDivision) {
-                    option.style.display = 'none';
-                }
+                option.style.display = 'block';
             });
-        }
-    });
-</script>
+
+            // Jika ada divisi yang dipilih
+            if (selectedDivision !== 'Divisi') {
+                options.forEach(function(option) {
+                    var userRole = option.getAttribute('data-role');
+                    if (userRole && userRole !== selectedDivision) {
+                        option.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

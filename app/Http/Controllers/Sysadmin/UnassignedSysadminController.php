@@ -23,8 +23,10 @@ class UnassignedSysadminController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'statusChangedByUser')
-            ->whereDoesntHave('assignTo')
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+            ->where('assign_to', Auth::user()->id)  // Menggunakan ID dari user yang sedang login
+            ->where('status', 'Belum verifikasi')
+            ->orWhere('status', 'Verifikasi ditolak')
             ->get();
 
         return view('dashboard.sysadmin.unassigned-ticket.index', compact('tickets'));
@@ -123,7 +125,7 @@ class UnassignedSysadminController extends Controller
         try {
             $comment = new Comment();
             $comment->ticket_id = $request->ticket_id;
-            $comment->user_id =  $request->user_id;
+            $comment->user_id = $request->user_id;
             $comment->message = $request->message;
             $comment->created_at = now();
             $comment->updated_at = null;
