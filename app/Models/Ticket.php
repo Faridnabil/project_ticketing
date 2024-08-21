@@ -22,6 +22,7 @@ class Ticket extends Model
         'service_id',
         'description',
         'solution',
+        'status',
         'attachments',
         'status_changed_by_id',
         'no_telp',

@@ -229,7 +229,7 @@
                 <div class="col-lg-12 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s"
                     style="animation-delay: 1s;">
                     <div class="bg-secondary rounded p-5">
-                        <form action={{ route('landing.save') }} method='POST'>
+                        <form action={{ route('landing.save') }} method="POST" enctype="multipart/form-data">
                             @method('POST')
                             @csrf
                             <div class="row g-3">
@@ -265,7 +265,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="notlp" class="form-label"><b>Nomor Telp/WhatsApp</b></label>
-                                    <input class="form-control @error('notlp') is-invalid @enderror" id="notlp"
+                                    <input type="number" class="form-control @error('notlp') is-invalid @enderror" id="notlp"
                                         name="no_telp">
 
                                     <div class="valid-feedback">
@@ -307,7 +307,7 @@
                                         </div>
 
                                         <div class="col-6">
-                                            <select class="form-select" id="user-select">
+                                            <select class="form-select" id="user-select" name="assign_to">
                                                 <option selected>Seseorang</option>
                                                 @foreach($users as $item)
                                                     <option value="{{ $item->id }}" data-role="{{ $item->roles->pluck('name')->implode(', ') }}">{{ $item->name }}</option>
@@ -319,7 +319,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Prioritas</b></label>
-                                    <select class="form-select" aria-label="Default select example">
+                                    <select class="form-select" aria-label="Default select example" name="priority_id">
                                         <option value="" selected>Pilih Prioritas</option>
                                         @foreach($prioritas as $item)
                                         <option value="{{$item->id}}">{{$item->priority_name}}</option>
@@ -330,21 +330,21 @@
                                     <label for="services" class="form-label"><b>Layanan</b></label>
                                     <select id="services" name="service_id" class="form-select" aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
-                                        {{-- @foreach($service as $item)
-                                            <option value="{{ $item->id }}" {{ $selectedServiceId == $item->id ? 'selected' : '' }}>
+                                        @foreach($service as $item)
+                                            <option value="{{ $item->id }}">
                                                 {{ $item->service_name }}
                                             </option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                 </div>
 
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select id="category" class="form-select" aria-label="Default select example">
+                                    <select id="category" class="form-select" aria-label="Default select example" name="category_id">
                                         <option value="">Pilih Kategori</option>
-                                        {{-- @foreach($categories as $item)
+                                        @foreach($category as $item)
                                             <option value="{{ $item->id }}">{{ $item->category_name }}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12">
