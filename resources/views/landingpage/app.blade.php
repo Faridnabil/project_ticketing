@@ -298,8 +298,8 @@
                                     <label for="services" class="form-label"><b>Tetapkan ke</b></label>
                                     <div class="row">
                                         <div class="col-6">
-                                            <select class="form-select" id="division-select">
-                                                <option selected>Divisi</option>
+                                            <select class="form-select" id="division-select" name="assign_to">
+                                                <option selected disabled>Divisi</option>
                                                 @foreach($userRoles as $item)
                                                     <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
                                                 @endforeach
@@ -308,7 +308,7 @@
 
                                         <div class="col-6">
                                             <select class="form-select" id="user-select" name="assign_to">
-                                                <option selected>Seseorang</option>
+                                                <option selected disabled>Seseorang</option>
                                                 @foreach($users as $item)
                                                     <option value="{{ $item->id }}" data-role="{{ $item->roles->pluck('name')->implode(', ') }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -320,7 +320,7 @@
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Prioritas</b></label>
                                     <select class="form-select" aria-label="Default select example" name="priority_id">
-                                        <option value="" selected>Pilih Prioritas</option>
+                                        <option value="" selected disabled>Pilih Prioritas</option>
                                         @foreach($prioritas as $item)
                                         <option value="{{$item->id}}">{{$item->priority_name}}</option>
                                         @endforeach

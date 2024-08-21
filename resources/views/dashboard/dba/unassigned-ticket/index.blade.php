@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ticket yang Belum Ditetapkan | PLN Icon+
+    Verifikasi Ticket | PLN Icon+
 @endsection
 
 @section('content')

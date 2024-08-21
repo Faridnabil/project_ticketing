@@ -15,14 +15,14 @@ return new class extends Migration {
             $table->id();
             $table->string('no_ticket')->nullable();
             $table->string('title')->nullable();
-            $table->integer('no_telp')->nullable();
+            $table->string('no_telp')->nullable();
             $table->string('email')->nullable();
             $table->string('name')->nullable();
             // $table->foreignId('t_users')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
             $table->foreignId('priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->string('due_date')->nullable();
-            $table->enum('status',['Revisi ticket','Salah divisi','test','test1','test2'])->default('Diterima');
+            $table->enum('status',['Revisi ticket','Salah divisi','test','test1','test2'])->default('Revisi ticket');
             $table->foreignId('status_id')->nullable()->constrained('statuses')->cascadeOnDelete();
             $table->foreignId('service_id')->nullable()->constrained('services')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
