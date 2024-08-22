@@ -62,68 +62,84 @@
 
     <style>
         .custom-dropzone {
-            border: 2px dashed #dbdbdb;
+            border: 3px dashed #dbdbdb;
             padding: 10px;
-            /* Kecilkan padding untuk mengecilkan dropzone */
             text-align: center;
             cursor: pointer;
             position: relative;
             width: 100%;
-            /* Sesuaikan lebar agar sama dengan form lainnya */
             height: 150px;
-            /* Sesuaikan tinggi agar tidak terlalu besar */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .custom-dropzone .dz-message {
             pointer-events: none;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .custom-dropzone .dz-message h3 {
+        .custom-dropzone .dz-message.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .custom-dropzone .dz-message h5 {
             font-size: 14px;
-            /* Kecilkan ukuran font */
             margin-top: 10px;
-            /* Sesuaikan margin atas */
         }
 
         .custom-dropzone .dz-message span {
             font-size: 12px;
-            /* Kecilkan ukuran font */
         }
 
         .custom-dropzone .bi {
             font-size: 2rem;
-            /* Sesuaikan ukuran ikon */
         }
 
         .preview {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            /* Kurangi jarak antar gambar preview */
             margin-top: 10px;
             justify-content: center;
+            align-items: center;
         }
 
-        .preview img {
-            max-width: 70px;
-            /* Kecilkan ukuran gambar preview */
-            max-height: 70px;
+        .image-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
         }
 
         .remove-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 3px;
+            right: 3px;
             background: red;
             color: white;
             border: none;
             border-radius: 50%;
             cursor: pointer;
             width: 15px;
-            /* Kecilkan tombol hapus */
             height: 15px;
             font-size: 10px;
-            /* Kecilkan ukuran font tombol hapus */
             text-align: center;
         }
     </style>
@@ -139,37 +155,6 @@
         </div>
     </div>
     <!-- Spinner End -->
-
-    <!-- Topbar Start -->
-    {{-- <div class="container-fluid topbar bg-secondary d-none d-xl-block w-100">
-        <div class="container">
-            <div class="row gx-0 align-items-center" style="height: 45px;">
-                <div class="col-lg-6 text-center text-lg-start mb-lg-0">
-                    <div class="d-flex flex-wrap">
-                        <a href="#" class="text-muted me-4"><i
-                                class="fas fa-map-marker-alt text-primary me-2"></i>Find A Location</a>
-                        <a href="tel:+01234567890" class="text-muted me-4"><i
-                                class="fas fa-phone-alt text-primary me-2"></i>+01234567890</a>
-                        <a href="mailto:example@gmail.com" class="text-muted me-0"><i
-                                class="fas fa-envelope text-primary me-2"></i>Example@gmail.com</a>
-                    </div>
-                </div>
-                <div class="col-lg-6 text-center text-lg-end">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <a href="#" class="btn btn-light btn-sm-square rounded-circle me-3"><i
-                                class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="btn btn-light btn-sm-square rounded-circle me-3"><i
-                                class="fab fa-twitter"></i></a>
-                        <a href="#" class="btn btn-light btn-sm-square rounded-circle me-3"><i
-                                class="fab fa-instagram"></i></a>
-                        <a href="#" class="btn btn-light btn-sm-square rounded-circle me-0"><i
-                                class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- Topbar End -->
 
     <!-- Navbar & Hero Start -->
     <div class="container-fluid nav-bar sticky-top px-0 px-lg-4 py-2 py-lg-0">
@@ -265,8 +250,8 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="notlp" class="form-label"><b>Nomor Telp/WhatsApp</b></label>
-                                    <input type="number" class="form-control @error('notlp') is-invalid @enderror" id="notlp"
-                                        name="no_telp">
+                                    <input type="number" class="form-control @error('notlp') is-invalid @enderror"
+                                        id="notlp" name="no_telp">
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -300,7 +285,7 @@
                                         <div class="col-6">
                                             <select class="form-select" id="division-select" name="assign_to">
                                                 <option selected disabled>Divisi</option>
-                                                @foreach($userRoles as $item)
+                                                @foreach ($userRoles as $item)
                                                     <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
                                                 @endforeach
                                             </select>
@@ -309,8 +294,10 @@
                                         <div class="col-6">
                                             <select class="form-select" id="user-select" name="assign_to">
                                                 <option selected disabled>Seseorang</option>
-                                                @foreach($users as $item)
-                                                    <option value="{{ $item->id }}" data-role="{{ $item->roles->pluck('name')->implode(', ') }}">{{ $item->name }}</option>
+                                                @foreach ($users as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        data-role="{{ $item->roles->pluck('name')->implode(', ') }}">
+                                                        {{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -319,18 +306,20 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Prioritas</b></label>
-                                    <select class="form-select" aria-label="Default select example" name="priority_id">
+                                    <select class="form-select" aria-label="Default select example"
+                                        name="priority_id">
                                         <option value="" selected disabled>Pilih Prioritas</option>
-                                        @foreach($prioritas as $item)
-                                        <option value="{{$item->id}}">{{$item->priority_name}}</option>
+                                        @foreach ($prioritas as $item)
+                                            <option value="{{ $item->id }}">{{ $item->priority_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Layanan</b></label>
-                                    <select id="services" name="service_id" class="form-select" aria-label="Default select example">
+                                    <select id="services" name="service_id" class="form-select"
+                                        aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
-                                        @foreach($service as $item)
+                                        @foreach ($service as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->service_name }}
                                             </option>
@@ -340,9 +329,10 @@
 
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select id="category" class="form-select" aria-label="Default select example" name="category_id">
+                                    <select id="category" class="form-select" aria-label="Default select example"
+                                        name="category_id">
                                         <option value="">Pilih Kategori</option>
-                                        @foreach($category as $item)
+                                        @foreach ($category as $item)
                                             <option value="{{ $item->id }}">{{ $item->category_name }}</option>
                                         @endforeach
                                     </select>
@@ -364,15 +354,11 @@
                                     <label class="d-block fw-bold mb-2">Lampiran</label>
                                     <div class="custom-dropzone"
                                         onclick="document.getElementById('attachments').click()">
-                                        <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                         <div class="dz-message">
                                             <h5 class="fs-6 fw-bolder mb-1 mt-0" style="color: #eeeeee">
-                                                Letakkan
-                                                file di sini
-                                                atau
-                                                klik untuk mengunggah.</h5>
-                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5
-                                                file</span>
+                                                Letakkan file di sini atau klik untuk mengunggah.
+                                            </h5>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                         </div>
                                         <div class="preview"></div>
                                     </div>
@@ -429,6 +415,8 @@
     <script>
         let uploadedFiles = [];
         let existingFiles = [];
+        let removedFiles = [];
+
         @if (isset($ticket) && $ticket->attachments)
             @php
                 $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
@@ -437,50 +425,78 @@
                 existingFiles.push('{{ $attachment }}');
             @endforeach
         @endif
-        let removedFiles = [];
+
         document.addEventListener('DOMContentLoaded', function() {
             const preview = document.querySelector('.preview');
+            const dzMessage = document.querySelector('.dz-message');
+            const icon = document.querySelector('.bi-file-earmark-arrow-up');
+
+            // Tampilkan existing files
             existingFiles.forEach(filePath => {
-                const container = document.createElement('div');
-                container.classList.add('image-container');
-                const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`;
-                img.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    removeExistingFile(event, filePath);
-                });
-                const removeBtn = document.createElement('button');
-                removeBtn.textContent = 'x';
-                removeBtn.classList.add('remove-btn');
-                removeBtn.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    removeExistingFile(event, filePath);
-                });
-                container.appendChild(img);
-                container.appendChild(removeBtn);
-                preview.appendChild(container);
+                addExistingFile(preview, filePath);
             });
             updateExistingFileList();
+
+            // Sembunyikan pesan dan ikon jika ada existing files
+            if (existingFiles.length > 0) {
+                dzMessage.classList.add('hidden');
+                icon.style.display = 'none';
+            }
         });
+
         document.getElementById('attachments').addEventListener('change', function(event) {
             const preview = document.querySelector('.preview');
+            const dzMessage = document.querySelector('.dz-message');
+            const icon = document.querySelector('.bi-file-earmark-arrow-up');
             const files = event.target.files;
+
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 uploadedFiles.push(file);
-                const container = document.createElement('div');
-                container.classList.add('image-container');
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                const removeBtn = document.createElement('button');
-                removeBtn.textContent = 'x';
-                removeBtn.classList.add('remove-btn');
-                removeBtn.addEventListener('click', () => removeFile(file));
-                container.appendChild(img);
-                container.appendChild(removeBtn);
-                preview.appendChild(container);
+                addNewFile(preview, file);
+            }
+
+            // Sembunyikan pesan dan ikon saat file diunggah
+            if (files.length > 0) {
+                dzMessage.classList.add('hidden');
+                icon.style.display = 'none';
             }
         });
+
+        function addExistingFile(preview, filePath) {
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            const img = document.createElement('img');
+            img.src = `{{ asset('') }}${filePath}`;
+            img.addEventListener('click', (event) => {
+                event.stopPropagation();
+                removeExistingFile(event, filePath);
+            });
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'x';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                removeExistingFile(event, filePath);
+            });
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+            preview.appendChild(container);
+        }
+
+        function addNewFile(preview, file) {
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'x';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => removeFile(file));
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+            preview.appendChild(container);
+        }
 
         function removeFile(file) {
             const index = uploadedFiles.indexOf(file);
@@ -488,6 +504,12 @@
                 uploadedFiles.splice(index, 1);
                 const preview = document.querySelector('.preview');
                 preview.removeChild(preview.childNodes[index]);
+
+                // Tampilkan kembali pesan dan ikon jika tidak ada file yang diunggah
+                if (uploadedFiles.length === 0 && existingFiles.length === 0) {
+                    document.querySelector('.dz-message').classList.remove('hidden');
+                    document.querySelector('.bi-file-earmark-arrow-up').style.display = 'block';
+                }
             }
         }
 
@@ -497,6 +519,12 @@
             existingFiles = existingFiles.filter(file => file !== filePath);
             event.target.parentElement.remove();
             updateExistingFileList();
+
+            // Tampilkan kembali pesan dan ikon jika tidak ada file yang diunggah
+            if (uploadedFiles.length === 0 && existingFiles.length === 0) {
+                document.querySelector('.dz-message').classList.remove('hidden');
+                document.querySelector('.bi-file-earmark-arrow-up').style.display = 'block';
+            }
         }
 
         function updateExistingFileList() {
@@ -516,31 +544,33 @@
             const preview = document.querySelector('.preview');
             preview.innerHTML = '';
             updateExistingFileList();
+            document.querySelector('.dz-message').classList.remove('hidden');
+            document.querySelector('.bi-file-earmark-arrow-up').style.display = 'block';
         }
     </script>
 
-<script>
-    document.getElementById('division-select').addEventListener('change', function() {
-        var selectedDivision = this.value;
-        var userSelect = document.getElementById('user-select');
-        var options = userSelect.querySelectorAll('option');
+    <script>
+        document.getElementById('division-select').addEventListener('change', function() {
+            var selectedDivision = this.value;
+            var userSelect = document.getElementById('user-select');
+            var options = userSelect.querySelectorAll('option');
 
-        // Tampilkan semua opsi terlebih dahulu
-        options.forEach(function(option) {
-            option.style.display = 'block';
-        });
-
-        // Jika ada divisi yang dipilih
-        if (selectedDivision !== 'Divisi') {
+            // Tampilkan semua opsi terlebih dahulu
             options.forEach(function(option) {
-                var userRole = option.getAttribute('data-role');
-                if (userRole && userRole !== selectedDivision) {
-                    option.style.display = 'none';
-                }
+                option.style.display = 'block';
             });
-        }
-    });
-</script>
+
+            // Jika ada divisi yang dipilih
+            if (selectedDivision !== 'Divisi') {
+                options.forEach(function(option) {
+                    var userRole = option.getAttribute('data-role');
+                    if (userRole && userRole !== selectedDivision) {
+                        option.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
