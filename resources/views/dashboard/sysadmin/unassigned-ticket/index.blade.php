@@ -36,7 +36,7 @@
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
                                             <td>{{ $ticket->title }}</td>
-                                            <td>{{ $ticket->user_s->name }}</td>
+                                            <td>{{ $ticket->assignTo->name }}</td>
                                             <td>{{ $ticket->category->category_name }}</td>
                                             <td>
                                                 @if ($ticket->priority_id == '4')

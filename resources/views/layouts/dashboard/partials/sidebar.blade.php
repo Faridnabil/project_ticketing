@@ -233,7 +233,7 @@
                             <a class="menu-link {{ Request::is('unassignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('unassignedSysadmin.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
-                                <p>Belum Ditetapkan</p>
+                                <p>Verifikasi Tiket</p>
                                 <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
                             </a>
                         </li>
@@ -271,7 +271,7 @@
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
                                 href="{{ route('unassignedDba.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
-                                <p>Belum Ditetapkan</p>
+                                <p>Verifikasi Tiket</p>
                                 <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
                             </a>
                         </li>

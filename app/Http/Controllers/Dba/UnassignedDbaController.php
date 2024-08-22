@@ -23,11 +23,10 @@ class UnassignedDbaController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'statusChangedByUser')
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('assign_to', Auth::user()->id)  // Menggunakan ID dari user yang sedang login
-            ->whereHas('user.roles', function ($query) {
-                $query->where('id', Auth::user()->roles->first()->id);  // Memeriksa role ID dari user yang sedang login
-            })
+            ->where('status', 'Belum verifikasi')
+            ->where('status', 'Verifikasi ditolak')
             ->get();
 
         return view('dashboard.dba.unassigned-ticket.index', compact('tickets'));

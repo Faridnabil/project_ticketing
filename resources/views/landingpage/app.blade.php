@@ -174,7 +174,19 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
+                @auth
+                    @if (Auth::user()->role('Admin'))
+                        <a href="{{ route('admin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('Engineer'))
+                        <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('SysAdmin'))
+                        <a href="{{ route('sysadmin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @elseif (Auth::user()->role('DBA'))
+                        <a href="{{ route('dba.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                    @endif
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
+                @endauth
         </div>
         </nav>
     </div>
