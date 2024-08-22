@@ -13,9 +13,7 @@ use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\CommentDepartment;
-use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
-use App\Notifications\NotificationDepartment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -28,19 +26,29 @@ class AssignedSysadminController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
+
+        // Mengambil tiket yang sudah diverifikasi dan ditugaskan ke SysAdmin yang sedang login
         $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+            ->where('status', 'Verifikasi') // Pastikan tiket sudah diverifikasi
             ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
+                $query->where('id', $userId); // Filter tiket berdasarkan SysAdmin yang sedang login
             })
             ->get();
 
-        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
-        $categories = Category::all(); // Ambil semua kategori untuk dropdown filter
-        $priorities = Priority::all(); // Ambil semua prioritas untuk dropdown filter
+        // Ambil semua status, kategori, dan prioritas untuk dropdown filter
+        $statuses = Status::all();
+        $categories = Category::all();
+        $priorities = Priority::all();
 
         return view('dashboard.sysadmin.assigned-ticket.index', compact('tickets', 'statuses', 'categories', 'priorities'));
     }
 
+    public function countAssignedTickets()
+    {
+        return Ticket::where('assign_to', Auth::user()->id)
+        ->where('status_id', [1, 3])
+        ->count();
+    }
 
     public function show($id)
     {
@@ -226,88 +234,23 @@ class AssignedSysadminController extends Controller
         }
     }
 
-    public function store_comment(Request $request)
-    {
-        DB::beginTransaction();
-        try {
-            $comment = new Comment();
-            $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = $request->user_id;
-            $comment->message = $request->message;
-            $comment->created_at = now();
-            $comment->updated_at = null;
-            $comment->save();
-
-            $assignedDepartmentId = $request->assign_to;
-
-            // Notifikasi
-            $users = User::role(['User'])->where('id', $assignedDepartmentId)->get();
-            $authenticatedUserName = Auth::user()->name;
-
-            $notificationData = [
-                'name' => $authenticatedUserName,
-                'body' => 'Ada komentar baru pada tiket anda',
-                'thanks' => 'Terimakasih',
-                'Text' => 'Tolong cek kembali',
-                'Url' => url('/customer/myTicket/' . $comment->ticket_id),
-                'department_id' => rand(1111, 9999),
-                'type' => 'comment', // Menambahkan properti 'type'
-            ];
-
-            Notification::send($users, new CommentDepartment($notificationData));
-
-            DB::commit();
-
-            return redirect()->back()->with([
-                'success' => 'Komen telah terbuat!',
-                'new_comment_id' => $comment->id
-            ]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return back()->with('error', 'Komentar anda tidak tersimpan!');
-        }
-    }
-
-    public function update_comment(Request $request, $id)
-    {
-        // Cari komentar berdasarkan ID
-        $comment = Comment::find($id);
-
-        // Pastikan komentar ditemukan
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Comment not found.');
-        }
-
-        // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
-        $ticket = Ticket::find($request->ticket_id);
-        if (!$ticket) {
-            return redirect()->back()->with('error', 'Ticket not found.');
-        }
-
-        // Perbarui atribut-atribut komentar
-        $comment->ticket_id = $request->ticket_id;
-        $comment->user_id = auth()->id();
-        $comment->message = $request->message;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment updated successfully!');
-    }
-
     public function completedTickets()
     {
         $userId = auth()->user()->id;
         $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
-            ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId);
+            ->where('assign_to', $userId)
+            ->where(function ($query) {
+                $query->where('status_id', 4) // Status 'Selesai'
+                    ->orWhere('status_id', 2) // Status 'Tidak Aktif'
+                    ->orWhere('status', 'Verifikasi ditolak'); // Status 'Verifikasi ditolak'
             })
-            ->where('status_id', 4) // Status 4 adalah "Selesai"
             ->get();
 
         $statuses = Status::all(); // Semua status untuk dropdown filter
 
         return view('dashboard.sysadmin.assigned-ticket.completed', compact('tickets', 'statuses'));
     }
+
 
     public function export(Request $request)
     {

@@ -47,8 +47,8 @@ Route::get('/notification', [NotificationController::class, 'sendnotification'])
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
-Route::get('/',[LandingPageController::class,'index'])->name('landing.index');
-Route::post('/post-ticket',[LandingPageController::class,'store'])->name('landing.save');
+Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
+Route::post('/post-ticket', [LandingPageController::class, 'store'])->name('landing.save');
 
 
 // Route::get('/', function () {
@@ -123,9 +123,12 @@ Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
     ]);
     Route::get('/sysadmin/unassignedTicket', [UnassignedSysadminController::class, 'index'])->name('unassignedSysadmin.index');
     Route::get('/sysadmin/unassignedTicketShow/{id}', [UnassignedSysadminController::class, 'show'])->name('unassignedSyasadmin.show');
+    Route::get('/sysadmin/unassignedTicketEdit/{id}', [UnassignedSysadminController::class, 'edit'])->name('unassignedSysadmin.edit');
+    Route::put('/sysadmin/unassignedTicketUpdate/{id}', [UnassignedSysadminController::class, 'update'])->name('unassignedSysadmin.update');
+    Route::put('/sysadmin/unassignedTicketVerify/{id}', [UnassignedSysadminController::class, 'verifyTicket'])->name('unassignedSysadmin.verifyTicket');
+    Route::put('/sysadmin/unassignedTicketrReject/{id}', [UnassignedSysadminController::class, 'rejectTicket'])->name('unassignedSysadmin.rejectTicket');
 
-    Route::post('/sysadmin/unassignedTicketStore', [UnassignedSysadminController::class, 'store_comment'])->name('sysadmin.unassignedTickets.store');
-    Route::put('/sysadmin/unassignedTicketUpdate/{id}', [UnassignedSysadminController::class, 'update_comment'])->name('unassignedTickets.update');
+
 
     Route::post('/sysadmin/assignedTicketStore', [AssignedSysadminController::class, 'store_comment'])->name('sysadmin.assignedTickets.store');
     Route::put('/sysadmin/assignedTicketUpdate/{id}', [AssignedSysadminController::class, 'update_comment'])->name('sysadmin.assignedTickets.update');
@@ -153,9 +156,11 @@ Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
 
     Route::get('/dba/unassignedTicket', [UnassignedDbaController::class, 'index'])->name('unassignedDba.index');
     Route::get('/dba/unassignedTicketShow/{id}', [UnassignedDbaController::class, 'show'])->name('unassignedDba.show');
+    Route::get('/dba/unassignedTicketEdit/{id}', [UnassignedDbaController::class, 'edit'])->name('unassignedDba.edit');
+    Route::put('/dba/unassignedTicketUpdate/{id}', [UnassignedDbaController::class, 'update'])->name('unassignedDba.update');
+    Route::put('/dba/unassignedTicketVerify/{id}', [UnassignedDbaController::class, 'verifyTicket'])->name('unassignedDba.verifyTicket');
+    Route::put('/dba/unassignedTicketReject/{id}', [UnassignedDbaController::class, 'rejectTicket'])->name('unassignedDba.rejectTicket');
 
-    Route::post('/dba/unassignedTicketStore', [UnassignedDbaController::class, 'store_comment'])->name('dba.unassignedTickets.store');
-    Route::put('/dba/unassignedTicketUpdate/{id}', [UnassignedDbaController::class, 'update_comment'])->name('unassignedTickets.update');
 
     Route::post('/dba/assignedTicketStore', [AssignedDbaController::class, 'store_comment'])->name('assignedTickets.store');
     Route::put('/dba/assignedTicketUpdate/{id}', [AssignedDbaController::class, 'update_comment'])->name('assignedTickets.update');

@@ -13,9 +13,7 @@ use App\Models\Priority;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\CommentDepartment;
-use App\Notifications\NotificationAdmin;
 use App\Notifications\NotificationCustomer;
-use App\Notifications\NotificationDepartment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -28,19 +26,29 @@ class AssignedDbaController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
+
+        // Mengambil tiket yang sudah diverifikasi dan ditugaskan ke DBA yang sedang login
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+            ->where('status', 'Verifikasi') // Pastikan tiket sudah diverifikasi
             ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
+                $query->where('id', $userId); // Filter tiket berdasarkan DBA yang sedang login
             })
             ->get();
 
-        $statuses = Status::all(); // Ambil semua status untuk dropdown filter
-        $categories = Category::all(); // Ambil semua kategori untuk dropdown filter
-        $priorities = Priority::all(); // Ambil semua prioritas untuk dropdown filter
+        // Ambil semua status, kategori, dan prioritas untuk dropdown filter
+        $statuses = Status::all();
+        $categories = Category::all();
+        $priorities = Priority::all();
 
         return view('dashboard.dba.assigned-ticket.index', compact('tickets', 'statuses', 'categories', 'priorities'));
     }
 
+    public function countAssignedTickets()
+    {
+        return Ticket::where('assign_to', Auth::user()->id)
+            ->where('status_id', [1, 3])
+            ->count();
+    }
 
     public function show($id)
     {
@@ -48,7 +56,8 @@ class AssignedDbaController extends Controller
         $users_s = User::role('User')
             ->get();
 
-        $assign_to = User::role(['DBA', 'SysAdmin'])->get();
+        $assignTo = User::role(['DBA', 'SysAdmin'])
+            ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -56,11 +65,10 @@ class AssignedDbaController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
-
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -76,7 +84,7 @@ class AssignedDbaController extends Controller
                 'statuses',
                 'categories',
                 'comments',
-                'statusChangedBy',
+                'statusChangedBy'
             )
         );
     }
@@ -84,10 +92,11 @@ class AssignedDbaController extends Controller
     public function edit($id)
     {
         $ticket = Ticket::find($id);
-        $user_s = User::role('User')
+        $users_s = User::role('User')
             ->get();
 
-        $assign_to = User::role(['DBA', 'SysAdmin'])->get();
+        $assignTo = User::role(['DBA', 'SysAdmin'])
+            ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -96,23 +105,24 @@ class AssignedDbaController extends Controller
         $statusChangedBy = Auth::user();
 
         $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket)
+            ->where('model_id', $ticket->id)
             ->get();
 
         return view(
             'dashboard.dba.assigned-ticket.edit',
             compact(
                 'ticket',
-                'user_s',
-                'assign_to',
+                'users_s',
+                'assignTo',
                 'priorities',
                 'statuses',
                 'categories',
                 'statusChangedBy',
-                'logs',
+                'logs'
             )
         );
     }
+
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
@@ -150,6 +160,23 @@ class AssignedDbaController extends Controller
 
             // Update tiket dengan data baru
             $ticket->update($validate);
+
+            // Simpan data tiket yang diupdate ke tabel history_tickets
+            DB::table('history_tickets')->insert([
+                'h_no_ticket' => $ticket->no_ticket,
+                'h_title' => $ticket->title,
+                'h_users' => $ticket->t_users,
+                'h_assign_to' => $ticket->assign_to,
+                'h_solution' => $ticket->solution,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_category_id' => $ticket->category_id,
+                'h_description' => $ticket->description,
+                'h_attachments' => json_encode($attachments),
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status_changedBy' => Auth::user()->id,
+            ]);
 
             // ------ Notifikasi --------------
             $statusName = $ticket->status->status_name;
@@ -196,23 +223,6 @@ class AssignedDbaController extends Controller
                 }
             }
 
-            // Simpan data tiket yang diupdate ke tabel history_tickets
-            DB::table('history_tickets')->insert([
-                'h_no_ticket' => $ticket->no_ticket,
-                'h_title' => $ticket->title,
-                'h_users' => $ticket->t_users,
-                'h_assign_to' => $ticket->assign_to,
-                'h_solution' => $ticket->solution,
-                'h_priority_id' => $ticket->priority_id,
-                'h_status_id' => $ticket->status_id,
-                'h_category_id' => $ticket->category_id,
-                'h_description' => $ticket->description,
-                'h_attachments' => json_encode($attachments),
-                'created_at' => now(),
-                'updated_at' => now(),
-                'status_changedBy' => Auth::user()->id,
-            ]);
-
             DB::commit();
             return redirect()->route('assignedDba.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
@@ -221,66 +231,23 @@ class AssignedDbaController extends Controller
         }
     }
 
-
-
-    public function store_comment(Request $request)
-    {
-        DB::beginTransaction();
-        try {
-            $comment = new Comment();
-            $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = $request->user_id;
-            $comment->message = $request->message;
-            $comment->created_at = now();
-            $comment->updated_at = null;
-            $comment->save();
-
-            $assignedDepartmentId = $request->assign_to;
-
-            // Notifikasi
-            $users = User::role(['User'])->where('id', $assignedDepartmentId)->get();
-            $authenticatedUserName = Auth::user()->name;
-
-            $notificationData = [
-                'name' => $authenticatedUserName,
-                'body' => 'Ada komentar baru pada tiket anda',
-                'thanks' => 'Terimakasih',
-                'Text' => 'Tolong cek kembali',
-                'Url' => url('/users/myTicket/' . $comment->ticket_id),
-                'department_id' => rand(1111, 9999),
-                'type' => 'comment', // Menambahkan properti 'type'
-            ];
-
-            Notification::send($users, new CommentDepartment($notificationData));
-
-            DB::commit();
-
-            return redirect()->back()->with([
-                'success' => 'Komen telah terbuat!',
-                'new_comment_id' => $comment->id
-            ]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return back()->with('error', 'Komentar anda tidak tersimpan!');
-        }
-    }
-
-
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'user_s', 'assignTo', 'statusChangedByUser')
-            ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId);
+        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+            ->where('assign_to', $userId)
+            ->where(function ($query) {
+                $query->where('status_id', 4) // Status 'Selesai'
+                    ->orWhere('status_id', 2) // Status 'Tidak Aktif'
+                    ->orWhere('status', 'Verifikasi ditolak'); // Status 'Verifikasi ditolak'
             })
-            ->where('status_id', 4) // Status 4 adalah "Selesai"
             ->get();
 
         $statuses = Status::all(); // Semua status untuk dropdown filter
 
         return view('dashboard.dba.assigned-ticket.completed', compact('tickets', 'statuses'));
     }
+
 
     public function export(Request $request)
     {

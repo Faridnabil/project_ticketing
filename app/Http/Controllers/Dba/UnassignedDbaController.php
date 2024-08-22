@@ -5,89 +5,37 @@ namespace App\Http\Controllers\Dba;
 use App\Http\Controllers\Controller;
 use App\Models\HistoryTicket;
 use App\Models\Ticket;
-use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Priority;
-use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
-use App\Notifications\CommentDepartment;
-use App\Notifications\NotificationDepartment;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class UnassignedDbaController extends Controller
 {
     public function index()
     {
         $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
-            ->where('assign_to', Auth::user()->id)  // Menggunakan ID dari user yang sedang login
+            ->where('assign_to', Auth::user()->id)
             ->where('status', 'Belum verifikasi')
-            ->where('status', 'Verifikasi ditolak')
             ->get();
 
         return view('dashboard.dba.unassigned-ticket.index', compact('tickets'));
-
     }
 
     public function countUnassignedTickets()
     {
-        return Ticket::whereDoesntHave('assignTo')->count();
+        return Ticket::where('assign_to', Auth::user()->id)
+            ->where('status', 'Belum verifikasi')
+            ->count();
     }
-
-    public function request_assignment(Request $request, Ticket $ticket)
-    {
-        // Pastikan user yang sedang login memiliki role 'Department' dan tiket belum diassign ke siapa pun
-        if (Auth::user()->hasRole(['DBA', 'SysAdmin']) && $ticket->assign_to === null) {
-            // Periksa apakah pengajuan sudah ada
-            $existingRequest = RequestAssignment::where('ticket_id', $ticket->id)
-                ->where('user_id', Auth::id())
-                ->exists();
-
-            if ($existingRequest) {
-                return redirect()->back()->with('error', 'Anda sudah mengajukan untuk tiket ini.');
-            }
-
-            // Notifikasi kepada admin dengan role 'Department'
-            $users = User::role('Admin')->get();
-            $authenticatedUserName = Auth::user()->name;
-
-            $notificationData = [
-                'name' => $authenticatedUserName,
-                'body' => 'Ada permintaan, untuk tiket yang belum ditetapkan.',
-                'thanks' => 'Terima kasih.',
-                'Text' => 'Tolong perbaiki lagi.',
-                'Url' => url('/approve-assignment'), // Perbaikan pada URL
-                'department_id' => rand(1111, 9999),
-            ];
-
-            Notification::send($users, new NotificationDepartment($notificationData));
-
-            // Simpan permintaan penugasan ke dalam tabel request_assignments
-            RequestAssignment::create([
-                'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
-                'status_id' => 1 // status_id 1 untuk 'Pending'
-            ]);
-
-            return redirect()->back()->with('success', 'Permintaan penugasan berhasil dikirim. Menunggu persetujuan admin.');
-        }
-
-        return redirect()->back()->with('error', 'Permintaan penugasan gagal. Anda tidak memiliki hak untuk mengajukan.');
-    }
-
 
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $users = User::role('User')
-            ->get();
-
-        // $assignTo = User::role('Department')
-        //     ->get();
+        $customers = User::role('User')->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -95,11 +43,10 @@ class UnassignedDbaController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
-
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -110,7 +57,7 @@ class UnassignedDbaController extends Controller
             compact(
                 'ticket',
                 'logs',
-                'users',
+                'customers',
                 'priorities',
                 'statuses',
                 'categories',
@@ -120,72 +67,51 @@ class UnassignedDbaController extends Controller
         );
     }
 
-    public function store_comment(Request $request)
+    public function edit($id)
     {
-        DB::beginTransaction();
-        try {
-            $comment = new Comment();
-            $comment->ticket_id = $request->ticket_id;
-            $comment->user_id = $request->user_id;
-            $comment->message = $request->message;
-            $comment->created_at = now();
-            $comment->updated_at = null;
-            $comment->save();
+        $ticket = Ticket::findOrFail($id);
+        $priorities = Priority::all();
+        $categories = Category::all();
 
-            $assignedSysdbaId = $request->assign_to;
-
-            // Notifikasi
-            $users = User::role(['User'])->where('id', $assignedSysdbaId)->get();
-            $authenticatedUserName = Auth::user()->name;
-
-            $notificationData = [
-                'name' => $authenticatedUserName,
-                'body' => 'Ada komentar baru pada tiket anda',
-                'thanks' => 'Terimakasih',
-                'Text' => 'Tolong cek kembali',
-                'Url' => url('/users/myTicket/' . $comment->ticket_id),
-                'department_id' => rand(1111, 9999),
-                'type' => 'comment', // Menambahkan properti 'type'
-            ];
-
-            Notification::send($users, new CommentDepartment($notificationData));
-
-            DB::commit();
-
-            return redirect()->back()->with([
-                'success' => 'Komen telah terbuat!',
-                'new_comment_id' => $comment->id
-            ]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return back()->with('error', 'Komentar anda tidak tersimpan!');
-        }
+        return view('dashboard.dba.unassigned-ticket.edit', compact('ticket', 'priorities', 'categories'));
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'priority_id' => 'required|exists:priorities,id',
+            'category_id' => 'required|exists:categories,id',
+        ]);
 
-    // public function update_comment(Request $request, $id)
-    // {
-    //     // Cari komentar berdasarkan ID
-    //     $comment = Comment::find($id);
+        $ticket = Ticket::findOrFail($id);
+        $ticket->priority_id = $request->input('priority_id');
+        $ticket->category_id = $request->input('category_id');
+        $ticket->save();
 
-    //     // Pastikan komentar ditemukan
-    //     if (!$comment) {
-    //         return redirect()->back()->with('error', 'Comment not found.');
-    //     }
+        return redirect()->route('unassignedDba.index')->with('success', 'Ticket berhasil diperbarui.');
+    }
 
-    //     // Cek apakah ticket_id yang diberikan ada dalam tabel tickets
-    //     $ticket = Ticket::find($request->ticket_id);
-    //     if (!$ticket) {
-    //         return redirect()->back()->with('error', 'Ticket not found.');
-    //     }
+    public function verifyTicket($id)
+    {
+        $ticket = Ticket::findOrFail($id);
 
-    //     // Perbarui atribut-atribut komentar
-    //     $comment->ticket_id = $request->ticket_id;
-    //     $comment->user_id = auth()->id();
-    //     $comment->message = $request->message;
-    //     $comment->save();
+        $ticket->status_id = 1; // Assuming status_id 1 corresponds to 'Aktif'
+        $ticket->status = 'Verifikasi';
 
-    //     return redirect()->back()->with('success', 'Comment updated successfully!');
-    // }
+        $ticket->save();
+
+        return redirect()->route('unassignedDba.index')->with('success', 'Ticket berhasil diverifikasi.');
+    }
+
+    public function rejectTicket($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->status_id = 2; // Assuming status_id 2 corresponds to 'Tidak Aktif'
+        $ticket->status = 'Verifikasi ditolak';
+
+        $ticket->save();
+
+        return redirect()->route('unassignedDba.index')->with('success', 'Ticket berhasil ditolak.');
+    }
 }

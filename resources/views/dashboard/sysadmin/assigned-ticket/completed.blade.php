@@ -77,11 +77,10 @@
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                        @if ($ticket->status_id == 4)
                                             <!-- Selesai -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->user_s->name }}</td>
+                                                <td>{{ $ticket->name }}</td>
                                                 <td>{{ $ticket->title }}</td>
                                                 <td>{{ $ticket->category->category_name }}</td>
                                                 <td class="text-center">
@@ -133,7 +132,6 @@
                                                     @endif --}}
                                                 </td>
                                             </tr>
-                                        @endif
                                     @endforeach
                                 @endif
                             </tbody>

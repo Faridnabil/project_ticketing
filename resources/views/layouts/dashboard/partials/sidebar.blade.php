@@ -238,11 +238,17 @@
                             </a>
                         </li>
 
+                        @php
+                            $AssignedTicketsCount = app(
+                                'App\Http\Controllers\Sysadmin\AssignedSysadminController',
+                            )->countAssignedTickets();
+                        @endphp
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('assignedSysadmin.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
+                                <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -275,11 +281,18 @@
                                 <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
                             </a>
                         </li>
+
+                        @php
+                            $AssignedTicketsCount = app(
+                                'App\Http\Controllers\Sysadmin\AssignedSysadminController',
+                            )->countAssignedTickets();
+                        @endphp
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
                                 href="{{ route('assignedDba.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
+                                <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -287,6 +300,7 @@
                                 href="{{ route('dba.completed-tickets') }}">
                                 <i class="fas fa-check-circle"></i>
                                 <p>Tiket Selesai</p>
+
                             </a>
                         </li>
                         <li class="nav-item">

@@ -12,7 +12,7 @@
             <!--begin::Card-->
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Data Tiket yang Diterima dan Proses</h4>
+                    <h4 class="card-title">Data Tiket yang aktif dan diproses</h4>
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                         data-bs-target="#filterModal">
                         <span class="btn-label">
@@ -39,13 +39,13 @@
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                        @if (in_array($ticket->status_id, [2, 3]))
+                                        @if (in_array($ticket->status_id, [1, 3]))
                                             <!-- Diterima dan Proses -->
                                             <tr>
                                                 <td>{{ $ticket->no_ticket }}</td>
                                                 <td>{{ $ticket->title }}</td>
                                                 <td>{{ $ticket->category->category_name }}</td>
-                                                <td>{{ $ticket->user_s->name }}</td>
+                                                <td>{{ $ticket->name }}</td>
                                                 <td class="text-center">
                                                     @if ($ticket->priority_id == '4')
                                                         <span class="badge"
@@ -71,10 +71,10 @@
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($ticket->created_at))?? '' }}</td>
                                                 <td>
-                                                    @if ($ticket->status_id == '2')
+                                                    @if ($ticket->status_id == '1')
                                                         <span class="badge"
-                                                            style="background-color:blue ; color: white; font-weight:bold">
-                                                            Diterima</span>
+                                                            style="background-color:green ; color: white; font-weight:bold">
+                                                            Aktif</span>
                                                     @elseif($ticket->status_id == '3')
                                                         <span class="badge"
                                                             style="background-color:#FF7F3E ; color: white; font-weight:bold">
@@ -103,7 +103,7 @@
                                                             </span>
                                                         </a>
                                                     @endcan
-                                                    @if (in_array($ticket->status_id, [2, 3]))
+                                                    @if (in_array($ticket->status_id, [1, 3]))
                                                         <!-- Diterima dan Proses -->
                                                         @can('Edit Ticket')
                                                             <a href="{{ route('assignedSysadmin.edit', $ticket->id) }}"

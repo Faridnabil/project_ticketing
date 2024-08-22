@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->string('no_telp')->nullable();
             $table->string('email')->nullable();
             $table->string('name')->nullable();
-            // $table->foreignId('t_users')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assign_to')->nullable()->constrained('users');
             $table->foreignId('priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->string('due_date')->nullable();
