@@ -52,6 +52,9 @@ Route::post('/notifications/mark-all-as-read', [NotificationController::class, '
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
 Route::post('/post-ticket', [LandingPageController::class, 'store'])->name('landing.save');
+Route::get('/categories-by-service/{service_id}', [LandingPageController::class, 'getCategoriesByService']);
+// Route::get('/user-roles', [LandingPageController::class, 'getUserRoles']);
+// Route::get('/users-by-division/{division}', [LandingPageController::class, 'getUsersByDivision']);
 
 
 // Route::get('/', function () {
