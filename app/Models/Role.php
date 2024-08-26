@@ -14,8 +14,9 @@ class Role extends Model
     protected $fillable = ['name', 'guard_name'];
     protected $primaryKey = 'id';
 
-    public function getrole()
+    public function users()
     {
-        
-    }    
+        return $this->belongsToMany(User::class, 'model_has_roles', 'role_id', 'model_id');
+    }
+
 }

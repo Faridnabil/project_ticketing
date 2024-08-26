@@ -290,19 +290,17 @@
                                         </div>
                                     @enderror
                                 </div>
-
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Tetapkan ke</b></label>
                                     <div class="row">
                                         <div class="col-6">
-                                            <select class="form-select" id="division-select" name="assign_to">
+                                            <select class="form-select" id="division-select" name="assig_to_role">
                                                 <option selected disabled>Divisi</option>
                                                 @foreach ($userRoles as $item)
                                                     <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-
                                         <div class="col-6">
                                             <select class="form-select" id="user-select" name="assign_to">
                                                 <option selected disabled>Seseorang</option>
@@ -328,25 +326,18 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Layanan</b></label>
-                                    <select id="services" name="service_id" class="form-select"
-                                        aria-label="Default select example">
+                                    <select id="services" name="service_id" class="form-select" aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
-                                        @foreach ($service as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->service_name }}
-                                            </option>
+                                        @foreach ($services as $item)
+                                            <option value="{{ $item->id }}">{{ $item->service_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-
+                            
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select id="category" class="form-select" aria-label="Default select example"
-                                        name="category_id">
+                                    <select id="category" class="form-select" aria-label="Default select example" name="category_id">
                                         <option value="">Pilih Kategori</option>
-                                        @foreach ($category as $item)
-                                            <option value="{{ $item->id }}">{{ $item->category_name }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12">
@@ -567,12 +558,9 @@
             var userSelect = document.getElementById('user-select');
             var options = userSelect.querySelectorAll('option');
 
-            // Tampilkan semua opsi terlebih dahulu
             options.forEach(function(option) {
                 option.style.display = 'block';
             });
-
-            // Jika ada divisi yang dipilih
             if (selectedDivision !== 'Divisi') {
                 options.forEach(function(option) {
                     var userRole = option.getAttribute('data-role');
@@ -581,6 +569,37 @@
                     }
                 });
             }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#services').change(function() {
+                var serviceId = $(this).val();
+
+                if (serviceId) {
+                    $.ajax({
+                        url: '/categories-by-service/' + serviceId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            var categoryDropdown = $('#category');
+                            categoryDropdown.empty();
+                            categoryDropdown.append('<option value="">Pilih Kategori</option>');
+
+                            $.each(data, function(key, category) {
+                                categoryDropdown.append('<option value="' + category.id + '">' + category.category_name + '</option>');
+                            });
+                        },
+                        error: function(xhr) {
+                            console.log('Error:', xhr.responseText);
+                        }
+                    });
+                } else {
+                    $('#category').empty().append('<option value="">Pilih Kategori</option>'); // Clear categories dropdown
+                }
+            });
         });
     </script>
 

@@ -16,7 +16,7 @@ class Category extends Model
         'category_name', 'color'
     ] ;
 
-    public function layanan()
+    public function service()
     {
         return $this->belongsTo(Service::class);
     }
