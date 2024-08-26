@@ -16,7 +16,7 @@ class Service extends Model
         'color',
     ];
 
-    public function category()
+    public function categories()
     {
         return $this->hasMany(Category::class);
     }
