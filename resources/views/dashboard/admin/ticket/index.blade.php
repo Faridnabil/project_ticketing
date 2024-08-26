@@ -89,19 +89,16 @@
                                             <td class="text-center">
                                                 @if ($ticket->status_id == '1')
                                                     <span class="badge"
-                                                        style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                                @elseif($ticket->status_id == '2')
-                                                    <span class="badge"
-                                                        style="background-color:blue; color: white; font-weight:bold">Diterima</span>
+                                                        style="background-color:rgb(6, 240, 6); color: white; font-weight:bold">Aktif</span>
                                                 @elseif($ticket->status_id == '3')
                                                     <span class="badge"
                                                         style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
                                                 @elseif($ticket->status_id == '4')
                                                     <span class="badge"
-                                                        style="background-color:green; color: white; font-weight:bold">Selesai</span>
+                                                        style="background-color:rgb(0, 107, 0); color: white; font-weight:bold">Selesai</span>
                                                 @else
                                                     <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak Aktif</span>
                                                 @endif
                                             </td>
                                             <td style="width: 150px;  align-items: center; justify-content: center;">

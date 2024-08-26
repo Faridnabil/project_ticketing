@@ -25,6 +25,9 @@ use App\Http\Controllers\Admin\IncidentalActivityCategoryController;
 use App\Http\Controllers\Dba\AssignedDbaController;
 use App\Http\Controllers\Dba\IncidentalDbaController;
 use App\Http\Controllers\Dba\UnassignedDbaController;
+use App\Http\Controllers\Engineer\EngineerTicketController;
+use App\Http\Controllers\Engineer\HomeEngineerController;
+use App\Http\Controllers\Engineer\IncidentalEngineerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Sysadmin\AssignedSysadminController;
 use App\Http\Controllers\Sysadmin\HomeSysadminController;
@@ -70,7 +73,7 @@ require __DIR__ . '/auth.php';
 
 
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Admin|Engineer'])->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
 
@@ -90,7 +93,7 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin'])->group(functio
     Route::post('/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
 });
 
-Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|SysAdmin|DBA'])->group(function () {
+Route::middleware(['verified', 'auth', 'role:Admin|Engineer|SysAdmin|DBA'])->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
 
     Route::resources([
@@ -99,7 +102,17 @@ Route::middleware(['verified', 'auth', 'role:Super Admin|Admin|SysAdmin|DBA'])->
         '/admin/category' => CategoryController::class,
         '/admin/incidental-activity-category' => IncidentalActivityCategoryController::class,
         '/admin/service' => ServiceController::class,
+        '/engineer/engineerticket' => EngineerTicketController::class,
     ]);
+});
+
+Route::middleware(['verified', 'auth', 'role:Engineer'])->group(function () {
+    Route::resources([
+        '/engineer/engineerticket' => EngineerTicketController::class,
+    ]);
+    Route::get('/engineer/dashboard', [HomeEngineerController::class, 'index'])->name('engineer.dashboard.index');
+    Route::get('/ticket/export', [TicketController::class, 'export'])->name('ticket.export');
+    Route::get('/engineer/incidental-activities', [IncidentalEngineerController::class, 'index'])->name('engineer.incidental-activities.index');
 });
 
 

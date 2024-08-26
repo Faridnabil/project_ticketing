@@ -70,8 +70,16 @@
                                                         <a href="role" class="badge bg-primary">
                                                             {{ $roles }}
                                                         </a>
-                                                    @elseif ($roles == 'Tenaga Ahli')
+                                                    @elseif ($roles == 'Engineer')
                                                         <a href="role" class="badge bg-success">
+                                                            {{ $roles }}
+                                                        </a>
+                                                    @elseif ($roles == 'SysAdmin')
+                                                        <a href="role" class="badge bg-secondary">
+                                                            {{ $roles }}
+                                                        </a>
+                                                    @elseif ($roles == 'DBA')
+                                                        <a href="role" class="badge bg-secondary">
                                                             {{ $roles }}
                                                         </a>
                                                     @else

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Dashboard | PLN Icon+
+    Dashboard Engineer | PLN Icon+
 @endsection
 
 @section('content')
@@ -55,7 +55,7 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Dashboard
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Dashboard Engineer
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
@@ -239,6 +239,10 @@
                                                     </tr>
                                                 @endif
                                             @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="7" class="text-center">No data available</td>
+                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -246,12 +250,10 @@
                         </div>
                     </div>
                 </div>
+                <!-- End of Left Column -->
             </div>
         </div>
     </div>
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

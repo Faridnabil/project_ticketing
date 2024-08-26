@@ -21,78 +21,7 @@
                                         enctype="multipart/form-data" novalidate>
                                         @csrf
                                         @method('PUT')
-                                        <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01" class="form-label">Judul</label>
-                                            <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                                id="title" name="title" value="{{ old('title', $ticket->title) }}"
-                                                autofocus required>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('title')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01" class="form-label">Pemilik</label>
-                                            <select name="t_users"
-                                                class="form-control @error('t_users') is-invalid @enderror" required
-                                                autofocus style="pointer-events: none">
-                                                <option value="" disabled>Pilih Pemilik</option>
-                                                @foreach ($user_s as $user)
-                                                    <option value="{{ $user->id }}"
-                                                        {{ $ticket->user == $user->id ? 'selected' : '' }}>
-                                                        {{ $user->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('user')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
-                                            <select name="assign_to"
-                                                class="form-control @error('assign_to') is-invalid @enderror" required
-                                                autofocus style="pointer-events: none">
-                                                <option disabled>Ditugaskan kepada</option>
-                                                @foreach ($assign_to as $assign)
-                                                    <option value="{{ $assign->id }}"
-                                                        {{ $ticket->assign_to == $assign->id ? 'selected' : '' }}>
-                                                        {{ $assign->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('assign_to')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01" class="form-label">Prioritas</label>
-                                            <select name="priority_id"
-                                                class="form-select @error('priority_id') is-invalid @enderror"
-                                                data-control="select2" data-placeholder="Pilih Prioritas" required
-                                                autofocus>
-                                                <option disabled>Pilih Prioritas</option>
-                                                @foreach ($priorities as $priority)
-                                                    <option value="{{ $priority->id }}"
-                                                        {{ $ticket->priority_id == $priority->id ? 'selected' : '' }}>
-                                                        {{ $priority->priority_name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('priority_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
-                                            <input type="date" name="due_date" class="form-control"
-                                                value="{{ old('due_date', $ticket->due_date) }}">
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('due_date')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+
                                         <div class="col-md-4">
                                             <label for="validationCustom01" class="form-label">Status</label>
                                             <select name="status_id"
@@ -100,7 +29,7 @@
                                                 data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                                 <option disabled>Pilih Status</option>
                                                 @foreach ($statuses as $status)
-                                                    @if (in_array($status->status_name, ['Diterima', 'Proses', 'Selesai']))
+                                                    @if (in_array($status->status_name, ['Aktif', 'Proses', 'Selesai']))
                                                         <option value="{{ $status->id }}"
                                                             {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
                                                             {{ $status->status_name }}</option>
@@ -112,46 +41,14 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="col-md-4">
-                                            <label for="validationCustom01" class="form-label">Kategori</label>
-                                            <select name="category_id"
-                                                class="form-select @error('category_id') is-invalid @enderror"data-control="select2"
-                                                data-placeholder="Pilih Kategori" required autofocus>
-                                                <option disabled>Pilih Kategori</option>
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}"
-                                                        {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
-                                                        {{ $category->category_name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('category_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
 
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01" class="form-label">Deskripsi</label>
-                                            <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                                cols="10" rows="3">{{ old('description', $ticket->description) }}</textarea>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('description')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
                                         <div class="col-md-6">
                                             <label for="solution" class="form-label">Solusi</label>
                                             <textarea name="solution" class="form-control @error('solution') is-invalid @enderror" id="solution" cols="10"
                                                 rows="3">{{ old('solution', $ticket->solution) }}</textarea>
-
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-
+                                            <div class="valid-feedback">Looks good!</div>
                                             @error('solution')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
@@ -170,10 +67,8 @@
                                             </div>
                                             <input type="file" id="attachments" name="attachments[]"
                                                 class="form-control d-none" multiple>
-
                                             <input type="hidden" id="removed_attachments" name="removed_attachments">
-                                            <input type="hidden" id="remaining_attachments"
-                                                name="remaining_attachments">
+                                            <input type="hidden" id="remaining_attachments" name="remaining_attachments">
                                             <div class="valid-feedback">Looks good!</div>
                                             @error('attachments')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -198,11 +93,6 @@
     {{-- CKEditor CDN --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
     <script>
-        ClassicEditor
-            .create(document.querySelector('#description'))
-            .catch(error => {
-                console.error(error);
-            });
         ClassicEditor
             .create(document.querySelector('#solution'))
             .catch(error => {

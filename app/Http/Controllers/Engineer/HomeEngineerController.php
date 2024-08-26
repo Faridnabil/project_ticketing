@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Engineer;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -9,7 +9,7 @@ use App\Models\Comment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class HomeAdminController extends Controller
+class HomeEngineerController extends Controller
 {
     public function index(Request $request)
     {
@@ -92,11 +92,11 @@ class HomeAdminController extends Controller
         }
 
         $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
-            ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
+            ->whereIn('priority_id', [2, 4])
             ->get();
 
         return view(
-            'dashboard.admin.home.index',
+            'dashboard.engineer.home.index',
             compact(
                 'ticketPriotitas',
                 'tickets',
@@ -118,20 +118,18 @@ class HomeAdminController extends Controller
 
     public function getTicketChartData(Request $request)
     {
-        $filterType = $request->input('filter', 'yearly'); // Default ke 'yearly' jika tidak ada filter yang dipilih
+        $filterType = $request->input('filter', 'yearly');
         $date = Carbon::now();
 
         switch ($filterType) {
             case 'weekly':
-                $startOfWeek = Carbon::now()->startOfWeek(); // Mulai minggu (default: Senin)
-                $endOfWeek = Carbon::now()->endOfWeek(); // Akhir minggu (default: Minggu)
+                $startOfWeek = Carbon::now()->startOfWeek();
+                $endOfWeek = Carbon::now()->endOfWeek();
 
                 $tickets = Ticket::selectRaw('DAYOFWEEK(created_at) as day, COUNT(*) as total')
                     ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-                    ->where(function ($query) {
-                        $query->where('status_id', 1)
-                            ->orWhere('status_id', 2)
-                            ->orWhere('status_id', 3);
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
                     })
                     ->groupBy('day')
                     ->get()
@@ -140,6 +138,9 @@ class HomeAdminController extends Controller
 
                 $ticketsClosed = Ticket::selectRaw('DAYOFWEEK(updated_at) as day, COUNT(*) as total')
                     ->whereBetween('updated_at', [$startOfWeek, $endOfWeek])
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
+                    })
                     ->where('status_id', 4)
                     ->groupBy('day')
                     ->get()
@@ -164,10 +165,8 @@ class HomeAdminController extends Controller
                 $tickets = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
                     ->whereMonth('created_at', $month)
                     ->whereYear('created_at', $date->year)
-                    ->where(function ($query) {
-                        $query->where('status_id', 1)
-                            ->orWhere('status_id', 2)
-                            ->orWhere('status_id', 3);
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
                     })
                     ->groupBy('day')
                     ->get()
@@ -177,6 +176,9 @@ class HomeAdminController extends Controller
                 $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
                     ->whereMonth('updated_at', $month)
                     ->whereYear('updated_at', $date->year)
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
+                    })
                     ->where('status_id', 4)
                     ->groupBy('day')
                     ->get()
@@ -202,10 +204,8 @@ class HomeAdminController extends Controller
 
                 $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
                     ->whereYear('created_at', $year)
-                    ->where(function ($query) {
-                        $query->where('status_id', 1)
-                            ->orWhere('status_id', 2)
-                            ->orWhere('status_id', 3);
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
                     })
                     ->groupBy('month')
                     ->get()
@@ -214,6 +214,9 @@ class HomeAdminController extends Controller
 
                 $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
                     ->whereYear('updated_at', $year)
+                    ->whereHas('assignTo.role', function($query) {
+                        $query->whereIn('name', ['SysAdmin', 'DBA']);
+                    })
                     ->where('status_id', 4)
                     ->groupBy('month')
                     ->get()

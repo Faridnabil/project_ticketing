@@ -20,7 +20,7 @@ class HistoryTicket extends Model
         'h_attachments',
         'status_changedBy',
         'h_title',
-        'h_t_users',
+        // 'h_t_users',
         'h_assign_to',
         'h_due_date',
         'h_solution',
@@ -80,10 +80,10 @@ class HistoryTicket extends Model
     }
 
 
-    public function user_s()
-    {
-        return $this->belongsTo(User::class, 't_users');
-    }
+    // public function user_s()
+    // {
+    //     return $this->belongsTo(User::class, 't_users');
+    // }
 
     public function assignTo()
     {

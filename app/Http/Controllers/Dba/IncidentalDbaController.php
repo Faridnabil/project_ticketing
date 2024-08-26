@@ -36,7 +36,7 @@ class IncidentalDbaController extends Controller
         }
 
         // Set status default ke Tertunda
-        $statusDefault = Status::where('status_name', 'Tertunda')->first()->id;
+        // $statusDefault = Status::where('status_name', 'Tertunda')->first()->id;
 
         IncidentalActivity::create([
             'title' => $request->title,
@@ -46,7 +46,7 @@ class IncidentalDbaController extends Controller
             'end_time' => $request->end_time,
             'executor' => $request->executor,
             'sysdba' => $request->sysdba,
-            'status_id' => $statusDefault,
+            // 'status_id' => $statusDefault,
             'file_path' => $filePath,
             'user_id' => Auth::id(),
         ]);

@@ -176,20 +176,22 @@
                 </div>
                 @auth
                     @if (Auth::user()->role('Admin'))
-                        <a href="{{ route('admin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                        <a href="{{ route('admin.dashboard.index') }}"
+                            class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
                     @elseif (Auth::user()->role('Engineer'))
                         <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
                     @elseif (Auth::user()->role('SysAdmin'))
-                        <a href="{{ route('sysadmin.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                        <a href="{{ route('sysadmin.dashboard.index') }}"
+                            class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
                     @elseif (Auth::user()->role('DBA'))
-                        <a href="{{ route('dba.dashboard.index') }}" class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
+                        <a href="{{ route('dba.dashboard.index') }}"
+                            class="btn btn-secondary rounded-pill py-2 px-4">Dashboard</a>
                     @endif
                 @else
                     <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4">Login</a>
                 @endauth
+            </nav>
         </div>
-        </nav>
-    </div>
     </div>
     <!-- Navbar & Hero End -->
 
@@ -298,7 +300,10 @@
                                             <select class="form-select" id="division-select" name="assign_to">
                                                 <option selected disabled>Divisi</option>
                                                 @foreach ($userRoles as $item)
-                                                    <option value="{{ $item['role'] }}">{{ $item['role'] }}</option>
+                                                    @if (in_array($item['role'], ['SysAdmin', 'DBA']))
+                                                        <option value="{{ $item['role'] }}">{{ $item['role'] }}
+                                                        </option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </div>
@@ -313,7 +318,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -567,9 +571,13 @@
             var userSelect = document.getElementById('user-select');
             var options = userSelect.querySelectorAll('option');
 
+            // Aktifkan select user setelah divisi dipilih
+            userSelect.disabled = false;
+
             // Tampilkan semua opsi terlebih dahulu
             options.forEach(function(option) {
                 option.style.display = 'block';
+                option.disabled = false;
             });
 
             // Jika ada divisi yang dipilih
@@ -578,6 +586,7 @@
                     var userRole = option.getAttribute('data-role');
                     if (userRole && userRole !== selectedDivision) {
                         option.style.display = 'none';
+                        option.disabled = true;
                     }
                 });
             }

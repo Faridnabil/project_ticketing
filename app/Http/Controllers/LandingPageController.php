@@ -82,24 +82,13 @@ class LandingPageController extends Controller
                 $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
             }
 
-            //query untuk menyimpan file ticket
-            // $files = $request->file('attachments');
-            // $attachments = [];
-            // if ($files) {
-            //     foreach ($files as $file) {
-            //         $nama_file = time() . "_" . $file->getClientOriginalName();
-            //         $nama_folder = 'file/ticket';
-            //         $file->move(public_path($nama_folder), $nama_file);
-            //         $attachments[] = $nama_folder . "/" . $nama_file;
-            //     }
-            // }
             $files = $request->file('attachments');
             $attachments = [];
 
             if ($files) {
                 foreach ($files as $file) {
                     $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'ticket';
+                    $nama_folder = 'file/ticket';
                     $file->move(public_path($nama_folder), $nama_file);
                     $attachments[] = $nama_folder . "/" . $nama_file;
                 }

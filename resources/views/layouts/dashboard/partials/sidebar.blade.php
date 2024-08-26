@@ -32,6 +32,15 @@
                         </a>
                     </li>
                 @endcan
+                @can('View Dashboard Engineer')
+                    <li class="nav-item active">
+                        <a class="menu-link {{ Request::is('engineer.dashboard') ? 'active' : '' }}"
+                            href="{{ route('engineer.dashboard.index') }}" aria-expanded="false">
+                            <i class="fas fa-home"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('View Dashboard User')
                     <li class="nav-item active">
                         <a class="menu-link {{ Request::is('user.dashboard') ? 'active' : '' }}"
@@ -205,6 +214,28 @@
                                 <p>Daftar Pengajuan</p>
                             </a>
                         </li>
+                    @endrole
+                    @role('Engineer')
+                        <li class="nav-item">
+                            <a class="menu-link {{ Request::is('ticket') ? 'active' : '' }}"
+                                href="{{ route('engineerticket.index') }}">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Semua Tiket</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu-link" href="{{ route('engineer.incidental-activities.index') }}">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Incidental Activity</p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a class="menu-link {{ Request::is('requestAssignment') ? 'active' : '' }}"
+                                href="{{ route('requestAssignment.index') }}">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Daftar Pengajuan</p>
+                            </a>
+                        </li> --}}
                     @endrole
                     @role('User')
                         <li class="nav-item">

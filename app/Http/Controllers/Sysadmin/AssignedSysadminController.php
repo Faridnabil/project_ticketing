@@ -46,8 +46,9 @@ class AssignedSysadminController extends Controller
     public function countAssignedTickets()
     {
         return Ticket::where('assign_to', Auth::user()->id)
-        ->where('status_id', [1, 3])
-        ->count();
+            ->where('status_id', 1)
+            ->orWhere('status_id', 3)
+            ->count();
     }
 
     public function show($id)
@@ -93,11 +94,6 @@ class AssignedSysadminController extends Controller
     public function edit($id)
     {
         $ticket = Ticket::find($id);
-        $users_s = User::role('User')
-            ->get();
-
-        $assignTo = User::role(['DBA', 'SysAdmin'])
-            ->get();
 
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -105,24 +101,22 @@ class AssignedSysadminController extends Controller
 
         $statusChangedBy = Auth::user();
 
+        // Ambil hanya log yang relevan
         $logs = ActivityLog::where('model_type', Ticket::class)
-            ->where('model_id', $ticket)
+            ->where('model_id', $ticket->id)
             ->get();
 
         return view(
             'dashboard.sysadmin.assigned-ticket.edit',
             compact(
                 'ticket',
-                'users_s',
-                'assignTo',
-                'priorities',
                 'statuses',
-                'categories',
                 'statusChangedBy',
-                'logs',
+                'logs'
             )
         );
     }
+
 
     public function update(Request $request, $id)
     {
@@ -131,23 +125,21 @@ class AssignedSysadminController extends Controller
             // Ambil tiket yang akan diupdate
             $ticket = Ticket::findOrFail($id);
 
-            $validate = $request->all();
-            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+            // Validasi hanya untuk field yang bisa di-update
+            $validate = $request->only(['status_id', 'solution', 'attachments']);
+            $files = $request->file('attachments');
 
-            // Ambil file yang masih ada
+            // Handle solution field as nullable
+            $validate['solution'] = $request->input('solution') ?: $ticket->solution;
+
+            // Handle attachments
             $existingAttachments = $ticket->attachments ? json_decode($ticket->attachments, true) : [];
-
-            // Ambil file yang dihapus
             $removedAttachments = $request->input('removed_attachments') ? explode(',', $request->input('removed_attachments')) : [];
-
-            // Filter file yang masih ada setelah penghapusan
             $remainingAttachments = array_diff($existingAttachments, $removedAttachments);
 
-            // Proses file baru yang diupload
             $newAttachments = [];
             if ($files) {
                 foreach ($files as $file) {
-                    // Proses setiap file
                     $nama_file = time() . "_" . $file->getClientOriginalName();
                     $nama_folder = 'file/ticket';
                     $file->move(public_path($nama_folder), $nama_file);
@@ -155,76 +147,32 @@ class AssignedSysadminController extends Controller
                 }
             }
 
-            // Gabungkan file baru dengan file yang masih ada
             $attachments = array_merge($remainingAttachments, $newAttachments);
             $validate['attachments'] = json_encode($attachments);
 
-            // Update tiket dengan data baru
+            // Update tiket dengan data yang diperbolehkan
             $ticket->update($validate);
 
-            // Simpan data tiket yang diupdate ke tabel history_tickets
+            // Log perubahan ke tabel history_tickets
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_title' => $ticket->title,
-                'h_users' => $ticket->t_users,
+                'h_no_telp' => $ticket->no_telp,
+                'h_email' => $ticket->email,
+                // 'h_users' => $ticket->name,
                 'h_assign_to' => $ticket->assign_to,
-                'h_solution' => $ticket->solution,
-                'h_priority_id' => $ticket->priority_id,
-                'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
+                'h_priority_id' => $ticket->priority_id,
+                'h_status_id' => $ticket->status_id,
+                'h_solution' => $ticket->solution,
                 'h_attachments' => json_encode($attachments),
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            $ticket->update($validate);
-
-            // ------ Notifikasi --------------
-            $statusName = $ticket->status->status_name;
-
-            // Ambil nama pengguna yang ditugaskan
-            $authenticatedUserName = Auth::user()->name;
-
-            if ($statusName == 'Proses') {
-                // Ambil semua pengguna dengan role Admin
-                $adminUsers = User::role('Admin')->get();
-
-                if ($adminUsers->isNotEmpty()) {
-                    $notificationDataForAdmins = [
-                        'name' => $authenticatedUserName,
-                        'body' => 'Tiket diterima dan sedang diproses.',
-                        'thanks' => 'Terimakasih',
-                        'Text' => 'Silakan cek perkembangan tiket anda.',
-                        'Url' => url('/admin/ticket'),
-                        'ticket_id' => $ticket->no_ticket,
-                        'type' => 'ticket_in_progress',
-                    ];
-
-                    // Kirim notifikasi ke semua pengguna Admin
-                    Notification::send($adminUsers, new NotificationCustomer($notificationDataForAdmins));
-                }
-            } elseif ($statusName == 'Selesai') {
-                // Cek apakah statusnya "Selesai"
-                $tUsers = User::find($ticket->t_users);
-
-                if ($tUsers) {
-                    // Data notifikasi untuk pengguna yang memiliki tiket (t_users)
-                    $notificationDataForTUsers = [
-                        'name' => $authenticatedUserName,
-                        'body' => 'Tiket yang anda ajukan telah selesai.',
-                        'thanks' => 'Terimakasih',
-                        'Text' => 'Silakan cek hasilnya.',
-                        'Url' => url('/users/myTicket'),
-                        'ticket_id' => $ticket->no_ticket,
-                        'type' => 'ticket_completed',
-                    ];
-
-                    // Kirim notifikasi ke pengguna yang memiliki tiket
-                    Notification::send($tUsers, new NotificationCustomer($notificationDataForTUsers));
-                }
-            }
+            // Logika notifikasi sesuai kebutuhan
 
             DB::commit();
             return redirect()->route('assignedSysadmin.index')->with('success', 'Tiket Berhasil Dirubah');

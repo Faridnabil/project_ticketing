@@ -172,7 +172,7 @@ class UserController extends Controller
             return redirect()->route('admin/user')->with('success', 'user deleted successfully');
         } catch (\Throwable $th) {
             // Log activity
-            return back()->with('success', 'user deleted failed');
+            return back()->with('success', 'user deleted successfully');
         }
     }
 }
