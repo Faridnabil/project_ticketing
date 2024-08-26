@@ -56,6 +56,7 @@ Route::get('/categories-by-service/{service_id}', [LandingPageController::class,
 // Route::get('/user-roles', [LandingPageController::class, 'getUserRoles']);
 // Route::get('/users-by-division/{division}', [LandingPageController::class, 'getUsersByDivision']);
 
+
 // Route::get('/', function () {
 //     return view('landingpage.app');
 // });
