@@ -95,10 +95,16 @@ class UnassignedDbaController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->status_id = 1; // Assuming status_id 1 corresponds to 'Aktif'
+        // Update status tiket menjadi 'Verifikasi'
+        $ticket->status_id = 1; // Asumsikan status_id 1 adalah 'Verifikasi'
         $ticket->status = 'Verifikasi';
-
         $ticket->save();
+
+        // Hapus semua tiket dengan no_ticket yang sama dan status 'Belum verifikasi'
+        Ticket::where('no_ticket', $ticket->no_ticket)
+            ->where('status', 'Belum verifikasi')
+            ->where('id', '!=', $ticket->id)
+            ->delete();
 
         return redirect()->route('unassignedDba.index')->with('success', 'Ticket berhasil diverifikasi.');
     }
@@ -111,6 +117,12 @@ class UnassignedDbaController extends Controller
         $ticket->status = 'Verifikasi ditolak';
 
         $ticket->save();
+
+        // Hapus semua tiket dengan no_ticket yang sama dan status 'Belum verifikasi'
+        Ticket::where('no_ticket', $ticket->no_ticket)
+            ->where('status', 'Belum verifikasi')
+            ->where('id', '!=', $ticket->id)
+            ->delete();
 
         return redirect()->route('unassignedDba.index')->with('success', 'Ticket berhasil ditolak.');
     }

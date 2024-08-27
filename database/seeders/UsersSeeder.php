@@ -16,7 +16,7 @@ class UsersSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         Permission::create(['name' => 'View Dashboard Admin']);
-        Permission::create(['name' => 'View Dashboard User']);
+        // Permission::create(['name' => 'View Dashboard User']);
         Permission::create(['name' => 'View Dashboard SysAdmin']);
         Permission::create(['name' => 'View Dashboard Engineer']);
         Permission::create(['name' => 'View Dashboard DBA']);
@@ -87,41 +87,41 @@ class UsersSeeder extends Seeder
         $adminRole->givePermissionTo('Create User');
         $adminRole->givePermissionTo('Edit User');
         $adminRole->givePermissionTo('Delete User');
-        $adminRole->givePermissionTo('Show User');
+        // $adminRole->givePermissionTo('Show User');
 
         $adminRole->givePermissionTo('Create Role');
         $adminRole->givePermissionTo('Edit Role');
         $adminRole->givePermissionTo('Delete Role');
-        $adminRole->givePermissionTo('Show Role');
+        // $adminRole->givePermissionTo('Show Role');
 
         $adminRole->givePermissionTo('Create Permission');
         $adminRole->givePermissionTo('Edit Permission');
         $adminRole->givePermissionTo('Delete Permission');
-        $adminRole->givePermissionTo('Show Permission');
+        // $adminRole->givePermissionTo('Show Permission');
 
         $adminRole->givePermissionTo('View Category');
         $adminRole->givePermissionTo('Create Category');
         $adminRole->givePermissionTo('Edit Category');
         $adminRole->givePermissionTo('Delete Category');
-        $adminRole->givePermissionTo('Show Category');
+        // $adminRole->givePermissionTo('Show Category');
 
         $adminRole->givePermissionTo('View Service');
         $adminRole->givePermissionTo('Create Service');
         $adminRole->givePermissionTo('Edit Service');
         $adminRole->givePermissionTo('Delete Service');
-        $adminRole->givePermissionTo('Show Service');
+        // $adminRole->givePermissionTo('Show Service');
 
         $adminRole->givePermissionTo('View Priority');
         $adminRole->givePermissionTo('Create Priority');
         $adminRole->givePermissionTo('Edit Priority');
         $adminRole->givePermissionTo('Delete Priority');
-        $adminRole->givePermissionTo('Show Priority');
+        // $adminRole->givePermissionTo('Show Priority');
 
         $adminRole->givePermissionTo('View Status');
         $adminRole->givePermissionTo('Create Status');
         $adminRole->givePermissionTo('Edit Status');
         $adminRole->givePermissionTo('Delete Status');
-        $adminRole->givePermissionTo('Show Status');
+        // $adminRole->givePermissionTo('Show Status');
 
         $adminRole->givePermissionTo('View Ticket');
         $adminRole->givePermissionTo('Create Ticket');
@@ -134,51 +134,51 @@ class UsersSeeder extends Seeder
 
         $EngineerRole->givePermissionTo('View Category');
         $EngineerRole->givePermissionTo('Edit Category');
-        $EngineerRole->givePermissionTo('Show Category');
+        // $EngineerRole->givePermissionTo('Show Category');
 
         $EngineerRole->givePermissionTo('View Service');
         $EngineerRole->givePermissionTo('Edit Service');
-        $EngineerRole->givePermissionTo('Show Service');
+        // $EngineerRole->givePermissionTo('Show Service');
 
         $EngineerRole->givePermissionTo('View Priority');
         $EngineerRole->givePermissionTo('Edit Priority');
-        $EngineerRole->givePermissionTo('Show Priority');
+        // $EngineerRole->givePermissionTo('Show Priority');
 
         $EngineerRole->givePermissionTo('View Status');
         $EngineerRole->givePermissionTo('Edit Status');
-        $EngineerRole->givePermissionTo('Show Status');
+        // $EngineerRole->givePermissionTo('Show Status');
 
         $EngineerRole->givePermissionTo('View Ticket');
         $EngineerRole->givePermissionTo('Edit Ticket');
         $EngineerRole->givePermissionTo('Show Ticket');
 
         //User
-        $UserRole->givePermissionTo('View Dashboard User');
+        // $UserRole->givePermissionTo('View Dashboard User');
 
-        $UserRole->givePermissionTo('View Ticket');
-        $UserRole->givePermissionTo('Create Ticket');
-        $UserRole->givePermissionTo('Edit Ticket');
-        $UserRole->givePermissionTo('Delete Ticket');
-        $UserRole->givePermissionTo('Show Ticket');
+        // $UserRole->givePermissionTo('View Ticket');
+        // $UserRole->givePermissionTo('Create Ticket');
+        // $UserRole->givePermissionTo('Edit Ticket');
+        // $UserRole->givePermissionTo('Delete Ticket');
+        // $UserRole->givePermissionTo('Show Ticket');
 
         //SysAdmin
         $SysAdminRole->givePermissionTo('View Dashboard SysAdmin');
 
         $SysAdminRole->givePermissionTo('View Category');
         $SysAdminRole->givePermissionTo('Edit Category');
-        $SysAdminRole->givePermissionTo('Show Category');
+        // $SysAdminRole->givePermissionTo('Show Category');
 
         $SysAdminRole->givePermissionTo('View Service');
         $SysAdminRole->givePermissionTo('Edit Service');
-        $SysAdminRole->givePermissionTo('Show Service');
+        // $SysAdminRole->givePermissionTo('Show Service');
 
         $SysAdminRole->givePermissionTo('View Priority');
         $SysAdminRole->givePermissionTo('Edit Priority');
-        $SysAdminRole->givePermissionTo('Show Priority');
+        // $SysAdminRole->givePermissionTo('Show Priority');
 
         $SysAdminRole->givePermissionTo('View Status');
         $SysAdminRole->givePermissionTo('Edit Status');
-        $SysAdminRole->givePermissionTo('Show Status');
+        // $SysAdminRole->givePermissionTo('Show Status');
 
         $SysAdminRole->givePermissionTo('View Ticket');
         $SysAdminRole->givePermissionTo('Edit Ticket');
@@ -195,19 +195,19 @@ class UsersSeeder extends Seeder
 
         $DBARole->givePermissionTo('View Category');
         $DBARole->givePermissionTo('Edit Category');
-        $DBARole->givePermissionTo('Show Category');
+        // $DBARole->givePermissionTo('Show Category');
 
         $DBARole->givePermissionTo('View Service');
         $DBARole->givePermissionTo('Edit Service');
-        $DBARole->givePermissionTo('Show Service');
+        // $DBARole->givePermissionTo('Show Service');
 
         $DBARole->givePermissionTo('View Priority');
         $DBARole->givePermissionTo('Edit Priority');
-        $DBARole->givePermissionTo('Show Priority');
+        // $DBARole->givePermissionTo('Show Priority');
 
         $DBARole->givePermissionTo('View Status');
         $DBARole->givePermissionTo('Edit Status');
-        $DBARole->givePermissionTo('Show Status');
+        // $DBARole->givePermissionTo('Show Status');
 
         $DBARole->givePermissionTo('View Ticket');
         $DBARole->givePermissionTo('Edit Ticket');
@@ -226,30 +226,42 @@ class UsersSeeder extends Seeder
         ]);
         $user->assignRole($adminRole);
 
-        $user = User::factory()->create([
-            'name' => 'User1',
-            'email' => 'User1@gmail.com',
-            'password' => bcrypt('qwerty12'),
-        ]);
-        $user->assignRole($UserRole);
+        // $user = User::factory()->create([
+        //     'name' => 'User1',
+        //     'email' => 'User1@gmail.com',
+        //     'password' => bcrypt('qwerty12'),
+        // ]);
+        // $user->assignRole($UserRole);
+
+        // $user = User::factory()->create([
+        //     'name' => 'User2',
+        //     'email' => 'User2@gmail.com',
+        //     'password' => bcrypt('qwerty12'),
+        // ]);
+        // $user->assignRole($UserRole);
 
         $user = User::factory()->create([
-            'name' => 'User2',
-            'email' => 'User2@gmail.com',
+            'name' => 'SysAdmin1',
+            'email' => 'sysadmin1@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
-        $user->assignRole($UserRole);
-
+        $user->assignRole($SysAdminRole);
         $user = User::factory()->create([
-            'name' => 'SysAdmin',
-            'email' => 'sysadmin@gmail.com',
+            'name' => 'SysAdmin2',
+            'email' => 'sysadmin2@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($SysAdminRole);
 
         $user = User::factory()->create([
-            'name' => 'DBA',
-            'email' => 'dba@gmail.com',
+            'name' => 'DBA1',
+            'email' => 'dba1@gmail.com',
+            'password' => bcrypt('qwerty12'),
+        ]);
+        $user->assignRole($DBARole);
+        $user = User::factory()->create([
+            'name' => 'DBA2',
+            'email' => 'dba2@gmail.com',
             'password' => bcrypt('qwerty12'),
         ]);
         $user->assignRole($DBARole);

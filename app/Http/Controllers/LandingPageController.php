@@ -38,7 +38,7 @@ class LandingPageController extends Controller
             }
         }
         // $userRoles = collect($userRoles)->unique('role')->values()->all();
-        $desiredRoles = ['SysAdmin', 'DBA', 'Engineer'];
+        $desiredRoles = ['SysAdmin', 'DBA'];
         $userRoles = collect($userRoles)
             ->unique('role')
             ->filter(function ($item) use ($desiredRoles) {
@@ -199,7 +199,7 @@ class LandingPageController extends Controller
             //     }
             // } else {
             //     $data->assign_to = $request->assign_to;
-            // }            
+            // }
             // $data->priority_id = $request->priority_id;
             // $data->due_date = null;
             // $data->status_id = null;
@@ -214,5 +214,5 @@ class LandingPageController extends Controller
 
     }
 
-        
+
 }

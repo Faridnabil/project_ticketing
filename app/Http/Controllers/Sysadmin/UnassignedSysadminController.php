@@ -28,8 +28,8 @@ class UnassignedSysadminController extends Controller
     public function countUnassignedTickets()
     {
         return Ticket::where('assign_to', Auth::user()->id)
-        ->where('status', 'Belum verifikasi')
-        ->count();
+            ->where('status', 'Belum verifikasi')
+            ->count();
     }
 
 
@@ -97,15 +97,20 @@ class UnassignedSysadminController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        // Update the ticket's status and verification status
-        // $ticket->status_id = 'Aktif';
-        $ticket->status_id = 1; // Assuming status_id 2 corresponds to 'Aktif'
-        $ticket->status = 'Verifikasi'; // You may need to add this column in the tickets table
-
+        // Update status tiket menjadi 'Verifikasi'
+        $ticket->status_id = 1; // Asumsikan status_id 1 adalah 'Verifikasi'
+        $ticket->status = 'Verifikasi';
         $ticket->save();
 
-        return redirect()->route('unassignedSysadmin.index')->with('success', 'Ticket berhasil diverifikasi.');
+        // Hapus semua tiket dengan no_ticket yang sama dan status 'Belum verifikasi'
+        Ticket::where('no_ticket', $ticket->no_ticket)
+            ->where('status', 'Belum verifikasi')
+            ->where('id', '!=', $ticket->id)
+            ->delete();
+
+        return redirect()->route('unassignedSysadmin.index')->with('success', 'Tiket berhasil diverifikasi dan dihapus dari pengguna lain.');
     }
+
 
     public function rejectTicket($id)
     {
@@ -116,6 +121,12 @@ class UnassignedSysadminController extends Controller
         $ticket->status = 'Verifikasi ditolak';
 
         $ticket->save();
+
+        // Hapus semua tiket dengan no_ticket yang sama dan status 'Belum verifikasi'
+        Ticket::where('no_ticket', $ticket->no_ticket)
+            ->where('status', 'Belum verifikasi')
+            ->where('id', '!=', $ticket->id)
+            ->delete();
 
         return redirect()->route('unassignedSysadmin.index')->with('success', 'Ticket berhasil ditolak.');
     }

@@ -299,10 +299,8 @@
                                             <select class="form-select" id="division-select" name="assig_to_role">
                                                 <option selected disabled>Divisi</option>
                                                 @foreach ($userRoles as $item)
-                                                    @if (in_array($item['role'], ['SysAdmin', 'DBA']))
-                                                        <option value="{{ $item['role'] }}">{{ $item['role'] }}
-                                                        </option>
-                                                    @endif
+                                                    <option value="{{ $item['role'] }}">{{ $item['role'] }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -330,17 +328,19 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="services" class="form-label"><b>Layanan</b></label>
-                                    <select id="services" name="service_id" class="form-select" aria-label="Default select example">
+                                    <select id="services" name="service_id" class="form-select"
+                                        aria-label="Default select example">
                                         <option value="">Pilih Layanan</option>
                                         @foreach ($services as $item)
                                             <option value="{{ $item->id }}">{{ $item->service_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            
+
                                 <div class="col-6">
                                     <label for="category" class="form-label"><b>Kategori</b></label>
-                                    <select id="category" class="form-select" aria-label="Default select example" name="category_id">
+                                    <select id="category" class="form-select" aria-label="Default select example"
+                                        name="category_id">
                                         <option value="">Pilih Kategori</option>
                                     </select>
                                 </div>
@@ -557,24 +557,37 @@
     </script>
 
     <script>
-        document.getElementById('division-select').addEventListener('change', function() {
-            var selectedDivision = this.value;
+        document.addEventListener('DOMContentLoaded', function() {
             var userSelect = document.getElementById('user-select');
-            var options = userSelect.querySelectorAll('option');
+            userSelect.disabled = true; // Disable the user-select on page load
 
-            options.forEach(function(option) {
-                option.style.display = 'block';
-                option.disabled = false;
-            });
-            if (selectedDivision !== 'Divisi') {
+            document.getElementById('division-select').addEventListener('change', function() {
+                var selectedDivision = this.value;
+                var options = userSelect.querySelectorAll('option');
+
+                // Reset the user select options
                 options.forEach(function(option) {
-                    var userRole = option.getAttribute('data-role');
-                    if (userRole && userRole !== selectedDivision) {
-                        option.style.display = 'none';
-                        option.disabled = true;
-                    }
+                    if (option.value === "") return; // Skip the default "Seseorang" option
+                    option.style.display = 'none';
+                    option.disabled = true;
                 });
-            }
+
+                // Enable user-select only when a valid division is selected
+                if (selectedDivision) {
+                    userSelect.disabled = false;
+
+                    // Show the options based on the selected division
+                    options.forEach(function(option) {
+                        var userRole = option.getAttribute('data-role');
+                        if (userRole && userRole === selectedDivision) {
+                            option.style.display = 'block';
+                            option.disabled = false;
+                        }
+                    });
+                } else {
+                    userSelect.disabled = true;
+                }
+            });
         });
     </script>
 
@@ -595,7 +608,9 @@
                             categoryDropdown.append('<option value="">Pilih Kategori</option>');
 
                             $.each(data, function(key, category) {
-                                categoryDropdown.append('<option value="' + category.id + '">' + category.category_name + '</option>');
+                                categoryDropdown.append('<option value="' + category
+                                    .id + '">' + category.category_name +
+                                    '</option>');
                             });
                         },
                         error: function(xhr) {
@@ -603,7 +618,8 @@
                         }
                     });
                 } else {
-                    $('#category').empty().append('<option value="">Pilih Kategori</option>'); // Clear categories dropdown
+                    $('#category').empty().append(
+                        '<option value="">Pilih Kategori</option>'); // Clear categories dropdown
                 }
             });
         });
