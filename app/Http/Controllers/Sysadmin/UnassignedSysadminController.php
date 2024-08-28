@@ -25,7 +25,7 @@ class UnassignedSysadminController extends Controller
         return view('dashboard.sysadmin.unassigned-ticket.index', compact('tickets'));
     }
 
-    public function countUnassignedTickets()
+    public function countUnassignedSysadmin()
     {
         return Ticket::where('assign_to', Auth::user()->id)
             ->where('status', 'Belum verifikasi')

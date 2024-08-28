@@ -16,6 +16,11 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+        // return $categories;
+        // foreach ($categories as $key => $value) {
+        //     $value -> service->service_name;
+        // }
+        // return $value;
 
         return view("dashboard.admin.category.index", compact("categories"));
     }

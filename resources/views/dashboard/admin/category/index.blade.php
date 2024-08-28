@@ -40,8 +40,8 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>
                                                 <span class="badge"
-                                                    style="background-color: {{ $category->layanan->color }}; color: white; font-weight:bold">
-                                                    {{ $category->layanan->service_name }}</span>
+                                                    style="background-color:{{ $category->layanan->color }}; color: white; font-weight:bold">{{ $category->layanan->color }}
+                                                    </span>
                                             </td>
                                             <td class="text-center">
                                                 <span class="badge"

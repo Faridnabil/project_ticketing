@@ -25,7 +25,7 @@ class UnassignedDbaController extends Controller
         return view('dashboard.dba.unassigned-ticket.index', compact('tickets'));
     }
 
-    public function countUnassignedTickets()
+    public function countUnassignedDba()
     {
         return Ticket::where('assign_to', Auth::user()->id)
             ->where('status', 'Belum verifikasi')

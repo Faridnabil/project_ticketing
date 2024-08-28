@@ -237,7 +237,7 @@
                             </a>
                         </li> --}}
                     @endrole
-                    @role('User')
+                    {{-- @role('User')
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('myTicket') ? 'active' : '' }}"
                                 href="{{ route('myTicket.index') }}">
@@ -252,12 +252,12 @@
                                 <p>Riwayat Tiket</p>
                             </a>
                         </li>
-                    @endrole
+                    @endrole --}}
                     @role('SysAdmin')
                         @php
                             $unassignedTicketsCount = app(
                                 'App\Http\Controllers\Sysadmin\UnassignedSysadminController',
-                            )->countUnassignedTickets();
+                            )->countUnassignedSysadmin();
                         @endphp
 
                         <li class="nav-item">
@@ -300,8 +300,8 @@
                     @role('DBA')
                         @php
                             $unassignedTicketsCount = app(
-                                'App\Http\Controllers\Sysadmin\UnassignedSysadminController',
-                            )->countUnassignedTickets();
+                                'App\Http\Controllers\Dba\UnassignedDbaController',
+                            )->countUnassignedDba();
                         @endphp
 
                         <li class="nav-item">
@@ -315,7 +315,7 @@
 
                         @php
                             $AssignedTicketsCount = app(
-                                'App\Http\Controllers\Sysadmin\AssignedSysadminController',
+                                'App\Http\Controllers\Dba\AssignedDbaController',
                             )->countAssignedTickets();
                         @endphp
                         <li class="nav-item">
