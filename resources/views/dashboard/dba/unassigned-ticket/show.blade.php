@@ -103,9 +103,7 @@
         <div class="card">
             <div class="card-header card-header border-0 pt-6 ">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Edit Ticket</h4>
-                </div>
-                <div class="card-header" style="margin-top: 30px">
+                    <h4 class="card-title">Detail Ticket</h4>
                     <ul class="nav custom-tabs" role="tablist">
                         <li class="nav-item">
                             <a class="btn-custom active font-regular mt-4" data-bs-toggle="tab" href="#keluhan"
@@ -177,14 +175,18 @@
                                                     data-tns-center="false" data-tns-dots="false">
 
                                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                                        @php
+                                                            $attachment = trim($attachment);
+                                                        @endphp
                                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                            <img src="{{ asset($attachment) }}"
+                                                            <img src="{{ asset('storage/' . $attachment) }}"
                                                                 alt="{{ basename($attachment) }}"
                                                                 class="card-rounded shadow mw-100" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
                                                         </div>
                                                     @endforeach
                                                 </div>
+
                                                 <!--end::Slider-->
                                                 <!--begin::Slider button-->
                                                 <button class="btn btn-icon btn-active-color-primary"
@@ -248,7 +250,7 @@
                                             @foreach ($logs as $log)
                                                 <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
                                                     <span
-                                                        class="timeline-date">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
+                                                        class="timeline-date">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
                                                     <div class="timeline-content">
                                                         <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
                                                         <p class="timeline-text">
@@ -286,11 +288,14 @@
                                                                     <a href="#" class="attachment-link"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#imageModal"
-                                                                        data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                        data-src="{{ asset('attachments/' . $attachment) }}">{{ $shortenedFilename }}</a><br>
                                                                 @endforeach
                                                             @else
                                                                 N/A
                                                             @endif
+
+
+
                                                             <br>
                                                             <strong>Status Diubah Oleh :</strong>
                                                             {{ $log->statusChangedBy->name ?? 'N/A' }}
@@ -338,6 +343,9 @@
     </script>
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+        @php
+            $attachment = trim($attachment);
+        @endphp
         <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
@@ -349,7 +357,7 @@
                     </div><!--end modal-header-->
                     <div class="modal-body">
                         <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                            <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}" />
                         </div>
                     </div><!--end modal-body-->
                 </div>
@@ -458,6 +466,27 @@
                     localStorage.setItem('lastEditedComment', commentId);
                 });
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var slider = tns({
+                container: '#kt_team_slider',
+                items: 1,
+                slideBy: 'page',
+                autoplay: false,
+                controls: false, // disable built-in controls
+                nav: false,
+                autoplayButtonOutput: false
+            });
+
+            document.getElementById('kt_team_slider_prev1').onclick = function() {
+                slider.goTo('prev');
+            };
+
+            document.getElementById('kt_team_slider_next1').onclick = function() {
+                slider.goTo('next');
+            };
         });
     </script>
 @endsection

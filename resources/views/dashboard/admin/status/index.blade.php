@@ -37,14 +37,14 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">
-                                                @if ($status->status_name == 'Tertunda')
+                                                @if ($status->status_name == 'Aktif')
                                                     <span class="badge"
-                                                        style="background-color:red ; color: white; font-weight:bold">
-                                                        Tertunda</span>
-                                                @elseif($status->status_name == 'Diterima')
+                                                        style="background-color:rgb(6, 240, 6); ; color: white; font-weight:bold">
+                                                        Aktif</span>
+                                                @elseif($status->status_name == 'Tidak Aktif')
                                                     <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">
-                                                        Diterima</span>
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                        Tidak Aktif</span>
                                                 @elseif($status->status_name == 'Proses')
                                                     <span class="badge"
                                                         style="background-color:#FF7F3E ; color: white; font-weight:bold">

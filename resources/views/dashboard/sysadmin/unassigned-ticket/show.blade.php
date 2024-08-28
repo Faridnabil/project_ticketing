@@ -104,8 +104,6 @@
             <div class="card-header card-header border-0 pt-6 ">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Detail Ticket</h4>
-                </div>
-                <div class="card-header" style="margin-top: 30px">
                     <ul class="nav custom-tabs" role="tablist">
                         <li class="nav-item">
                             <a class="btn-custom active font-regular mt-4" data-bs-toggle="tab" href="#keluhan"
@@ -163,11 +161,12 @@
                                                                 class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span></span>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
-                                        <div class="mb-10 border border-dark rounded">
+                                        <div class="mb-10">
                                             <!--begin::Product slider-->
-                                            <div class="tns tns-default position-relative">
+                                            <div class="tns tns-default">
                                                 <!--begin::Slider-->
                                                 <div id="kt_team_slider" class="my-slider" data-tns="true"
                                                     data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
@@ -176,23 +175,29 @@
                                                     data-tns-center="false" data-tns-dots="false">
 
                                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                                        @php
+                                                            $attachment = trim($attachment);
+                                                        @endphp
                                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                            <img src="{{ asset($attachment) }}"
+                                                            <img src="{{ asset('storage/' . $attachment) }}"
                                                                 alt="{{ basename($attachment) }}"
                                                                 class="card-rounded shadow mw-100" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
                                                         </div>
                                                     @endforeach
                                                 </div>
+
                                                 <!--end::Slider-->
                                                 <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary position-absolute top-50 start-0 translate-middle-y"
+                                                <button class="btn btn-icon btn-active-color-primary"
                                                     id="kt_team_slider_prev1">
                                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-left.svg-->
                                                     <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
                                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                                 <path
                                                                     d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
@@ -205,13 +210,15 @@
                                                 </button>
                                                 <!--end::Slider button-->
                                                 <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary position-absolute top-50 end-0 translate-middle-y"
+                                                <button class="btn btn-icon btn-active-color-primary"
                                                     id="kt_team_slider_next1">
                                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
                                                     <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
                                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                                 <path
                                                                     d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
@@ -226,8 +233,8 @@
                                             </div>
                                             <!--end::Product slider-->
                                         </div>
-
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -243,7 +250,7 @@
                                             @foreach ($logs as $log)
                                                 <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
                                                     <span
-                                                        class="timeline-date">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
+                                                        class="timeline-date">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
                                                     <div class="timeline-content">
                                                         <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
                                                         <p class="timeline-text">
@@ -281,7 +288,7 @@
                                                                     <a href="#" class="attachment-link"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#imageModal"
-                                                                        data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                        data-src="{{ asset('attachments/' . $attachment) }}">{{ $shortenedFilename }}</a><br>
                                                                 @endforeach
                                                             @else
                                                                 N/A
@@ -336,6 +343,9 @@
     </script>
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+        @php
+            $attachment = trim($attachment);
+        @endphp
         <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
@@ -347,7 +357,7 @@
                     </div><!--end modal-header-->
                     <div class="modal-body">
                         <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                            <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}" />
                         </div>
                     </div><!--end modal-body-->
                 </div>
@@ -456,6 +466,27 @@
                     localStorage.setItem('lastEditedComment', commentId);
                 });
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var slider = tns({
+                container: '#kt_team_slider',
+                items: 1,
+                slideBy: 'page',
+                autoplay: false,
+                controls: false, // disable built-in controls
+                nav: false,
+                autoplayButtonOutput: false
+            });
+
+            document.getElementById('kt_team_slider_prev1').onclick = function() {
+                slider.goTo('prev');
+            };
+
+            document.getElementById('kt_team_slider_next1').onclick = function() {
+                slider.goTo('next');
+            };
         });
     </script>
 @endsection

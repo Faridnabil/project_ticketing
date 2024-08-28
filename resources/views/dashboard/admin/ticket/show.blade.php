@@ -175,14 +175,18 @@
                                                     data-tns-center="false" data-tns-dots="false">
 
                                                     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                                        @php
+                                                            $attachment = trim($attachment);
+                                                        @endphp
                                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                            <img src="{{ asset($attachment) }}"
+                                                            <img src="{{ asset('storage/' . $attachment) }}"
                                                                 alt="{{ basename($attachment) }}"
                                                                 class="card-rounded shadow mw-100" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
                                                         </div>
                                                     @endforeach
                                                 </div>
+
                                                 <!--end::Slider-->
                                                 <!--begin::Slider button-->
                                                 <button class="btn btn-icon btn-active-color-primary"
@@ -284,7 +288,7 @@
                                                                     <a href="#" class="attachment-link"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#imageModal"
-                                                                        data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                        data-src="{{ asset('attachments/' . $attachment) }}">{{ $shortenedFilename }}</a><br>
                                                                 @endforeach
                                                             @else
                                                                 N/A
@@ -339,6 +343,9 @@
     </script>
 
     @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+        @php
+            $attachment = trim($attachment);
+        @endphp
         <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
@@ -350,7 +357,7 @@
                     </div><!--end modal-header-->
                     <div class="modal-body">
                         <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                            <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}" />
                         </div>
                     </div><!--end modal-body-->
                 </div>
