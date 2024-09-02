@@ -18,22 +18,22 @@ class HomeSysadminController extends Controller
         $selectedTicketNumber = null;
 
         // Initialize an empty collection for tickets
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo')
         ->where('assign_to', $user->id)
         ->get();
         $logs = collect();
 
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
-        $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        $tiket_belum = $tickets->where('statuses.status_name', null)->count();
+        $tiket_buka_proses = $tickets->whereIn('statuses.status_name', ['Aktif', 'Proses'])->count();
+        $tiket_tertunda = $tickets->where('statuses.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('statuses.status_name', 'Selesai')->count();
 
 
         if ($selectedTicketId) {
             // Get the selected ticket
-            $selectedTicket = Ticket::with('status', 'category', 'priority', 'assignTo')
+            $selectedTicket = Ticket::with('statuses', 'category', 'priority', 'assignTo')
                 ->where('assign_to', $user->id)
                 ->find($selectedTicketId);
 
@@ -43,7 +43,7 @@ class HomeSysadminController extends Controller
 
                 $ticketNumbers = $tickets->pluck('no_ticket')->toArray();
 
-                $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
+                $logs = HistoryTicket::with('statuses', 'category', 'priority', 'assignTo')
                     ->whereIn('h_no_ticket', $ticketNumbers)
                     ->orderBy('created_at', 'desc')
                     ->get();

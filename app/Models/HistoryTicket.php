@@ -54,7 +54,7 @@ class HistoryTicket extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function status()
+    public function statuses()
     {
         return $this->belongsTo(Status::class, 'h_status_id');
     }

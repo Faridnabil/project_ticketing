@@ -124,30 +124,35 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <label for="executor" class="form-label">Pelaksana</label>
-                                        <input type="text" name="executor"
-                                            class="form-control @error('executor') is-invalid @enderror" id="executor"
-                                            value="{{ old('executor', $activity->executor) }}" required>
+                                    <div class="col-md-12">
+                                        <label for="users" class="form-label">Pilih Pelaksana</label>
+                                        <select name="users[]" class="form-select" id="multiple-select-optgroup-field"
+                                            data-placeholder="Pilih Pelaksana" multiple>
+                                            <optgroup label="SysAdmin">
+                                                @foreach ($users as $user)
+                                                    @if ($user->hasRole('SysAdmin'))
+                                                        <option value="{{ $user->id }}"
+                                                            {{ in_array($user->id, $selectedUsers) ? 'selected' : '' }}>
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </optgroup>
+                                            <optgroup label="DBA">
+                                                @foreach ($users as $user)
+                                                    @if ($user->hasRole('DBA'))
+                                                        <option value="{{ $user->id }}"
+                                                            {{ in_array($user->id, $selectedUsers) ? 'selected' : '' }}>
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </optgroup>
+                                        </select>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
-                                        @error('executor')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="sysdba" class="form-label">Departemen</label>
-                                        <input type="text" name="sysdba"
-                                            class="form-control @error('sysdba') is-invalid @enderror" id="sysdba"
-                                            value="{{ old('sysdba', $activity->sysdba) }}" required>
-                                        <div class="valid-feedback">
-                                            Looks good!
-                                        </div>
-                                        @error('sysdba')
+                                        @error('users')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -229,5 +234,11 @@
             .catch(error => {
                 console.error(error);
             });
+        $('#multiple-select-optgroup-field').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            closeOnSelect: false,
+        });
     </script>
 @endsection

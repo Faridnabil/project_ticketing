@@ -60,7 +60,7 @@ class LandingPageController extends Controller
                 'name' => 'required',
                 'no_telp' => 'required',
                 'description' => 'required|string',
-                'attachments.*' => 'file|mimes:jpg,png,pdf,docx|max:5120',
+                'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
             ], [
                 'title.required' => 'tolong isi dengan benar',
                 'email.required' => 'isi dengan email aktif',

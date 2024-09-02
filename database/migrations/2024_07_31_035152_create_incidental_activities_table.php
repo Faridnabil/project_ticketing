@@ -15,8 +15,7 @@ class CreateIncidentalActivitiesTable extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->date('start_time'); // Tanggal Mulai
             $table->date('end_time'); // Tanggal Selesai
-            $table->string('executor'); // Pelaksana Aktivitas
-            $table->string('sysdba'); // Departemen/Tim
+            $table->json('users')->nullable(); // Menyimpan array ID user sebagai JSON
             $table->text('mitigation')->nullable(); // Mitigasi
             $table->text('impact')->nullable(); // Dampak terhadap Sistem
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete(); // Status Aktivitas

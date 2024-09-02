@@ -28,7 +28,7 @@ class AssignedSysadminController extends Controller
         $userId = auth()->user()->id;
 
         // Mengambil tiket yang sudah diverifikasi dan ditugaskan ke SysAdmin yang sedang login
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('status', 'Verifikasi') // Pastikan tiket sudah diverifikasi
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Filter tiket berdasarkan SysAdmin yang sedang login
@@ -66,7 +66,7 @@ class AssignedSysadminController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
+        $logs = HistoryTicket::with('statuses', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -95,6 +95,9 @@ class AssignedSysadminController extends Controller
     {
         $ticket = Ticket::find($id);
 
+        // Ambil data lampiran jika ada
+        $existingAttachments = $ticket->attachments ? json_decode($ticket->attachments, true) : [];
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -112,10 +115,12 @@ class AssignedSysadminController extends Controller
                 'ticket',
                 'statuses',
                 'statusChangedBy',
-                'logs'
+                'logs',
+                'existingAttachments' // Kirim lampiran ke view
             )
         );
     }
+
 
 
     public function update(Request $request, $id)
@@ -140,13 +145,15 @@ class AssignedSysadminController extends Controller
             $newAttachments = [];
             if ($files) {
                 foreach ($files as $file) {
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $newAttachments[] = $nama_folder . "/" . $nama_file;
+                    $imageName = md5(rand(1000, 10000));
+                    $ext = strtolower($file->getClientOriginalExtension());
+                    $imageFullName = $imageName . '.' . $ext;
+                    $path = $file->storeAs('ticket', $imageFullName, 'public');
+                    $newAttachments[] = $path;
                 }
             }
 
+            // Gabungkan lampiran yang tersisa dan lampiran baru
             $attachments = array_merge($remainingAttachments, $newAttachments);
             $validate['attachments'] = json_encode($attachments);
 
@@ -159,7 +166,6 @@ class AssignedSysadminController extends Controller
                 'h_title' => $ticket->title,
                 'h_no_telp' => $ticket->no_telp,
                 'h_email' => $ticket->email,
-                // 'h_users' => $ticket->name,
                 'h_assign_to' => $ticket->assign_to,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
@@ -172,11 +178,11 @@ class AssignedSysadminController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // Logika notifikasi sesuai kebutuhan
-
+            // Commit transaksi
             DB::commit();
             return redirect()->route('assignedSysadmin.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
+            // Rollback transaksi jika terjadi kesalahan
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }
@@ -185,7 +191,7 @@ class AssignedSysadminController extends Controller
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('assign_to', $userId)
             ->where(function ($query) {
                 $query->where('status_id', 4) // Status 'Selesai'

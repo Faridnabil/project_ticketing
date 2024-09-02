@@ -17,7 +17,7 @@ class UnassignedSysadminController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('assign_to', Auth::user()->id)  // Menggunakan ID dari user yang sedang login
             ->where('status', 'Belum verifikasi')
             ->get();
@@ -45,7 +45,7 @@ class UnassignedSysadminController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
+        $logs = HistoryTicket::with('statuses', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -90,7 +90,7 @@ class UnassignedSysadminController extends Controller
         $ticket->category_id = $request->input('category_id');
         $ticket->save();
 
-        return redirect()->route('unassignedSysadmin.index')->with('success', 'Ticket berhasil diperbarui.');
+        return redirect()->route('unassignedSysadmin.index')->with('success', 'Tiket berhasil diperbarui.');
     }
 
     public function verifyTicket($id)
@@ -108,7 +108,7 @@ class UnassignedSysadminController extends Controller
             ->where('id', '!=', $ticket->id)
             ->delete();
 
-        return redirect()->route('unassignedSysadmin.index')->with('success', 'Tiket berhasil diverifikasi dan dihapus dari pengguna lain.');
+        return redirect()->route('unassignedSysadmin.index')->with('success', 'Tiket berhasil.');
     }
 
 
@@ -128,6 +128,6 @@ class UnassignedSysadminController extends Controller
             ->where('id', '!=', $ticket->id)
             ->delete();
 
-        return redirect()->route('unassignedSysadmin.index')->with('success', 'Ticket berhasil ditolak.');
+        return redirect()->route('unassignedSysadmin.index')->with('success', 'Tiket berhasil ditolak.');
     }
 }

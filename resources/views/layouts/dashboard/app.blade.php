@@ -35,7 +35,22 @@
     <link rel="stylesheet" href="{{ asset('templates/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('templates/assets/css/kaiadmin.min.css') }}" />
 
+    <!-- Styles -->
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" /> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+
     <!-- Additional CSS for Demo -->
+    <!-- Dropzone CSS -->
     <style>
         .custom-dropzone {
             border: 2px dashed #007bff;
@@ -157,12 +172,12 @@
                         var column = this;
                         var select = $(
                                 '<select class="form-select"><option value=""></option></select>'
-                                )
+                            )
                             .appendTo($(column.footer()).empty())
                             .on("change", function() {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                 column.search(val ? "^" + val + "$" : "", true, false)
-                                .draw();
+                                    .draw();
                             });
                         column.data().unique().sort().each(function(d, j) {
                             select.append('<option value="' + d + '">' + d +
@@ -212,6 +227,7 @@
     <script>
         let uploadedFiles = [];
         let existingFiles = [];
+
         @if (isset($ticket) && $ticket->attachments)
             @php
                 $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
@@ -220,18 +236,22 @@
                 existingFiles.push('{{ $attachment }}');
             @endforeach
         @endif
+
         let removedFiles = [];
+
         document.addEventListener('DOMContentLoaded', function() {
             const preview = document.querySelector('.preview');
             existingFiles.forEach(filePath => {
                 const container = document.createElement('div');
                 container.classList.add('image-container');
+
                 const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`;
+                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
                 img.addEventListener('click', (event) => {
                     event.stopPropagation();
                     removeExistingFile(event, filePath);
                 });
+
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = 'x';
                 removeBtn.classList.add('remove-btn');
@@ -239,68 +259,100 @@
                     event.stopPropagation();
                     removeExistingFile(event, filePath);
                 });
+
                 container.appendChild(img);
                 container.appendChild(removeBtn);
                 preview.appendChild(container);
             });
-            updateExistingFileList();
-        });
-        document.getElementById('attachments').addEventListener('change', function(event) {
-            const preview = document.querySelector('.preview');
-            const files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                uploadedFiles.push(file);
-                const container = document.createElement('div');
-                container.classList.add('image-container');
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                const removeBtn = document.createElement('button');
-                removeBtn.textContent = 'x';
-                removeBtn.classList.add('remove-btn');
-                removeBtn.addEventListener('click', () => removeFile(file));
-                container.appendChild(img);
-                container.appendChild(removeBtn);
-                preview.appendChild(container);
-            }
+            updateExistingFileList(); // Update the list on page load
         });
 
-        function removeFile(file) {
-            const index = uploadedFiles.indexOf(file);
-            if (index !== -1) {
-                uploadedFiles.splice(index, 1);
-                const preview = document.querySelector('.preview');
-                preview.removeChild(preview.childNodes[index]);
+        document.getElementById('attachments').addEventListener('change', function(event) {
+            const fileList = Array.from(event.target.files);
+            const preview = document.querySelector('.preview');
+            const errorMessage = document.getElementById('error-message');
+            const maxFiles = 5;
+
+            if (existingFiles.length + uploadedFiles.length + fileList.length > maxFiles) {
+                errorMessage.textContent = `Anda hanya dapat mengunggah hingga ${maxFiles} file/foto.`;
+                return;
             }
+
+            errorMessage.textContent = ''; // Clear any existing error message
+
+            fileList.forEach(file => {
+                if (!uploadedFiles.includes(file) && !existingFiles.includes(file.name)) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const container = document.createElement('div');
+                        container.classList.add('image-container');
+
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'x';
+                        removeBtn.classList.add('remove-btn');
+                        removeBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            container.remove();
+                            uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
+                            updateFileList();
+                        });
+
+                        container.appendChild(img);
+                        container.appendChild(removeBtn);
+                        preview.appendChild(container);
+                    };
+
+                    if (file.type.startsWith('image/')) {
+                        reader.readAsDataURL(file); // Read file as Data URL for image preview
+                    }
+
+                    uploadedFiles.push(file);
+                    updateFileList(); // Update file list after adding each file
+                }
+            });
+        });
+
+        function uploadFile(event) {
+            if (!event.target.closest('.image-container')) {
+                document.getElementById('attachments').click();
+            }
+        }
+
+        function updateFileList() {
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('attachments').files = dataTransfer.files;
+        }
+
+        function updateExistingFileList() {
+            document.getElementById('remaining_attachments').value = existingFiles.join(',');
         }
 
         function removeExistingFile(event, filePath) {
             event.stopPropagation();
-            removedFiles.push(filePath);
-            existingFiles = existingFiles.filter(file => file !== filePath);
-            event.target.parentElement.remove();
-            updateExistingFileList();
-        }
+            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
+            if (imgElement && imgElement.parentElement) {
+                existingFiles = existingFiles.filter(file => file !== filePath);
+                removedFiles.push(filePath);
+                imgElement.parentElement.remove();
+                document.getElementById('removed_attachments').value = removedFiles.join(',');
 
-        function updateExistingFileList() {
-            const fileList = document.getElementById('existing_file_list');
-            fileList.innerHTML = '';
-            existingFiles.forEach(filePath => {
-                const listItem = document.createElement('li');
-                listItem.textContent = filePath;
-                fileList.appendChild(listItem);
-            });
-        }
-
-        function removeAllFiles() {
-            uploadedFiles = [];
-            removedFiles = [];
-            existingFiles = [];
-            const preview = document.querySelector('.preview');
-            preview.innerHTML = '';
-            updateExistingFileList();
+                updateExistingFileList(); // Update remaining files list
+            } else {
+                console.error('File not found:', filePath);
+            }
         }
     </script>
+
 
     @stack('scripts')
 </body>

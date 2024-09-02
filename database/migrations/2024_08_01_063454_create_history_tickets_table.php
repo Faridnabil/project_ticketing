@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('h_no_ticket');
             $table->string('h_title');
-            $table->integer('h_no_telp');
+            $table->string('h_no_telp');
             $table->string('h_email');
-            $table->foreignId('h_users')->constrained('users')->cascadeOnDelete();
+            // $table->foreignId('h_users')->constrained('users')->cascadeOnDelete();
             $table->foreignId('h_assign_to')->nullable()->constrained('users');
             $table->foreignId('h_priority_id')->nullable()->constrained('priorities')->cascadeOnDelete();
             $table->foreignId('h_status_id')->nullable()->constrained('statuses')->cascadeOnDelete();

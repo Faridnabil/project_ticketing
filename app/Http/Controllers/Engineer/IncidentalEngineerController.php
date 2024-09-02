@@ -16,6 +16,10 @@ class IncidentalEngineerController extends Controller
         $activities = IncidentalActivity::all();
         $statuses = Status::all();
         $categories = IncidentalActivityCategory::all();
+        foreach ($activities as $activity) {
+            // Ambil daftar pengguna yang terkait dengan aktivitas ini menggunakan method getAssignedUsers()
+            $activity->assigned_users = $activity->getAssignedUsers();
+        }
 
         return view('dashboard.engineer.incidental-activities.index', compact('activities', 'statuses', 'categories'));
     }

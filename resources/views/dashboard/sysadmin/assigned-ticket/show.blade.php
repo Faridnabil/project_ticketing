@@ -315,20 +315,20 @@
     </div>
 
     <!-- Modal Riwayat -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img id="modalImage" src="" alt="Attachment" class="img-fluid">
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="modalImage" src=""
+                            alt="" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('imageModal');
@@ -365,20 +365,7 @@
         </div>
     @endforeach
 
-    {{-- Refresh Komentar --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const newCommentId = {{ session('new_comment_id') }};
-            if (newCommentId) {
-                const newCommentElement = document.getElementById('comment-' + newCommentId);
-                if (newCommentElement) {
-                    newCommentElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    </script>
+
 
     <script>
         $(document).ready(function() {
@@ -403,71 +390,6 @@
             });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const editButtons = document.querySelectorAll('.edit-button');
-            let currentEditor;
-
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const commentId = this.getAttribute('data-comment-id');
-                    const textarea = document.getElementById(`message-${commentId}`);
-                    const displayParagraph = document.getElementById(
-                        `message-display-${commentId}`);
-                    const updateButton = document.getElementById(`update-button-${commentId}`);
-
-                    // Hide all other textareas and update buttons
-                    document.querySelectorAll('textarea').forEach(el => el.style.display = 'none');
-                    document.querySelectorAll('.update-button').forEach(el => el.style.display =
-                        'none');
-                    // Destroy existing CKEditor instance
-                    if (currentEditor) {
-                        currentEditor.destroy();
-                    }
-
-                    // Show the current textarea and update button
-                    textarea.style.display = 'block';
-                    updateButton.style.display = 'block';
-
-                    // Initialize CKEditor
-                    ClassicEditor.create(textarea)
-                        .then(editor => {
-                            currentEditor = editor;
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-
-                    // Hide all other display paragraphs
-                    document.querySelectorAll('p[id^="message-display-"]').forEach(el => el.style
-                        .display = 'block');
-                    // Hide the current display paragraph
-                    if (displayParagraph) {
-                        displayParagraph.style.display = 'none';
-                    }
-                });
-            });
-
-            // Scroll to the last edited comment after page reload
-            const lastEditedComment = localStorage.getItem('lastEditedComment');
-            if (lastEditedComment) {
-                const element = document.getElementById(`comment-${lastEditedComment}`);
-                if (element) {
-                    element.scrollIntoView();
-                }
-                localStorage.removeItem('lastEditedComment');
-            }
-
-            // Save the last edited comment ID before form submission
-            const commentForms = document.querySelectorAll('.comment-form');
-            commentForms.forEach(form => {
-                form.addEventListener('submit', function() {
-                    const commentId = this.getAttribute('data-comment-id');
-                    localStorage.setItem('lastEditedComment', commentId);
-                });
-            });
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var slider = tns({

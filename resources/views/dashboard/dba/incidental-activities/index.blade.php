@@ -27,10 +27,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Executor</th>
-                                    <th>Department</th>
+                                    <th>Judul</th>
+                                    <th>Kategori</th>
+                                    <th>Pelaksana</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -41,8 +40,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $activity->title }}</td>
                                         <td>{{ $activity->category->category_name }}</td>
-                                        <td>{{ $activity->executor }}</td>
-                                        <td>{{ $activity->sysdba }}</td>
+                                        <td>
+                                            {{ implode(', ', $activity->assigned_users->pluck('name')->toArray()) }}
+                                        </td>
                                         <td>
                                             @if ($activity->status_id == '1')
                                                 <span class="badge"
