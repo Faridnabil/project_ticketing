@@ -161,7 +161,7 @@ class TicketController extends Controller
         $categories = Category::all();
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'user_s', 'assignTo')
+        $logs = HistoryTicket::with('statuses', 'category', 'priority', 'user_s', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();

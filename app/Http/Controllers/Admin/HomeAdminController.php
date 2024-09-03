@@ -20,7 +20,7 @@ class HomeAdminController extends Controller
         $allTickets = Ticket::all();
 
         // Mengambil data tiket dan menerapkan filter nomor tiket jika ada
-        $ticketsQuery = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser');
+        $ticketsQuery = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser');
 
         if ($ticketNumber) {
             $ticketsQuery->where('id', $ticketNumber);
@@ -65,7 +65,7 @@ class HomeAdminController extends Controller
         $selectedTicketId = $request->input('ticket_number');
         $selectedTicketNumber = null;
 
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->get();
 
         if ($selectedTicketId) {

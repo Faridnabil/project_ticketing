@@ -8,6 +8,7 @@
     <title>PLN ICON PLUS</title>
     <meta name="keywords"
         content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
+    <link rel="icon" href="{{ asset('templates/assets/img/kaiadmin/pln.ico') }}" type="image/x-icon" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
@@ -32,7 +33,8 @@
             <!--begin::Content-->
             <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
                 <!--begin::Wrapper-->
-                <div class="w-lg-500px  rounded shadow-sm p-10 p-lg-15 mx-auto" style="background-color: rgb(26, 32, 53)">
+                <div class="w-lg-500px  rounded shadow-sm p-10 p-lg-15 mx-auto"
+                    style="background-color: rgb(26, 32, 53)">
                     @yield('content')
                 </div>
                 <!--end::Wrapper-->

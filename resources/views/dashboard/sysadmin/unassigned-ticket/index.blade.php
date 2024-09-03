@@ -63,9 +63,9 @@
                                             </td>
                                             <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
                                             <td>{{ $ticket->status }}</td>
-                                            <td>
+                                            <td class="d-flex justify-content-center align-items-center">
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3"
+                                                    <a class="menu-link"
                                                         href="{{ route('unassignedSyasadmin.show', $ticket->id) }}"
                                                         type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">

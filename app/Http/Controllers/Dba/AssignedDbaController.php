@@ -28,7 +28,7 @@ class AssignedDbaController extends Controller
         $userId = auth()->user()->id;
 
         // Mengambil tiket yang sudah diverifikasi dan ditugaskan ke DBA yang sedang login
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('status', 'Verifikasi') // Pastikan tiket sudah diverifikasi
             ->whereHas('assignTo', function ($query) use ($userId) {
                 $query->where('id', $userId); // Filter tiket berdasarkan DBA yang sedang login
@@ -66,7 +66,7 @@ class AssignedDbaController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
+        $logs = HistoryTicket::with('statuses', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -184,7 +184,7 @@ class AssignedDbaController extends Controller
     public function completedTickets()
     {
         $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('assign_to', $userId)
             ->where(function ($query) {
                 $query->where('status_id', 4) // Status 'Selesai'

@@ -17,7 +17,7 @@ class UnassignedDbaController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $tickets = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->where('assign_to', Auth::user()->id)
             ->where('status', 'Belum verifikasi')
             ->get();
@@ -43,7 +43,7 @@ class UnassignedDbaController extends Controller
 
         $statusChangedBy = Auth::user();
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'assignTo')
+        $logs = HistoryTicket::with('statuses', 'category', 'priority', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();

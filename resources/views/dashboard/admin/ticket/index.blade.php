@@ -101,9 +101,9 @@
                                                         style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak Aktif</span>
                                                 @endif
                                             </td>
-                                            <td style="width: 150px;  align-items: center; justify-content: center;">
+                                            <td class="d-flex justify-content-center align-items-center">
                                                 @can('Show Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('ticket.show', $ticket->id) }}" type="button">
+                                                    <a class="menu-link" href="{{ route('ticket.show', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

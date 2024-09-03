@@ -207,13 +207,13 @@
                                 <p>Semua Tiket</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="menu-link {{ Request::is('requestAssignment') ? 'active' : '' }}"
                                 href="{{ route('requestAssignment.index') }}">
                                 <i class="fas fa-clipboard-list"></i>
                                 <p>Daftar Pengajuan</p>
                             </a>
-                        </li>
+                        </li> --}}
                     @endrole
                     @role('Engineer')
                         <li class="nav-item">
