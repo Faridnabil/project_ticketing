@@ -40,18 +40,25 @@ class IncidentalActivity extends Model
 
     /**
      * Retrieve the users associated with this incidental activity.
+     *
+     * @return \Illuminate\Support\Collection
      */
     public function getAssignedUsers()
     {
-        // Decode data 'users' jika berbentuk string JSON, lalu ubah menjadi array
-        $userIds = is_string($this->users) ? json_decode($this->users, true) : $this->users;
+        // Jika 'users' adalah array, langsung gunakan
+        if (is_array($this->users)) {
+            $userIds = $this->users;
+        } else {
+            // Jika 'users' adalah string, coba decode menjadi array
+            $userIds = json_decode($this->users, true);
+        }
 
-        // Pastikan $userIds adalah array sebelum menggunakan count()
-        if (is_array($userIds)) {
+        // Pastikan $userIds adalah array yang valid dan tidak kosong
+        if (is_array($userIds) && !empty($userIds)) {
             return User::whereIn('id', $userIds)->get();
         }
 
-        // Kembalikan koleksi kosong jika userIds tidak valid
+        // Kembalikan koleksi kosong jika $userIds tidak valid
         return collect();
     }
 }

@@ -23,4 +23,17 @@ class IncidentalEngineerController extends Controller
 
         return view('dashboard.engineer.incidental-activities.index', compact('activities', 'statuses', 'categories'));
     }
+
+    public function show($id)
+    {
+        // Ambil data aktivitas insidental berdasarkan ID yang diterima
+        $activity = IncidentalActivity::with(['category', 'status'])
+            ->findOrFail($id);
+
+        // Ambil daftar pengguna assigned menggunakan method getAssignedUsers()
+        $assigned_users = $activity->getAssignedUsers();
+
+        // Kirim data ke view show/detail
+        return view('dashboard.engineer.incidental-activities.show', compact('activity', 'assigned_users'));
+    }
 }

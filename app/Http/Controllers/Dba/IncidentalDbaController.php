@@ -123,6 +123,18 @@ class IncidentalDbaController extends Controller
         return redirect()->route('dba.incidental-activities.index')->with('success', 'Activity updated successfully');
     }
 
+    public function show($id)
+    {
+        // Ambil data aktivitas insidental berdasarkan ID yang diterima
+        $activity = IncidentalActivity::with(['category', 'status'])
+            ->findOrFail($id);
+
+        // Ambil daftar pengguna assigned menggunakan method getAssignedUsers()
+        $assigned_users = $activity->getAssignedUsers();
+
+        // Kirim data ke view show/detail
+        return view('dashboard.dba.incidental-activities.show', compact('activity', 'assigned_users'));
+    }
 
     public function destroy($id)
     {

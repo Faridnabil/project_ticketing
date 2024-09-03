@@ -293,9 +293,6 @@
                                                             @else
                                                                 N/A
                                                             @endif
-
-
-
                                                             <br>
                                                             <strong>Status Diubah Oleh :</strong>
                                                             {{ $log->statusChangedBy->name ?? 'N/A' }}
@@ -390,7 +387,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         ClassicEditor
             .create(document.querySelector('#message'))
             .catch(error => {
@@ -401,9 +398,9 @@
             .catch(error => {
                 console.error(error);
             });
-    </script>
+    </script> --}}
 
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const editButtons = document.querySelectorAll('.edit-button');
             let currentEditor;
@@ -467,7 +464,7 @@
                 });
             });
         });
-    </script>
+    </script> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var slider = tns({

@@ -30,7 +30,7 @@
                                     <th>Judul</th>
                                     <th>Kategori</th>
                                     <th>Pelaksana</th>
-                                    <th>Status</th>
+                                    <th>Deskripsi</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -43,25 +43,23 @@
                                         <td>
                                             {{ implode(', ', $activity->assigned_users->pluck('name')->toArray()) }}
                                         </td>
-                                        <td>
-                                            @if ($activity->status_id == '1')
-                                                <span class="badge"
-                                                    style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                            @elseif($activity->status_id == '2')
-                                                <span class="badge"
-                                                    style="background-color:blue; color: white; font-weight:bold">Diterima</span>
-                                            @elseif($activity->status_id == '3')
-                                                <span class="badge"
-                                                    style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                            @elseif($activity->status_id == '4')
-                                                <span class="badge"
-                                                    style="background-color:green; color: white; font-weight:bold">Selesai</span>
-                                            @else
-                                                <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                            @endif
-                                        </td>
+                                        <td>{{ strip_tags($activity->description) }}</td>
                                         <td class="text-center">
+                                            <a href="{{ route('sysadmin.incidental-activities.show', $activity->id) }}" title="Lihat"
+                                                class="menu-link ms-3 me-1">
+                                                <span class="menu-icon" style="fill: #1218ca">
+                                                    <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                    <span class="svg-icon svg-icon-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <path
+                                                                d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                            <circle cx="12" cy="12" r="4" />
+                                                        </svg>
+                                                    </span>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                            </a>
                                             <a href="{{ route('sysadmin.incidental-activities.edit', $activity->id) }}"
                                                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                                 <span class="menu-icon" style="fill: #bd6710">

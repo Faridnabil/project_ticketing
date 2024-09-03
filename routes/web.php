@@ -116,19 +116,20 @@ Route::middleware(['verified', 'auth', 'role:Engineer'])->group(function () {
     Route::get('/engineer/dashboard', [HomeEngineerController::class, 'index'])->name('engineer.dashboard.index');
     Route::get('/ticket/export', [TicketController::class, 'export'])->name('ticket.export');
     Route::get('/engineer/incidental-activities', [IncidentalEngineerController::class, 'index'])->name('engineer.incidental-activities.index');
+    Route::get('/engineer/incidental-activities/{id}/show', [IncidentalEngineerController::class, 'show'])->name('engineer.incidental-activities.show');
 });
 
 
-Route::middleware(['verified', 'auth', 'role:User'])->group(function () {
-    Route::get('/users/dashboard', [HomeUserController::class, 'index'])->name('user.dashboard.index');
+// Route::middleware(['verified', 'auth', 'role:User'])->group(function () {
+//     Route::get('/users/dashboard', [HomeUserController::class, 'index'])->name('user.dashboard.index');
 
-    Route::resources([
-        '/users/myTicket' => TicketUserController::class,
-    ]);
-    Route::get('/users/completed-tickets', [TicketUserController::class, 'completedTickets'])->name('myTicket.completed');
-    Route::post('/users/TicketStore', [TicketUserController::class, 'store_comment'])->name('myTickets.store');
-    Route::put('/users/TicketUpdate/{id}', [TicketUserController::class, 'update_comment'])->name('myTickets.update');
-});
+//     Route::resources([
+//         '/users/myTicket' => TicketUserController::class,
+//     ]);
+//     Route::get('/users/completed-tickets', [TicketUserController::class, 'completedTickets'])->name('myTicket.completed');
+//     Route::post('/users/TicketStore', [TicketUserController::class, 'store_comment'])->name('myTickets.store');
+//     Route::put('/users/TicketUpdate/{id}', [TicketUserController::class, 'update_comment'])->name('myTickets.update');
+// });
 
 //SysAdmin
 Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
@@ -156,6 +157,7 @@ Route::middleware(['verified', 'auth', 'role:SysAdmin'])->group(function () {
     Route::post('/sysadmin/incidental-activities', [IncidentalSysadminController::class, 'store'])->name('sysadmin.incidental-activities.store');
     Route::get('/sysadmin/incidental-activities/{id}/edit', [IncidentalSysadminController::class, 'edit'])->name('sysadmin.incidental-activities.edit');
     Route::put('/sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'update'])->name('sysadmin.incidental-activities.update');
+    Route::get('/sysadmin/incidental-activities/{id}/show', [IncidentalSysadminController::class, 'show'])->name('sysadmin.incidental-activities.show');
     Route::delete('/sysadmin/incidental-activities/{id}', [IncidentalSysadminController::class, 'destroy'])->name('sysadmin.incidental-activities.destroy');
 
 
@@ -189,6 +191,7 @@ Route::middleware(['verified', 'auth', 'role:DBA'])->group(function () {
     Route::post('/dba/incidental-activities', [IncidentalDbaController::class, 'store'])->name('dba.incidental-activities.store');
     Route::get('/dba/incidental-activities/{id}/edit', [IncidentalDbaController::class, 'edit'])->name('dba.incidental-activities.edit');
     Route::put('/dba/incidental-activities/{id}', [IncidentalDbaController::class, 'update'])->name('dba.incidental-activities.update');
+    Route::get('/dba/incidental-activities/{id}/show', [IncidentalDbaController::class, 'show'])->name('dba.incidental-activities.show');
     Route::delete('/dba/incidental-activities/{id}', [IncidentalDbaController::class, 'destroy'])->name('dba.incidental-activities.destroy');
 
 
