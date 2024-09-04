@@ -26,8 +26,8 @@ class HomeDbaController extends Controller
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Aktif', 'Proses'])->count();
+        $tiket_tertunda = $tickets->where('status', 'Belum verifikasi')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
 

@@ -44,8 +44,9 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Tiket</th>
+                                    <th>Judul</th>
                                     <th>Kategori</th>
-                                    <th>Layanan</th>
+                                    {{-- <th>Layanan</th> --}}
                                     <th>Pemilik</th>
                                     <th>Tetapkan Ke</th>
                                     <th>Prioritas</th>
@@ -58,8 +59,9 @@
                                     @foreach ($tickets as $ticket)
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
+                                            <td>{{ $ticket->title }}</td>
                                             <td>{{ $ticket->category->category_name }}</td>
-                                            <td>{{ $ticket->service->service_name }}</td>
+                                            {{-- <td>{{ $ticket->service->service_name }}</td> --}}
                                             <td>{{ $ticket->name }}</td>
                                             <td class="text-center">
                                                 @if ($ticket->assignTo != null)
@@ -96,9 +98,12 @@
                                                 @elseif($ticket->status_id == '4')
                                                     <span class="badge"
                                                         style="background-color:rgb(0, 107, 0); color: white; font-weight:bold">Selesai</span>
-                                                @else
+                                                @elseif($ticket->status_id == '2')
                                                     <span class="badge"
                                                         style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak Aktif</span>
+                                                @else
+                                                <span class="badge"
+                                                        style="background-color:rgb(184, 162, 162); color: white; font-weight:bold">Belum verisikasi</span>
                                                 @endif
                                             </td>
                                             <td class="d-flex justify-content-center align-items-center">

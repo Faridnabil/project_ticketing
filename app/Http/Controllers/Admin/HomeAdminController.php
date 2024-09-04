@@ -31,19 +31,19 @@ class HomeAdminController extends Controller
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets
-            ->where('status.status_name', null)
+            ->where('statuses.status_name', null)
             ->count();
         $tiket_buka = $tickets
-            ->where('status.status_name', 'Diterima')
+            ->where('statuses.status_name', 'Diterima')
             ->count();
         $tiket_proses = $tickets
-            ->where('status.status_name', 'Proses')
+            ->whereIn('statuses.status_name', ['Aktif', 'Proses'])
             ->count();
         $tiket_tertunda = $tickets
-            ->where('status.status_name', 'Tertunda')
+            ->where('status', 'Belum verifikasi')
             ->count();
         $tiket_selesai = $tickets
-            ->where('status.status_name', 'Selesai')
+            ->where('statuses.status_name', 'Selesai')
             ->count();
 
         // Mendapatkan data logs dan comments untuk setiap tiket
@@ -91,7 +91,7 @@ class HomeAdminController extends Controller
             }
         }
 
-        $ticketPriotitas = Ticket::with('status', 'category', 'priority', 'assignTo', 'statusChangedByUser')
+        $ticketPriotitas = Ticket::with('statuses', 'category', 'priority', 'assignTo', 'statusChangedByUser')
             ->whereIn('priority_id', [2, 4]) // Pastikan filter priority_id juga diterapkan di sini
             ->get();
 

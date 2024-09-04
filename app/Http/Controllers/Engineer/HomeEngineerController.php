@@ -30,20 +30,14 @@ class HomeEngineerController extends Controller
 
         // Menghitung jumlah tiket berdasarkan status
         $total_tiket = $tickets->count();
-        $tiket_belum = $tickets
-            ->where('status.status_name', null)
-            ->count();
-        $tiket_buka = $tickets
-            ->where('status.status_name', 'Diterima')
-            ->count();
         $tiket_proses = $tickets
-            ->where('status.status_name', 'Proses')
+            ->whereIn('statuses.status_name', ['Aktif', 'Proses'])
             ->count();
         $tiket_tertunda = $tickets
-            ->where('status.status_name', 'Tertunda')
+            ->where('status', 'Belum verifikasi')
             ->count();
         $tiket_selesai = $tickets
-            ->where('status.status_name', 'Selesai')
+            ->where('statuses.status_name', 'Selesai')
             ->count();
 
         // Mendapatkan data logs dan comments untuk setiap tiket
@@ -101,8 +95,6 @@ class HomeEngineerController extends Controller
                 'ticketPriotitas',
                 'tickets',
                 'total_tiket',
-                'tiket_belum',
-                'tiket_buka',
                 'tiket_proses',
                 'tiket_tertunda',
                 'tiket_selesai',

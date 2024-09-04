@@ -228,12 +228,13 @@
         let uploadedFiles = [];
         let existingFiles = [];
 
+        // Initialize existing files from PHP and push them into the JavaScript array
         @if (isset($ticket) && $ticket->attachments)
             @php
                 $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
             @endphp
             @foreach ($attachments as $attachment)
-                existingFiles.push('{{ $attachment }}');
+                existingFiles.push('{{ trim($attachment) }}');
             @endforeach
         @endif
 
@@ -241,15 +242,19 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const preview = document.querySelector('.preview');
+            // Display existing files with correct path
             existingFiles.forEach(filePath => {
+                const sanitizedFilePath = filePath.replace('%20', ' ');
                 const container = document.createElement('div');
                 container.classList.add('image-container');
 
                 const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
+                // Correct path for existing files stored in Laravel storage
+                img.src =
+                `{{ asset('storage/${sanitizedFilePath}') }}`; // Adjust the path based on your file storage setup
                 img.addEventListener('click', (event) => {
                     event.stopPropagation();
-                    removeExistingFile(event, filePath);
+                    removeExistingFile(event, sanitizedFilePath);
                 });
 
                 const removeBtn = document.createElement('button');
@@ -257,14 +262,14 @@
                 removeBtn.classList.add('remove-btn');
                 removeBtn.addEventListener('click', (event) => {
                     event.stopPropagation();
-                    removeExistingFile(event, filePath);
+                    removeExistingFile(event, sanitizedFilePath);
                 });
 
                 container.appendChild(img);
                 container.appendChild(removeBtn);
                 preview.appendChild(container);
             });
-            updateExistingFileList(); // Update the list on page load
+            updateExistingFileList();
         });
 
         document.getElementById('attachments').addEventListener('change', function(event) {
@@ -316,16 +321,10 @@
                     }
 
                     uploadedFiles.push(file);
-                    updateFileList(); // Update file list after adding each file
+                    updateFileList();
                 }
             });
         });
-
-        function uploadFile(event) {
-            if (!event.target.closest('.image-container')) {
-                document.getElementById('attachments').click();
-            }
-        }
 
         function updateFileList() {
             const dataTransfer = new DataTransfer();
@@ -339,14 +338,14 @@
 
         function removeExistingFile(event, filePath) {
             event.stopPropagation();
-            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
+            const imgElement = document.querySelector(`img[src="{{ asset('storage/${filePath}') }}"]`);
             if (imgElement && imgElement.parentElement) {
                 existingFiles = existingFiles.filter(file => file !== filePath);
                 removedFiles.push(filePath);
                 imgElement.parentElement.remove();
                 document.getElementById('removed_attachments').value = removedFiles.join(',');
 
-                updateExistingFileList(); // Update remaining files list
+                updateExistingFileList();
             } else {
                 console.error('File not found:', filePath);
             }

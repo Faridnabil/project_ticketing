@@ -22,7 +22,7 @@
                                         @csrf
                                         @method('PUT')
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <label for="validationCustom01" class="form-label">Status</label>
                                             <select name="status_id"
                                                 class="form-select @error('status_id') is-invalid @enderror"
@@ -42,7 +42,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-10">
                                             <label for="solution" class="form-label">Solusi</label>
                                             <textarea name="solution" class="form-control @error('solution') is-invalid @enderror" id="solution" cols="10"
                                                 rows="3">{{ old('solution', $ticket->solution) }}</textarea>
@@ -52,7 +52,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
                                             <div class="custom-dropzone"
                                                 onclick="document.getElementById('attachments').click()">

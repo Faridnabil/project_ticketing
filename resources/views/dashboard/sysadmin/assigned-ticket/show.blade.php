@@ -260,7 +260,7 @@
                                                             <strong>Prioritas :</strong>
                                                             {{ $log->priority->priority_name ?? 'N/A' }}<br>
                                                             <strong>Status :</strong>
-                                                            {{ $log->status->status_name ?? 'N/A' }}<br>
+                                                            {{ $log->statuses->status_name ?? 'N/A' }}<br>
                                                             @if ($log->h_level1)
                                                                 <strong>Disposisi :</strong>
                                                                 {{ $log->helpdesk->name ?? 'N/A' }}<br>
@@ -279,8 +279,9 @@
                                                             @endif
                                                             <strong>Lampiran :</strong>
                                                             @if ($log->h_attachments)
-                                                                @foreach (json_decode($log->h_attachments) as $attachment)
+                                                                @foreach (explode(',', str_replace(['[', ']', '"'], '', $log->h_attachments)) as $index => $attachment)
                                                                     @php
+                                                                        $attachment = trim($attachment);
                                                                         $filename = basename($attachment);
                                                                         $parts = explode('_', $filename);
                                                                         $shortenedFilename = end($parts);
@@ -288,7 +289,7 @@
                                                                     <a href="#" class="attachment-link"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#imageModal"
-                                                                        data-src="{{ asset('attachments/' . $attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                        data-src="{{ asset('storage/' . $attachment) }}">{{ $shortenedFilename }}</a><br>
                                                                 @endforeach
                                                             @else
                                                                 N/A
@@ -315,20 +316,19 @@
     </div>
 
     <!-- Modal Riwayat -->
-        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <img id="modalImage" src=""
-                            alt="" class="img-fluid">
-                    </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="" class="img-fluid">
                 </div>
             </div>
         </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('imageModal');

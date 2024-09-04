@@ -139,10 +139,11 @@ class AssignedDbaController extends Controller
             $newAttachments = [];
             if ($files) {
                 foreach ($files as $file) {
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $newAttachments[] = $nama_folder . "/" . $nama_file;
+                    $image_name = md5(rand(1000, 10000));
+                    $ext = strtolower($file->getClientOriginalExtension());
+                    $image_full_name = $image_name . '.' . $ext;
+                    $path = $file->storeAs('ticket', $image_full_name, 'public');
+                    $newAttachments[] = $path;
                 }
             }
 
@@ -158,7 +159,6 @@ class AssignedDbaController extends Controller
                 'h_title' => $ticket->title,
                 'h_no_telp' => $ticket->no_telp,
                 'h_email' => $ticket->email,
-                // 'h_users' => $ticket->name,
                 'h_assign_to' => $ticket->assign_to,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
@@ -171,8 +171,6 @@ class AssignedDbaController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // Logika notifikasi sesuai kebutuhan
-
             DB::commit();
             return redirect()->route('assignedDba.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
@@ -180,6 +178,7 @@ class AssignedDbaController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
 
     public function completedTickets()
     {
