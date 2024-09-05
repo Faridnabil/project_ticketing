@@ -99,7 +99,10 @@
         }
     </style>
 
-    <div id="kt_content_container" class="container mt-5">
+    <div id="kt_content_container" class="container">
+        <a href="{{ route('assignedDba.index') }}" class="btn btn-custom">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
         <div class="card">
             <div class="card-header card-header border-0 pt-6 ">
                 <div class="card-header d-flex justify-content-between align-items-center">

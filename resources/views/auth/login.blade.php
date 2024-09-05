@@ -6,8 +6,8 @@
 
 @section('content')
     <!--begin::Logo-->
-    <a href="/" class="mb-12">
-        <img alt="Logo" src="{{ asset('templates/assets/img/kaiadmin/logonew.png') }}" class="h-100px w-200px mb-5" />
+    <a href="/" class="d-flex justify-content-center align-items-center mb-2">
+        <img alt="Logo" src="{{ asset('templates/assets/img/kaiadmin/logonew.png') }}" class="h-100px w-180px mb-5" />
     </a>
     <!--end::Logo-->
 
@@ -23,7 +23,7 @@
             <!--begin::Input-->
             <input class="form-control form-control-lg form-control-solid" type="text" name="email" autocomplete="off"
                 id="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('email')" />
 
             <!--end::Input-->
         </div>
@@ -37,23 +37,23 @@
             <input class="form-control form-control-lg form-control-solid" type="password" name="password"
                 autocomplete="off" id="password" name="password"required autocomplete="current-password" />
             <!--end::Input-->
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-input-error :messages="$errors->get('password')" />
 
-            <div class="d-flex flex-stack mb-2">
-                <!--begin::Label-->
-                <label for="remember_me" class="inline-flex items-center mt-5 ">
-                    <input id="remember_me" type="checkbox"
-                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                        name="remember">
-                    <span class="ml-2 text-sm text-gray-600 dark:text-white-400">{{ __('Remember me') }}</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Link-->
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder mt-5">Forgot Password ?</a>
-                @endif
-                <!--end::Link-->
-            </div>
+                <div class="d-flex flex-stack mb-2">
+                    <!--begin::Label-->
+                    <label for="remember_me" class="inline-flex items-center mt-5 ">
+                        <input id="remember_me" type="checkbox"
+                            class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                            name="remember">
+                        <span class="ml-2 text-sm text-gray-600 dark:text-white-400">{{ __('Remember me') }}</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Link-->
+                    {{-- @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder mt-5">Forgot Password ?</a>
+                    @endif --}}
+                    <!--end::Link-->
+                </div>
 
             <!--end::Input group-->
             <!--begin::Actions-->

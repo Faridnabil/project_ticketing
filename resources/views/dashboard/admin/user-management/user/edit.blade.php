@@ -42,6 +42,11 @@
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
+            <div class="d-flex justify-content-start mb-1">
+                <a href="{{ route('user.index') }}" class="btn btn-custom">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-header d-flex justify-content-between align-items-center">

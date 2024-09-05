@@ -100,11 +100,11 @@ Route::middleware(['verified', 'auth', 'role:Admin|Engineer|SysAdmin|DBA'])->gro
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('admin.dashboard.index');
 
     Route::resources([
-        '/admin/priority' => PriorityController::class,
-        '/admin/status' => StatusController::class,
-        '/admin/category' => CategoryController::class,
-        '/admin/incidental-activity-category' => IncidentalActivityCategoryController::class,
-        '/admin/service' => ServiceController::class,
+        '/priority' => PriorityController::class,
+        '/status' => StatusController::class,
+        '/category' => CategoryController::class,
+        '/incidental-activity-category' => IncidentalActivityCategoryController::class,
+        '/service' => ServiceController::class,
         '/engineer/engineerticket' => EngineerTicketController::class,
     ]);
 });

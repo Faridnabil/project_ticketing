@@ -120,7 +120,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('Edit Ticket')
-                                                    <a class="menu-link ms-3" href="{{ route('ticket.edit', $ticket->id) }}" type="button">
+                                                    <a class="menu-link ms-2" href="{{ route('ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -132,7 +132,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('Delete Ticket')
-                                                    <a class="menu-link ms-3" href="#" type="reset" data-bs-toggle="modal" data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                    <a class="menu-link ms-2" href="#" type="reset" data-bs-toggle="modal" data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

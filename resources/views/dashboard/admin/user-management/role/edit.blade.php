@@ -8,6 +8,9 @@
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container">
+            <a href="{{ route('role.index') }}" class="btn btn-custom">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-header d-flex justify-content-between align-items-center">
