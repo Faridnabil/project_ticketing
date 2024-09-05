@@ -13,12 +13,14 @@ class TicketReportMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $ticket; // Tambahkan property untuk tiket
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($ticket)
     {
-        //
+        $this->ticket = $ticket; // Inisialisasi tiket
     }
 
     /**
@@ -27,7 +29,7 @@ class TicketReportMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Ticket Report Mail',
+            subject: 'Laporan Tiket: ' . $this->ticket->title, // Menambahkan judul tiket sebagai subjek
         );
     }
 
@@ -37,7 +39,8 @@ class TicketReportMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.ticket_report', // Mengarahkan ke view yang sesuai
+            with: ['ticket' => $this->ticket], // Mengirim data tiket ke view
         );
     }
 
@@ -48,6 +51,6 @@ class TicketReportMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return []; // Tambahkan attachment jika diperlukan
     }
 }
