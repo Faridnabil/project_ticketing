@@ -86,10 +86,9 @@ class LandingPageController extends Controller
             }
 
             // Simpan file lampiran
-            $images = array();
+            $images = [];
             if ($request->hasFile('attachments')) {
-                $files = $request->file('attachments');
-                foreach ($files as $file) {
+                foreach ($request->file('attachments') as $file) {
                     $image_name = md5(rand(1000, 10000));
                     $ext = strtolower($file->getClientOriginalExtension());
                     $image_full_name = $image_name . '.' . $ext;
@@ -105,39 +104,64 @@ class LandingPageController extends Controller
             $data->name = $request->name;
             $data->email = $request->email;
             $data->no_telp = $request->no_telp;
-            $data->assign_to = $request->assign_to ?? null;
-            $data->priority_id = $request->priority_id;
-            $data->due_date = null;
-            $data->status_id = null;
-            $data->service_id = $request->service_id;
-            $data->description = strip_tags($request->description);
-            $data->category_id = $request->category_id;
-            $data->solution = null;
-            $data->status = 'Belum verifikasi';
-            $data->attachments = json_encode($images);
-            $data->status_changed_by_id = null;
-            $data->save();
+
+            // Cek apakah assign_to ada dalam permintaan
+            if (!$request->assign_to) {
+                $selectedRole = $request->input('assig_to_role');
+                $users = User::whereHas('roles', function ($query) use ($selectedRole) {
+                    $query->where('name', $selectedRole);
+                })->get();
+
+                if ($users->isEmpty()) {
+                    return redirect()->back()->withErrors(['error' => 'Tidak ada pengguna yang memiliki role tersebut.']);
+                }
+
+                foreach ($users as $user) {
+                    $dataClone = clone $data;
+                    $dataClone->assign_to = $user->id;
+                    $dataClone->priority_id = $request->priority_id;
+                    $dataClone->due_date = null;
+                    $dataClone->status_id = null;
+                    $dataClone->service_id = $request->service_id;
+                    $dataClone->description = strip_tags($request->description);
+                    $dataClone->category_id = $request->category_id;
+                    $dataClone->solution = null;
+                    $dataClone->status = 'Belum verifikasi';
+                    $dataClone->attachments = json_encode($images);
+                    $dataClone->status_changed_by_id = null;
+                    $dataClone->save();
+                }
+            } else {
+                $data->assign_to = $request->assign_to;
+                $data->priority_id = $request->priority_id;
+                $data->due_date = null;
+                $data->status_id = null;
+                $data->service_id = $request->service_id;
+                $data->description = strip_tags($request->description);
+                $data->category_id = $request->category_id;
+                $data->solution = null;
+                $data->status = 'Belum verifikasi';
+                $data->attachments = json_encode($images);
+                $data->status_changed_by_id = null;
+                $data->save();
+            }
 
             DB::commit(); // Commit transaksi
 
-            try {
-                // Kirim email setelah commit sukses
-                Mail::to($data->email)->send(new TicketReportMail($data));
-            } catch (\Exception $e) {
-                Log::error('Email gagal dikirim: ' . $e->getMessage());
-                // Kembalikan response jika email gagal
-                return redirect()->route('landing.index')->with('warning', 'Tiket Berhasil Dibuat tetapi email gagal dikirim.');
-            }
+            // try {
+            //     // Kirim email setelah commit sukses
+            //     Mail::to($data->email)->send(new TicketReportMail($data));
+            // } catch (\Exception $e) {
+            //     Log::error('Email gagal dikirim: ' . $e->getMessage());
+            //     return redirect()->route('landing.index')->with('warning', 'Tiket Berhasil Dibuat tetapi email gagal dikirim.');
+            // }
 
-            // Jika berhasil, redirect dengan pesan sukses
-            return Redirect::route('landing.index')->with('success', 'Tiket Berhasil Dibuat dan email laporan telah dikirim.');
+            return Redirect::route('landing.index')->with('success', 'Tiket Berhasil Dibuat');
         } catch (\Throwable $th) {
             DB::rollBack(); // Rollback transaksi jika ada error
             return Redirect::route('landing.index')->with('error', 'Tiket gagal dibuat.');
         }
     }
-
-
 
     public function getCategoriesByService($service_id)
     {

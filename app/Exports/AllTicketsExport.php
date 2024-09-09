@@ -77,10 +77,10 @@ class AllTicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyl
             $ticket->no_ticket,
             $ticket->category->category_name,
             $ticket->name,
-            $ticket->assignTo->name,
+            $ticket->assignTo ? $ticket->assignTo->name : '-',
             $ticket->priority->priority_name,
             $ticket->created_at->format('d F Y'),
-            $ticket->statuses->status_name,
+            $ticket->statuses ? $ticket->statuses->status_name: '-',
         ];
     }
 

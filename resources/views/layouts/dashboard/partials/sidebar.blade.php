@@ -265,7 +265,7 @@
                                 href="{{ route('unassignedSysadmin.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Verifikasi Tiket</p>
-                                <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
+                                {{-- <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span> --}}
                             </a>
                         </li>
 
@@ -279,7 +279,7 @@
                                 href="{{ route('assignedSysadmin.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
-                                <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span>
+                                {{-- <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span> --}}
                             </a>
                         </li>
                         <li class="nav-item">
@@ -309,7 +309,7 @@
                                 href="{{ route('unassignedDba.index') }}">
                                 <i class="fas fa-hourglass-start"></i>
                                 <p>Verifikasi Tiket</p>
-                                <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span>
+                                {{-- <span class="badge badge-secondary">{{ $unassignedTicketsCount }}</span> --}}
                             </a>
                         </li>
 
@@ -323,7 +323,7 @@
                                 href="{{ route('assignedDba.index') }}">
                                 <i class="fas fa-spinner"></i>
                                 <p>Tiket Proses</p>
-                                <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span>
+                                {{-- <span class="badge badge-secondary">{{ $AssignedTicketsCount }}</span> --}}
                             </a>
                         </li>
                         <li class="nav-item">

@@ -90,7 +90,7 @@ Route::middleware(['verified', 'auth', 'role:Admin|Engineer'])->group(function (
 
     Route::post('/admin/TicketStore', [TicketController::class, 'store_comment'])->name('tickets.store');
     Route::put('/admin/TicketUpdate/{id}', [TicketController::class, 'update_comment'])->name('tickets.update');
-    Route::get('/ticket/export', [TicketController::class, 'export'])->name('ticket.export');
+    Route::get('/ticket/AdminExport', [TicketController::class, 'export'])->name('admin.ticket.export');
 
     Route::get('/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
@@ -114,7 +114,7 @@ Route::middleware(['verified', 'auth', 'role:Engineer'])->group(function () {
         '/engineer/engineerticket' => EngineerTicketController::class,
     ]);
     Route::get('/engineer/dashboard', [HomeEngineerController::class, 'index'])->name('engineer.dashboard.index');
-    Route::get('/ticket/export', [TicketController::class, 'export'])->name('ticket.export');
+    Route::get('/ticket/EngineerExport', [TicketController::class, 'export'])->name('engineer.ticket.export');
     Route::get('/engineer/incidental-activities', [IncidentalEngineerController::class, 'index'])->name('engineer.incidental-activities.index');
     Route::get('/engineer/incidental-activities/{id}/show', [IncidentalEngineerController::class, 'show'])->name('engineer.incidental-activities.show');
 });

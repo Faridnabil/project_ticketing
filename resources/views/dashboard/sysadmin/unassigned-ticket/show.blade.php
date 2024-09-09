@@ -100,7 +100,7 @@
     </style>
 
     <div id="kt_content_container" class="container">
-        <a href="{{ route('unassignedSyasadmin.index') }}" class="btn btn-custom">
+        <a href="{{ route('unassignedSysadmin.index') }}" class="btn btn-custom">
             <i class="fas fa-arrow-left"></i> Back
         </a>
         <div class="card">

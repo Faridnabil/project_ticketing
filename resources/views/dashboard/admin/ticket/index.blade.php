@@ -29,7 +29,7 @@
                             </span>
                             Filter
                         </button>
-                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-sm ms-2"
+                        <a href="{{ route('admin.ticket.export', request()->query()) }}" class="btn btn-sm ms-2"
                             style="background-color: #17ba4b; color:white">
                             <span class="btn-label">
                                 <i class="fas fa-file-excel"></i>
@@ -100,19 +100,24 @@
                                                         style="background-color:rgb(0, 107, 0); color: white; font-weight:bold">Selesai</span>
                                                 @elseif($ticket->status_id == '2')
                                                     <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak Aktif</span>
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak
+                                                        Aktif</span>
                                                 @else
-                                                <span class="badge"
-                                                        style="background-color:rgb(184, 162, 162); color: white; font-weight:bold">Belum verisikasi</span>
+                                                    <span class="badge"
+                                                        style="background-color:rgb(184, 162, 162); color: white; font-weight:bold">Belum
+                                                        verisikasi</span>
                                                 @endif
                                             </td>
                                             <td class="d-flex justify-content-center align-items-center">
                                                 @can('Show Ticket')
-                                                    <a class="menu-link" href="{{ route('ticket.show', $ticket->id) }}" type="button">
+                                                    <a class="menu-link" href="{{ route('ticket.show', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <path
+                                                                        d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
                                                                     <circle cx="12" cy="12" r="4" />
                                                                 </svg>
                                                             </span>
@@ -120,23 +125,31 @@
                                                     </a>
                                                 @endcan
                                                 @can('Edit Ticket')
-                                                    <a class="menu-link ms-2" href="{{ route('ticket.edit', $ticket->id) }}" type="button">
+                                                    <a class="menu-link ms-2" href="{{ route('ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
-                                                                    <path d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <path
+                                                                        d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
+                                                                    <path
+                                                                        d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
                                                                 </svg>
                                                             </span>
                                                         </span>
                                                     </a>
                                                 @endcan
                                                 @can('Delete Ticket')
-                                                    <a class="menu-link ms-2" href="#" type="reset" data-bs-toggle="modal" data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                    <a class="menu-link ms-2" href="#" type="reset"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path d="M23,3H18V2.5A2.5,2.5,0,0,0,15.5,0h-7A2.5,2.5,0,0,0,6,2.5V3H1V6H3V21a3,3,0,0,0,3,3H18a3,3,0,0,0,3-3V6h2ZM18,21H6V6H18Z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <path
+                                                                        d="M23,3H18V2.5A2.5,2.5,0,0,0,15.5,0h-7A2.5,2.5,0,0,0,6,2.5V3H1V6H3V21a3,3,0,0,0,3,3H18a3,3,0,0,0,3-3V6h2ZM18,21H6V6H18Z" />
                                                                     <rect x="8" y="9" width="3" height="9" />
                                                                     <rect x="13" y="9" width="3" height="9" />
                                                                 </svg>
@@ -145,7 +158,6 @@
                                                     </a>
                                                 @endcan
                                             </td>
-
                                     @endforeach
                                 @endif
                             </tbody>

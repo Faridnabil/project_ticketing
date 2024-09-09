@@ -20,7 +20,7 @@
                             </span>
                             Filter
                         </button>
-                        <a href="{{ route('ticket.export', request()->query()) }}" class="btn btn-sm ms-2"
+                        <a href="{{ route('engineer.ticket.export', request()->query()) }}" class="btn btn-sm ms-2"
                             style="background-color: #17ba4b; color:white">
                             <span class="btn-label">
                                 <i class="fas fa-file-excel"></i>
@@ -47,57 +47,71 @@
                             <tbody>
                                 @if ($tickets->count())
                                     @foreach ($tickets as $ticket)
-                                            <tr>
-                                                <td>{{ $ticket->no_ticket }}</td>
-                                                <td>{{ $ticket->category->category_name }}</td>
-                                                <td>{{ $ticket->service->service_name }}</td>
-                                                <td>{{ $ticket->name }}</td>
-                                                <td class="text-center">{{ $ticket->assignTo->name }}</td>
-                                                <td class="text-center">
-                                                    @if ($ticket->priority_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Critical</span>
-                                                    @elseif($ticket->priority_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Medium</span>
-                                                    @elseif($ticket->priority_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
-                                                    @elseif($ticket->priority_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Low</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($ticket->status_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:rgb(6, 240, 6); color: white; font-weight:bold">Aktif</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                                    @elseif($ticket->status_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:rgb(0, 107, 0); color: white; font-weight:bold">Selesai</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak Aktif</span>
-                                                    @endif
-                                                </td>
-                                                <td style="width: 150px;  align-items: center; justify-content: center;">
-                                                    <a class="menu-link ms-3" href="{{ route('engineerticket.show', $ticket->id) }}" type="button">
-                                                        <span class="menu-icon" style="fill: #1218ca">
-                                                            <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
-                                                                    <circle cx="12" cy="12" r="4" />
-                                                                </svg>
-                                                            </span>
+                                        <tr>
+                                            <td>{{ $ticket->no_ticket }}</td>
+                                            <td>{{ $ticket->category->category_name }}</td>
+                                            <td>{{ $ticket->service->service_name }}</td>
+                                            <td>{{ $ticket->name }}</td>
+                                            <td class="text-center">
+                                                @if ($ticket->assignTo != null)
+                                                    {{ $ticket->assignTo->name }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($ticket->priority_id == '4')
+                                                    <span class="badge"
+                                                        style="background-color:red; color: white; font-weight:bold">Critical</span>
+                                                @elseif($ticket->priority_id == '3')
+                                                    <span class="badge"
+                                                        style="background-color:blue; color: white; font-weight:bold">Medium</span>
+                                                @elseif($ticket->priority_id == '2')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
+                                                @elseif($ticket->priority_id == '1')
+                                                    <span class="badge"
+                                                        style="background-color:green; color: white; font-weight:bold">Low</span>
+                                                @else
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($ticket->status_id == '1')
+                                                    <span class="badge"
+                                                        style="background-color:rgb(6, 240, 6); color: white; font-weight:bold">Aktif</span>
+                                                @elseif($ticket->status_id == '3')
+                                                    <span class="badge"
+                                                        style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
+                                                @elseif($ticket->status_id == '4')
+                                                    <span class="badge"
+                                                        style="background-color:rgb(0, 107, 0); color: white; font-weight:bold">Selesai</span>
+                                                @elseif($ticket->status_id == '2')
+                                                    <span class="badge"
+                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">Tidak
+                                                        Aktif</span>
+                                                @else
+                                                    <span class="badge"
+                                                        style="background-color:rgb(184, 162, 162); color: white; font-weight:bold">Belum
+                                                        verisikasi</span>
+                                                @endif
+                                            </td>
+                                            <td style="width: 150px;  align-items: center; justify-content: center;">
+                                                <a class="menu-link ms-3"
+                                                    href="{{ route('engineerticket.show', $ticket->id) }}" type="button">
+                                                    <span class="menu-icon" style="fill: #1218ca">
+                                                        <span class="svg-icon svg-icon-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px"
+                                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <path
+                                                                    d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
+                                                                <circle cx="12" cy="12" r="4" />
+                                                            </svg>
                                                         </span>
-                                                    </a>
-                                                    {{-- @can('Edit Ticket')
+                                                    </span>
+                                                </a>
+                                                {{-- @can('Edit Ticket')
                                                         <a class="menu-link ms-3" href="{{ route('ticket.edit', $ticket->id) }}" type="button">
                                                             <span class="menu-icon" style="fill: #bd6710">
                                                                 <span class="svg-icon svg-icon-2">
@@ -109,8 +123,8 @@
                                                             </span>
                                                         </a>
                                                     @endcan --}}
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @endif
                             </tbody>
@@ -186,7 +200,8 @@
                         </div>
                         <div class="d-flex align-self-end mt-2">
                             <button type="submit" class="btn btn-primary me-2">Filter</button>
-                            <a href="{{ route('engineerticket.index') }}" class="btn btn-danger" style="color: white">Hapus</a>
+                            <a href="{{ route('engineerticket.index') }}" class="btn btn-danger"
+                                style="color: white">Hapus</a>
                         </div>
                     </form>
                 </div>

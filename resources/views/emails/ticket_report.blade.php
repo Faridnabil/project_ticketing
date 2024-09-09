@@ -67,7 +67,7 @@
             <span><strong>Ditugaskan ke:</strong> {{ $ticket->assignTo->name }}</span><br>
             <span><strong>Prioritas:</strong> {{ $ticket->priority->priority_name }}</span><br>
             <span><strong>Service:</strong> {{ $ticket->service->service_name }}</span><br>
-            <span><strong>Kategori:</strong> {{ $ticket->category->category_name }}</span><br>
+            {{-- <span><strong>Kategori:</strong> {{ $ticket->category->category_name }}</span><br> --}}
             <span><strong>Deskripsi:</strong> {{ strip_tags($ticket->description) }}</span><br>
             <span><strong>Dibuat:</strong> {{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
         </div>
