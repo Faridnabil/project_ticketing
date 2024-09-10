@@ -128,116 +128,109 @@
                         <!-- Detail Keluhan -->
                         <div class="tab-pane fade show active" id="keluhan" role="tabpanel">
                             <div class="row gy-5 g-xl-12">
-                                <div class="col-xl-12">
+                                <!-- Column for Ticket Details -->
+                                <div class="col-xl-6">
                                     <div class="card-body py-14 me-xl-7 me-0 px-0 px-xxl-9">
-                                        <div class="d-flex align-items-center mb-12">
-                                            <div class="mb-12 ms-5">
-                                                <div class="d-flex flex-column">
-                                                    <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}
-                                                    </h1>
-                                                    <div>
-                                                        <span class="fw-bold text-muted">Nomor Tiket:
-                                                            {{ $ticket->no_ticket }}</span><br>
-                                                        <span class="fw-bold text-muted">Judul:
-                                                            {{ $ticket->title }}</span><br>
-                                                        <span class="fw-bold text-muted">Pemilik:
-                                                            {{ $ticket->name }}</span><br>
-                                                        <span class="fw-bold text-muted">Nomor Telepon:
-                                                            {{ $ticket->no_telp }}</span><br>
-                                                        <span class="fw-bold text-muted">Email:
-                                                            {{ $ticket->email }}</span><br>
-                                                        <span class="fw-bold text-muted">Ditugaskan ke:
-                                                            {{ $ticket->assignTo->name }}</span><br>
-                                                        <span class="fw-bold text-muted">Prioritas:
-                                                            {{ $ticket->priority->priority_name }}</span><br>
-                                                        <span class="fw-bold text-muted">Status Proses:
-                                                            {{ $ticket->status_name }}</span><br>
-                                                        <span class="fw-bold text-muted">Status Verifikasi:
-                                                            {{ $ticket->status }}</span><br>
-                                                        <span class="fw-bold text-muted">Service:
-                                                            {{ $ticket->service->service_name }}</span><br>
-                                                        <span class="fw-bold text-muted">Kategori:
-                                                            {{ $ticket->category->category_name }}</span><br>
-                                                        <span class="fw-bold text-muted">Deskripsi:
-                                                            {{ strip_tags($ticket->description) }}</span><br>
-                                                        <span class="fw-bold text-muted">Dibuat : <span
-                                                                class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span></span>
-                                                    </div>
-                                                </div>
-
+                                        <div class="d-flex flex-column">
+                                            <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}</h1>
+                                            <div>
+                                                <span class="fw-bold text-muted">Nomor Tiket:
+                                                    {{ $ticket->no_ticket }}</span><br>
+                                                <span class="fw-bold text-muted">Judul: {{ $ticket->title }}</span><br>
+                                                <span class="fw-bold text-muted">Pemilik: {{ $ticket->name }}</span><br>
+                                                <span class="fw-bold text-muted">Nomor Telepon:
+                                                    {{ $ticket->no_telp }}</span><br>
+                                                <span class="fw-bold text-muted">Email: {{ $ticket->email }}</span><br>
+                                                <span class="fw-bold text-muted">Ditugaskan ke:
+                                                    {{ $ticket->assignTo->name }}</span><br>
+                                                <span class="fw-bold text-muted">Prioritas:
+                                                    {{ $ticket->priority->priority_name }}</span><br>
+                                                <span class="fw-bold text-muted">Status Proses:
+                                                    {{ $ticket->status_name }}</span><br>
+                                                <span class="fw-bold text-muted">Status Verifikasi:
+                                                    {{ $ticket->status }}</span><br>
+                                                <span class="fw-bold text-muted">Service:
+                                                    {{ $ticket->service->service_name }}</span><br>
+                                                <span class="fw-bold text-muted">Kategori:
+                                                    {{ $ticket->category->category_name }}</span><br>
+                                                <span class="fw-bold text-muted">Deskripsi:
+                                                    {{ strip_tags($ticket->description) }}</span><br>
+                                                <span class="fw-bold text-muted">Dibuat:
+                                                    <span
+                                                        class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
+                                                </span>
                                             </div>
-                                        </div>
-                                        <div class="mb-10">
-                                            <!--begin::Product slider-->
-                                            <div class="tns tns-default">
-                                                <!--begin::Slider-->
-                                                <div id="kt_team_slider" class="my-slider" data-tns="true"
-                                                    data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
-                                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
-                                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
-                                                    data-tns-center="false" data-tns-dots="false">
-
-                                                    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-                                                        @php
-                                                            $attachment = trim($attachment);
-                                                        @endphp
-                                                        <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                            <img src="{{ asset('storage/' . $attachment) }}"
-                                                                alt="{{ basename($attachment) }}"
-                                                                class="card-rounded shadow mw-100" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-
-                                                <!--end::Slider-->
-                                                <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary"
-                                                    id="kt_team_slider_prev1">
-                                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-left.svg-->
-                                                    <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
-                                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                                <path
-                                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                                    fill="#000000" fill-rule="nonzero"
-                                                                    transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </button>
-                                                <!--end::Slider button-->
-                                                <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary"
-                                                    id="kt_team_slider_next1">
-                                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
-                                                    <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
-                                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                                <path
-                                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                                    fill="#000000" fill-rule="nonzero"
-                                                                    transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </button>
-                                                <!--end::Slider button-->
-                                            </div>
-                                            <!--end::Product slider-->
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="mb-10">
+                                        <!--begin::Product slider-->
+                                        <div class="tns tns-default">
+                                            <!--begin::Slider-->
+                                            <div id="kt_team_slider" class="my-slider" data-tns="true" data-tns-loop="true"
+                                                data-tns-swipe-angle="false" data-tns-speed="2000" data-tns-autoplay="true"
+                                                data-tns-autoplay-timeout="18000" data-tns-controls="true"
+                                                data-tns-nav="false" data-tns-items="1" data-tns-center="false"
+                                                data-tns-dots="false">
 
+                                                @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                                    @php
+                                                        $attachment = trim($attachment);
+                                                    @endphp
+                                                    <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                                        <img src="{{ asset('storage/' . $attachment) }}"
+                                                            alt="{{ basename($attachment) }}"
+                                                            class="card-rounded shadow mw-100" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                            <!--end::Slider-->
+                                            <!--begin::Slider button-->
+                                            <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_prev1">
+                                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-left.svg-->
+                                                <span class="svg-icon svg-icon-3x">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <path
+                                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </button>
+                                            <!--end::Slider button-->
+                                            <!--begin::Slider button-->
+                                            <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_next1">
+                                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
+                                                <span class="svg-icon svg-icon-3x">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <path
+                                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </button>
+                                            <!--end::Slider button-->
+                                        </div>
+                                        <!--end::Product slider-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
