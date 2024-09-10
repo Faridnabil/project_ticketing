@@ -44,7 +44,26 @@ Detail Incidental Activity | PLN Icon+
                                                     <span class="fw-bold text-muted">Dibuat:
                                                         <span class="fw-bolder text-gray-600 me-1">
                                                             {{ date('d F Y H:i', strtotime($activity->created_at)) }}</span>
-                                                    </span>
+                                                    </span><br>
+
+                                                    <!-- Tampilkan File Upload -->
+                                                    @if($activity->file_path)
+                                                        <span class="fw-bold text-muted">File:
+                                                            @php
+                                                                $fileExtension = pathinfo($activity->file_path, PATHINFO_EXTENSION);
+                                                            @endphp
+                                                            @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
+                                                                <!-- Preview Gambar -->
+                                                                <img src="{{ asset($activity->file_path) }}" alt="Uploaded Image" class="img-thumbnail mt-2" style="max-width: 200px;">
+                                                            @elseif($fileExtension === 'pdf')
+                                                                <!-- Tautan ke PDF -->
+                                                                <a href="{{ asset($activity->file_path) }}" target="_blank" class="btn btn-outline-primary mt-2">View PDF</a>
+                                                            @else
+                                                                <!-- Tautan untuk file lainnya -->
+                                                                <a href="{{ asset($activity->file_path) }}" target="_blank" class="btn btn-outline-secondary mt-2">Download File</a>
+                                                            @endif
+                                                        </span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

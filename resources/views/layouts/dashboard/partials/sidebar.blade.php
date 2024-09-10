@@ -254,11 +254,11 @@
                         </li>
                     @endrole --}}
                     @role('SysAdmin')
-                        @php
+                        {{-- @php
                             $unassignedTicketsCount = app(
                                 'App\Http\Controllers\Sysadmin\UnassignedSysadminController',
                             )->countUnassignedSysadmin();
-                        @endphp
+                        @endphp --}}
 
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedSysadmin') ? 'active' : '' }}"
@@ -269,11 +269,11 @@
                             </a>
                         </li>
 
-                        @php
+                        {{-- @php
                             $AssignedTicketsCount = app(
                                 'App\Http\Controllers\Sysadmin\AssignedSysadminController',
                             )->countAssignedTickets();
-                        @endphp
+                        @endphp --}}
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedSysadmin') ? 'active' : '' }}"
                                 href="{{ route('assignedSysadmin.index') }}">
@@ -298,11 +298,11 @@
                     @endrole
 
                     @role('DBA')
-                        @php
+                        {{-- @php
                             $unassignedTicketsCount = app(
                                 'App\Http\Controllers\Dba\UnassignedDbaController',
                             )->countUnassignedDba();
-                        @endphp
+                        @endphp --}}
 
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('unassignedTicket') ? 'active' : '' }}"
@@ -313,11 +313,11 @@
                             </a>
                         </li>
 
-                        @php
+                        {{-- @php
                             $AssignedTicketsCount = app(
                                 'App\Http\Controllers\Dba\AssignedDbaController',
                             )->countAssignedTickets();
-                        @endphp
+                        @endphp --}}
                         <li class="nav-item">
                             <a class="menu-link {{ Request::is('assignedTicket') ? 'active' : '' }}"
                                 href="{{ route('assignedDba.index') }}">

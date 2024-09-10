@@ -60,7 +60,9 @@ class IncidentalDbaController extends Controller
 
         $filePath = null;
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('incidental_activities_files', 'public');
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName(); // Membuat nama file unik
+            $filePath = $file->storeAs('incidental_activities_files', $fileName, 'public'); // Simpan file di storage/app/public/incidental_activities_files
         }
 
         // Save incidental activity data and store users as a JSON-encoded array
@@ -73,7 +75,7 @@ class IncidentalDbaController extends Controller
             'mitigation' => $request->mitigation,
             'impact' => $request->impact,
             'status_id' => $request->status_id,
-            'file_path' => $filePath,
+            'file_path' => $filePath ? 'storage/' . $filePath : null, // Sesuaikan path agar bisa diakses
             'user_id' => Auth::id(),
             'users' => json_encode($request->users), // Store users as a JSON array
         ]);
@@ -114,7 +116,16 @@ class IncidentalDbaController extends Controller
 
         // Proses file baru yang diupload
         if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('incidental_activities_files', 'public');
+            // Hapus file lama jika ada
+            if ($activity->file_path && file_exists(public_path($activity->file_path))) {
+                unlink(public_path($activity->file_path));
+            }
+
+            // Simpan file baru dengan menggunakan storeAs()
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('incidental_activities_files', $fileName, 'public');
+            $data['file_path'] = 'storage/' . $filePath; // Sesuaikan path agar bisa diakses
         }
 
         // Update aktivitas dan simpan users sebagai JSON
