@@ -362,59 +362,87 @@
         }
     </script>
 
-{{-- DataTables --}}
-<script>
-    $(document).ready(function() {
-        // Ambil nilai lengthMenu dan halaman terakhir dari localStorage
-        var selectedLength = localStorage.getItem('selectedLength') || 5; // Default ke 5 jika tidak ada nilai di localStorage
-        var lastPage = localStorage.getItem('lastPage') || 0; // Default ke 0 jika tidak ada nilai di localStorage (halaman pertama)
+    {{-- DataTables --}}
+    <script>
+        $(document).ready(function() {
+            // Ambil nilai lengthMenu dan halaman terakhir dari localStorage
+            var selectedLength = localStorage.getItem('selectedLength') ||
+                5; // Default ke 5 jika tidak ada nilai di localStorage
+            var lastPage = localStorage.getItem('lastPage') ||
+                0; // Default ke 0 jika tidak ada nilai di localStorage (halaman pertama)
 
-        // Inisialisasi DataTable
-        var table = $("#kt_datatable_example_5").DataTable({
-            "language": {
-                "lengthMenu": "Show _MENU_",
-                "emptyTable": "Tidak ada data yang ditampilkan. Silakan gunakan filter untuk mencari data."
-            },
-            "dom": "<'row'" +
-                "<'col-sm-6 d-flex align-items-center justify-content-start'l>" +
-                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                ">" +
-                "<'table-responsive'tr>" +
-                "<'row'" +
-                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                ">",
-            "pageLength": parseInt(selectedLength), // Atur panjang halaman sesuai dengan nilai yang tersimpan
-            "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data yang ditampilkan
-            "order": [
-                [3, 'desc']
-            ], // Urutkan berdasarkan prioritas
-            "columnDefs": [{
-                "targets": 3, // Kolom prioritas
-                "orderData": [3],
-                "type": "num"
-            }],
-            "displayStart": parseInt(lastPage) * selectedLength // Memulai dari halaman terakhir yang tersimpan
+            // Inisialisasi DataTable
+            var table = $("#kt_datatable_example_5").DataTable({
+                "language": {
+                    "lengthMenu": "Show _MENU_",
+                    "emptyTable": "Tidak ada data yang ditampilkan. Silakan gunakan filter untuk mencari data."
+                },
+                "dom": "<'row'" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-start'l>" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                    ">" +
+                    "<'table-responsive'tr>" +
+                    "<'row'" +
+                    "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                    "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                    ">",
+                "pageLength": parseInt(
+                    selectedLength), // Atur panjang halaman sesuai dengan nilai yang tersimpan
+                "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data yang ditampilkan
+                "order": [
+                    [3, 'desc']
+                ], // Urutkan berdasarkan prioritas
+                "columnDefs": [{
+                    "targets": 3, // Kolom prioritas
+                    "orderData": [3],
+                    "type": "num"
+                }],
+                "displayStart": parseInt(lastPage) *
+                    selectedLength // Memulai dari halaman terakhir yang tersimpan
+            });
+
+            // Simpan nilai pageLength ke localStorage setiap kali berubah
+            $('#kt_datatable_example_5').on('length.dt', function(e, settings, len) {
+                localStorage.setItem('selectedLength', len);
+            });
+
+            // Simpan halaman terakhir yang diakses ke localStorage setiap kali pagination berubah
+            $('#kt_datatable_example_5').on('page.dt', function() {
+                var info = table.page.info();
+                localStorage.setItem('lastPage', info.page);
+            });
+
+            // Custom search input
+            $('#tableSearch').on('keyup', function() {
+                table.search(this.value).draw(); // Pencarian otomatis saat mengetik
+            });
         });
+    </script>
 
-        // Simpan nilai pageLength ke localStorage setiap kali berubah
-        $('#kt_datatable_example_5').on('length.dt', function(e, settings, len) {
-            localStorage.setItem('selectedLength', len);
-        });
-
-        // Simpan halaman terakhir yang diakses ke localStorage setiap kali pagination berubah
-        $('#kt_datatable_example_5').on('page.dt', function() {
-            var info = table.page.info();
-            localStorage.setItem('lastPage', info.page);
-        });
-
-        // Custom search input
-        $('#tableSearch').on('keyup', function() {
-            table.search(this.value).draw(); // Pencarian otomatis saat mengetik
-        });
-    });
-</script>
-
+    {{-- CHATBOT --}}
+    <script type="text/javascript">
+        var LHCChatOptions = {};
+        LHCChatOptions.opt = {
+            widget_height: 340,
+            widget_width: 300,
+            popup_height: 520,
+            popup_width: 500
+        };
+        (function() {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            var referrer = (document.referrer) ? encodeURIComponent(document.referrer.substr(document.referrer.indexOf(
+                '://') + 1)) : '';
+            var location = (document.location) ? encodeURIComponent(window.location.href.substring(window.location
+                .protocol.length)) : '';
+            po.src =
+                '//chatbot.plniconpln.id/index.php/chat/getstatus/(click)/internal/(position)/bottom_right/(ma)/br/(top)/350/(units)/pixels/(leaveamessage)/true/(department)/4/(theme)/3?r=' +
+                referrer + '&l=' + location;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
 
 </body>
 
