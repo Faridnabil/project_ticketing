@@ -39,12 +39,21 @@ class NotificationPejabat extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //         ->line($this->DataPejabat['body'])
+    //         ->action($this->DataPejabat['Text'], $this->DataPejabat['Url'])
+    //         ->line($this->DataPejabat['thanks']);
+    // }
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line($this->DataPejabat['body'])
-            ->action($this->DataPejabat['Text'], $this->DataPejabat['Url'])
-            ->line($this->DataPejabat['thanks']);
+            ->subject('Notifikasi Tiket')
+            ->view('emails.notificationEmail', [
+                'data' => $this->DataPejabat
+            ]);
     }
 
     /**
@@ -61,7 +70,7 @@ class NotificationPejabat extends Notification
             'thanks' => $this->DataPejabat['thanks'],
             'Text' => $this->DataPejabat['Text'],
             'Url' => $this->DataPejabat['Url'],
-            'pejabat_id' => rand(1111, 9999),
+            'koordinasi_id' => rand(1111, 9999),
         ];
     }
 }

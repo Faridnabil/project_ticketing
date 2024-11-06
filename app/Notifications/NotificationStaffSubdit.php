@@ -39,12 +39,21 @@ class NotificationStaffSubdit extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //         ->line($this->DataStaffSubdit['body'])
+    //         ->action($this->DataStaffSubdit['Text'], $this->DataStaffSubdit['Url'])
+    //         ->line($this->DataStaffSubdit['thanks']);
+    // }
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line($this->DataStaffSubdit['body'])
-            ->action($this->DataStaffSubdit['Text'], $this->DataStaffSubdit['Url'])
-            ->line($this->DataStaffSubdit['thanks']);
+            ->subject('Notifikasi Tiket')
+            ->view('emails.notificationEmail', [
+                'data' => $this->DataStaffSubdit
+            ]);
     }
 
     /**
@@ -61,7 +70,7 @@ class NotificationStaffSubdit extends Notification
             'thanks' => $this->DataStaffSubdit['thanks'],
             'Text' => $this->DataStaffSubdit['Text'],
             'Url' => $this->DataStaffSubdit['Url'],
-            'staff_subdit_id' => rand(1111, 9999),
+            'koordinasi_id' => rand(1111, 9999),
         ];
     }
 }

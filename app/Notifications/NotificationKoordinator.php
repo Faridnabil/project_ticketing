@@ -51,9 +51,10 @@ class NotificationKoordinator extends Notification
     {
         return (new MailMessage)
             ->subject('Notifikasi Tiket')
-            ->view('emails.notificationKoordinator', ['data' => $this->DataKoordinasi]);
+            ->view('emails.notificationEmail', [
+                'data' => $this->DataKoordinasi
+            ]);
     }
-
 
     /**
      * Get the array representation of the notification.
