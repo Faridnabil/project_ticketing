@@ -100,7 +100,7 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Keterangan</th>
+                                {{-- <th class="min-w-70px">Keterangan</th> --}}
                                 <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
@@ -225,7 +225,7 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             @if ($ticket->latestHistory)
                                                 @php
                                                     $updatedByUser = $ticket->latestHistory->status_changedBy
@@ -239,7 +239,7 @@
                                             @endif
                                             :
                                             {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
-                                        </td>
+                                        </td> --}}
 
 
                                         <!--begin::Action=-->
