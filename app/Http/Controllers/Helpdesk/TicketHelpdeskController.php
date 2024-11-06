@@ -26,7 +26,7 @@ class TicketHelpdeskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, Ticket $ticket)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
@@ -66,6 +66,14 @@ class TicketHelpdeskController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
+        if ($request->filled('province_id')) {
+            $query->where('province_id', $request->province_id);
+        }
+
+        if ($request->filled('city_or_regency_id')) {
+            $query->where('city_or_regency_id', $request->city_or_regency_id);
+        }
+
         // Apply sorting after all filters
         $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
 
@@ -82,8 +90,25 @@ class TicketHelpdeskController extends Controller
             ->pluck('id')
             ->toArray();
 
-        return view('dashboard.helpdesk.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'reqTanggal', 'koordinatorUsers'));
+        $provinces = Province::all();
+
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
+        return view('dashboard.helpdesk.ticket.index', [
+            'tickets' => $tickets,
+            'provinces' => $provinces,
+            'city_or_regencies' => $city_or_regencies,
+            'categories' => $categories,
+            'priorities' => $priorities,
+            'statuses' => $statuses,
+            'levels' => $levels,
+            'reqTanggal' => $reqTanggal,
+            'koordinatorUsers' => $koordinatorUsers,
+            'filter' => $request->all() // Kirim filter saat ini ke view
+        ]);
     }
+
     public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
@@ -122,7 +147,6 @@ class TicketHelpdeskController extends Controller
 
         return view('dashboard.helpdesk.ticket.new_ticket', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -216,9 +240,6 @@ class TicketHelpdeskController extends Controller
             return back()->withInput()->withErrors($th->getMessage());
         }
     }
-
-
-
 
     /**
      * Display the specified resource.
@@ -401,7 +422,7 @@ class TicketHelpdeskController extends Controller
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('helpdesk.ticket.index', $request->all())->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             // dd($th->getMessage()); // Menampilkan pesan error untuk debugging
@@ -632,6 +653,7 @@ class TicketHelpdeskController extends Controller
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Pengajuan telah dikirim.');
     }
+
     public function getCities($provinceId)
     {
         $cities = CityOrRegency::with('province')

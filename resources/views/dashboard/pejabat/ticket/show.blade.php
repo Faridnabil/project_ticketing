@@ -458,7 +458,7 @@
                                                             {{ $log->pejabat->name ?? 'N/A' }}<br>
                                                         @endif
                                                         <strong>Lampiran :</strong>
-                                                        @if ($log->h_attachments)
+                                                        @if ($log->h_attachments && is_string($log->h_attachments) && json_decode($log->h_attachments))
                                                             @foreach (json_decode($log->h_attachments) as $attachment)
                                                                 @php
                                                                     $filename = basename($attachment);
@@ -466,13 +466,12 @@
                                                                     $shortenedFilename = end($parts);
                                                                 @endphp
                                                                 <a href="#" class="attachment-link"
-                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
-                                                                    data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                   data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                                   data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
                                                             @endforeach
                                                         @else
                                                             N/A
                                                         @endif
-
 
 
                                                         <br>

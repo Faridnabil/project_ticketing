@@ -29,8 +29,8 @@ class NotificationKoordinator extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail', 'database'];
-        return ['database'];
+        return ['mail', 'database'];
+        // return ['database'];
     }
 
     /**
@@ -39,13 +39,21 @@ class NotificationKoordinator extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //         ->line($this->DataKoordinasi['body'])
+    //         ->action($this->DataKoordinasi['Text'], $this->DataKoordinasi['Url'])
+    //         ->line($this->DataKoordinasi['thanks']);
+    // }
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line($this->DataKoordinasi['body'])
-            ->action($this->DataKoordinasi['Text'], $this->DataKoordinasi['Url'])
-            ->line($this->DataKoordinasi['thanks']);
+            ->subject('Notifikasi Tiket')
+            ->view('emails.notificationKoordinator', ['data' => $this->DataKoordinasi]);
     }
+
 
     /**
      * Get the array representation of the notification.

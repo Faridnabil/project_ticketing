@@ -42,6 +42,13 @@
                         <!--begin::Form-->
                         <form method="GET" action="{{ route('helpdesk.ticket.index') }}"
                             class="row g-3 align-items-center">
+
+                            <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
+                            <input type="hidden" name="level" value="{{ request('level') }}">
+                            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                            <input type="hidden" name="priority_id" value="{{ request('priority_id') }}">
+                            <input type="hidden" name="status_id" value="{{ request('status_id') }}">
+
                             <div class="col-md-2">
                                 <div class="form-group">
                                     {{-- <label for="tanggal" class="form-label mb-2">Tanggal</label> --}}
@@ -106,6 +113,34 @@
                                 </select>
                             </div>
 
+                            <!-- Provinsi -->
+                            <div class="col-md-2">
+                                <select id="province_id" name="province_id" class="form-select" data-control="select2"
+                                    onchange="fetchCityOrRegency(this.value)">
+                                    <option value="" selected disabled>Pilih Provinsi</option>
+                                    @foreach ($provinces as $province)
+                                        <option value="{{ $province->id }}"
+                                            {{ request('province_id') == $province->id ? 'selected' : '' }}>
+                                            {{ $province->no_province }} - {{ $province->province_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Kabupaten/Kota -->
+                            <div class="col-md-2">
+                                <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
+                                    data-control="select2">
+                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                    @foreach ($city_or_regencies as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
                             <div class="col-md-2  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
                                 <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset</a>
@@ -113,7 +148,6 @@
                         </form>
                         <!--end::Form-->
                     </div>
-
 
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
@@ -140,7 +174,8 @@
                 <!--end::Card header-->
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <table id="kt_datatable_example_5" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                    <table id="kt_datatable_example_5"
+                        class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -152,7 +187,7 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Keterangan</th>
+                                {{-- <th class="min-w-70px">Keterangan</th> --}}
                                 <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
@@ -160,7 +195,7 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if ($reqTanggal || request('level') || request('category_id') || request('priority_id') || request('status_id'))
+                            @if ($reqTanggal || request('level') || request('category_id') || request('priority_id') || request('status_id') || request('city_or_regency_id') || request('province_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -220,7 +255,6 @@
                                             {{ date('d F Y', strtotime($ticket->created_at)) }}
                                         </td>
 
-                                        <!--end::Payment method=-->
                                         <!--begin::Date=-->
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -277,7 +311,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        {{-- <td>
                                             @if ($ticket->latestHistory)
                                                 @php
                                                     $updatedByUser = $ticket->latestHistory->status_changedBy
@@ -293,8 +327,7 @@
                                             @endif
                                             :
                                             {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
-                                        </td>
-
+                                        </td> --}}
 
                                         <!--begin::Action=-->
                                         <td>
@@ -605,6 +638,24 @@
                 };
             });
         </script>
-    @endforeach
 
+
+        <script>
+            function fetchCityOrRegency(provinceId) {
+                if (provinceId) {
+                    fetch(`/get-cities/${provinceId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const citySelect = document.getElementById('city_or_regency_id');
+                            citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                            data.forEach(city => {
+                                citySelect.innerHTML +=
+                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
+                            });
+                        })
+                        .catch(error => console.error('Error fetching cities:', error));
+                }
+            }
+        </script>
+    @endforeach
 @endsection

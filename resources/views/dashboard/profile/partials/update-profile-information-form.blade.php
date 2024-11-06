@@ -23,7 +23,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
         <br>
-        {{-- <div>
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="form-control" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -45,7 +45,7 @@
                     @endif
                 </div>
             @endif
-        </div> --}}
+        </div>
 
         <br>
         <div class="flex items-center gap-4">
