@@ -432,7 +432,7 @@ class TicketKoordinatorController extends Controller
 
             $notificationData = [
                 'name' => $authenticatedUserName,
-                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', terlah dialihkan kepada anda',
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', telah dialihkan kepada anda',
                 'thanks' => 'Terimakasih',
                 'Text' => '',
                 'Url' => url('/staff-subdit/ticket'),
