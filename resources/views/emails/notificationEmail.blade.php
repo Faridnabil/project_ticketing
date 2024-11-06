@@ -14,11 +14,11 @@
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background-color: #1E1E2D;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #1E1E2D;
+            border-top: 5px solid #ffffff;
             text-align: center;
         }
 
@@ -33,19 +33,19 @@
         .content h1 {
             font-size: 26px;
             margin-bottom: 20px;
-            color: #333;
+            color: #ffffff;
         }
 
         .content p {
             font-size: 16px;
             line-height: 1.6;
-            color: #555;
+            color: #ffffff;
             margin-bottom: 30px;
         }
 
         .button {
-            background-color: #1E1E2D;
-            color: #ffffff !important;
+            background-color: #ffffff;
+            color: #1E1E2D !important;
             padding: 12px 25px;
             text-decoration: none;
             border-radius: 30px;
@@ -56,7 +56,7 @@
         }
 
         .button:hover {
-            background-color: #2A2A3A;
+            background-color: #ffffff;
         }
 
         .footer {
@@ -79,6 +79,7 @@
             <h1>Anda Menerima Tiket Baru!</h1>
             <p>Halo, Anda telah menerima tiket baru yang memerlukan perhatian Anda. Silakan klik tombol di bawah ini
                 untuk melihat detail tiket dan melakukan tindakan yang diperlukan.</p>
+                <br>
             <a href="{{ $data['Url'] }}" class="button">{{ $data['Text'] ?: 'Cek Tiket Sekarang' }}</a>
         </div>
 
