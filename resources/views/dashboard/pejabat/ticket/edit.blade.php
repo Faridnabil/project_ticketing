@@ -30,6 +30,13 @@
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
 
+                                <select name="level5" hidden required>
+                                    @foreach ($pejabatRoles as $roleId)
+                                        <option value="{{ $roleId }}"
+                                            {{ old('level5') == $roleId ? 'selected' : '' }}>{{ $roleId }}</option>
+                                    @endforeach
+                                </select>
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
                                     <select name="category_id"

@@ -232,7 +232,7 @@
         });
     </script>
 
-    {{-- Javascript Dropzone --}}
+    {{-- JavaScript Dropzone --}}
     <script>
         let uploadedFiles = [];
         let existingFiles = [];
@@ -242,7 +242,8 @@
                 $attachments = explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments));
             @endphp
             @foreach ($attachments as $attachment)
-                existingFiles.push('{{ $attachment }}');
+                // Menggunakan Storage::url untuk mendapatkan path yang benar dari file di storage
+                existingFiles.push('{{ Storage::url($attachment) }}');
             @endforeach
         @endif
 
@@ -255,7 +256,7 @@
                 container.classList.add('image-container');
 
                 const img = document.createElement('img');
-                img.src = `{{ asset('') }}${filePath}`; // Menggunakan path relatif
+                img.src = filePath; // URL file di storage
                 img.addEventListener('click', (event) => {
                     event.stopPropagation();
                     removeExistingFile(event, filePath);
@@ -343,15 +344,18 @@
         }
 
         function updateExistingFileList() {
+            // Update input value for remaining attachments
             document.getElementById('remaining_attachments').value = existingFiles.join(',');
         }
 
         function removeExistingFile(event, filePath) {
             event.stopPropagation();
-            const imgElement = document.querySelector(`img[src="{{ asset('') }}${filePath}"]`);
+            const imgElement = document.querySelector(`img[src="${filePath}"]`);
             if (imgElement && imgElement.parentElement) {
+                // Filter out the removed file from existing files
                 existingFiles = existingFiles.filter(file => file !== filePath);
-                removedFiles.push(filePath);
+                removedFiles.push(filePath.replace('{{ Storage::url('') }}', '')); // Remove Storage prefix
+
                 imgElement.parentElement.remove();
                 document.getElementById('removed_attachments').value = removedFiles.join(',');
 
@@ -361,6 +365,7 @@
             }
         }
     </script>
+
 
     {{-- DataTables --}}
     <script>

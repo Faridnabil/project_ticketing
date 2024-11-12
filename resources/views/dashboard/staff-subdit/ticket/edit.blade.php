@@ -29,6 +29,12 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
+                                <select name="level3" hidden required>
+                                    @foreach ($StaffsubditRoles as $roleId)
+                                        <option value="{{ $roleId }}"
+                                            {{ old('level3') == $roleId ? 'selected' : '' }}>{{ $roleId }}</option>
+                                    @endforeach
+                                </select>
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>

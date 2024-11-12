@@ -214,25 +214,24 @@ class TicketHelpdeskController extends Controller
                 $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
             }
 
-            $validate = $request->all();
-            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
-            $validate['no_ticket'] = $newTicketId;
-            $validate['level1'] = $request->input('level1'); // Menyimpan role_id
+            // Ambil semua input yang sudah divalidasi
+            $data = $request->all();
+            $data['no_ticket'] = $newTicketId;
+            $data['level1'] = $request->input('level1'); // Menyimpan role_id jika ada
 
+            // Proses file lampiran jika ada
             $attachments = [];
-            if ($files) {
-                foreach ($files as $file) {
-                    // Proses setiap file
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
                     $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
+                    $filePath = $file->storeAs('public/foto/ticket-heldesk', $nama_file);
+                    $attachments[] = str_replace('public/', '', $filePath); // Hapus prefix 'public/' agar sesuai dengan URL Storage
                 }
             }
+            $data['attachments'] = json_encode($attachments);
 
-            $validate['attachments'] = json_encode($attachments);
-
-            Ticket::create($validate);
+            // Simpan data tiket
+            Ticket::create($data);
             DB::commit();
             return redirect()->route('helpdesk.newTickets.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -316,8 +315,6 @@ class TicketHelpdeskController extends Controller
         );
     }
 
-
-
     /**
      * Update the specified resource in storage.
      */
@@ -328,33 +325,47 @@ class TicketHelpdeskController extends Controller
             // Ambil tiket yang akan diupdate
             $ticket = Ticket::findOrFail($id);
 
-            // Validasi file hanya berupa gambar (JPG, JPEG, PNG)
+            // Validasi input termasuk file lampiran
             $request->validate([
+                'category_id' => 'required',
+                'province_id' => 'required',
+                'city_or_regency_id' => 'required',
+                'status_id' => 'required',
+                'priority_id' => 'required',
+                'pic' => 'required',
+                'jabatan' => 'required',
+                'no_hp' => 'required',
+                'description' => 'required',
                 'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png',
             ], [
                 'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, atau PNG.',
             ]);
 
-            $validate = $request->all();
-            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
+            // Ambil semua input yang sudah divalidasi
+            $data = $request->all();
 
-            // Ambil file yang dihapus
-            $removedAttachments = explode(',', $request->input('removed_attachments'));
+            // Ambil path lampiran yang ada di database jika tidak ada file baru yang diunggah
+            $existingAttachments = json_decode($ticket->attachments, true) ?? [];
 
-            // Ambil file yang masih ada
-            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
-            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+            // Ambil file yang dihapus dari input (jika ada)
+            $removedAttachments = explode(',', $request->input('removed_attachments', ''));
+            $remainingAttachments = array_diff($existingAttachments, $removedAttachments);
 
-            $attachments = [];
-            if ($files) {
-                foreach ($files as $file) {
-                    // Proses setiap file
+            // Proses file lampiran baru jika ada
+            $newAttachments = [];
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
                     $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
+                    // Simpan file ke folder `foto/ticket-helpdesk`
+                    $filePath = $file->storeAs('public/foto/ticket-heldesk', $nama_file);
+
+                    // Hapus prefix `public/` agar sesuai dengan yang diinginkan
+                    $newAttachments[] = str_replace('public/', '', $filePath);
                 }
             }
+
+            // Gabungkan lampiran yang tersisa dan yang baru diunggah
+            $data['attachments'] = json_encode(array_merge($remainingAttachments, $newAttachments));
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             DB::table('history_tickets')->insert([
@@ -379,7 +390,7 @@ class TicketHelpdeskController extends Controller
                 'status_changedBy' => Auth::user()->id,
             ]);
 
-            // Pengecekan status_id 5 untuk notifikasi
+            // Notifikasi jika status berubah ke 5
             if ($request->status_id == 5) {
                 $roles = [
                     'Helpdesk' => '/helpdesk/ticket',
@@ -389,44 +400,34 @@ class TicketHelpdeskController extends Controller
                     'Pejabat' => '/pejabat/ticket',
                 ];
 
-                // Dapatkan pengguna yang sedang terautentikasi
                 $authUser = Auth::user();
 
                 foreach ($roles as $role => $url) {
-                    // Ambil semua pengguna dengan peran yang sesuai
                     $users = User::whereHas('roles', function ($query) use ($role) {
                         $query->where('name', $role);
                     })->get();
 
                     $notificationData = [
                         'name' => $authUser->name,
-                        'body' => 'Tiket yang ditangani oleh anda telah dibuka kembali oleh ' . $authUser->name . ' anda dapat mengecek kembali tiketnya',
-                        'thanks' => 'Terimakasih',
+                        'body' => 'Tiket yang ditangani oleh anda telah dibuka kembali oleh ' . $authUser->name . '. Anda dapat mengecek kembali tiketnya.',
+                        'thanks' => 'Terima kasih',
                         'Text' => '',
                         'Url' => url($url),
                         'koordinator_id' => rand(1111, 9999),
                     ];
 
-                    // Kirim notifikasi kepada semua pengguna dengan peran yang sesuai
-                    foreach ($users as $user) {
-                        Notification::send($user, new NotificationKoordinator($notificationData));
-                    }
+                    Notification::send($users, new NotificationKoordinator($notificationData));
                 }
             }
 
-            // Gabungkan file baru dengan file yang masih ada
-            $attachments = array_merge($remainingAttachments, $attachments);
-            $validate['attachments'] = json_encode($attachments);
-
-            // Update tiket dengan data baru
-            $ticket->update($validate);
+            // Update data tiket dengan data baru
+            $ticket->update($data);
 
             DB::commit();
-            return redirect()->route('helpdesk.ticket.index', $request->all())->with('success', 'Tiket Berhasil Dirubah');
+            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
-            // dd($th->getMessage()); // Menampilkan pesan error untuk debugging
-            return back()->with('error', $th->getMessage());
+            return back()->withInput()->withErrors($th->getMessage());
         }
     }
 

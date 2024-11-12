@@ -150,6 +150,10 @@ class TicketSiakDevController extends Controller
         $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
         $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
 
+        $siakDevRoles = Role::where('name', 'SIAK Dev')
+        ->pluck('id')
+        ->toArray();
+
         return view(
             'dashboard.siak-dev.ticket.edit',
             compact(
@@ -162,6 +166,7 @@ class TicketSiakDevController extends Controller
                 'selesaiStatusId',
                 'tertundaStatusId',
                 'diterimaStatusId',
+                'siakDevRoles',
                 'bukaKembaliStatusId'
             )
         );
@@ -185,26 +190,29 @@ class TicketSiakDevController extends Controller
             ]);
 
             $validate = $request->all();
-            $files = $request->file('attachments'); // Mengambil file dari input 'attachments'
 
-            // Ambil file yang dihapus
-            $removedAttachments = explode(',', $request->input('removed_attachments'));
+            // Ambil path lampiran yang ada di database
+            $existingAttachments = json_decode($ticket->attachments, true) ?? [];
 
-            // Ambil file yang masih ada
-            $remainingAttachments = explode(',', $request->input('remaining_attachments'));
-            $remainingAttachments = array_diff($remainingAttachments, $removedAttachments);
+            // Ambil file yang dihapus dari request
+            $removedAttachments = explode(',', $request->input('removed_attachments', ''));
+            $remainingAttachments = array_filter($existingAttachments, function ($attachment) use ($removedAttachments) {
+                return !in_array(str_replace('storage/', '', $attachment), $removedAttachments);
+            });
 
-            $attachments = [];
-            $validate['level4'] = $request->input('level4'); // Menyimpan role_id
-            if ($files) {
-                foreach ($files as $file) {
-                    // Proses setiap file
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $nama_folder = 'file/ticket';
-                    $file->move(public_path($nama_folder), $nama_file);
-                    $attachments[] = $nama_folder . "/" . $nama_file;
+            $newAttachments = [];
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $namaFile = time() . "_" . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('public/foto/ticket-siakDev', $namaFile);
+                    $newAttachments[] = str_replace('public/', '', $filePath);
                 }
             }
+
+            // Gabungkan file baru dengan file yang tersisa
+            $attachments = array_merge($remainingAttachments, $newAttachments);
+            $validate['attachments'] = json_encode($attachments);
+
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             DB::table('history_tickets')->insert([
@@ -282,10 +290,6 @@ class TicketSiakDevController extends Controller
 
             //     Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
             // }
-
-            // Gabungkan file baru dengan file yang masih ada
-            $attachments = array_merge($remainingAttachments, $attachments);
-            $validate['attachments'] = json_encode($attachments);
 
             // Update tiket dengan data baru
             $ticket->update($validate);

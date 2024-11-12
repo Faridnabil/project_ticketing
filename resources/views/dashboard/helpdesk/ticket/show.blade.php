@@ -360,20 +360,23 @@
                             <div class="tns tns-default">
                                 <h3>Lampiran :</h3>
                                 <!--begin::Slider-->
-                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
-                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false"
-                                    data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
+                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
+                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                    data-tns-center="false" data-tns-dots="false"
+                                    data-tns-prev-button="#kt_team_slider_prev1"
+                                    data-tns-next-button="#kt_team_slider_next1">
 
-                                    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
+                                    @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
                                         <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}"
-                                                class="card-rounded shadow mw-100"
+                                            <img src="{{ asset('storage/' . $attachment) }}"
+                                                alt="{{ basename($attachment) }}" class="card-rounded shadow mw-100"
                                                 style="max-width: 400px; max-height: 300px; object-fit: cover;"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
                                         </div>
                                     @endforeach
+
                                 </div>
                                 <!--end::Slider-->
                                 <!--begin::Slider button-->
@@ -464,8 +467,8 @@
                                                                     $shortenedFilename = end($parts);
                                                                 @endphp
                                                                 <a href="#" class="attachment-link"
-                                                                   data-bs-toggle="modal" data-bs-target="#imageModal"
-                                                                   data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                                    data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
                                                             @endforeach
                                                         @else
                                                             N/A
@@ -517,9 +520,10 @@
     </script>
 
 
-    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
-            <div class="modal-dialog modal-fullscreen">
+    @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Ubah ke modal-lg untuk ukuran besar -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title m-0 text" id="exampleModalprimary1">
@@ -529,13 +533,15 @@
                     </div><!--end modal-header-->
                     <div class="modal-body">
                         <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
+                            <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}"
+                                class="img-fluid" />
                         </div>
                     </div><!--end modal-body-->
                 </div>
             </div>
         </div>
     @endforeach
+
 
     {{-- Refresh Komentar --}}
     <script>
