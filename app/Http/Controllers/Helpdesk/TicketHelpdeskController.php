@@ -30,6 +30,11 @@ class TicketHelpdeskController extends Controller
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
+        // Simpan URL pertama di sesi jika belum ada
+        if (!session()->has('first_url')) {
+            session(['first_url' => $request->fullUrl()]);
+        }
+
         // Retrieve filter input
         $reqTanggal = $request->tanggal ?? null;
 
@@ -424,7 +429,8 @@ class TicketHelpdeskController extends Controller
             $ticket->update($data);
 
             DB::commit();
-            return redirect()->route('helpdesk.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect(session('first_url', route('admin.ticket.index')))
+                ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());

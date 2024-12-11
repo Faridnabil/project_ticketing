@@ -421,7 +421,7 @@
                         <br>
                         <hr>
                         <br>
-                        <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Kembali</a>
+                        <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
                     </div>
 
                     <!-- Riwayat -->

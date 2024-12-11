@@ -184,7 +184,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Ubah</button>
-                                    <a href="{{ route('assignedTicket.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                         </div>

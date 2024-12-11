@@ -205,8 +205,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Update</button>
-                                    <a href="{{ route('pejabat.ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Ubah</button>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
 

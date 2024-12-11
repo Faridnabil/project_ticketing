@@ -358,21 +358,29 @@
                         <div class="col-xl-12">
                             <!--begin::Product slider-->
                             <div class="tns tns-default">
+                                <h3>Lampiran :</h3>
                                 <!--begin::Slider-->
-                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000"
-                                    data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false"
-                                    data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
+                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
+                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                    data-tns-center="false" data-tns-dots="false"
+                                    data-tns-prev-button="#kt_team_slider_prev1"
+                                    data-tns-next-button="#kt_team_slider_next1">
 
-                                    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-                                        <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}"
-                                                class="card-rounded shadow mw-100"
-                                                style="max-width: 400px; max-height: 300px; object-fit: cover;"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
-                                        </div>
-                                    @endforeach
+                                    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+                                        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+                                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                                <img src="{{ asset('storage/' . $attachment) }}"
+                                                    alt="{{ basename($attachment) }}" class="card-rounded shadow mw-100"
+                                                    style="max-width: 400px; max-height: 300px; object-fit: cover;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p class="text-center">Tidak ada lampiran.</p>
+                                    @endif
+
                                 </div>
                                 <!--end::Slider-->
                                 <!--begin::Slider button-->
@@ -410,6 +418,10 @@
                             </div>
                             <!--end::Product slider-->
                         </div>
+                        <br>
+                        <hr>
+                        <br>
+                        <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
                     </div>
 
                     <!-- Riwayat -->
@@ -459,14 +471,12 @@
                                                                     $shortenedFilename = end($parts);
                                                                 @endphp
                                                                 <a href="#" class="attachment-link"
-                                                                   data-bs-toggle="modal" data-bs-target="#imageModal"
-                                                                   data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
+                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                                    data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
                                                             @endforeach
                                                         @else
                                                             N/A
                                                         @endif
-
-
 
                                                         <br>
                                                         <strong>Status Diubah Oleh :</strong>
@@ -514,25 +524,31 @@
     </script>
 
 
-    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title m-0 text" id="exampleModalprimary1">
-                            Foto
-                        </h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><!--end modal-header-->
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
-                        </div>
-                    </div><!--end modal-body-->
+    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+            <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Ubah ke modal-lg untuk ukuran besar -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title m-0 text" id="exampleModalprimary1">
+                                Foto
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div><!--end modal-header-->
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}"
+                                    class="img-fluid" />
+                            </div>
+                        </div><!--end modal-body-->
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
+    @endif
+
 
     {{-- Refresh Komentar --}}
     <script>

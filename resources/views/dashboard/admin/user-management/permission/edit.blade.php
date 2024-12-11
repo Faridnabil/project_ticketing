@@ -74,8 +74,8 @@
                             </div>
 
                             <div class="col-12">
-                                <button class="btn btn-primary" type="submit">Submit</button>
-                                <a href="{{ route('permission.index') }}" class="btn btn-danger">Cancel</a>
+                                <button class="btn btn-primary" type="submit">Simpan</button>
+                                <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                             </div>
                         </form><!--end form-->
                         </div>

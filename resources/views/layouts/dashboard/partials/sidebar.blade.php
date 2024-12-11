@@ -235,8 +235,8 @@
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
                                     <path
                                         d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
                                         fill="#000000" opacity="0.3" />
@@ -254,7 +254,7 @@
             @endcan
             @can('View User Management')
                 <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">    
+                    <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
                     </div>
                 </div>
@@ -705,7 +705,7 @@
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Laporan Tiket</span>
                     </div>
                 </div>
-                @role('Helpdesk')
+                @hasrole(['Helpdesk', 'Admin'])
                     <div class="menu-item">
                         <a class="{{ request()->routeIs('helpdesk.report.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('helpdesk.report.index') }}">
@@ -727,10 +727,10 @@
                             <span class="menu-title">Laporan</span>
                         </a>
                     </div>
-                @endrole
+                    @endhasrole
+                @endcan
 
-            @endcan
+            </div>
+            <!--end::Menu-->
         </div>
-        <!--end::Menu-->
     </div>
-</div>

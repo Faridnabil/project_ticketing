@@ -87,9 +87,21 @@
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
-                                                {{ $status->status_name }}</option>
+                                            @if ($ticket->status_id == $selesaiStatusId)
+                                                @if ($status->id != $tertundaStatusId && $status->id != $diterimaStatusId)
+                                                    <option value="{{ $status->id }}"
+                                                        {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                        {{ $status->status_name }}
+                                                    </option>
+                                                @endif
+                                            @else
+                                                @if ($status->id != $bukaKembaliStatusId)
+                                                    <option value="{{ $status->id }}"
+                                                        {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                        {{ $status->status_name }}
+                                                    </option>
+                                                @endif
+                                            @endif
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">Looks good!</div>
@@ -170,7 +182,7 @@
                                         <div class="dz-message">
                                             <h3 class="fs-5 fw-bolder text-gray-900 mb-1 mt-5">Letakkan file di sini atau
                                                 klik untuk mengunggah.</h3>
-                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 10 file</span>
+                                            <span class="fs-7 fw-bold text-gray-400">Unggah hingga 5 file</span>
                                         </div>
                                         <div class="preview" id="preview"></div>
                                     </div>
@@ -187,7 +199,7 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Ubah</button>
-                                    <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Batal</a>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
 
@@ -215,7 +227,7 @@
                         .then(response => response.json())
                         .then(data => {
                             // Clear previous options
-                            citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
+                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
 
                             // Add new options
                             data.forEach(city => {
@@ -230,31 +242,10 @@
                         .catch(error => console.error('Error:', error));
                 } else {
                     citySelect.html(
-                        '<option value="">Pilih Kabupaten/Kota</option>'
-                    ); // Clear cities if no province is selected
+                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
             });
-
-            // Pre-select city or regency if available
-            const selectedCity = "{{ $ticket->city_or_regency_id }}";
-            if (selectedCity) {
-                const provinceId = "{{ $ticket->province_id }}";
-                provinceSelect.val(provinceId).trigger('change');
-
-                fetch(`/get-cities/${provinceId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        citySelect.html('<option selected disabled>Pilih Kabupaten/Kota</option>');
-                        data.forEach(city => {
-                            citySelect.append(
-                                `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
-                            );
-                        });
-                        citySelect.trigger('change');
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
         });
     </script>
 
