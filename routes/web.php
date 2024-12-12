@@ -129,10 +129,12 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
 
-        // Report Routes
-        Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
-        Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
-        Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
+    // Report Routes
+    Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
+    Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
+    Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
+    Route::get('/helpdesk/report/export-pdf', [ReportController::class, 'export_ticket_pdf'])->name('report.export_pdf');
+
 });
 
 
