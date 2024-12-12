@@ -48,9 +48,10 @@ Route::get('/notification', [NotificationController::class, 'sendnotification'])
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
-Route::view('/error-403', 'errors.403')->middleware('auth')->name('error-403');
-Route::view('/error-404', 'errors.404')->middleware('auth')->name('error-404');
-Route::view('/error-500', 'errors.500')->middleware('auth')->name('error-500');
+Route::view('/error-403', 'errors.403')->name('error-403');
+Route::view('/error-404', 'errors.404')->name('error-404');
+Route::view('/error-500', 'errors.500')->name('error-500');
+
 
 Route::get('/', function () {
     return redirect()->route('login'); // Mengarahkan ke halaman login
