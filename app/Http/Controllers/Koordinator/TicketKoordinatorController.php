@@ -84,6 +84,10 @@ class TicketKoordinatorController extends Controller
      */
     public function show($id)
     {
+        if (!session()->has('filtered_url')) {
+            session(['filtered_url' => url()->previous()]);
+        }
+
         $ticket = Ticket::find($id);
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -123,6 +127,12 @@ class TicketKoordinatorController extends Controller
      */
     public function edit(Ticket $ticket)
     {
+
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -273,7 +283,8 @@ class TicketKoordinatorController extends Controller
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('koordinator.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect(session('first_url', route('koordinator.ticket.index')))
+            ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());

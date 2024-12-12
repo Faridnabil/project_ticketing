@@ -421,7 +421,7 @@
                         <br>
                         <hr>
                         <br>
-                        <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                        <a href="{{ session('filtered_url', route('admin.ticket.index')) }}" class="btn btn-danger">Kembali</a>
                     </div>
 
                     <!-- Riwayat -->

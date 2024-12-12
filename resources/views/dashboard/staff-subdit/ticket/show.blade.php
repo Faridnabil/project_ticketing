@@ -419,7 +419,7 @@
                             <br>
                             <hr>
                             <br>
-                            <a href="{{ route('staffSubdit.ticket.index') }}" class="btn btn-danger">Kembali</a>
+                            <a href="{{ session('filtered_url', route('staffSubdit.ticket.index')) }}" class="btn btn-danger">Kembali</a>
                         </div>
                     </div>
 

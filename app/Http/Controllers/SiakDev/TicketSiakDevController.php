@@ -96,6 +96,10 @@ class TicketSiakDevController extends Controller
      */
     public function show($id)
     {
+        if (!session()->has('filtered_url')) {
+            session(['filtered_url' => url()->previous()]);
+        }
+
         $ticket = Ticket::find($id);
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -140,6 +144,11 @@ class TicketSiakDevController extends Controller
         $categories = Category::all();
         $provinces = Province::all();
 
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
         // Fetch the city or regency for the selected province
         $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)
             ->get();
@@ -151,8 +160,8 @@ class TicketSiakDevController extends Controller
         $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
 
         $siakDevRoles = Role::where('name', 'SIAK Dev')
-        ->pluck('id')
-        ->toArray();
+            ->pluck('id')
+            ->toArray();
 
         return view(
             'dashboard.siak-dev.ticket.edit',
@@ -295,7 +304,8 @@ class TicketSiakDevController extends Controller
             $ticket->update($validate);
 
             DB::commit();
-            return redirect()->route('siakDev.ticket.index')->with('success', 'Tiket Berhasil Dirubah');
+            return redirect(session('first_url', route('siakDev.ticket.index')))
+            ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             // dd($th->getMessage()); // Menampilkan pesan error untuk debugging

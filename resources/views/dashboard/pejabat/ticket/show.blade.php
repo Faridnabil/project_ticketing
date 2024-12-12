@@ -419,7 +419,7 @@
                             <br>
                             <hr>
                             <br>
-                            <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                            <a href="{{ session('filtered_url', route('pejabat.ticket.index')) }}" class="btn btn-danger">Kembali</a>
                         </div>
                     </div>
 

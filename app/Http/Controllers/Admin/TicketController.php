@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\CityOrRegency;
 use App\Models\Ticket;
 use App\Models\Category;
@@ -15,8 +14,6 @@ use App\Models\RequestAssignment;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationAdmin;
-use App\Notifications\NotificationCustomer;
-use App\Notifications\NotificationDepartment;
 use App\Notifications\NotificationKoordinator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -214,6 +211,10 @@ class TicketController extends Controller
      */
     public function show($id)
     {
+        if (!session()->has('filtered_url')) {
+            session(['filtered_url' => url()->previous()]);
+        }
+
         $ticket = Ticket::find($id);
         $priorities = Priority::all();
         $statuses = Status::all();
@@ -251,8 +252,13 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ticket $ticket)
+    public function edit(Ticket $ticket, Request $request)
     {
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
@@ -394,8 +400,8 @@ class TicketController extends Controller
             $ticket->update($data);
 
             DB::commit();
-            return redirect(session('first_url', route('admin.ticket.index')))
-                ->with('success', 'Tiket Berhasil Dirubah');
+            return redirect(session('first_url', route('helpdesk.ticket.index')))
+            ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());
