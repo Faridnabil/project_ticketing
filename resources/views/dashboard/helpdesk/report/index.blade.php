@@ -167,20 +167,51 @@
                                     Export
                                 </button>
                             </form>
-                            <form action="{{ route('helpdesk.report.export_pdf') }}" method="GET" class="d-inline">
-                                <input type="hidden" name="awal" value="{{ old('awal', $req1) }}">
-                                <input type="hidden" name="akhir" value="{{ old('akhir', $req2) }}">
-                                <input type="hidden" name="category_id"
-                                    value="{{ old('category_id', request('category_id')) }}">
-                                <input type="hidden" name="priority_id"
-                                    value="{{ old('priority_id', request('priority_id')) }}">
-                                <input type="hidden" name="status_id"
-                                    value="{{ old('status_id', request('status_id')) }}">
-                                <input type="hidden" name="level" value="{{ old('level', request('level')) }}">
-                                <button type="submit" class="btn btn-danger mb-4 ms-3">
-                                    <i class="fas fa-file-pdf"></i> Export PDF
-                                </button>
-                            </form>
+                            <!-- Tombol untuk membuka modal -->
+                            <button type="button" class="btn btn-danger mb-4 ms-3" data-bs-toggle="modal"
+                                data-bs-target="#pdfPreviewModal" onclick="loadPdfPreview()">
+                                <i class="fas fa-eye"></i> Preview PDF
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="pdfPreviewModal" tabindex="-1"
+                                aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="pdfPreviewModalLabel">Preview PDF</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Iframe untuk preview PDF -->
+                                            <iframe id="pdfPreviewIframe" src="" width="100%" height="500px"
+                                                frameborder="0"></iframe>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <!-- Tombol untuk export PDF -->
+                                            <form action="{{ route('helpdesk.report.export_pdf') }}" method="GET"
+                                                class="d-inline">
+                                                <input type="hidden" name="awal" value="{{ old('awal', $req1) }}">
+                                                <input type="hidden" name="akhir" value="{{ old('akhir', $req2) }}">
+                                                <input type="hidden" name="category_id"
+                                                    value="{{ old('category_id', request('category_id')) }}">
+                                                <input type="hidden" name="priority_id"
+                                                    value="{{ old('priority_id', request('priority_id')) }}">
+                                                <input type="hidden" name="status_id"
+                                                    value="{{ old('status_id', request('status_id')) }}">
+                                                <input type="hidden" name="level"
+                                                    value="{{ old('level', request('level')) }}">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fas fa-file-pdf"></i> Export PDF
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Tutup</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -189,12 +220,17 @@
                             class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                             <thead>
                                 <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-70px">Nomor Tiket</th>
-                                    <th class="min-w-70px">Kategori</th>
-                                    <th class="min-w-70px">Disposisi</th>
-                                    <th class="min-w-70px">Prioritas</th>
-                                    <th class="min-w-70px">Dibuat Tanggal</th>
-                                    <th class="min-w-70px">Status</th>
+                                    <th lass="min-w-70px">Nomor Tiket</th>
+                                    <th lass="min-w-70px">Dibuat Tanggal</th>
+                                    <th lass="min-w-70px">No Provinsi</th>
+                                    <th lass="min-w-70px">Nama Provinsi</th>
+                                    <th lass="min-w-70px">No Kabupaten</th>
+                                    <th lass="min-w-70px">Nama Kabupaten</th>
+                                    <th lass="min-w-70px">Keterangan Permasalahan</th>
+                                    <th lass="min-w-70px">Kategori</th>
+                                    <th lass="min-w-70px">Disposisi</th>
+                                    <th lass="min-w-70px">Prioritas</th>
+                                    <th lass="min-w-70px">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">
@@ -204,69 +240,53 @@
                                             range.</td>
                                     </tr>
                                 @else
-                                    @foreach ($tickets as $ticket)
+                                    @foreach ($tickets as $key => $ticket)
+                                        @php
+                                            // Logika disposisi
+                                            $disposisi = '-';
+                                            if ($ticket->level1) {
+                                                $disposisi = $ticket->helpdesk->name ?? '-';
+                                            } elseif ($ticket->level2) {
+                                                $disposisi = $ticket->koordinator->name ?? '-';
+                                            } elseif ($ticket->level3) {
+                                                $disposisi = $ticket->staffSubdit->name ?? '-';
+                                            } elseif ($ticket->level4) {
+                                                $disposisi = $ticket->siakDev->name ?? '-';
+                                            } elseif ($ticket->level5) {
+                                                $disposisi = $ticket->pejabat->name ?? '-';
+                                            }
+
+                                            // Logika prioritas
+                                            $priority = match ($ticket->priority_id) {
+                                                4 => 'Critical',
+                                                3 => 'High',
+                                                2 => 'Medium',
+                                                1 => 'Low',
+                                                default => '-',
+                                            };
+
+                                            // Logika status
+                                            $status = match ($ticket->status_id) {
+                                                1 => 'Tertunda',
+                                                2 => 'Diterima',
+                                                3 => 'Proses',
+                                                4 => 'Selesai',
+                                                5 => 'Buka Kembali',
+                                                default => '-',
+                                            };
+                                        @endphp
                                         <tr>
                                             <td>{{ $ticket->no_ticket }}</td>
-                                            <td>{{ $ticket->category->category_name }}</td>
-                                            <td>
-                                                @if ($ticket->level1 != null)
-                                                    {{ $ticket->helpdesk->name }}
-                                                @elseif ($ticket->level2 != null)
-                                                    {{ $ticket->koordinator->name }}
-                                                @elseif ($ticket->level3 != null)
-                                                    {{ $ticket->staffSubdit->name }}
-                                                @elseif ($ticket->level4 != null)
-                                                    {{ $ticket->siakDev->name }}
-                                                @elseif ($ticket->level5 != null)
-                                                    {{ $ticket->pejabat->name }}
-                                                @else
-                                                    <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($ticket->priority_id == '4')
-                                                    <span class="badge"
-                                                        style="background-color:red; color: white; font-weight:bold">Critical</span>
-                                                @elseif($ticket->priority_id == '3')
-                                                    <span class="badge"
-                                                        style="background-color:#FF7F3E; color: white; font-weight:bold">High</span>
-                                                @elseif($ticket->priority_id == '2')
-                                                    <span class="badge"
-                                                        style="background-color:blue; color: white; font-weight:bold">Medium</span>
-                                                @elseif($ticket->priority_id == '1')
-                                                    <span class="badge"
-                                                        style="background-color:green; color: white; font-weight:bold">Low</span>
-                                                @else
-                                                    <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ date('d F Y', strtotime($ticket->created_at)) }}</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if ($ticket->status_id == '1')
-                                                        <span class="badge"
-                                                            style="background-color:red; color: white; font-weight:bold">Tertunda</span>
-                                                    @elseif($ticket->status_id == '2')
-                                                        <span class="badge"
-                                                            style="background-color:blue; color: white; font-weight:bold">Diterima</span>
-                                                    @elseif($ticket->status_id == '3')
-                                                        <span class="badge"
-                                                            style="background-color:#FF7F3E; color: white; font-weight:bold">Proses</span>
-                                                    @elseif($ticket->status_id == '4')
-                                                        <span class="badge"
-                                                            style="background-color:green; color: white; font-weight:bold">Selesai</span>
-                                                    @elseif($ticket->status_id == '5')
-                                                        <span class="badge"
-                                                            style="background-color:rgb(185, 192, 2); color: white; font-weight:bold">Buka
-                                                            Kembali</span>
-                                                    @else
-                                                        <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75); color: white; font-weight:bold">-</span>
-                                                    @endif
-                                                </div>
-                                            </td>
+                                            <td>{{ $ticket->created_at->format('d-m-Y') }}</td>
+                                            <td>{{ $ticket->province->no_province ?? '-' }}</td>
+                                            <td>{{ $ticket->province->province_name ?? '-' }}</td>
+                                            <td>{{ $ticket->cityOrRegency->no_city_or_regency ?? '-' }}</td>
+                                            <td>{{ $ticket->cityOrRegency->city_or_regency_name ?? '-' }}</td>
+                                            <td>{{ strip_tags(html_entity_decode($ticket->description)) ?? '-' }}</td>
+                                            <td>{{ $ticket->category->category_name ?? '-' }}</td>
+                                            <td>{{ $disposisi }}</td>
+                                            <td>{{ $priority }}</td>
+                                            <td>{{ $status }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -290,4 +310,26 @@
             }
         }
     </script>
+
+    <!-- JavaScript untuk mengatur iframe saat modal dibuka -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var modal = document.getElementById('pdfPreviewModal');
+            var iframe = document.getElementById('pdfPreviewIframe');
+
+            modal.addEventListener('show.bs.modal', function() {
+                var params = new URLSearchParams({
+                    awal: "{{ old('awal', $req1) }}",
+                    akhir: "{{ old('akhir', $req2) }}",
+                    category_id: "{{ old('category_id', request('category_id')) }}",
+                    priority_id: "{{ old('priority_id', request('priority_id')) }}",
+                    status_id: "{{ old('status_id', request('status_id')) }}",
+                    level: "{{ old('level', request('level')) }}"
+                });
+
+                iframe.src = "{{ route('helpdesk.report.preview_pdf') }}?" + params.toString();
+            });
+        });
+    </script>
+
 @endsection
