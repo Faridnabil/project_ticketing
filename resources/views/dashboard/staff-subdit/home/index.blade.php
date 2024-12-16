@@ -325,10 +325,10 @@
                     <div class="col-md-2 mt-1">
                         <select id="filterYear" class="form-select">
                             <option value="" selected disabled>Pilih Tahun</option>
-                            @for ($y = \Carbon\Carbon::now()->year; $y >= 2020; $y--)
-                                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>
-                                    {{ $y }}</option>
-                            @endfor
+                            @foreach (range(now()->year - 5, now()->year) as $year)
+                                <option value="{{ $year }}" {{ $year == now()->year ? 'selected' : '' }}>
+                                    {{ $year }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -494,19 +494,19 @@
 
     {{-- Title Tahun --}}
     <script>
-        document.getElementById('filterYear').addEventListener('change', function() {
-            const selectedYear = this.value;
-            const currentMonth = new Date().toLocaleString('default', {
+        document.getElementById('filterYear').addEventListener('change', updateTitles);
+        document.getElementById('filterMonth').addEventListener('change', updateTitles);
+
+        function updateTitles() {
+            const selectedYear = document.getElementById('filterYear').value || new Date().getFullYear();
+            const selectedMonth = document.getElementById('filterMonth').value || new Date().getMonth() + 1;
+
+            const monthName = new Date(selectedYear, selectedMonth - 1).toLocaleString('default', {
                 month: 'long'
             });
-            document.getElementById('cardTitle').textContent = `Tiket Perbulan - ${currentMonth} ${selectedYear}`;
-        });
-        document.getElementById('filterYear').addEventListener('change', function() {
-            const selectedYear = this.value;
-            const currentMonth = new Date().toLocaleString('default', {
-                month: 'long'
-            });
-            document.getElementById('cardTitle2').textContent = `Tiket Pertahun - ${currentMonth} ${selectedYear}`;
-        });
+
+            document.getElementById('cardTitle').textContent = `Tiket Perbulan - ${monthName} ${selectedYear}`;
+            document.getElementById('cardTitle2').textContent = `Tiket Pertahun - ${monthName} ${selectedYear}`;
+        }
     </script>
 @endsection
