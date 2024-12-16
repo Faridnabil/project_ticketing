@@ -129,8 +129,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Batal</a>
+                                    <button class="btn btn-primary" type="submit">Ubah</button>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
 

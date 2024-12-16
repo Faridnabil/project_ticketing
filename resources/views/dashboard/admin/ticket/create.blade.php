@@ -39,40 +39,65 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <!--begin::Body-->
                         <div class="card-body pt-5">
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.ticket.store') }}"
-                                enctype="multipart/form-data" novalidate>
+                            <form class="row g-3 needs-validation" method="POST"
+                                action="{{ route('admin.ticket.store') }}" enctype="multipart/form-data" novalidate>
                                 @csrf
-                                <input type="hidden" name="no_ticket">
-                                <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Judul</label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        id="title" name="title" autofocus required>
+                                <input type="hidden" name="no_ticket" value="{{ old('no_ticket') }}">
+                                <select name="level1" hidden required>
+                                    @foreach ($helpdeskRoles as $roleId)
+                                        <option value="{{ $roleId }}"
+                                            {{ old('level1') == $roleId ? 'selected' : '' }}>{{ $roleId }}</option>
+                                    @endforeach
+                                </select>
 
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('title')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Pemilik</label>
-                                    <select name="customer" class="form-control @error('customer') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Pemilik"required autofocus>
+                                    <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
+                                    <select name="category_id"
+                                        class="form-select @error('category_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
                                         <option></option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->category_name }}</option>
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
+                                    @error('category_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
 
-                                    @error('customer')
+                                <div class="col-md-3">
+                                    <label for="province_id" class="form-label">Nama Provinsi</label>
+                                    <select id="province_id" data-control="select2" name="province_id"
+                                        class="form-select @error('province_id') is-invalid @enderror" required>
+                                        <option value="" selected disabled>Pilih Provinsi</option>
+                                        @foreach ($provinces as $province)
+                                            <option value="{{ $province->id }}"
+                                                {{ old('province_id') == $province->id ? 'selected' : '' }}>
+                                                {{ $province->no_province }} - {{ $province->province_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('province_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="city_or_regency_id" class="form-label">Nama Kabupaten/Kota</label>
+                                    <select id="city_or_regency_id" data-control="select2" name="city_or_regency_id"
+                                        class="form-select @error('city_or_regency_id') is-invalid @enderror" required>
+                                        <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                    </select>
+                                    @error('city_or_regency_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -80,25 +105,60 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Ditugaskan Ke</label>
-                                    <select name="assign_to" class="form-select @error('assign_to') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Departemen" required autofocus>
+                                    <label for="validationCustom01" class="form-label">Status</label>
+                                    <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
+                                        data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
-                                        @foreach ($assignTo as $assign)
-                                            <option value="{{ $assign->id }}">{{ $assign->name }}</option>
+                                        @foreach ($statuses as $status)
+                                            @if ($status->status_name !== 'Buka Kembali') {{-- Jika status bukan "Buka Kembali" --}}
+                                                <option value="{{ $status->id }}"
+                                                    {{ old('status_id') == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
-                                    @error('assign_to')
+                                    @error('status_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
+
+
+                                <div class="col-md-3">
+                                    <label for="validationCustom01" class="form-label">PIC</label>
+                                    <input type="text" name="pic" value="{{ old('pic') }}"
+                                        class="form-control @error('pic') is-invalid @enderror" id="pic"
+                                        placeholder="Masukan PIC">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    @error('pic')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="validationCustom01" class="form-label">Jabatan</label>
+                                    <input type="text" name="jabatan" value="{{ old('jabatan') }}"
+                                        class="form-control @error('jabatan') is-invalid @enderror" id="jabatan"
+                                        placeholder="Masukan jabatan">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    @error('jabatan')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Prioritas</label>
                                     <select name="priority_id"
@@ -106,14 +166,15 @@
                                         data-control="select2" data-placeholder="Pilih Prioritas" required autofocus>
                                         <option></option>
                                         @foreach ($priorities as $priority)
-                                            <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
+                                            <option value="{{ $priority->id }}"
+                                                {{ old('priority_id') == $priority->id ? 'selected' : '' }}>
+                                                {{ $priority->priority_name }}
+                                            </option>
                                         @endforeach
                                     </select>
-
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('priority_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -121,57 +182,15 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
-                                    <label for="validationCustom01" class="form-label">Tanggal Jatuh Tempo</label>
-                                    <input type="date" name="due_date"
-                                        class="form-control @error('due_date') is-invalid @enderror" required autofocus>
-
+                                <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">No Hp / WA</label>
+                                    <input type="number" name="no_hp" value="{{ old('no_hp') }}"
+                                        class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
+                                        placeholder="Masukan Nomor Handphone/WA">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
-                                    @error('due_date')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="validationCustom01" class="form-label">Status</label>
-                                    <select name="status_id" class="form-select @error('status_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Status"required autofocus>
-                                        <option></option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('status_id')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="validationCustom01" class="form-label">Kategori</label>
-                                    <select name="category_id"
-                                        class="form-select @error('category_id') is-invalid @enderror"
-                                        data-control="select2" data-placeholder="Pilih Kategori" required autofocus>
-                                        <option></option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-
-                                    @error('category_id')
+                                    @error('no_hp')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -181,12 +200,10 @@
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Deskripsi</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
-                                        cols="10" rows="3"></textarea>
-
+                                        cols="10" rows="3">{{ old('description') }}</textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
-
                                     @error('description')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -215,10 +232,12 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
+
+
                             <!--end form-->
                         </div>
                         <!--end::Body-->
@@ -229,6 +248,56 @@
         </div>
     </div>
     <!--end::Post-->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = $('#province_id');
+            const citySelect = $('#city_or_regency_id');
+            const oldProvinceId = "{{ old('province_id') }}";
+            const oldCityId = "{{ old('city_or_regency_id') }}";
+
+            // Initialize Select2
+            provinceSelect.select2();
+            citySelect.select2();
+
+            function loadCities(provinceId, selectedCityId = null) {
+                if (provinceId) {
+                    fetch(`/get-cities/${provinceId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear previous options
+                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+
+                            // Add new options
+                            data.forEach(city => {
+                                citySelect.append(
+                                    `<option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
+                                );
+                            });
+
+                            // Trigger Select2 to update the dropdown
+                            citySelect.trigger('change');
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    citySelect.html('<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
+                    citySelect.trigger('change');
+                }
+            }
+
+            // Handle province change
+            provinceSelect.on('change', function() {
+                const provinceId = $(this).val();
+                loadCities(provinceId);
+            });
+
+            // If there is an old province value, load the cities
+            if (oldProvinceId) {
+                loadCities(oldProvinceId, oldCityId);
+            }
+        });
+    </script>
+
 
     <script>
         ClassicEditor

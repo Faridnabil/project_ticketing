@@ -61,6 +61,7 @@ class AttendanceHelpdeskController extends Controller
     {
         DB::beginTransaction();
         try {
+
             $validate = $request->all();
             $validate['date_check_in'] = now();
 
@@ -70,7 +71,7 @@ class AttendanceHelpdeskController extends Controller
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return back()->with("error", "Check In Gagal, Data Tidak Boleh Kosong");
         }
     }
 
@@ -97,21 +98,25 @@ class AttendanceHelpdeskController extends Controller
     {
         DB::beginTransaction();
         try {
+            $request->validate([
+                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+            ]);
+
             // Update date_check_out with the provided value
             $attendance->date_check_out = $request->input('date_check_out');
             $attendance->check_out = $request->input('check_out');
             $attendance->activity = $request->input('activity');
-            $attendance->status_activity = $request->input('status_activity');
 
             // Handle file upload
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/absen';
-                $file->move(public_path($nama_folder), $nama_file);
+                $originalFilename = $file->getClientOriginalName(); // Mendapatkan nama file asli
 
-                // Save the file path to the database
-                $attendance->attachment = $nama_folder . "/" . $nama_file;
+                // Simpan file di storage/app/public/absen dengan nama asli
+                $filePath = $file->storeAs('public/absen', $originalFilename);
+
+                // Simpan path relatif ke storage dengan nama asli ke kolom attachment
+                $attendance->attachment = str_replace('public/', '', $filePath); // Path relatif
             }
 
             $attendance->save();
@@ -120,12 +125,10 @@ class AttendanceHelpdeskController extends Controller
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check Out berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            //    dd($th->getMessage()); // Menampilkan pesan error untuk debugging
+            return back()->with("error", 'Check Out Gagal!.');
         }
     }
-
-
-
 
 
     /**

@@ -51,15 +51,17 @@
                                 </div>
                             @endif
                             <!--end::Error-->
-                            <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.role.update', $role->id) }}"
-                                enctype="multipart/form-data" novalidate>
+                            <form class="row g-3 needs-validation" method="POST"
+                                action="{{ route('admin.role.update', $role->id) }}" enctype="multipart/form-data"
+                                novalidate>
                                 @method('PUT')
                                 @csrf
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Role</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror mb-4"
-                                        id="name" name="name" value="{{ old('name', $role->name) }}" autofocus required>
+                                        id="name" name="name" value="{{ old('name', $role->name) }}" autofocus
+                                        required>
 
                                     <div class="valid-feedback">
                                         Looks good!
@@ -77,18 +79,19 @@
                                     <div class="role-permissions">
                                         <div class="row">
                                             @if (count($permission))
-                                            @foreach ($permission as $item)
-                                                <!-- Assuming you want 3 permissions per row -->
-                                                <div class="col-md-4">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input mb-4" type="checkbox" name="permission[]"
-                                                        id="inlineCheckbox{{ $item->id }}" value="{{ $item->id }}"
-                                                        {{ in_array($item->id, $rolePermissions) ? 'checked="checked"' : '' }}>
-                                                    <label class="form-check-label"
-                                                        for="inlineCheckbox{{ $item->id }}">{{ $item->name }}</label>
-                                                </div>
-                                                </div>
-                                                @if ($loop->index % 3 == 2)
+                                                @foreach ($permission as $item)
+                                                    <!-- Assuming you want 3 permissions per row -->
+                                                    <div class="col-md-4">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input mb-4" type="checkbox"
+                                                                name="permission[]" id="inlineCheckbox{{ $item->id }}"
+                                                                value="{{ $item->id }}"
+                                                                {{ in_array($item->id, $rolePermissions) ? 'checked="checked"' : '' }}>
+                                                            <label class="form-check-label"
+                                                                for="inlineCheckbox{{ $item->id }}">{{ $item->name }}</label>
+                                                        </div>
+                                                    </div>
+                                                    @if ($loop->index % 3 == 2)
                                         </div>
                                         <div class="row">
                                             @endif
@@ -100,8 +103,8 @@
                                 <!--end::Input group Permission-->
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('admin.role.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form><!--end form-->
                         </div>

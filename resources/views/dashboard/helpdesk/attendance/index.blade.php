@@ -148,17 +148,31 @@
                                                 @if ($absen->check_out == null)
                                                     <div class="col-md-6">
                                                         <label for="validationCustom01" class="form-label">File</label>
-                                                        <input type="file" class="form-control" name="attachment">
+                                                        <input type="file" class="form-control" name="attachment"
+                                                            accept=".jpg, .jpeg, .png, .pdf, .docx">
+                                                        <p>File harus berupa <b>jpg, jpeg, png, pdf, dan docx</b></p>
                                                     </div>
 
-                                                    <div class="col-md-6">
+                                                    <script>
+                                                        document.querySelector('input[name="attachment"]').addEventListener('change', function(event) {
+                                                            const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'docx'];
+                                                            const file = event.target.files[0];
+                                                            if (file) {
+                                                                const extension = file.name.split('.').pop().toLowerCase();
+                                                                if (!allowedExtensions.includes(extension)) {
+                                                                    alert(
+                                                                        'File type not allowed. Please upload a file with one of the following extensions: jpg, jpeg, png, pdf, docx, xlsx.'
+                                                                    );
+                                                                    event.target.value = ''; // Clear the input
+                                                                }
+                                                            }
+                                                        });
+                                                    </script>
+
+
+                                                    <div class="col-md-12">
                                                         <label for="" class="form-label">Aktifitas</label>
                                                         <textarea name="activity" class="form-control" id="activity"></textarea>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label for="" class="form-label">Status</label>
-                                                        <textarea name="status_activity" class="form-control" id="status_activity"></textarea>
                                                     </div>
 
                                                     <div class="col-md-6">
@@ -192,7 +206,8 @@
                                                     <label for="validationCustom01" class="form-label">Nama Lengkap</label>
                                                     <input type="text"
                                                         class="form-control @error('name') is-invalid @enderror"
-                                                        id="name" name="name" required>
+                                                        id="name" name="name" required autofocus>
+
                                                     <div class="valid-feedback">
                                                         Looks good!
                                                     </div>
@@ -205,8 +220,8 @@
 
                                                 <div class="col-md-2">
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>
-                                                    <select class="form-select" id="shiftSelect" name="check_in"
-                                                        required>
+                                                    <select class="form-select" id="shiftSelect" name="check_in" required
+                                                        autofocus>
                                                         <option selected disabled>Opsi</option>
                                                         <option value="Shift 1">Shift 1</option>
                                                         <option value="Shift 2">Shift 2</option>
@@ -286,10 +301,25 @@
                                                                     </td>
                                                                     <td>
 
-                                                                        <a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_attendances_{{ $attendance_today->id }}">
-                                                                            Keluar
-                                                                        </a>
+                                                                        @if ($attendance_today->attachment == null)
+                                                                            -
+                                                                        @else
+                                                                            <a href="#" data-bs-toggle="modal"
+                                                                                data-bs-target="#modal_checkout_{{ $attendance_today->id }}">
+                                                                                @if (str_ends_with($attendance_today->attachment, '.pdf'))
+                                                                                    Keluar
+                                                                                @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
+                                                                                        str_ends_with($attendance_today->attachment, '.jpeg') ||
+                                                                                        str_ends_with($attendance_today->attachment, '.png'))
+                                                                                    Keluar
+                                                                                @elseif (str_ends_with($attendance_today->attachment, '.docx'))
+                                                                                    Keluar
+                                                                                @else
+                                                                                    Keluar
+                                                                                @endif
+                                                                            </a>
+                                                                        @endif
+
                                                                     </td>
                                                                 </tr>
                                                             @endif
@@ -338,7 +368,7 @@
                                     value="{{ request('active_tab', 'absen') }}">
 
                                 <button type="submit" class="btn btn-primary me-1">Filter</button>
-                                <a href="#" id="clear-filters" class="btn btn-danger">Hapus</a>
+                                <a href="#" id="clear-filters" class="btn btn-danger">Reset</a>
                             </form>
                             <!--end::Form-->
 
@@ -399,9 +429,8 @@
                                     <th class="min-w-40px">Shift</th>
                                     <th class="min-w-40px">Jam Masuk</th>
                                     <th class="min-w-40px">Jam Pulang</th>
-                                    <th class="min-w-40px">Keterangan</th>
-                                    <th class="min-w-40px">Aktifitas</th>
-                                    <th class="min-w-40px">Status Tugas</th>
+                                    <th class="min-w-40px">Dokumen</th>
+                                    <th class="min-w-40px">Aksi</th>
                                     {{-- <th class="min-w-100px">Fitur</th> --}}
                                 </tr>
                                 <!--end::Table row-->
@@ -426,31 +455,86 @@
                                                 @if ($attendance->check_in)
                                                     {{ date('H:i', strtotime($attendance->date_check_in)) }}
                                                 @else
-                                                -
+                                                    -
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($attendance->check_out)
                                                     {{ date('H:i', strtotime($attendance->date_check_out)) }}
                                                 @else
-                                                -
+                                                    -
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($attendance->attachment == null)
-                                                -
+                                                    -
                                                 @else
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-                                                        <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
-                                                            width="40px" height="50px" alt="file">
+                                                        @if (str_ends_with($attendance->attachment, '.pdf'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
+                                                                width="40px" height="50px" alt="file">
+                                                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                                                str_ends_with($attendance->attachment, '.jpeg') ||
+                                                                str_ends_with($attendance->attachment, '.png'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/png.png') }}"
+                                                                width="50px" height="50px" alt="file">
+                                                        @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/word.png') }}"
+                                                                width="50px" height="50px" alt="file">
+                                                        @else
+                                                            <img src="{{ asset('template/dist/assets/media/illustrations/FILE.png') }}"
+                                                                width="50px" height="50px" alt="file">
+                                                        @endif
                                                     </a>
                                                 @endif
                                             </td>
-                                            <td style="text-align: left"> {!! $attendance_today->activity ?? '-' !!}
+
+                                            <div class="modal fade" tabindex="-1"
+                                                id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary">
+                                                            <h6 class="modal-title m-0 text-white">
+                                                                File
+                                                            </h6>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div><!--end modal-header-->
+                                                        <div class="modal-body">
+                                                            @if (str_ends_with($attendance->attachment, '.pdf'))
+                                                                <iframe
+                                                                    src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                    style="width: 100%; height: 560px;"
+                                                                    frameborder="0"></iframe>
+                                                            @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                                                    str_ends_with($attendance->attachment, '.jpeg') ||
+                                                                    str_ends_with($attendance->attachment, '.png'))
+                                                                <img src="{{ asset('storage/' . $attendance->attachment) }}"
+                                                                    style="width: 100%; height: auto;" />
+                                                            @elseif (str_ends_with($attendance->attachment, '.docx'))
+                                                                <p>File ini tidak dapat ditampilkan secara langsung di
+                                                                    browser. Silakan unduh file dibawah ini.<a
+                                                                        href="{{ Storage::url($attendance->attachment) }}"
+                                                                        download><br><br>Unduh File Sekarang</a></p>
+                                                            @else
+                                                            @endif
+                                                        </div><!--end modal-body-->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <td style="text-align: left">
+
+                                                <a href="" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_attendanceLog_{{ $attendance->id }}_{{ $loop->index }}"
+                                                    title="Detail Deskripsi">
+                                                    <img src="{{ asset('template/dist/assets/media/illustrations/check.png') }}"
+                                                        style="width: auto; height: 30px;" />
+                                                </a>
                                             </td>
-                                            <td style="text-align: left"> {!! $attendance_today->status_activity ?? '-' !!}
-                                            </td>
+
                                         </tr>
                                     @endforeach
                                 @endif
@@ -470,50 +554,78 @@
                 console.error(error);
             });
     </script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#status_activity'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 
     @foreach ($attendances as $attendance)
+        <!-- Modal Template -->
         <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
-                            File
-                        </h6>
+                        <h6 class="modal-title m-0 text-white">File</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
                     <div class="modal-body">
-                        <center>
-                            <iframe src="{{ asset($attendance->attachment) }}"
-                                style="width: 100%; height: 560px;"></iframe>
-                        </center>
+                        @if (str_ends_with($attendance->attachment, '.pdf'))
+                            <iframe src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: 560px;"
+                                frameborder="0"></iframe>
+                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
+                                str_ends_with($attendance->attachment, '.jpeg') ||
+                                str_ends_with($attendance->attachment, '.png'))
+                            <img src="{{ Storage::url($attendance->attachment) }}" style="width: 100%; height: auto;" />
+                        @elseif (str_ends_with($attendance->attachment, '.docx'))
+                            <p>File tidak dapat ditampilkan langsung. <a
+                                    href="{{ Storage::url($attendance->attachment) }}" download>Unduh file .docx</a></p>
+                        @else
+                            <p>File tidak dapat ditampilkan.</p>
+                        @endif
                     </div><!--end modal-body-->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" tabindex="-1" id="kt_modal_attendanceLog_{{ $attendance->id }}_{{ $loop->index }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="activityModalLabel{{ $attendance->id }}">Detail Aktifitas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {!! $attendance->activity !!}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
     @endforeach
 
     @foreach ($attendances as $attendance_today)
-        <div class="modal fade" tabindex="-1" id="kt_modal_attendances_{{ $attendance_today->id }}">
-            <div class="modal-dialog">
+        <!-- Modal Template -->
+        <div class="modal fade" tabindex="-1" id="modal_checkout_{{ $attendance_today->id }}">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h6 class="modal-title m-0 text-white" id="exampleModalDanger1">
-                            File
-                        </h6>
+                    <div class="modal-header bg-primary">
+                        <h6 class="modal-title m-0 text-white">File Tidak Dapat Dilihat Langsung</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
                     <div class="modal-body">
-                        <center>
-                            <iframe src="{{ asset($attendance_today->attachment) }}"
-                                style="width: 100%; height: 560px;"></iframe>
-                        </center>
+                        @if (str_ends_with($attendance_today->attachment, '.pdf'))
+                            <iframe src="{{ Storage::url($attendance_today->attachment) }}"
+                                style="width: 100%; height: 560px;" frameborder="0"></iframe>
+                        @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
+                                str_ends_with($attendance_today->attachment, '.jpeg') ||
+                                str_ends_with($attendance_today->attachment, '.png'))
+                            <img src="{{ Storage::url($attendance_today->attachment) }}"
+                                style="width: 100%; height: auto;" />
+                        @elseif (str_ends_with($attendance_today->attachment, '.docx'))
+                            <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah
+                                ini.<a href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh
+                                    File Sekarang</a></p>
+                        @else
+                        @endif
                     </div><!--end modal-body-->
                 </div>
             </div>

@@ -40,45 +40,111 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="d-flex">
-                            <select name="level" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Disposisi">
-                                <option></option>
-                                @foreach ($levels as $level)
-                                    <option value="{{ $level->id }}">{{ $level->name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                        <form method="GET" action="{{ route('admin.ticket.index') }}"
+                            class="row g-3 align-items-center">
 
-                            <select name="category_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Kategori">
-                                <option></option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
+                            <input type="hidden" name="level" value="{{ request('level') }}">
+                            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                            <input type="hidden" name="priority_id" value="{{ request('priority_id') }}">
+                            <input type="hidden" name="status_id" value="{{ request('status_id') }}">
 
-                            <select name="priority_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Prioritas">
-                                <option></option>
-                                @foreach ($priorities as $priority)
-                                    <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {{-- <label for="tanggal" class="form-label mb-2">Tanggal</label> --}}
+                                    <input type="date" id="tanggal" name="tanggal" class="form-control"
+                                        value="{{ old('tanggal', $reqTanggal) }}">
+                                </div>
+                            </div>
 
-                            <select name="status_id" class="form-select me-2" data-control="select2"
-                                data-placeholder="Pilih Status">
-                                <option></option>
-                                @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
-                                @endforeach
-                            </select>
-                            &nbsp;
+                            <div class="col-md-2">
+                                {{-- <label for="disposisi" class="form-label mb-2">Disposisi</label> --}}
+                                <select name="level" id="disposisi" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Disposisi">
+                                    <option></option>
+                                    @foreach ($levels as $level)
+                                        <option value="{{ $level->id }}"
+                                            {{ old('level', request('level')) == $level->id ? 'selected' : '' }}>
+                                            {{ $level->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            <div class="col-md-2">
+                                {{-- <label for="kategori" class="form-label mb-2">Kategori</label> --}}
+                                <select name="category_id" id="kategori" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Kategori">
+                                    <option></option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{-- <label for="prioritas" class="form-label mb-2">Prioritas</label> --}}
+                                <select name="priority_id" id="prioritas" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Prioritas">
+                                    <option></option>
+                                    @foreach ($priorities as $priority)
+                                        <option value="{{ $priority->id }}"
+                                            {{ old('priority_id', request('priority_id')) == $priority->id ? 'selected' : '' }}>
+                                            {{ $priority->priority_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{-- <label for="status" class="form-label mb-2">Status</label> --}}
+                                <select name="status_id" id="status" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Status">
+                                    <option></option>
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}"
+                                            {{ old('status_id', request('status_id')) == $status->id ? 'selected' : '' }}>
+                                            {{ $status->status_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Provinsi -->
+                            <div class="col-md-2">
+                                <select id="province_id" name="province_id" class="form-select" data-control="select2"
+                                    onchange="fetchCityOrRegency(this.value)">
+                                    <option value="" selected disabled>Pilih Provinsi</option>
+                                    @foreach ($provinces as $province)
+                                        <option value="{{ $province->id }}"
+                                            {{ request('province_id') == $province->id ? 'selected' : '' }}>
+                                            {{ $province->no_province }} - {{ $province->province_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Kabupaten/Kota -->
+                            <div class="col-md-2">
+                                <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
+                                    data-control="select2">
+                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                    @foreach ($city_or_regencies as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-2  d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">Filter</button>
+                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            </div>
                         </form>
                         <!--end::Form-->
                     </div>
@@ -108,7 +174,6 @@
                 <!--end::Card header-->
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <!--begin::Table-->
                     <table id="kt_datatable_example_5"
                         class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
                         <!--begin::Table head-->
@@ -122,14 +187,22 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Aksi</th>
+                                {{-- <th class="min-w-70px">Keterangan</th> --}}
+                                <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if ($tickets->count())
+                            @if (
+                                $reqTanggal ||
+                                    request('level') ||
+                                    request('category_id') ||
+                                    request('priority_id') ||
+                                    request('status_id') ||
+                                    request('city_or_regency_id') ||
+                                    request('province_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -142,12 +215,6 @@
                                         <td>
                                             {{ $ticket->category->category_name }}
                                         </td>
-                                        <!--end::Title=-->
-                                        <!--begin::Customer Name=-->
-                                        {{-- <td>
-                                            {{ $ticket->customers->name }}
-                                        </td> --}}
-                                        <!--end::Customer Name=-->
                                         <!--begin::Assign To=-->
                                         <td>
                                             @if ($ticket->level1 != null)
@@ -170,35 +237,31 @@
 
                                         <!--end::Assign To=-->
                                         <!--begin::Priority=-->
-                                        <td>
+                                        <td data-order="{{ $ticket->priority_id }}">
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">Critical</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">High</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">Medium</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">Low</span>
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                             @endif
                                         </td>
+
                                         <!--end::Priority=-->
                                         <!--begin::Payment method=-->
                                         <td>
                                             {{ date('d F Y', strtotime($ticket->created_at)) }}
                                         </td>
-                                        <!--end::Payment method=-->
+
                                         <!--begin::Date=-->
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -230,14 +293,14 @@
                                                         -</span>
                                                 @endif
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
-                                                    {{-- @if ($ticket->level1 == 2) --}}
+                                                    @if ($ticket->level1 == 2)
                                                         <form
                                                             action="{{ route('admin.tickets.statusTicket', $ticket->id) }}"
-                                                            method="POST" class="ml-2">
+                                                            method="POST" id="statusForm_{{ $ticket->id }}">
                                                             @csrf
                                                             <div class="custom-select-wrapper">
                                                                 <select name="status_id" class="custom-select"
-                                                                    onchange="this.form.submit()">
+                                                                    id="statusSelect_{{ $ticket->id }}">
                                                                     <option value="2"
                                                                         {{ $ticket->status_id == '2' ? 'selected' : '' }}>
                                                                         Diterima</option>
@@ -247,23 +310,40 @@
                                                                     <option value="4"
                                                                         {{ $ticket->status_id == '4' ? 'selected' : '' }}>
                                                                         Selesai</option>
-                                                                    <option value="5"
-                                                                        {{ $ticket->status_id == '5' ? 'selected' : '' }}>
-                                                                        Buka Kembali</option>
                                                                 </select>
                                                             </div>
                                                         </form>
-                                                    {{-- @endif --}}
+                                                    @endif
                                                 @endif
                                             </div>
                                         </td>
+
+                                        {{-- <td>
+                                            @if ($ticket->latestHistory)
+                                                @php
+                                                    $updatedByUser = $ticket->latestHistory->status_changedBy
+                                                        ? App\Models\User::find(
+                                                            $ticket->latestHistory->status_changedBy,
+                                                        )
+                                                        : null;
+                                                @endphp
+
+                                                {{ $updatedByUser ? $updatedByUser->name : '-' }}
+                                            @else
+                                                -
+                                            @endif
+                                            :
+                                            {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
+                                        </td> --}}
+
                                         <!--begin::Action=-->
                                         <td>
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
-                                                        <span class="menu-icon" style="fill: #bd6710">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
+                                                        type="button">
+                                                        <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px"
@@ -281,7 +361,8 @@
                                                 @can('Delete Ticket')
                                                     <a class="menu-link ms-3" href="#" type="reset"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                        data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
+                                                        title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -300,7 +381,7 @@
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -394,6 +475,7 @@
     </div>
     <!--end::Post-->
 
+
     @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket_{{ $ticket->id }}">
             <div class="modal-dialog">
@@ -431,9 +513,7 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
-    @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -490,8 +570,8 @@
                                         <h3>{{ $ticket->no_ticket }}</h3>
                                         <p class="info">
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
-                                            <span>Status:</span> {{ $ticket->status->status_name }}<br>
-                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name }}<br>
+                                            <span>Status:</span> {{ $ticket->status->status_name ?? '-' }}<br>
+                                            <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
                                             <span>Nama Provinsi:</span> {{ $ticket->province->province_name }}<br>
                                             <span>Nama Kota:</span> {{ $ticket->cityOrRegency->city_or_regency_name }}
                                         </p>
@@ -507,7 +587,7 @@
                                     <input type="hidden" name="level1" value="">
 
                                     <select name="level2" hidden required>
-                                        @foreach ($helpdeskUsers as $roleId)
+                                        @foreach ($koordinatorUsers as $roleId)
                                             <option value="{{ $roleId }}">{{ $roleId }}</option>
                                         @endforeach
                                     </select>
@@ -526,6 +606,63 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
+        <!-- Modal Konfirmasi -->
+        <div class="modal fade" id="confirmModal_{{ $ticket->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Perubahan Status</h5>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
+                            id="status-name-{{ $ticket->id }}"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
+                            Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                // Set status name in modal
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // Show modal
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                // On confirm button click
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    statusForm.submit();
+                };
+            });
+        </script>
+
+
+        <script>
+            function fetchCityOrRegency(provinceId) {
+                if (provinceId) {
+                    fetch(`/get-cities/${provinceId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const citySelect = document.getElementById('city_or_regency_id');
+                            citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                            data.forEach(city => {
+                                citySelect.innerHTML +=
+                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
+                            });
+                        })
+                        .catch(error => console.error('Error fetching cities:', error));
+                }
+            }
+        </script>
+    @endforeach
 @endsection

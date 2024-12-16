@@ -147,105 +147,111 @@
                 <div class="tab-content">
                     <!-- Detail Keluhan -->
                     <div class="tab-pane fade show active" id="keluhan" role="tabpanel">
-                        <div class="row gy-5 g-xl-12">
+                        <div class="row g-xl-12">
                             <div class="col-xl-7">
-                                <div class="card-body py-14 me-xl-7 me-0 px-0 px-xxl-9">
-                                    <div class="">
-                                        <div class="d-flex align-items-center mb-12">
+                                <div class="card-body">
+                                    <div>
+                                        <!-- Ticket Header -->
+                                        <div class="d-flex align-items-center mb-6">
                                             <span class="svg-icon svg-icon-4qx svg-icon-success ms-n2 me-3">
                                                 <!-- SVG Icon -->
                                             </span>
                                             <div class="d-flex flex-column">
                                                 <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}
+                                                    ({{ $ticket->no_ticket }}) - @if ($ticket->level1 != null)
+                                                        {{ $ticket->helpdesk->name }}
+                                                    @elseif ($ticket->level2 != null)
+                                                        {{ $ticket->koordinator->name }}
+                                                    @elseif ($ticket->level3 != null)
+                                                        {{ $ticket->staffSubdit->name }}
+                                                    @elseif ($ticket->level4 != null)
+                                                        {{ $ticket->siakDev->name }}
+                                                    @elseif ($ticket->level5 != null)
+                                                        {{ $ticket->pejabat->name }}
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </h1>
-                                                <div class="">
-                                                    {{-- <span class="fw-bold text-muted me-6">Pemilik :
-                                                        {{ $ticket->customers->name }}</span> --}}
-                                                    <span class="fw-bold text-muted">
-                                                        Dibuat :
-                                                        <span
-                                                            class="fw-bolder text-gray-600 me-1">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
-                                                    </span>
+                                                <div class="text-muted">
+                                                    Pelapor: <span class="fw-bolder text-gray-600">{{ $ticket->pic }},
+                                                        {{ $ticket->jabatan ?? '-' }} - {{ $ticket->no_hp }}</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                    <span class="fw-bolder text-gray-600">Provinsi :
+                                                        {{ $ticket->province->province_name }} - Kota/Kabupaten :
+                                                        {{ $ticket->cityOrRegency->city_or_regency_name }}</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Dibuat: <span
+                                                        class="fw-bolder text-gray-600">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <p class="fs-5 fw-normal text-gray-800">
+                                            {!! $ticket->description ?? '' !!}
+                                        </p>
+
+                                        <!-- Ticket Description -->
+                                        <div class="table-responsive mb-10">
+                                            <strong>Prioritas / Status :</strong>
+                                            <strong></strong>
+                                            @if ($ticket->priority_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Critical</span>
+                                            @elseif($ticket->priority_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    High</span>
+                                            @elseif($ticket->priority_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Medium</span>
+                                            @elseif($ticket->priority_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Low</span>
+                                            @else
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
+                                            @endif
+
+                                            -
+
+                                            @if ($ticket->status_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:red ; color: white; font-weight:bold">
+                                                    Tertunda</span>
+                                            @elseif($ticket->status_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue ; color: white; font-weight:bold">
+                                                    Diterima</span>
+                                            @elseif($ticket->status_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
+                                                    Proses</span>
+                                            @elseif($ticket->status_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:green ; color: white; font-weight:bold">
+                                                    Selesai
+                                                </span>
+                                            @elseif($ticket->status_id == '5')
+                                                <span class="badge"
+                                                    style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">
+                                                    Buka Kembali
+                                                </span>
+                                            @else
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
+                                                    -</span>
+                                            @endif
                                         </div>
 
-                                        <div class="mb-10">
-                                            <div class="mb-15 fs-5 fw-normal text-gray-800">
-                                                <div class="mb-10">
-                                                    {!! $ticket->description ?? '' !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-10">
-                                            <!--begin::Product slider-->
-                                            <div class="tns tns-default">
-                                                <!--begin::Slider-->
-                                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
-                                                    data-tns-speed="2000" data-tns-autoplay="true"
-                                                    data-tns-autoplay-timeout="18000" data-tns-controls="true"
-                                                    data-tns-nav="false" data-tns-items="1" data-tns-center="false"
-                                                    data-tns-dots="false" data-tns-prev-button="#kt_team_slider_prev1"
-                                                    data-tns-next-button="#kt_team_slider_next1">
 
-                                                    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-                                                        <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                            <img src="{{ asset($attachment) }}"
-                                                                alt="{{ basename($attachment) }}"
-                                                                class="card-rounded shadow mw-100" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                                <!--end::Slider-->
-                                                <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary"
-                                                    id="kt_team_slider_prev1">
-                                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-left.svg-->
-                                                    <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
-                                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                                <path
-                                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                                    fill="#000000" fill-rule="nonzero"
-                                                                    transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </button>
-                                                <!--end::Slider button-->
-                                                <!--begin::Slider button-->
-                                                <button class="btn btn-icon btn-active-color-primary"
-                                                    id="kt_team_slider_next1">
-                                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-right.svg-->
-                                                    <span class="svg-icon svg-icon-3x">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
-                                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                                <path
-                                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                                    fill="#000000" fill-rule="nonzero"
-                                                                    transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </button>
-                                                <!--end::Slider button-->
-                                            </div>
-                                            <!--end::Product slider-->
-                                        </div>
+
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="col-xl-5">
@@ -302,7 +308,7 @@
                                                                 {!! $comment->message !!}
                                                             </p>
                                                             <form
-                                                                action="{{ route('helpdesk.tickets.update', $comment->id) }}"
+                                                                action="{{ route('koordinator.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -323,8 +329,8 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('helpdesk.tickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
+                                            action="{{ route('koordinator.tickets.store') }}"
+                                            enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
@@ -336,7 +342,7 @@
                                             @enderror
                                             <div class="d-flex flex-stack">
                                                 <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send">Kirim</button>
+                                                    data-kt-element="send" disabled>Kirim</button>
                                             </div>
                                         </form>
                                     </div>
@@ -345,7 +351,79 @@
                                 <!--end::Messenger-->
                             </div>
                         </div>
+                        <br><br>
+                        <hr>
+
+                        <!-- Attachments Slider -->
+                        <div class="col-xl-12">
+                            <!--begin::Product slider-->
+                            <div class="tns tns-default">
+                                <h3>Lampiran :</h3>
+                                <!--begin::Slider-->
+                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
+                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
+                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
+                                    data-tns-center="false" data-tns-dots="false"
+                                    data-tns-prev-button="#kt_team_slider_prev1"
+                                    data-tns-next-button="#kt_team_slider_next1">
+
+                                    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+                                        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+                                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                                <img src="{{ asset('storage/' . $attachment) }}"
+                                                    alt="{{ basename($attachment) }}" class="card-rounded shadow mw-100"
+                                                    style="max-width: 400px; max-height: 300px; object-fit: cover;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p class="text-center">Tidak ada lampiran.</p>
+                                    @endif
+                                </div>
+                                <!--end::Slider-->
+                                <!--begin::Slider button-->
+                                <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_prev1">
+                                    <span class="svg-icon svg-icon-3x">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <path
+                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <!--end::Slider button-->
+                                <!--begin::Slider button-->
+                                <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_next1">
+                                    <span class="svg-icon svg-icon-3x">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <path
+                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <!--end::Slider button-->
+                            </div>
+                            <!--end::Product slider-->
+                            <br>
+                            <hr>
+                            <br>
+                            <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                            {{-- <a href="{{ session('filtered_url', route('koordinator.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
+                        </div>
                     </div>
+
                     <!-- Riwayat -->
                     <div class="tab-pane fade" id="riwayat" role="tabpanel">
                         <div class="col-xl-12">
@@ -385,7 +463,7 @@
                                                             {{ $log->pejabat->name ?? 'N/A' }}<br>
                                                         @endif
                                                         <strong>Lampiran :</strong>
-                                                        @if ($log->h_attachments)
+                                                        @if ($log->h_attachments && is_string($log->h_attachments) && json_decode($log->h_attachments))
                                                             @foreach (json_decode($log->h_attachments) as $attachment)
                                                                 @php
                                                                     $filename = basename($attachment);
@@ -448,26 +526,30 @@
     </script>
 
 
-    @foreach (explode(',', str_replace(['[', ']', '"'], '', $ticket->attachments)) as $index => $attachment)
-        <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title m-0 text" id="exampleModalprimary1">
-                            Foto
-                        </h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><!--end modal-header-->
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <img src="{{ asset($attachment) }}" alt="{{ basename($attachment) }}" />
-                        </div>
-                    </div><!--end modal-body-->
+    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+            <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Ubah ke modal-lg untuk ukuran besar -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title m-0 text" id="exampleModalprimary1">
+                                Foto
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div><!--end modal-header-->
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}"
+                                    class="img-fluid" />
+                            </div>
+                        </div><!--end modal-body-->
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
-
+        @endforeach
+    @endif
     {{-- Refresh Komentar --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

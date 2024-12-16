@@ -110,10 +110,12 @@
                                         data-control="select2" data-placeholder="Pilih Status" required autofocus>
                                         <option></option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ old('status_id') == $status->id ? 'selected' : '' }}>
-                                                {{ $status->status_name }}
-                                            </option>
+                                            @if ($status->status_name !== 'Buka Kembali') {{-- Jika status bukan "Buka Kembali" --}}
+                                                <option value="{{ $status->id }}"
+                                                    {{ old('status_id') == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->status_name }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">
@@ -125,6 +127,7 @@
                                         </div>
                                     @enderror
                                 </div>
+
 
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">PIC</label>
@@ -181,7 +184,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">No Hp / WA</label>
-                                    <input type="text" name="no_hp" value="{{ old('no_hp') }}"
+                                    <input type="number" name="no_hp" value="{{ old('no_hp') }}"
                                         class="form-control @error('no_hp') is-invalid @enderror" id="no_hp"
                                         placeholder="Masukan Nomor Handphone/WA">
                                     <div class="valid-feedback">
@@ -229,8 +232,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
 
@@ -250,14 +253,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const provinceSelect = $('#province_id');
             const citySelect = $('#city_or_regency_id');
+            const oldProvinceId = "{{ old('province_id') }}";
+            const oldCityId = "{{ old('city_or_regency_id') }}";
 
             // Initialize Select2
             provinceSelect.select2();
             citySelect.select2();
 
-            provinceSelect.on('change', function() {
-                const provinceId = $(this).val();
-
+            function loadCities(provinceId, selectedCityId = null) {
                 if (provinceId) {
                     fetch(`/get-cities/${provinceId}`)
                         .then(response => response.json())
@@ -268,7 +271,7 @@
                             // Add new options
                             data.forEach(city => {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.province.no_province} - ${city.city_or_regency_name}</option>`
+                                    `<option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
                                 );
                             });
 
@@ -277,13 +280,24 @@
                         })
                         .catch(error => console.error('Error:', error));
                 } else {
-                    citySelect.html(
-                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
+                    citySelect.html('<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
+            }
+
+            // Handle province change
+            provinceSelect.on('change', function() {
+                const provinceId = $(this).val();
+                loadCities(provinceId);
             });
+
+            // If there is an old province value, load the cities
+            if (oldProvinceId) {
+                loadCities(oldProvinceId, oldCityId);
+            }
         });
     </script>
+
 
     <script>
         ClassicEditor

@@ -24,6 +24,7 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'View Dashboard SIAK Dev']);
         Permission::create(['name' => 'View Dashboard Pejabat']);
         Permission::create(['name' => 'View Dashboard Department']);
+        Permission::create(['name' => 'View Dashboard Teknisi Hardware']);
         Permission::create(['name' => 'View Report']);
 
         Permission::create(['name' => 'View User Management']);
@@ -86,6 +87,12 @@ class UsersSeeder extends Seeder
 
         Permission::create(['name' => 'Send Ticket']);
 
+        Permission::create(['name' => 'View Aset Perangkat']);
+        Permission::create(['name' => 'Create Aset Perangkat']);
+        Permission::create(['name' => 'Edit Aset Perangkat']);
+        Permission::create(['name' => 'Delete Aset Perangkat']);
+        Permission::create(['name' => 'Show Aset Perangkat']);
+
         //create roles and assign existing permissions
         $adminRole = Role::create(['name' => 'Admin']);
         $helpdeskRole = Role::create(['name' => 'Helpdesk']);
@@ -93,6 +100,7 @@ class UsersSeeder extends Seeder
         $staffSubditRole = Role::create(['name' => 'Staff Subdit']);
         $siakDevRole = Role::create(['name' => 'SIAK Dev']);
         $pejabatRole = Role::create(['name' => 'Pejabat']);
+        $teknisiHardwareRole = Role::create(['name' => 'Teknisi Hardware']);
 
         //Admin
         $adminRole->givePermissionTo('View Dashboard Admin');
@@ -344,6 +352,15 @@ class UsersSeeder extends Seeder
 
         $pejabatRole->givePermissionTo('Send Ticket');
 
+        //Pejabat
+        $teknisiHardwareRole->givePermissionTo('View Dashboard Teknisi Hardware');
+
+        $teknisiHardwareRole->givePermissionTo('View Aset Perangkat');
+        $teknisiHardwareRole->givePermissionTo('Create Aset Perangkat');
+        $teknisiHardwareRole->givePermissionTo('Edit Aset Perangkat');
+        $teknisiHardwareRole->givePermissionTo('Delete Aset Perangkat');
+        $teknisiHardwareRole->givePermissionTo('Show Aset Perangkat');
+
         $faker = FakerFactory::create();
         $faker->addProvider(new NikProvider($faker));
 
@@ -467,5 +484,14 @@ class UsersSeeder extends Seeder
             'nik' => $faker->nik,
         ]);
         $user->assignRole($pejabatRole);
+
+        // Akun Teknisi Hardware
+        $user = User::factory()->create([
+            'name' => 'Bintang',
+            'email' => 'bintang@gmail.com',
+            'password' => bcrypt('qwerty12'),
+            'nik' => $faker->nik,
+        ]);
+        $user->assignRole($teknisiHardwareRole);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -27,4 +29,29 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof HttpException) {
+            $status = $exception->getStatusCode();
+
+            if ($status == 403) {
+                return auth()->check()
+                    ? redirect()->route('error-403')
+                    : redirect()->route('login');
+            } elseif ($status == 404) {
+                return auth()->check()
+                    ? redirect()->route('error-404')
+                    : redirect()->route('login');
+            } elseif ($status == 500) {
+                return auth()->check()
+                    ? redirect()->route('error-500')
+                    : redirect()->route('login');
+            }
+        }
+
+        return parent::render($request, $exception);
+    }
+
+
 }

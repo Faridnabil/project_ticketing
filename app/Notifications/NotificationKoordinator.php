@@ -39,12 +39,21 @@ class NotificationKoordinator extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //         ->line($this->DataKoordinasi['body'])
+    //         ->action($this->DataKoordinasi['Text'], $this->DataKoordinasi['Url'])
+    //         ->line($this->DataKoordinasi['thanks']);
+    // }
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line($this->DataKoordinasi['body'])
-            ->action($this->DataKoordinasi['Text'], $this->DataKoordinasi['Url'])
-            ->line($this->DataKoordinasi['thanks']);
+            ->subject('Notifikasi Tiket')
+            ->view('emails.notificationEmail', [
+                'data' => $this->DataKoordinasi
+            ]);
     }
 
     /**

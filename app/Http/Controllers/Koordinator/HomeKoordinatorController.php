@@ -18,11 +18,21 @@ class HomeKoordinatorController extends Controller
             ->get();
 
         // Menghitung jumlah tiket berdasarkan status
-        $total_tiket = $tickets->count();
-        $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_buka_proses = $tickets->whereIn('status.status_name', ['Diterima', 'Proses'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        $total_tiket = $tickets
+            ->count();
+        $tiket_belum = $tickets
+            ->where('status.status_name', null)
+            ->count();
+        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+        $tiket_proses = $tickets
+            ->whereIn('status.status_name', ['Proses', 'Buka Kembali'])
+            ->count();
+        $tiket_tertunda = $tickets
+            ->where('status.status_name', 'Tertunda')
+            ->count();
+        $tiket_selesai = $tickets
+            ->where('status.status_name', 'Selesai')
+            ->count();
 
         return view(
             'dashboard.koordinator.home.index',
@@ -30,7 +40,8 @@ class HomeKoordinatorController extends Controller
                 'tickets',
                 'total_tiket',
                 'tiket_belum',
-                'tiket_buka_proses',
+                'tiket_masuk',
+                'tiket_proses',
                 'tiket_tertunda',
                 'tiket_selesai',
             )

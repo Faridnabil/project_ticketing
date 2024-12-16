@@ -28,6 +28,8 @@ use App\Http\Controllers\SiakDev\HomeSiakDevController;
 use App\Http\Controllers\SiakDev\TicketSiakDevController;
 use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
 use App\Http\Controllers\StaffSubdit\TicketStaffSubditController;
+use App\Http\Controllers\TeknisiHardware\DeviceAssetsController;
+use App\Http\Controllers\TeknisiHardware\HomeTeknisiHardwareController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +47,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/notification', [NotificationController::class, 'sendnotification']);
 Route::patch('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+
+Route::view('/error-403', 'errors.403')->name('error-403');
+Route::view('/error-404', 'errors.404')->name('error-404');
+Route::view('/error-500', 'errors.500')->name('error-500');
 
 
 Route::get('/', function () {
@@ -69,6 +75,8 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
         '/status' => StatusController::class,
         '/category' => CategoryController::class,
     ]);
+
+    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
 
     Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
     Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
@@ -104,7 +112,7 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
 });
 
 // HELPDESK
-Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->group(function () {
+Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.')->group(function () {
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
@@ -116,15 +124,20 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk'])->name('helpdesk.')->gro
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
     Route::put('/helpdesk/sendTicket/{id}', [TicketHelpdeskController::class, 'send_ticket'])->name('tickets.send');
-    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
 
-        // Report Routes
-        Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
-        Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
-        Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
+    // Report Routes
+    Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
+    Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
+    Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
+    Route::get('/helpdesk/report/export-pdf', [ReportController::class, 'export_ticket_pdf'])->name('report.export_pdf');
+    Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])
+    ->name('report.preview_pdf');
+
+
 });
 
 
@@ -186,4 +199,14 @@ Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group
     Route::put('/pejabat/TicketUpdate/{id}', [TicketPejabatController::class, 'update_comment'])->name('tickets.update');
     Route::put('/pejabat/sendtTicket/{id}', [TicketPejabatController::class, 'send_ticket'])->name('tickets.send');
     Route::post('/pejabat/status-ticket/{id}', [TicketPejabatController::class, 'status_ticket'])->name('tickets.statusTicket');
+});
+
+//TEKNISI HARDWARE
+Route::middleware(['verified', 'auth', 'role:Teknisi Hardware'])->name('teknisiHardware.')->group(function () {
+    Route::get('/teknisi-hardware/dashboard', [HomeTeknisiHardwareController::class, 'index'])->name('dashboard.index');
+    Route::get('/teknisi-hardware/tickets/chart', [HomeTeknisiHardwareController::class, 'getTicketChartData']);
+    Route::get('/teknisi-hardware/tickets/dailyChart', [HomeTeknisiHardwareController::class, 'getDailyTicketChartData']);
+    Route::resources([
+        '/teknisi-hardware/deviceAssets' => DeviceAssetsController::class,
+    ]);
 });

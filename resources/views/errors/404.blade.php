@@ -51,17 +51,38 @@
                     <!--begin::Action-->
                     <div class="text-center">
                         @auth
-                            @if (Auth::user()->hasRoles('Admin'))
+                            @if (Auth::user()->hasRole('Admin'))
                                 <a href="{{ route('admin.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
                                     Kembali Ke Dashboard
                                 </a>
-                            @elseif(Auth::user()->hasRoles('Customer'))
-                                <a href="{{ route('customer.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
+                            @endif
+                            @if (Auth::user()->hasRole('Helpdesk'))
+                                <a href="{{ route('helpdesk.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
                                     Kembali Ke Dashboard
                                 </a>
-                            @elseif(Auth::user()->hasRoles('Department'))
-                                <a href="{{ route('department.dashboard.index') }}"
-                                    class="btn btn-lg btn-primary fw-bolder">
+                            @endif
+                            @if (Auth::user()->hasRole('Koordinator'))
+                                <a href="{{ route('koordinator.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
+                                    Kembali Ke Dashboard
+                                </a>
+                            @endif
+                            @if (Auth::user()->hasRole('Staff Subdit'))
+                                <a href="{{ route('staffSubdit.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
+                                    Kembali Ke Dashboard
+                                </a>
+                            @endif
+                            @if (Auth::user()->hasRole('SIAK Dev'))
+                                <a href="{{ route('siakDev.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
+                                    Kembali Ke Dashboard
+                                </a>
+                            @endif
+                            @if (Auth::user()->hasRole('Pejabat'))
+                                <a href="{{ route('pejabat.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
+                                    Kembali Ke Dashboard
+                                </a>
+                            @endif
+                            @if (Auth::user()->hasRole('Teknisi Hardware'))
+                                <a href="{{ route('teknisiHardware.dashboard.index') }}" class="btn btn-lg btn-primary fw-bolder">
                                     Kembali Ke Dashboard
                                 </a>
                             @endif

@@ -48,6 +48,7 @@
                                     <option value="{{ $level->id }}">{{ $level->name }}</option>
                                 @endforeach
                             </select>
+                            &nbsp;&nbsp;
 
                             <select name="category_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Kategori">
@@ -56,7 +57,7 @@
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                            &nbsp;&nbsp;
 
                             <select name="priority_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
@@ -65,7 +66,7 @@
                                     <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                            &nbsp;&nbsp;
 
                             <select name="status_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Status">
@@ -74,7 +75,7 @@
                                     <option value="{{ $status->id }}">{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;
+                            &nbsp;&nbsp;
 
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
                             <a href="{{ route('pejabat.ticket.index') }}" class="btn btn-danger">Reset</a>
@@ -99,7 +100,8 @@
                                 <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
-                                <th class="min-w-70px">Aksi</th>
+                                {{-- <th class="min-w-70px">Keterangan</th> --}}
+                                <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -206,11 +208,11 @@
                                                     @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                         <form
                                                             action="{{ route('pejabat.tickets.statusTicket', $ticket->id) }}"
-                                                            method="POST" class="ml-2">
+                                                            method="POST" id="statusForm_{{ $ticket->id }}">
                                                             @csrf
                                                             <div class="custom-select-wrapper">
                                                                 <select name="status_id" class="custom-select"
-                                                                    onchange="this.form.submit()">
+                                                                    id="statusSelect_{{ $ticket->id }}">
                                                                     <option value="2"
                                                                         {{ $ticket->status_id == '2' ? 'selected' : '' }}>
                                                                         Diterima</option>
@@ -220,22 +222,36 @@
                                                                     <option value="4"
                                                                         {{ $ticket->status_id == '4' ? 'selected' : '' }}>
                                                                         Selesai</option>
-                                                                    <option value="5"
-                                                                        {{ $ticket->status_id == '5' ? 'selected' : '' }}>
-                                                                        Buka Kembali</option>
                                                                 </select>
                                                             </div>
                                                         </form>
                                                     @endif
                                                 </div>
                                             </td>
+
+                                            {{-- <td>
+                                                @if ($ticket->latestHistory)
+                                                    @php
+                                                        $updatedByUser = $ticket->latestHistory->status_changedBy
+                                                            ? App\Models\User::find($ticket->latestHistory->status_changedBy)
+                                                            : null;
+                                                    @endphp
+
+                                                    {{ $updatedByUser ? $updatedByUser->name : '-' }}
+                                                @else
+                                                    -
+                                                @endif
+                                                :
+                                                {{ $ticket->latestHistory ? date('d F Y | H:i:s', strtotime($ticket->latestHistory->created_at)) : '-' }}
+                                            </td> --}}
+
                                             <!--begin::Action=-->
                                             <td>
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                     @can('Edit Ticket')
                                                         <a class="menu-link ms-3"
                                                             href="{{ route('pejabat.ticket.edit', $ticket->id) }}"
-                                                            type="button">
+                                                            type="button" title="Ubah Tiket">
                                                             <span class="menu-icon" style="fill: #bd6710">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
@@ -254,7 +270,8 @@
                                                     @can('Delete Ticket')
                                                         <a class="menu-link ms-3" href="#" type="reset"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_ticket_{{ $ticket->id }}">
+                                                            data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
+                                                            title="Hapus Tiket">
                                                             <span class="menu-icon" style="fill: #e21414">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
@@ -273,7 +290,7 @@
                                                     @can('Show Ticket')
                                                         <a class="menu-link ms-3"
                                                             href="{{ route('pejabat.ticket.show', $ticket->id) }}"
-                                                            type="button">
+                                                            type="button" title="Lihat Tiket">
                                                             <span class="menu-icon" style="fill: #1218ca">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
@@ -310,7 +327,7 @@
                                                     @can('Show Ticket')
                                                         <a class="menu-link ms-3"
                                                             href="{{ route('pejabat.ticket.show', $ticket->id) }}"
-                                                            type="button">
+                                                            type="button" title="Lihat Tiket">
                                                             <span class="menu-icon" style="fill: #1218ca">
                                                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
@@ -383,9 +400,7 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
-    @foreach ($tickets as $ticket)
         <div class="modal fade" tabindex="-1" id="kt_modal_ticket2_{{ $ticket->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -478,6 +493,44 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
+        <!-- Modal Konfirmasi -->
+        <div class="modal fade" id="confirmModal_{{ $ticket->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Perubahan Status</h5>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
+                            id="status-name-{{ $ticket->id }}"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
+                            Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                // Set status name in modal
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // Show modal
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                // On confirm button click
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    statusForm.submit();
+                };
+            });
+        </script>
+    @endforeach
 @endsection

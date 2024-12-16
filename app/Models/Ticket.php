@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
 
     protected $fillable = [
         'no_ticket',
@@ -102,5 +103,11 @@ class Ticket extends Model
     public function cityOrRegency()
     {
         return $this->belongsTo(CityOrRegency::class, 'city_or_regency_id');
+    }
+
+    public function latestHistory()
+    {
+        return $this->hasOne(HistoryTicket::class, 'h_no_ticket', 'no_ticket')
+            ->latest('created_at');
     }
 }

@@ -39,12 +39,21 @@ class NotificationSiakDev extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //         ->line($this->DataSiakDev['body'])
+    //         ->action($this->DataSiakDev['Text'], $this->DataSiakDev['Url'])
+    //         ->line($this->DataSiakDev['thanks']);
+    // }
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line($this->DataSiakDev['body'])
-            ->action($this->DataSiakDev['Text'], $this->DataSiakDev['Url'])
-            ->line($this->DataSiakDev['thanks']);
+            ->subject('Notifikasi Tiket')
+            ->view('emails.notificationEmail', [
+                'data' => $this->DataSiakDev
+            ]);
     }
 
     /**
@@ -61,7 +70,7 @@ class NotificationSiakDev extends Notification
             'thanks' => $this->DataSiakDev['thanks'],
             'Text' => $this->DataSiakDev['Text'],
             'Url' => $this->DataSiakDev['Url'],
-            'siak_dev_id' => rand(1111, 9999),
+            'koordinasi_id' => rand(1111, 9999),
         ];
     }
 }
