@@ -7,7 +7,7 @@
 @section('content')
     <!--begin::Logo-->
     <a href="#" class="mb-12">
-        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="h-60px mb-10" />
+        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.svg') }}" class="h-60px mb-10" />
     </a>
     <!--end::Logo-->
 

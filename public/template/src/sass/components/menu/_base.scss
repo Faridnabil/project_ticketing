@@ -40,6 +40,7 @@
         padding: get($menu, link, self, padding-y) get($menu, link, self, padding-x);
         transition: none;
         outline: none !important;
+        
 
         // Menu Icon
         .menu-icon {
@@ -94,7 +95,7 @@
                 width: 100%;
                 content: " ";
                 @include svg-bg-icon(arrow-end, $text-muted);
-            }            
+            }
         }
     }
 
@@ -105,7 +106,7 @@
 }
 
 // Accordion arrows
-.menu-item {    
+.menu-item {
     &.show {
         .menu-link {
             .menu-arrow:after {
@@ -121,7 +122,7 @@
     justify-content: center;
 }
 
-// Responsive 
+// Responsive
 @each $direction in (up, down) {
     @each $breakpoint in map-keys($grid-breakpoints) {
         $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -161,14 +162,14 @@
                     @if (get($menu, dropdown, animation) == true) {
                         // Move up
                         animation: menu-sub-dropdown-animation-fade-in #{get($menu, dropdown, animation-speed)} ease 1, menu-sub-dropdown-animation-move-up #{get($menu, dropdown, animation-speed)} ease 1;
-                        
+
                         // Move down
                         &[data-popper-placement="top"],
                         &[data-popper-placement="top-start"],
                         &[data-popper-placement="top-end"] {
                             animation: menu-sub-dropdown-animation-fade-in #{get($menu, dropdown, animation-speed)} ease 1, menu-sub-dropdown-animation-move-down #{get($menu, dropdown, animation-speed)} ease 1;
-                        }                        
-                    }                    
+                        }
+                    }
                 }
             }
 

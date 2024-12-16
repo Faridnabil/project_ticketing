@@ -121,10 +121,10 @@
                 data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}"
                 data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
                 <!--begin::Brand-->
-                <div class="aside-logo flex-column-auto" id="kt_aside_logo">
+                <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color: white">
                     <!--begin::Logo-->
                     <a href="">
-                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}"
+                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.svg') }}"
                             class="h-30px logo" />
                     </a>
                     <!--end::Logo-->

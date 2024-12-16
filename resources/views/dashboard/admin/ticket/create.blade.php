@@ -128,7 +128,6 @@
                                     @enderror
                                 </div>
 
-
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">PIC</label>
                                     <input type="text" name="pic" value="{{ old('pic') }}"

@@ -95,7 +95,7 @@
 <body>
     <!-- Header Section -->
     <header>
-        <img alt="Logo" src="{{ public_path('template/dist/assets/media/logos/logo.png') }}" />
+        <img alt="Logo" src="{{ public_path('template/dist/assets/media/logos/logo.svg') }}" />
     </header>
 
     <div class="header-container">

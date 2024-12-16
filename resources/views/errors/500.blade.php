@@ -34,7 +34,7 @@
             <div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
                 <!--begin::Logo-->
                 <a href="index.html" class="mb-10 pt-lg-20">
-                    <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}"
+                    <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.svg') }}"
                         class="h-50px mb-5" />
                 </a>
                 <!--end::Logo-->

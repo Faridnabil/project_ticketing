@@ -1,13 +1,6 @@
 <style>
     .menu-accordion.menu-active>.menu-link,
-    .menu-link.active {
-        background-color: #000;
-        color: #000;
-        width: 90%;
-        border-radius: 5px;
-        padding: 0.5rem;
-        margin-left: 10px;
-    }
+
 
     .menu-sub.show {
         display: block;
@@ -75,7 +68,71 @@
     }
 </style>
 
-<div class="aside-menu flex-column-fluid">
+<style>
+    .dashboard-link-container {
+        text-align: center;
+        width: 240px;
+        padding-left: 24px;
+        margin-bottom: 5px
+    }
+
+    .dashboard-link {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        padding: 7px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        background-color: white;
+        color: black;
+    }
+
+
+
+    .dashboard-link:hover {
+        background-color: #1285C4;
+        color: white;
+    }
+
+    .dashboard-link[style*="background-color: #1285C4; color: white;"] {
+        background-color: #1285C4;
+        color: white;
+    }
+
+    .icon-container {
+        margin-right: 8px;
+
+    }
+
+    .dashboard-link.active {
+        background-color: #1285C4;
+        color: white;
+    }
+
+    .submenu-icon {
+        margin-right: 8px;
+        font-size: 16px;
+        color: #000;
+        /* Ubah warna sesuai tema */
+        display: inline-block;
+    }
+
+    .management-pengguna-text {
+        color: blue;
+        /* Default: tidak aktif */
+        transition: color 0.3s;
+    }
+
+    .management-pengguna-text.active {
+        color: white;
+        /* Jika aktif */
+    }
+</style>
+
+
+
+<div class="aside-menu flex-column-fluid" style="background-color: #fff">
     <!--begin::Aside Menu-->
     <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
@@ -85,26 +142,21 @@
         <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
             id="#kt_aside_menu" data-kt-menu="true">
             @can('View Dashboard Admin')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('admin.dashboard') ? 'active' : '' }}"
-                        href="{{ route('admin.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('admin.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
@@ -297,33 +349,29 @@
             @endcan
 
             @can('View Province')
-                <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('province.index') ? 'active' : '' }}"
-                        href="{{ route('province.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path opacity="0.25" fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M13.5,18h-3v-3h3v3Zm0-13h-3v3h3v-3Zm0,5h-3v3h3v-3Zm10.5-1.5c0-1.93-1.57-3.5-3.5-3.5h-1.5v-1.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v6.5h-1.5c-1.93,0-3.5,1.57-3.5,3.5v10.5H24V8.5ZM3,13.5c0-.275,.224-.5,.5-.5h4.5V3.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5v4.5h4.5c.276,0,.5,.225,.5,.5v12.5H3v-7.5Zm16,1.5h-3v3h3v-3Zm-11,0h-3v3h3v-3Zm11-5h-3v3h3v-3Z"
-                                        fill="#12131A" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M13.5,18h-3v-3h3v3Zm0-13h-3v3h3v-3Zm0,5h-3v3h3v-3Zm10.5-1.5c0-1.93-1.57-3.5-3.5-3.5h-1.5v-1.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v6.5h-1.5c-1.93,0-3.5,1.57-3.5,3.5v10.5H24V8.5ZM3,13.5c0-.275,.224-.5,.5-.5h4.5V3.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5v4.5h4.5c.276,0,.5,.225,.5,.5v12.5H3v-7.5Zm16,1.5h-3v3h3v-3Zm-11,0h-3v3h3v-3Zm11-5h-3v3h3v-3Z"
-                                        fill="#12131A" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('province.index') }}"
+                        class="dashboard-link {{ request()->routeIs('province.index') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path opacity="0.25" fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M13.5,18h-3v-3h3v3Zm0-13h-3v3h3v-3Zm0,5h-3v3h3v-3Zm10.5-1.5c0-1.93-1.57-3.5-3.5-3.5h-1.5v-1.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v6.5h-1.5c-1.93,0-3.5,1.57-3.5,3.5v10.5H24V8.5ZM3,13.5c0-.275,.224-.5,.5-.5h4.5V3.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5v4.5h4.5c.276,0,.5,.225,.5,.5v12.5H3v-7.5Zm16,1.5h-3v3h3v-3Zm-11,0h-3v3h3v-3Zm11-5h-3v3h3v-3Z"
+                                    fill="#12131A" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M13.5,18h-3v-3h3v3Zm0-13h-3v3h3v-3Zm0,5h-3v3h3v-3Zm10.5-1.5c0-1.93-1.57-3.5-3.5-3.5h-1.5v-1.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v6.5h-1.5c-1.93,0-3.5,1.57-3.5,3.5v10.5H24V8.5ZM3,13.5c0-.275,.224-.5,.5-.5h4.5V3.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5v4.5h4.5c.276,0,.5,.225,.5,.5v12.5H3v-7.5Zm16,1.5h-3v3h3v-3Zm-11,0h-3v3h3v-3Zm11-5h-3v3h3v-3Z"
+                                    fill="#12131A" />
+                            </svg>
                         </span>
-                        <span class="menu-title">Provinsi</span>
+                        <span style="margin-left: 10px"> Provinsi</span>
                     </a>
                 </div>
             @endcan
 
             @can('View City Or Regency')
-                <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('cityOrRegency.index') ? 'active' : '' }}"
-                        href="{{ route('cityOrRegency.index') }}">
+                <div class="dashboard-link-container">
+                    <a href="{{ route('cityOrRegency.index') }}"
+                        class="dashboard-link {{ request()->routeIs('cityOrRegency.index') ? 'active' : '' }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -339,7 +387,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Kota/Kabupaten</span>
+                        <span style="margin-left: 10px">Kota/Kabupaten</span>
                     </a>
                 </div>
             @endcan
@@ -352,14 +400,15 @@
                         request()->routeIs('role.index') ||
                         request()->routeIs('permission.index');
                 @endphp
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ $userManagementActive ? 'menu-active show' : '' }}">
-                    <span class="menu-link">
+
+                <div class="dashboard-link-container">
+                    <div
+                        class="dashboard-link {{ request()->routeIs('admin.user.index') || request()->routeIs('admin.role.index') ? 'active' : '' }}"
+                        onclick="toggleDropdown('userManagementDropdown')">
+
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <polygon points="0 0 24 0 24 24 0 24" />
                                         <path
@@ -371,48 +420,42 @@
                                     </g>
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Manajemen Pengguna</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ $userManagementActive ? 'show' : '' }}">
-                        <div class="menu-item">
-                            <a class="menu-link mt-3 {{ request()->routeIs('admin.user.index') ? 'active' : '' }}"
-                                href="{{ route('admin.user.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Pengguna</span>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}"
-                                href="{{ route('admin.role.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Hak Akses</span>
-                            </a>
-                        </div>
-                        {{-- <div class="menu-item">
-                        <a class="menu-link mb-3 {{ request()->routeIs('admin.permission.index') ? 'active' : '' }}" href="{{ route('admin.permission.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Ijin Akses</span>
+
+                        <span style="margin-left: 10px; display: block; text-align: left">Management Pengguna</span>
+                        <span class="dropdown-icon" style="margin-left: auto; transition: transform 0.3s;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M7.247 11.14 2.451 5.658C2.036 5.193 2.345 4.5 2.954 4.5h10.092c.609 0 .918.692.503 1.158l-4.796 5.482a1 1 0 0 1-1.506 0z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div id="userManagementDropdown" style="display: none; margin-top: 10px;">
+                        <a href="{{ route('admin.user.index') }}"
+                            class="dashboard-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
+                            <span class="dot-icon" style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                            Pengguna
                         </a>
-                    </div> --}}
+                        <a href="{{ route('admin.role.index') }}"
+                            class="dashboard-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}" style="margin-top: 5px">
+                            <span class="dot-icon" style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                            Hak Akses
+                        </a>
                     </div>
                 </div>
+
+
             @endcan
 
+
+
+
             @can('View Category')
-                <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('category.index') ? 'active' : '' }}"
-                        href="{{ route('category.index') }}">
+                <div class="dashboard-link-container">
+                    <a href="{{ route('category.index') }}"
+                        class="dashboard-link {{ request()->routeIs('category.index') ? 'active' : '' }}">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                            <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                     viewBox="0 0 24 24" version="1.1">
@@ -426,16 +469,16 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Kategori</span>
+                        <span style="margin-left: 10px">Kategori</span>
                     </a>
                 </div>
             @endcan
             @can('View Priority')
-                <div class="menu-item">
-                    <a class="{{ request()->routeIs('priority.index') ? 'menu-link active' : 'menu-link' }}"
-                        href="{{ route('priority.index') }}">
+                <div class="dashboard-link-container">
+                    <a href="{{ route('priority.index') }}"
+                        class="dashboard-link {{ request()->routeIs('priority.index') ? 'active' : '' }}">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                            <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                     viewBox="0 0 24 24" version="1.1">
@@ -449,15 +492,15 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Prioritas</span>
+                        <span style="margin-left: 10px">Prioritas</span>
                     </a>
                 </div>
             @endcan
 
             @can('View Status')
-                <div class="menu-item">
-                    <a class="{{ request()->routeIs('status.index') ? 'menu-link active' : 'menu-link' }}"
-                        href="{{ route('status.index') }}">
+                <div class="dashboard-link-container">
+                    <a href="{{ route('status.index') }}"
+                        class="dashboard-link {{ request()->routeIs('status.index') ? 'active' : '' }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -473,7 +516,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Status</span>
+                        <span style="margin-left: 10px">Status</span>
                     </a>
                 </div>
             @endcan
@@ -579,9 +622,9 @@
                 @endrole
 
                 @role('Admin')
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('admin.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('admin.ticket.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('admin.ticket.index') }}"
+                            class="dashboard-link {{ request()->routeIs('admin.ticket.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -597,7 +640,7 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Semua Tiket</span>
+                            <span style="margin-left: 10px">Semua Tiket</span>
                         </a>
                     </div>
                 @endrole
@@ -706,9 +749,9 @@
                     </div>
                 </div>
                 @hasrole(['Helpdesk', 'Admin'])
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('helpdesk.report.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('helpdesk.report.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('helpdesk.report.index') }}"
+                            class="dashboard-link {{ request()->routeIs('helpdesk.report.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -724,13 +767,29 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Laporan</span>
+                            <span style="margin-left: 10px">Laporan</span>
                         </a>
                     </div>
-                    @endhasrole
-                @endcan
+                @endhasrole
+            @endcan
 
-            </div>
-            <!--end::Menu-->
         </div>
+        <!--end::Menu-->
     </div>
+</div>
+
+
+<script>
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        const icon = dropdown.previousElementSibling.querySelector('.dropdown-icon svg');
+
+        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+            dropdown.style.display = 'block';
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            dropdown.style.display = 'none';
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>
