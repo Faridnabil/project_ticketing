@@ -170,7 +170,7 @@
                             <!-- Tombol untuk membuka modal -->
                             <button type="button" class="btn btn-danger mb-4 ms-3" data-bs-toggle="modal"
                                 data-bs-target="#pdfPreviewModal" onclick="loadPdfPreview()">
-                                <i class="fas fa-eye"></i> Preview PDF
+                                <i class="fas fa-eye"></i> Lihat PDF
                             </button>
 
                             <!-- Modal -->

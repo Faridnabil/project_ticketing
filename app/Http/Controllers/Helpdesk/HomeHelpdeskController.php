@@ -53,7 +53,7 @@ class HomeHelpdeskController extends Controller
 
         // Ambil data tiket masuk
         $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
+            ->whereYear('created_at', operator: $year)
             ->groupBy('month')
             ->get()
             ->keyBy('month')
