@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Kategori | SIAK Dukcapil
+    Kategori | Ticketing
 @endsection
 
 @section('content')

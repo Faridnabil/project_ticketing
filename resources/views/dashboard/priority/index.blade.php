@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Prioritas | SIAK Dukcapil
+    Prioritas | Ticketing
 @endsection
 
 @section('content')

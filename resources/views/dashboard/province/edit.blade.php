@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Provinsi | SIAK Dukcapil
+    Ubah Provinsi | Ticketing
 @endsection
 
 @section('content')

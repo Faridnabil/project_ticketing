@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Data Profil | SIAK Dukcapil
+    Data Profil | Ticketing
 @endsection
 
 @section('content')

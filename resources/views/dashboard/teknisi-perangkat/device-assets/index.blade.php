@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Aset Perangkat | SIAK Dukcapil
+    Aset Perangkat | Ticketing
 @endsection
 
 @section('content')

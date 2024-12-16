@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Kota/Kabupaten | SIAK Dukcapil
+    Ubah Kota/Kabupaten | Ticketing
 @endsection
 
 @section('content')

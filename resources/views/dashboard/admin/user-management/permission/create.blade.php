@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Izin | SIAK Dukcapil
+    Tambah Izin | Ticketing
 @endsection
 
 @section('content')

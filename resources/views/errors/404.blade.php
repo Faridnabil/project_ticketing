@@ -6,7 +6,7 @@
 <head>
     <base href="../../">
     <meta charset="utf-8" />
-    <title>Error 404 | SIAK Dukcapil</title>
+    <title>Error 404 | Ticketing</title>
     <meta name="keywords"
         content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
@@ -34,7 +34,7 @@
             <div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
                 <!--begin::Logo-->
                 <a href="index.html" class="mb-10 pt-lg-20">
-                    <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.svg') }}"
+                    <img alt="Logo" src="{{ asset('template/dist/assets/media/logos.png') }}"
                         class="h-80px mb-5" />
                 </a>
                 <!--end::Logo-->

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Daftar Pengajuan | SIAK Dukcapil
+    Daftar Pengajuan | Ticketing
 @endsection
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Aktifitas | SIAK Dukcapil
+    Aktifitas | Ticketing
 @endsection
 
 @section('content')

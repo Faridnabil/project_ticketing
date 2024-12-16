@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Pengguna | SIAK Dukcapil
+    Tambah Pengguna | Ticketing
 @endsection
 
 @section('content')

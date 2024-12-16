@@ -71,7 +71,7 @@
     <div class="email-container">
         <!-- Bagian Logo Kustom -->
         <div class="header">
-            <img src="{{ $message->embed(public_path('template/dist/assets/media/logos/logo.svg')) }}" alt="Logo Perusahaan" width="100%">
+            <img src="{{ $message->embed(public_path('template/dist/assets/media/logos/logo.png')) }}" alt="Logo Perusahaan" width="100%">
         </div>
 
         <!-- Bagian Konten -->

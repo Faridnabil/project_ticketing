@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Provinsi | SIAK Dukcapil
+    Provinsi | Ticketing
 @endsection
 
 @section('content')

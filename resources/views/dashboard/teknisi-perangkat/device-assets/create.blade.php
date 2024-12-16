@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Aset Perangkat | SIAK Dukcapil
+    Tambah Aset Perangkat | Ticketing
 @endsection
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Ubah Peran | SIAK Dukcapil
+    Ubah Peran | Ticketing
 @endsection
 
 @section('content')

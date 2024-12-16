@@ -5,7 +5,7 @@
 <head>
     <base href="#">
     <meta charset="utf-8" />
-    <title>SIAK DUKCAPIL</title>
+    <title>Ticketing</title>
     <meta name="keywords"
         content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />

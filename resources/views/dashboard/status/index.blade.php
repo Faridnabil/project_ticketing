@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Status | SIAK Dukcapil
+    Status | Ticketing
 @endsection
 
 @section('content')

@@ -95,7 +95,7 @@
 <body>
     <!-- Header Section -->
     <header>
-        <img alt="Logo" src="{{ public_path('template/dist/assets/media/logos/logo.svg') }}" />
+        <img alt="Logo" src="{{ public_path('template/dist/assets/media/logos/logo.png') }}" />
     </header>
 
     <div class="header-container">
@@ -180,7 +180,7 @@
 
     <!-- Footer Section -->
     <footer>
-        <p>Dokumen ini dicetak secara otomatis dari sistem ticket | SIAK DUKCAPIL {{ now()->format('Y') }}</p>
+        <p>Dokumen ini dicetak secara otomatis dari sistem ticket | Ticketing {{ now()->format('Y') }}</p>
     </footer>
 </body>
 

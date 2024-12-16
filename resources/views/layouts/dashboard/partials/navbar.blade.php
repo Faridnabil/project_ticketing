@@ -1,5 +1,5 @@
 <!--begin::Wrapper-->
-<div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+<div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1"  style="width: 100px; width: 400px;  ">
     <!--begin::Navbar-->
     <div class="d-flex align-items-stretch" id="kt_header_nav">
         <!--begin::Menu wrapper-->
