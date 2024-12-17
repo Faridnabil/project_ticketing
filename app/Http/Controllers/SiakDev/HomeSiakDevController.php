@@ -12,9 +12,16 @@ class HomeSiakDevController extends Controller
 {
     public function index(Request $request)
     {
+        $month = $request->query('month', now()->month);
+        $year = $request->query('year', now()->year); // Default ke tahun berjalan
+
         // Mengambil semua tiket
         $tickets = Ticket::with('status', 'category', 'priority', 'siakDev')
             ->where('level4', '!=', null)
+            ->when($month && $year, function ($query) use ($month, $year) {
+                $query->whereYear('created_at', $year)
+                      ->whereMonth('created_at', $month);
+            })
             ->get();
 
         // Menghitung jumlah tiket berdasarkan status
@@ -43,6 +50,8 @@ class HomeSiakDevController extends Controller
                 'tiket_proses',
                 'tiket_tertunda',
                 'tiket_selesai',
+                'month',
+                'year',
             )
         );
     }
