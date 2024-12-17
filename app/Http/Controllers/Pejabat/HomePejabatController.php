@@ -18,7 +18,7 @@ class HomePejabatController extends Controller
         // Mengambil semua tiket
         $tickets = Ticket::with('status', 'category', 'priority', 'pejabat')
             ->whereNotNull('level5')
-            ->whereNull('level4')
+            // ->whereNull('level4')
             ->when($month && $year, function ($query) use ($month, $year) {
                 $query->whereYear('created_at', $year)
                       ->whereMonth('created_at', $month);
