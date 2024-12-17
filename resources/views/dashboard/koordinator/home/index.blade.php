@@ -143,6 +143,31 @@
             <div class="row">
                 <!--begin::Col-->
                 <div class="col-xxl-12 ">
+                    <div class="card card-xxl-stretch mt-3 mb-4">
+                        <div class="row mb-6 ms-6">
+                            <h4 class="card-title text-black mt-6">Filter</h4>
+                            <div class="col-md-2 mt-1">
+                                <select id="filterMonth" class="form-select" required>
+                                    <option value="" disabled {{ is_null($month) ? 'selected' : '' }}>Pilih Bulan</option>
+                                    @foreach (range(1, 12) as $m)
+                                        <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                                            {{ \Carbon\Carbon::create()->month($m)->format('F') }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mt-1">
+                                <select id="filterYear" class="form-select" required>
+                                    <option value="" disabled {{ is_null($year) ? 'selected' : '' }}>Pilih Tahun</option>
+                                    @foreach (range(now()->year - 5, now()->year) as $y)
+                                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                            {{ $y }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <!--begin::Mixed Widget 2-->
                     <div class="card card-xxl-stretch" style="height: 190px">
                         <!--begin::Header-->
@@ -163,6 +188,7 @@
                                 <!--begin::Row-->
 
                                 <div class="row g-0">
+
                                     <div class="col"
                                         style="width: 20%; background-color: #f8d7da; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                         <div class="d-flex align-items-center">
@@ -180,8 +206,9 @@
                                             </span>
                                             <!-- Text next to the SVG -->
                                             <div style="margin-left: 15px;margin-top:7px">
-                                                <a href="{{ route('koordinator.ticket.index', ['filter' => 'Diterima']) }}"
+                                                <a href="{{ route('koordinator.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
                                                     class="text-danger fw-bold fs-6">Tiket Masuk</a>
+
 
                                                 <div class="text-danger fw-bold fs-5 mt-1">
                                                     <b>{{ $tiket_masuk }}</b>
@@ -310,38 +337,13 @@
                 </div>
             </div>
 
-            <div class="card card-xxl-stretch mt-3 mb-2">
-                <div class="row mb-6 ms-6">
-                    <h4 class="card-title text-black mt-6">Filter Grafik</h4>
-                    <div class="col-md-2 mt-1">
-                        <select id="filterMonth" class="form-select">
-                            <option value="" selected disabled>Pilih Bulan</option>
-                            @foreach (range(1, 12) as $m)
-                                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->format('F') }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2 mt-1">
-                        <select id="filterYear" class="form-select">
-                            <option value="" selected disabled>Pilih Tahun</option>
-                            @foreach (range(now()->year - 5, now()->year) as $year)
-                                <option value="{{ $year }}" {{ $year == now()->year ? 'selected' : '' }}>
-                                    {{ $year }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-xxl-12">
                     <div class="card card-xxl-stretch">
                         <div class="card-header border-0 bg-primary py-5">
-                            <h3 id="cardTitle" class="card-title fw-bolder text-white">
-                                Tiket Perbulan - {{ \Carbon\Carbon::now()->format('F Y') }}
-                            </h3>
+                            <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
+                                {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Semua Bulan' }}
+                                {{ $year ?? now()->year }}</h3>
                         </div>
                         <div class="card-body">
                             <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
@@ -355,9 +357,8 @@
                 <div class="col-xxl-12">
                     <div class="card card-xxl-stretch">
                         <div class="card-header border-0 bg-primary py-5">
-                            <h3 id="cardTitle2" class="card-title fw-bolder text-white">
-                                Tiket Pertahun - {{ \Carbon\Carbon::now()->format('F Y') }}
-                            </h3>
+                            <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
+                                {{ $year ?? now()->year }}</h3>
                         </div>
                         <div class="card-body">
                             <canvas id="ticketChart" width="80%" height="20px"></canvas>
@@ -398,7 +399,7 @@
                             data: {
                                 labels: labelsDaily,
                                 datasets: [{
-                                        label: 'Tiket Masuk Harian',
+                                        label: 'Total Tiket',
                                         data: dataCreated,
                                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
@@ -461,7 +462,7 @@
                             data: {
                                 labels: data.months,
                                 datasets: [{
-                                        label: 'Tiket Masuk',
+                                        label: 'Total Tiket',
                                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1,
@@ -494,19 +495,54 @@
 
     {{-- Title Tahun --}}
     <script>
-        document.getElementById('filterYear').addEventListener('change', updateTitles);
-        document.getElementById('filterMonth').addEventListener('change', updateTitles);
+        const filterMonth = document.getElementById('filterMonth');
+        const filterYear = document.getElementById('filterYear');
+        const cardTitle = document.getElementById('cardTitle');
+        const cardTitle2 = document.getElementById('cardTitle2');
 
-        function updateTitles() {
-            const selectedYear = document.getElementById('filterYear').value || new Date().getFullYear();
-            const selectedMonth = document.getElementById('filterMonth').value || new Date().getMonth() + 1;
+        // Event listeners
+        filterMonth.addEventListener('change', handleFilterChange);
+        filterYear.addEventListener('change', handleFilterChange);
 
-            const monthName = new Date(selectedYear, selectedMonth - 1).toLocaleString('default', {
-                month: 'long'
-            });
+        function handleFilterChange() {
+            const selectedMonth = filterMonth.value;
+            const selectedYear = filterYear.value;
 
-            document.getElementById('cardTitle').textContent = `Tiket Perbulan - ${monthName} ${selectedYear}`;
-            document.getElementById('cardTitle2').textContent = `Tiket Pertahun - ${monthName} ${selectedYear}`;
+            if (selectedMonth && !selectedYear) {
+                alert('Harap pilih tahun terlebih dahulu sebelum memilih bulan!');
+                filterMonth.value = ""; // Reset pilihan bulan
+                return;
+            }
+
+            // Update URL tanpa reload halaman
+            const url = new URL(window.location.href);
+            if (selectedMonth) url.searchParams.set('month', selectedMonth);
+            if (selectedYear) url.searchParams.set('year', selectedYear);
+
+            window.location.href = url.toString(); // Reload halaman dengan parameter baru
+        }
+
+
+        function updateTitles(month, year) {
+            if (month && year) {
+                const monthName = new Date(year, month - 1).toLocaleString('default', {
+                    month: 'long'
+                });
+                cardTitle.textContent = `Tiket Perbulan - ${monthName} ${year}`;
+                cardTitle2.textContent = `Tiket Pertahun - ${monthName} ${year}`;
+            } else if (year) {
+                cardTitle.textContent = `Tiket Pertahun - ${year}`;
+                cardTitle2.textContent = `Tiket Pertahun - ${year}`;
+            } else if (month) {
+                const monthName = new Date(new Date().getFullYear(), month - 1).toLocaleString('default', {
+                    month: 'long'
+                });
+                cardTitle.textContent = `Tiket Perbulan - ${monthName}`;
+                cardTitle2.textContent = `Tiket Perbulan - ${monthName}`;
+            } else {
+                cardTitle.textContent = 'Tiket Perbulan - Tidak ada filter';
+                cardTitle2.textContent = 'Tiket Pertahun - Tidak ada filter';
+            }
         }
     </script>
 @endsection

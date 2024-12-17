@@ -137,7 +137,6 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])
     ->name('report.preview_pdf');
 
-
 });
 
 
