@@ -134,6 +134,8 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
     Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
     Route::get('/helpdesk/report/export-pdf', [ReportController::class, 'export_ticket_pdf'])->name('report.export_pdf');
+    Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])
+    ->name('report.preview_pdf');
 
 });
 
