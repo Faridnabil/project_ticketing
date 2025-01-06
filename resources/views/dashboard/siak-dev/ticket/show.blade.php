@@ -342,7 +342,7 @@
                                             @enderror
                                             <div class="d-flex flex-stack">
                                                 <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send">Kirim</button>
+                                                    data-kt-element="send" disabled>Kirim</button>
                                             </div>
                                         </form>
                                     </div>
@@ -419,7 +419,8 @@
                             <br>
                             <hr>
                             <br>
-                            <a href="{{ session('filtered_url', route('siakDev.ticket.index')) }}" class="btn btn-danger">Kembali</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                            {{-- <a href="{{ session('filtered_url', route('siakDev.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
                         </div>
                     </div>
 

@@ -18,46 +18,31 @@
             padding: 0;
         }
 
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #1c2732;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
         header img {
             height: 70px;
         }
 
-        .header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end; /* Pastikan sejajar ke bawah */
-        margin-bottom: 0; /* Hapus margin bawah */
-        padding-bottom: 0; /* Pastikan padding bawah juga nol */
-    }
 
-    .header-left {
-        text-align: left;
-        margin: 0; /* Hapus margin */
-    }
+        .header-left {
+            text-align: left;
+            margin: 0;
+            /* Hapus margin */
+        }
 
-    .header-left h1,
-    .header-left p {
-        margin: 0; /* Hapus margin bawah */
-    }
+        .header-left h1,
+        .header-left p {
+            margin: 0;
+            /* Hapus margin bawah */
+        }
 
-    .date {
-        font-size: 12px;
-        font-style: italic;
-        color: #555;
-        margin: 0; /* Hapus margin bawah */
-        text-align: right;
-    }
+        .date {
+            font-size: 12px;
+            font-style: italic;
+            color: #555;
+            margin: 0;
+            /* Hapus margin bawah */
+            text-align: right;
+        }
 
 
         table {
@@ -94,9 +79,8 @@
 
 <body>
     <!-- Header Section -->
-    <header>
-        {{-- <img src="{{ asset('template/dist/assets/media/logos/logo.png') }}" /> --}}
-        <img src="{{ public_path('template/dist/assets/media/logos/logo.png') }}" />
+    <header style="background-color: #1c2732;border-radius: 5px;display: flex;justify-content: space-between;padding: 10px 20px;margin-bottom: 10px;">
+        <img src="{{ asset('template/dist/assets/media/logos/logo.png') }}" />
     </header>
 
     <div class="header-container">
@@ -181,7 +165,7 @@
 
     <!-- Footer Section -->
     <footer>
-        <p>Dokumen ini dicetak secara otomatis dari sistem ticket | Ticketing {{ now()->format('Y') }}</p>
+        <p>Dokumen ini dicetak secara otomatis dari sistem ticket | SIAK DUKCAPIL {{ now()->format('Y') }}</p>
     </footer>
 </body>
 

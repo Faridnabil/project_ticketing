@@ -81,95 +81,98 @@ class ReportController extends Controller
     }
 
 
-    // Fungsi bantuan untuk memproses filter tanggal
-// Fungsi bantuan untuk memproses filter tanggal
-private function getFilterDates(Request $request)
-{
-    $req1 = $request->awal ?? null;
-    $req2 = $request->akhir ?? null;
+    private function getFilterDates(Request $request)
+    {
+        $req1 = $request->awal;
+        $req2 = $request->akhir;
 
-    if ($req1 && $req2) {
-        $startDate = Carbon::createFromFormat('Y-m-d', $req1)->startOfDay();
-        $endDate = Carbon::createFromFormat('Y-m-d', $req2)->endOfDay();
-    } else {
-        $startDate = Carbon::now()->startOfDay();
-        $endDate = Carbon::now()->endOfDay();
+        if ($req1 && $req2) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $req1)->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', $req2)->endOfDay();
+        } else {
+            $startDate = Carbon::now()->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+        }
+
+        return [$startDate, $endDate];
     }
 
-    return [$startDate, $endDate];
-}
 
-// Fungsi bantuan untuk query tiket berdasarkan filter
-private function queryTickets(Request $request)
-{
-    [$startDate, $endDate] = $this->getFilterDates($request);
+    private function queryTickets(Request $request)
+    {
+        [$startDate, $endDate] = $this->getFilterDates($request);
 
-    $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-        ->whereBetween('created_at', [$startDate, $endDate]);
+        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+            ->whereBetween('created_at', [$startDate, $endDate]);
 
-    // Tambahkan filter kategori
-    if ($request->has('category_id') && $request->category_id) {
-        $query->where('category_id', $request->category_id);
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('priority_id')) {
+            $query->where('priority_id', $request->priority_id);
+        }
+
+        if ($request->filled('status_id')) {
+            $query->where('status_id', $request->status_id);
+        }
+
+        if ($request->filled('level')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('level1', $request->level)
+                    ->orWhere('level2', $request->level)
+                    ->orWhere('level3', $request->level)
+                    ->orWhere('level4', $request->level)
+                    ->orWhere('level5', $request->level);
+            });
+        }
+
+        return $query->orderBy('id', 'asc')->get();
     }
 
-    // Tambahkan filter prioritas
-    if ($request->has('priority_id') && $request->priority_id) {
-        $query->where('priority_id', $request->priority_id);
+    // Fungsi Export Excel
+    public function export_ticket(Request $request)
+    {
+        // Ambil data tiket yang sudah difilter
+        $tickets = $this->queryTickets($request);
+
+        [$startDate, $endDate] = $this->getFilterDates($request);
+
+        // Format nama file berdasarkan tanggal
+        $fileName = "Laporan_Tiket_{$startDate->format('d-m-Y')}_{$endDate->format('d-m-Y')}.xlsx";
+
+        // Export ke Excel
+        return Excel::download(new ReportTicketExport($tickets), $fileName);
     }
 
-    // Tambahkan filter status
-    if ($request->has('status_id') && $request->status_id) {
-        $query->where('status_id', $request->status_id);
+    // Fungsi Export PDF
+    public function export_ticket_pdf(Request $request)
+    {
+        $tickets = $this->queryTickets($request);
+
+        [$startDate, $endDate] = $this->getFilterDates($request);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('dashboard.helpdesk.report.pdf', [
+            'tickets' => $tickets,
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ]);
+
+        $fileName = "Laporan_Tiket_{$startDate->format('d-m-Y')}_{$endDate->format('d-m-Y')}.pdf";
+
+        return $pdf->download($fileName);
     }
 
-    // Tambahkan filter disposisi (misal level-level tertentu)
-    if ($request->has('disposisi') && $request->disposisi) {
-        $query->where(function ($q) use ($request) {
-            $q->where('level1', $request->disposisi)
-                ->orWhere('level2', $request->disposisi)
-                ->orWhere('level3', $request->disposisi)
-                ->orWhere('level4', $request->disposisi)
-                ->orWhere('level5', $request->disposisi);
-        });
+    public function preview_ticket_pdf(Request $request)
+    {
+        $tickets = $this->queryTickets($request);
+        [$startDate, $endDate] = $this->getFilterDates($request);
+
+        return view('dashboard.helpdesk.report.pdf-view', [
+            'tickets' => $tickets,
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ]);
     }
-
-    return $query->orderBy('id', 'asc')->get();
-}
-
-// Fungsi Export Excel
-public function export_ticket(Request $request)
-{
-    [$startDate, $endDate] = $this->getFilterDates($request);
-
-    // Query tiket dengan semua filter
-    $tickets = $this->queryTickets($request);
-
-    // Format nama file berdasarkan tanggal dan filter
-    $fileName = "Laporan_Tiket_{$startDate->format('d-m-Y')}-{$endDate->format('d-m-Y')}.xlsx";
-
-    // Export data ke Excel
-    return Excel::download(new ReportTicketExport($tickets), $fileName);
-}
-
-// Fungsi Export PDF
-public function export_ticket_pdf(Request $request)
-{
-    [$startDate, $endDate] = $this->getFilterDates($request);
-
-    // Query tiket dengan semua filter
-    $tickets = $this->queryTickets($request);
-
-    // Format nama file berdasarkan tanggal dan filter
-    $fileName = "Laporan_Tiket_{$startDate->format('d-m-Y')}-{$endDate->format('d-m-Y')}.pdf";
-
-    // Load view untuk PDF
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('dashboard.helpdesk.report.pdf', [
-        'tickets' => $tickets,
-        'startDate' => $startDate,
-        'endDate' => $endDate
-    ]);
-
-    return $pdf->download($fileName);
-}
 
 }
