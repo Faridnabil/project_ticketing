@@ -124,8 +124,8 @@
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color: white">
                     <!--begin::Logo-->
                     <a href="">
-                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.svg') }}"
-                            class="h-30px logo" />
+                        <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}"
+                            class="h-70px logo" />
                     </a>
                     <!--end::Logo-->
 
