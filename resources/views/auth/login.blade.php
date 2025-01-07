@@ -72,7 +72,7 @@
         <!--begin::Copyright-->
         <div class="text-dark order-2 order-md-1 text-center mt-5">
             <span class="text-muted fw-bold me-1">Hak Cipta © </span>
-            2024
+            2025
             <a href="" target="_blank" class="text-gray-800 text-hover-primary">
                 Kementerian Perdagangan Republik Indonesia.
             </a>
