@@ -19,6 +19,14 @@
         type="text/css" />
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
+    <style>
+        /* Custom styles to make the background cover the full viewport */
+        .bgi-full {
+            background-size: cover;
+            height: 100vh;
+            /* Full viewport height */
+        }
+    </style>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -27,12 +35,13 @@
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
         <!--begin::Authentication - Sign-in -->
-        <div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
-            style="background-image: url({{ asset('template/dist/assets/media/illustrations/progress-hd.png') }})">
+        <div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-attachment-fixed bgi-full"
+            style="background-image: url({{ asset('template/dist/assets/media/illustrations/progress-hd.jpg') }})">
             <!--begin::Content-->
             <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
                 <!--begin::Wrapper-->
-                <div class="w-lg-500px  rounded shadow-sm p-10 p-lg-15 mx-auto" style="background-color: rgb(62, 62, 62)">
+                <div class="rounded shadow-sm p-5 p-lg-5 mx-auto"
+                    style="background-color: rgba(237, 237, 237, 0.454); width: 60%;">
                     @yield('content')
                 </div>
                 <!--end::Wrapper-->

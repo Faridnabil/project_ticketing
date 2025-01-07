@@ -7,7 +7,7 @@
             <span class="text-muted fw-bold me-1">Hak Cipta © </span>
             2024
             <a href="" target="_blank" class="text-gray-800 text-hover-primary">
-                Direktorat Jenderal Kependudukan dan Pencatatan Sipil Kementerian Dalam Negeri.
+                Kementerian Perdagangan Republik Indonesia.
             </a>
         </div>
         <!--end::Copyright-->

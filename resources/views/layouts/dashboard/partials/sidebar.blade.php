@@ -137,7 +137,7 @@
     <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
         data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"
-        data-kt-scroll-offset="0" >
+        data-kt-scroll-offset="0">
         <!--begin::Menu-->
         <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
             id="#kt_aside_menu" data-kt-menu="true">
@@ -161,146 +161,116 @@
                 </div>
             @endcan
             @can('View Dashboard Helpdesk')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('helpdesk.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('helpdesk.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('helpdesk.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('helpdesk/dashboard') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
             @can('View Dashboard Koordinator')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('koordinator.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('koordinator.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('koordinator.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('koordinator/dashboard') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
             @can('View Dashboard Staff Subdit')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('staffSubdit.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('staffSubdit.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('staffSubdit.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('staffSubdit.dashboard.index') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
             @can('View Dashboard SIAK Dev')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('siakDev.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('siakDev.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('siakDev.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('siakDev.dashboard.index') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
             @can('View Dashboard Pejabat')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('pejabat.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('pejabat.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                    version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('pejabat.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('pejabat.dashboard.index') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
             @can('View Dashboard Teknisi Hardware')
-                <div class="menu-item">
-                    <a class="menu-link {{ Request::is('teknisiHardware.dashboard.index') ? 'active' : '' }}"
-                        href="{{ route('teknisiHardware.dashboard.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-
-                            <!--end::Svg Icon-->
+                <div class="dashboard-link-container">
+                    <a href="{{ route('teknisiHardware.dashboard.index') }}"
+                        class="dashboard-link {{ request()->is('teknisiHardware.dashboard.index') ? 'active' : '' }}">
+                        <span class="svg-icon svg-icon-2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                version="1.1">
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" opacity="0.3" />
+                                <path
+                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
+                                    fill="#000000" />
+                            </svg>
                         </span>
-                        <span class="menu-title" style="color: white">Dashboard</span>
+                        <span style="margin-left: 10px">Dashboard</span>
                     </a>
                 </div>
             @endcan
@@ -402,13 +372,13 @@
                 @endphp
 
                 <div class="dashboard-link-container">
-                    <div
-                        class="dashboard-link {{ request()->routeIs('admin.user.index') || request()->routeIs('admin.role.index') ? 'active' : '' }}"
+                    <div class="dashboard-link {{ request()->routeIs('admin.user.index') || request()->routeIs('admin.role.index') ? 'active' : '' }}"
                         onclick="toggleDropdown('userManagementDropdown')">
 
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <polygon points="0 0 24 0 24 24 0 24" />
                                         <path
@@ -424,7 +394,8 @@
 
                         <span style="margin-left: 10px; display: block; text-align: left">Management Pengguna</span>
                         <span class="dropdown-icon" style="margin-left: auto; transition: transform 0.3s;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                                 <path
                                     d="M7.247 11.14 2.451 5.658C2.036 5.193 2.345 4.5 2.954 4.5h10.092c.609 0 .918.692.503 1.158l-4.796 5.482a1 1 0 0 1-1.506 0z" />
                             </svg>
@@ -433,18 +404,19 @@
                     <div id="userManagementDropdown" style="display: none; margin-top: 10px;">
                         <a href="{{ route('admin.user.index') }}"
                             class="dashboard-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
-                            <span class="dot-icon" style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                            <span class="dot-icon"
+                                style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
                             Pengguna
                         </a>
                         <a href="{{ route('admin.role.index') }}"
-                            class="dashboard-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}" style="margin-top: 5px">
-                            <span class="dot-icon" style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                            class="dashboard-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}"
+                            style="margin-top: 5px">
+                            <span class="dot-icon"
+                                style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
                             Hak Akses
                         </a>
                     </div>
                 </div>
-
-
             @endcan
 
 
@@ -553,11 +525,11 @@
                 </div>
                 @role('Helpdesk')
                     @can('View Attendance')
-                        <div class="menu-item">
-                            <a class="{{ request()->routeIs('helpdesk.attendance.index') ? 'menu-link active' : 'menu-link' }}"
-                                href="{{ route('helpdesk.attendance.index') }}">
+                        <div class="dashboard-link-container">
+                            <a href="{{ route('helpdesk.attendance.index') }}"
+                                class="dashboard-link {{ request()->routeIs('helpdesk.attendance.index') ? 'active' : '' }}">
                                 <span class="menu-icon">
-                                    <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                    <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                             viewBox="0 0 24 24" version="1.1">
@@ -571,54 +543,59 @@
                                     </span>
                                     <!--end::Svg Icon-->
                                 </span>
-                                <span class="menu-title">Aktifitas</span>
+                                <span style="margin-left: 10px">Aktifitas</span>
                             </a>
                         </div>
                     @endcan
 
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('helpdesk.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('helpdesk.ticket.index') }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <path
-                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                            fill="#000000" opacity="0.3" />
-                                        <path
-                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                            fill="#000000" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title">Semua Tiket</span>
-                        </a>
-                    </div>
 
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('helpdesk.newTickets.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('helpdesk.newTickets.index') }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <path
-                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                            fill="#000000" opacity="0.3" />
-                                        <path
-                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                            fill="#000000" />
-                                    </svg>
+                    @can('View Attendance')
+                        <div class="dashboard-link-container">
+                            <a href="{{ route('helpdesk.ticket.index') }}"
+                                class="dashboard-link {{ request()->routeIs('helpdesk.ticket.index') ? 'active' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1">
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" opacity="0.3" />
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
                                 </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title">Tiket Baru</span>
-                        </a>
-                    </div>
+                                <span style="margin-left: 10px">Semua Tiket</span>
+                            </a>
+                        </div>
+                    @endcan
+
+                    @can('View Attendance')
+                        <div class="dashboard-link-container">
+                            <a href="{{ route('helpdesk.newTickets.index') }}"
+                                class="dashboard-link {{ request()->routeIs('helpdesk.newTickets.index') ? 'active' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotone/Interface/Doughnut.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1">
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" opacity="0.3" />
+                                            <path
+                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                fill="#000000" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span style="margin-left: 10px">Tiket Baru</span>
+                            </a>
+                        </div>
+                    @endcan
                 @endrole
 
                 @role('Admin')
@@ -646,9 +623,9 @@
                 @endrole
 
                 @role('Koordinator')
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('koordinator.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('koordinator.ticket.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('koordinator.ticket.index') }}"
+                            class="dashboard-link {{ request()->routeIs('koordinator.ticket.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -664,15 +641,15 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Tiket</span>
+                            <span style="margin-left: 10px">Tiket</span>
                         </a>
                     </div>
                 @endrole
 
                 @role('Staff Subdit')
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('staffSubdit.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('staffSubdit.ticket.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('staffSubdit.ticket.index') }}"
+                            class="dashboard-link {{ request()->routeIs('staffSubdit.ticket.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -688,15 +665,15 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Tiket</span>
+                            <span style="margin-left: 10px">Tiket</span>
                         </a>
                     </div>
                 @endrole
 
                 @role('SIAK Dev')
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('siakDev.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('siakDev.ticket.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('siakDev.ticket.index') }}"
+                            class="dashboard-link {{ request()->routeIs('siakDev.ticket.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -712,15 +689,15 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Tiket</span>
+                            <span style="margin-left: 10px">Tiket</span>
                         </a>
                     </div>
                 @endrole
 
                 @role('Pejabat')
-                    <div class="menu-item">
-                        <a class="{{ request()->routeIs('pejabat.ticket.index') ? 'menu-link active' : 'menu-link' }}"
-                            href="{{ route('pejabat.ticket.index') }}">
+                    <div class="dashboard-link-container">
+                        <a href="{{ route('pejabat.ticket.index') }}"
+                            class="dashboard-link {{ request()->routeIs('pejabat.ticket.index') ? 'active' : '' }}">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -736,7 +713,7 @@
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-title">Tiket</span>
+                            <span style="margin-left: 10px">Tiket</span>
                         </a>
                     </div>
                 @endrole
