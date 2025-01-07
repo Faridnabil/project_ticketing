@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Helpdesk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\HistoryTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -12,39 +11,46 @@ class HomeHelpdeskController extends Controller
 {
     public function index(Request $request)
     {
-        // Mengambil semua tiket
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')->get();
+        $month = $request->query('month', now()->month);
+        $year = $request->query('year', now()->year); // Default ke tahun berjalan
 
-        // Menghitung jumlah tiket berdasarkan status
-        $total_tiket = $tickets
-            ->count();
-        $tiket_belum = $tickets
-            ->where('status.status_name', null)
-            ->count();
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+            ->when($month && $year, function ($query) use ($month, $year) {
+                $query->whereYear('created_at', $year)
+                      ->whereMonth('created_at', $month);
+            })
+            ->get();
+
+        $total_tiket = $tickets->count();
+        $tiket_belum = $tickets->where('status.status_name', null)->count();
         $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
-        $tiket_proses = $tickets
-            ->whereIn('status.status_name', ['Proses', 'Buka Kembali'])
-            ->count();
-        $tiket_tertunda = $tickets
-            ->where('status.status_name', 'Tertunda')
-            ->count();
-        $tiket_selesai = $tickets
-            ->where('status.status_name', 'Selesai')
-            ->count();
+        $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
+        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
-        return view(
-            'dashboard.helpdesk.home.index',
-            compact(
+        if ($request->ajax()) {
+            return response()->json([
+                'tickets' => $tickets,
+                'total_tiket' => $total_tiket,
+                'tiket_belum' => $tiket_belum,
+                'tiket_masuk' => $tiket_masuk,
+                'tiket_proses' => $tiket_proses,
+                'tiket_tertunda' => $tiket_tertunda,
+                'tiket_selesai' => $tiket_selesai,
+            ]);
+        }
 
-                'tickets',
-                'total_tiket',
-                'tiket_belum',
-                'tiket_masuk',
-                'tiket_proses',
-                'tiket_tertunda',
-                'tiket_selesai',
-            )
-        );
+        return view('dashboard.helpdesk.home.index', compact(
+            'tickets',
+            'total_tiket',
+            'tiket_belum',
+            'tiket_masuk',
+            'tiket_proses',
+            'tiket_tertunda',
+            'month',
+            'year',
+            'tiket_selesai'
+        ));
     }
 
     public function getTicketChartData(Request $request)
@@ -53,7 +59,7 @@ class HomeHelpdeskController extends Controller
 
         // Ambil data tiket masuk
         $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
+            ->whereYear('created_at', operator: $year)
             ->groupBy('month')
             ->get()
             ->keyBy('month')

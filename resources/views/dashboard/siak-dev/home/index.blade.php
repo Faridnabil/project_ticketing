@@ -144,6 +144,32 @@
                 <!--begin::Col-->
                 <div class="col-xxl-12 ">
                     <!--begin::Mixed Widget 2-->
+                    <div class="card card-xxl-stretch mt-3 mb-4">
+                        <div class="row mb-6 ms-6">
+                            <h4 class="card-title text-black mt-6">Filter</h4>
+                            <div class="col-md-2 mt-1">
+                                <select id="filterMonth" class="form-select" required>
+                                    <option value="" disabled {{ is_null($month) ? 'selected' : '' }}>Pilih Bulan</option>
+                                    @foreach (range(1, 12) as $m)
+                                        <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                                            {{ \Carbon\Carbon::create()->month($m)->format('F') }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mt-1">
+                                <select id="filterYear" class="form-select" required>
+                                    <option value="" disabled {{ is_null($year) ? 'selected' : '' }}>Pilih Tahun</option>
+                                    @foreach (range(now()->year - 5, now()->year) as $y)
+                                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                            {{ $y }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card card-xxl-stretch" style="height: 190px">
                         <!--begin::Header-->
                         <div class="card-header border-0 bg-primary py-5">
@@ -313,9 +339,9 @@
                 <div class="col-xxl-12">
                     <div class="card card-xxl-stretch">
                         <div class="card-header border-0 bg-primary py-5">
-                            <h3 class="card-title fw-bolder text-white">
-                                Tiket Perbulan - {{ \Carbon\Carbon::now()->format('F Y') }}
-                            </h3>
+                            <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
+                                {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Semua Bulan' }}
+                                {{ $year ?? now()->year }}</h3>
                         </div>
                         <div class="card-body">
                             <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
@@ -329,9 +355,8 @@
                 <div class="col-xxl-12">
                     <div class="card card-xxl-stretch">
                         <div class="card-header border-0 bg-primary py-5">
-                            <h3 class="card-title fw-bolder text-white">
-                                Tiket Pertahun - {{ \Carbon\Carbon::now()->format('Y') }}
-                            </h3>
+                            <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
+                                {{ $year ?? now()->year }}</h3>
                         </div>
                         <div class="card-body">
                             <canvas id="ticketChart" width="80%" height="20px"></canvas>
@@ -339,6 +364,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -348,51 +374,68 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctxDaily = document.getElementById('dailyDataChart').getContext('2d');
+            const filterYear = document.getElementById('filterYear');
+            const filterMonth = document.getElementById('filterMonth');
+            let dailyDataChart;
 
-            fetch('{{ url('/siak-dev/tickets/dailyChart') }}')
-                .then(response => response.json())
-                .then(data => {
-                    const labelsDaily = data.days;
-                    const dataCreated = data.ticketsCreated;
-                    const dataClosed = data.ticketsClosed;
+            function fetchDailyData() {
+                const year = filterYear.value;
+                const month = filterMonth.value;
 
-                    const dailyDataChart = new Chart(ctxDaily, {
-                        type: 'line',
-                        data: {
-                            labels: labelsDaily,
-                            datasets: [{
-                                    label: 'Tiket Masuk Harian',
-                                    data: dataCreated,
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                    fill: true
-                                },
-                                {
-                                    label: 'Tiket Selesai Harian',
-                                    data: dataClosed,
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                    borderColor: 'rgba(153, 102, 255, 1)',
-                                    borderWidth: 1,
-                                    fill: true
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
+                fetch(`{{ url('/siak-dev/tickets/dailyChart') }}?year=${year}&month=${month}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const labelsDaily = data.days;
+                        const dataCreated = data.ticketsCreated;
+                        const dataClosed = data.ticketsClosed;
+
+                        if (dailyDataChart) {
+                            dailyDataChart.destroy();
+                        }
+
+                        dailyDataChart = new Chart(ctxDaily, {
+                            type: 'line',
+                            data: {
+                                labels: labelsDaily,
+                                datasets: [{
+                                        label: 'Total Tiket',
+                                        data: dataCreated,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1,
+                                        fill: true
+                                    },
+                                    {
+                                        label: 'Tiket Selesai Harian',
+                                        data: dataClosed,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1,
+                                        fill: true
+                                    }
+                                ]
                             },
-                            elements: {
-                                line: {
-                                    tension: 0.1
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                },
+                                elements: {
+                                    line: {
+                                        tension: 0.1
+                                    }
                                 }
                             }
-                        }
-                    });
-                })
-                .catch(error => console.error('Error fetching daily data:', error));
+                        });
+                    })
+                    .catch(error => console.error('Error fetching daily data:', error));
+            }
+
+            filterYear.addEventListener('change', fetchDailyData);
+            filterMonth.addEventListener('change', fetchDailyData);
+
+            fetchDailyData();
         });
     </script>
 
@@ -400,39 +443,105 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('ticketChart').getContext('2d');
+            const filterYear = document.getElementById('filterYear');
+            let ticketChart;
 
-            fetch('{{ url('/siak-dev/tickets/chart') }}')
-                .then(response => response.json())
-                .then(data => {
-                    const ticketChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.months,
-                            datasets: [{
-                                    label: 'Tiket Masuk',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                    data: data.tickets
-                                },
-                                {
-                                    label: 'Tiket Selesai',
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                    borderColor: 'rgba(153, 102, 255, 1)',
-                                    borderWidth: 1,
-                                    data: data.ticketsClosed
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
+            function fetchYearlyData() {
+                const year = filterYear.value;
+
+                fetch(`{{ url('/siak-dev/tickets/chart') }}?year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (ticketChart) {
+                            ticketChart.destroy();
+                        }
+
+                        ticketChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: data.months,
+                                datasets: [{
+                                        label: 'Total Tiket',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1,
+                                        data: data.tickets
+                                    },
+                                    {
+                                        label: 'Tiket Selesai',
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1,
+                                        data: data.ticketsClosed
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
                                 }
                             }
-                        }
+                        });
                     });
-                });
+            }
+
+            filterYear.addEventListener('change', fetchYearlyData);
+            fetchYearlyData();
         });
+    </script>
+
+    {{-- Title Tahun --}}
+    <script>
+        const filterMonth = document.getElementById('filterMonth');
+        const filterYear = document.getElementById('filterYear');
+        const cardTitle = document.getElementById('cardTitle');
+        const cardTitle2 = document.getElementById('cardTitle2');
+
+        // Event listeners
+        filterMonth.addEventListener('change', handleFilterChange);
+        filterYear.addEventListener('change', handleFilterChange);
+
+        function handleFilterChange() {
+            const selectedMonth = filterMonth.value;
+            const selectedYear = filterYear.value;
+
+            if (selectedMonth && !selectedYear) {
+                alert('Harap pilih tahun terlebih dahulu sebelum memilih bulan!');
+                filterMonth.value = ""; // Reset pilihan bulan
+                return;
+            }
+
+            // Update URL tanpa reload halaman
+            const url = new URL(window.location.href);
+            if (selectedMonth) url.searchParams.set('month', selectedMonth);
+            if (selectedYear) url.searchParams.set('year', selectedYear);
+
+            window.location.href = url.toString(); // Reload halaman dengan parameter baru
+        }
+
+
+        function updateTitles(month, year) {
+            if (month && year) {
+                const monthName = new Date(year, month - 1).toLocaleString('default', {
+                    month: 'long'
+                });
+                cardTitle.textContent = `Tiket Perbulan - ${monthName} ${year}`;
+                cardTitle2.textContent = `Tiket Pertahun - ${monthName} ${year}`;
+            } else if (year) {
+                cardTitle.textContent = `Tiket Pertahun - ${year}`;
+                cardTitle2.textContent = `Tiket Pertahun - ${year}`;
+            } else if (month) {
+                const monthName = new Date(new Date().getFullYear(), month - 1).toLocaleString('default', {
+                    month: 'long'
+                });
+                cardTitle.textContent = `Tiket Perbulan - ${monthName}`;
+                cardTitle2.textContent = `Tiket Perbulan - ${monthName}`;
+            } else {
+                cardTitle.textContent = 'Tiket Perbulan - Tidak ada filter';
+                cardTitle2.textContent = 'Tiket Pertahun - Tidak ada filter';
+            }
+        }
     </script>
 @endsection
