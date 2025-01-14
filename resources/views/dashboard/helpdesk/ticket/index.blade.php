@@ -51,11 +51,22 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    {{-- <label for="tanggal" class="form-label mb-2">Tanggal</label> --}}
-                                    <input type="date" id="tanggal" name="tanggal" class="form-control"
-                                        value="{{ old('tanggal', $reqTanggal) }}">
+                                    <input type="date" id="tanggal_mulai" name="tanggal_mulai" class="form-control"
+                                        style="border: 2px solid #28a745;"
+                                        value="{{ old('tanggal_mulai', request('tanggal_mulai')) }}"
+                                        placeholder="Tanggal Mulai">
                                 </div>
                             </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="date" id="tanggal_selesai" name="tanggal_selesai" class="form-control"
+                                        style="border: 2px solid #dc3545;"
+                                        value="{{ old('tanggal_selesai', request('tanggal_selesai')) }}"
+                                        placeholder="Tanggal Selesai">
+                                </div>
+                            </div>
+
 
                             <div class="col-md-2">
                                 {{-- <label for="disposisi" class="form-label mb-2">Disposisi</label> --}}
@@ -126,24 +137,30 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <!-- Kabupaten/Kota -->
                             <div class="col-md-2">
                                 <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
                                     data-control="select2">
                                     <option value="" selected disabled>Pilih Kabupaten/Kota</option>
-                                    @foreach ($city_or_regencies as $city)
-                                        <option value="{{ $city->id }}"
-                                            {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
-                                            {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
-                                        </option>
-                                    @endforeach
+                                    @if (request('province_id'))
+                                        @foreach ($city_or_regencies as $city)
+                                            @if ($city->province_id == request('province_id'))
+                                                <option value="{{ $city->id }}"
+                                                    {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
+                                                    {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
 
 
-                            <div class="col-md-2  d-flex align-items-end">
+
+                            <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset</a>
+                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
                             </div>
                         </form>
                         <!--end::Form-->
@@ -195,7 +212,14 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if ($reqTanggal || request('level') || request('category_id') || request('priority_id') || request('status_id') || request('city_or_regency_id') || request('province_id'))
+                            @if (request('tanggal_mulai') ||
+                                    request('tanggal_selesai') ||
+                                    request('level') ||
+                                    request('category_id') ||
+                                    request('priority_id') ||
+                                    request('status_id') ||
+                                    request('city_or_regency_id') ||
+                                    request('province_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -642,20 +666,57 @@
 
         <script>
             function fetchCityOrRegency(provinceId) {
+                const citySelect = document.getElementById('city_or_regency_id');
                 if (provinceId) {
+                    // Tampilkan placeholder loading
+                    citySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
                     fetch(`/get-cities/${provinceId}`)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) throw new Error('Failed to fetch cities');
+                            return response.json();
+                        })
                         .then(data => {
-                            const citySelect = document.getElementById('city_or_regency_id');
+                            // Perbarui dropdown kabupaten/kota
                             citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
                             data.forEach(city => {
                                 citySelect.innerHTML +=
                                     `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
                             });
+                            // Pastikan opsi yang dipilih tetap terpilih setelah filter
+                            const selectedCityId = '{{ request('city_or_regency_id') }}';
+                            if (selectedCityId) {
+                                const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                                if (option) option.selected = true;
+                            }
                         })
-                        .catch(error => console.error('Error fetching cities:', error));
+                        .catch(error => {
+                            console.error('Error fetching cities:', error);
+                            alert('Gagal mengambil data kabupaten/kota. Silakan coba lagi.');
+                        });
+                } else {
+                    // Kosongkan dropdown jika provinsi tidak dipilih
+                    citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
                 }
             }
+
+            // Aktifkan ulang dropdown setelah halaman di-load ulang
+            document.addEventListener('DOMContentLoaded', function() {
+                const provinceSelect = document.getElementById('province_id');
+                const citySelect = document.getElementById('city_or_regency_id');
+                const selectedProvinceId = '{{ request('province_id') }}';
+                const selectedCityId = '{{ request('city_or_regency_id') }}';
+
+                if (selectedProvinceId) {
+                    // Trigger fetch jika provinsi dipilih sebelumnya
+                    fetchCityOrRegency(selectedProvinceId);
+                }
+
+                // Set opsi kabupaten/kota yang dipilih setelah data selesai dimuat
+                if (selectedCityId) {
+                    const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                    if (option) option.selected = true;
+                }
+            });
         </script>
     @endforeach
 @endsection

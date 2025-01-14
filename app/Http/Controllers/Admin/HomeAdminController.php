@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\HistoryTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,18 +27,6 @@ class HomeAdminController extends Controller
         $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
-
-        if ($request->ajax()) {
-            return response()->json([
-                'tickets' => $tickets,
-                'total_tiket' => $total_tiket,
-                'tiket_belum' => $tiket_belum,
-                'tiket_masuk' => $tiket_masuk,
-                'tiket_proses' => $tiket_proses,
-                'tiket_tertunda' => $tiket_tertunda,
-                'tiket_selesai' => $tiket_selesai,
-            ]);
-        }
 
         return view('dashboard.admin.home.index', compact(
             'tickets',

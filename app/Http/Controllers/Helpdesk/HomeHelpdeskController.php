@@ -17,7 +17,7 @@ class HomeHelpdeskController extends Controller
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
             ->when($month && $year, function ($query) use ($month, $year) {
                 $query->whereYear('created_at', $year)
-                      ->whereMonth('created_at', $month);
+                    ->whereMonth('created_at', $month);
             })
             ->get();
 
@@ -59,15 +59,16 @@ class HomeHelpdeskController extends Controller
 
         // Ambil data tiket masuk
         $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', operator: $year)
+            ->whereYear('created_at', $year)
             ->groupBy('month')
             ->get()
             ->keyBy('month')
             ->toArray();
 
-        // Ambil data tiket selesai
+        // Ambil data tiket selesai, hanya jika created_at juga dalam tahun yang diminta
         $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
             ->whereYear('updated_at', $year)
+            ->whereYear('created_at', $year) // Tambahkan kondisi ini
             ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
             ->groupBy('month')
             ->get()
@@ -96,6 +97,7 @@ class HomeHelpdeskController extends Controller
         $startDate = Carbon::create($year, $month)->startOfMonth();
         $endDate = Carbon::create($year, $month)->endOfMonth();
 
+        // Tickets Created Query
         $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('day')
@@ -103,14 +105,17 @@ class HomeHelpdeskController extends Controller
             ->keyBy('day')
             ->toArray();
 
+        // Tickets Closed Query (only if created_at is within the requested year)
         $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
             ->where('status_id', 4)
+            ->whereYear('created_at', $year) // Ensure created_at is in the requested year
             ->whereBetween('updated_at', [$startDate, $endDate])
             ->groupBy('day')
             ->get()
             ->keyBy('day')
             ->toArray();
 
+        // Prepare Chart Data
         $chartData = [
             'days' => [],
             'ticketsCreated' => [],
@@ -123,7 +128,52 @@ class HomeHelpdeskController extends Controller
             $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
         }
 
-        // Debugging output
+        return response()->json($chartData);
+    }
+
+    public function todaygetTicketChartData(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+
+        $startDate = Carbon::create($year, $month)->startOfMonth();
+        $endDate = Carbon::create($year, $month)->endOfMonth();
+
+        // Query tiket dibuat per hari
+        $ticketsCreated = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date')
+            ->toArray();
+
+        // Query tiket ditutup per hari
+        $ticketsClosed = Ticket::selectRaw('DATE(updated_at) as date, COUNT(*) as total')
+            ->where('status_id', 4) // Status ID untuk tiket selesai
+            ->whereYear('created_at', $year)
+            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date')
+            ->toArray();
+
+        // Siapkan data grafik
+        $chartData = [
+            'days' => [],
+            'daysOfWeek' => [],
+            'ticketsCreated' => [],
+            'ticketsClosed' => []
+        ];
+
+        // Iterasi setiap hari dalam bulan
+        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+            $formattedDate = $date->toDateString();
+            $chartData['days'][] = $date->day;
+            $chartData['daysOfWeek'][] = $date->translatedFormat('l');
+            $chartData['ticketsCreated'][] = $ticketsCreated[$formattedDate]['total'] ?? 0;
+            $chartData['ticketsClosed'][] = $ticketsClosed[$formattedDate]['total'] ?? 0;
+        }
+
         return response()->json($chartData);
     }
 }

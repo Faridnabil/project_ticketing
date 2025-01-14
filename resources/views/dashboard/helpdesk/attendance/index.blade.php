@@ -357,18 +357,20 @@
                                 </select>
                                 &nbsp;
 
-                                <input type="date" name="start_date" class="form-control me-2"
+                                <input type="date" name="start_date" class="form-control me-2" style="border: 2px solid #28a745;"
                                     value="{{ request('start_date') }}" placeholder="Start Date">
                                 &nbsp;
-                                <input type="date" name="end_date" class="form-control me-2"
+                                <input type="date" name="end_date" class="form-control me-2" style="border: 2px solid #dc3545;"
                                     value="{{ request('end_date') }}" placeholder="End Date">
                                 &nbsp;
 
                                 <input type="hidden" name="active_tab" id="active_tab"
                                     value="{{ request('active_tab', 'absen') }}">
 
-                                <button type="submit" class="btn btn-primary me-1">Filter</button>
-                                <a href="#" id="clear-filters" class="btn btn-danger">Reset</a>
+                                <div class="col-md-3  d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary me-1">Filter</button>
+                                    <a href="#" id="clear-filters" class="btn btn-danger">Reset Filter</a>
+                                </div>
                             </form>
                             <!--end::Form-->
 

@@ -31,15 +31,17 @@ class TicketHelpdeskController extends Controller
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
         // Retrieve filter input
-        $reqTanggal = $request->tanggal ?? null;
+        $tanggalMulai = $request->tanggal_mulai ?? null;
+        $tanggalSelesai = $request->tanggal_selesai ?? null;
 
-        // Filter by date if provided
-        if (!empty($reqTanggal)) {
+        // Filter by date range if provided
+        if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
             try {
-                $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
-                $query->whereDate('tickets.created_at', '=', $date);
+                $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+                $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+                $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
             } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['Invalid date format provided']);
+                return redirect()->back()->withErrors(['Invalid date range provided']);
             }
         }
 
@@ -66,8 +68,10 @@ class TicketHelpdeskController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
-        if ($request->filled('province_id')) {
-            $query->where('province_id', $request->province_id);
+        // Filter by province
+        $provinceId = $request->province_id ?? null;
+        if ($provinceId) {
+            $query->where('province_id', $provinceId);
         }
 
         if ($request->filled('city_or_regency_id')) {
@@ -92,8 +96,10 @@ class TicketHelpdeskController extends Controller
 
         $provinces = Province::all();
 
-        // Fetch the city or regency for the selected province
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // Fetch cities based on selected province
+        $city_or_regencies = $provinceId
+            ? CityOrRegency::where('province_id', $provinceId)->get()
+            : collect([]);
 
         return view('dashboard.helpdesk.ticket.index', [
             'tickets' => $tickets,
@@ -103,7 +109,8 @@ class TicketHelpdeskController extends Controller
             'priorities' => $priorities,
             'statuses' => $statuses,
             'levels' => $levels,
-            'reqTanggal' => $reqTanggal,
+            'tanggalMulai' => $tanggalMulai,
+            'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
             'filter' => $request->all() // Kirim filter saat ini ke view
         ]);
@@ -436,7 +443,7 @@ class TicketHelpdeskController extends Controller
 
             DB::commit();
             return redirect(session('first_url', route('helpdesk.ticket.index')))
-            ->with('success', 'Tiket Berhasil Dirubah');
+                ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());

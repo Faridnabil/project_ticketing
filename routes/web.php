@@ -116,6 +116,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
+    Route::get('/helpdesk/tickets/todaydailychart', [HomeHelpdeskController::class, 'todaygetTicketChartData']);
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
@@ -128,6 +129,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
+    Route::get('/helpdesk/today', [TicketHelpdeskController::class, 'indexToday'])->name('tickets.indexToday');
 
     // Report Routes
     Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
