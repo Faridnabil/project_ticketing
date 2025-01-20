@@ -156,7 +156,60 @@
                                 </select>
                             </div>
 
+                            <script>
+                                function fetchCityOrRegency(provinceId) {
+                                    const citySelect = document.getElementById('city_or_regency_id');
+                                    if (provinceId) {
+                                        // Tampilkan placeholder loading
+                                        citySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+                                        fetch(`/get-cities/${provinceId}`)
+                                            .then(response => {
+                                                if (!response.ok) throw new Error('Failed to fetch cities');
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                // Perbarui dropdown kabupaten/kota
+                                                citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                                data.forEach(city => {
+                                                    citySelect.innerHTML +=
+                                                        `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
+                                                });
+                                                // Pastikan opsi yang dipilih tetap terpilih setelah filter
+                                                const selectedCityId = '{{ request('city_or_regency_id') }}';
+                                                if (selectedCityId) {
+                                                    const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                                                    if (option) option.selected = true;
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error fetching cities:', error);
+                                                alert('Gagal mengambil data kabupaten/kota. Silakan coba lagi.');
+                                            });
+                                    } else {
+                                        // Kosongkan dropdown jika provinsi tidak dipilih
+                                        citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                    }
+                                }
 
+                                // Aktifkan ulang dropdown setelah halaman di-load ulang
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const provinceSelect = document.getElementById('province_id');
+                                    const citySelect = document.getElementById('city_or_regency_id');
+                                    const selectedProvinceId = '{{ request('province_id') }}';
+                                    const selectedCityId = '{{ request('city_or_regency_id') }}';
+
+                                    if (selectedProvinceId) {
+                                        // Trigger fetch jika provinsi dipilih sebelumnya
+                                        fetchCityOrRegency(selectedProvinceId);
+                                    }
+
+                                    // Set opsi kabupaten/kota yang dipilih setelah data selesai dimuat
+                                    if (selectedCityId) {
+                                        const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                                        if (option) option.selected = true;
+                                    }
+                                });
+                            </script>
 
                             <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
@@ -660,62 +713,6 @@
                 document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
                     statusForm.submit();
                 };
-            });
-        </script>
-
-
-        <script>
-            function fetchCityOrRegency(provinceId) {
-                const citySelect = document.getElementById('city_or_regency_id');
-                if (provinceId) {
-                    // Tampilkan placeholder loading
-                    citySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
-                    fetch(`/get-cities/${provinceId}`)
-                        .then(response => {
-                            if (!response.ok) throw new Error('Failed to fetch cities');
-                            return response.json();
-                        })
-                        .then(data => {
-                            // Perbarui dropdown kabupaten/kota
-                            citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
-                            data.forEach(city => {
-                                citySelect.innerHTML +=
-                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
-                            });
-                            // Pastikan opsi yang dipilih tetap terpilih setelah filter
-                            const selectedCityId = '{{ request('city_or_regency_id') }}';
-                            if (selectedCityId) {
-                                const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
-                                if (option) option.selected = true;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching cities:', error);
-                            alert('Gagal mengambil data kabupaten/kota. Silakan coba lagi.');
-                        });
-                } else {
-                    // Kosongkan dropdown jika provinsi tidak dipilih
-                    citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
-                }
-            }
-
-            // Aktifkan ulang dropdown setelah halaman di-load ulang
-            document.addEventListener('DOMContentLoaded', function() {
-                const provinceSelect = document.getElementById('province_id');
-                const citySelect = document.getElementById('city_or_regency_id');
-                const selectedProvinceId = '{{ request('province_id') }}';
-                const selectedCityId = '{{ request('city_or_regency_id') }}';
-
-                if (selectedProvinceId) {
-                    // Trigger fetch jika provinsi dipilih sebelumnya
-                    fetchCityOrRegency(selectedProvinceId);
-                }
-
-                // Set opsi kabupaten/kota yang dipilih setelah data selesai dimuat
-                if (selectedCityId) {
-                    const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
-                    if (option) option.selected = true;
-                }
             });
         </script>
     @endforeach

@@ -53,6 +53,50 @@ class HomeHelpdeskController extends Controller
         ));
     }
 
+    public function indexAll(Request $request)
+    {
+        $month = $request->query('month', now()->month);
+        $year = $request->query('year', now()->year); // Default ke tahun berjalan
+
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+            ->when($month && $year, function ($query) use ($month, $year) {
+                $query->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month);
+            })
+            ->get();
+
+        $total_tiket = $tickets->count();
+        $tiket_belum = $tickets->where('status.status_name', null)->count();
+        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+        $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
+        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tickets' => $tickets,
+                'total_tiket' => $total_tiket,
+                'tiket_belum' => $tiket_belum,
+                'tiket_masuk' => $tiket_masuk,
+                'tiket_proses' => $tiket_proses,
+                'tiket_tertunda' => $tiket_tertunda,
+                'tiket_selesai' => $tiket_selesai,
+            ]);
+        }
+
+        return view('dashboard.helpdesk.home.indexAll', compact(
+            'tickets',
+            'total_tiket',
+            'tiket_belum',
+            'tiket_masuk',
+            'tiket_proses',
+            'tiket_tertunda',
+            'month',
+            'year',
+            'tiket_selesai'
+        ));
+    }
+
     public function getTicketChartData(Request $request)
     {
         $year = $request->input('year', Carbon::now()->year);
@@ -133,47 +177,47 @@ class HomeHelpdeskController extends Controller
 
     public function todaygetTicketChartData(Request $request)
     {
-        $month = $request->input('month', Carbon::now()->month);
-        $year = $request->input('year', Carbon::now()->year);
+        $startTime = $request->input('startTime', '00:00');
+        $endTime = $request->input('endTime', '23:59');
+        $date = $request->input('date', today()->toDateString()); // Ensure there's a date passed
 
-        $startDate = Carbon::create($year, $month)->startOfMonth();
-        $endDate = Carbon::create($year, $month)->endOfMonth();
+        // Ensure that we are parsing times and dates correctly
+        $startTime = Carbon::parse($startTime);
+        $endTime = Carbon::parse($endTime);
 
-        // Query tiket dibuat per hari
-        $ticketsCreated = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('date')
-            ->get()
-            ->keyBy('date')
-            ->toArray();
-
-        // Query tiket ditutup per hari
-        $ticketsClosed = Ticket::selectRaw('DATE(updated_at) as date, COUNT(*) as total')
-            ->where('status_id', 4) // Status ID untuk tiket selesai
-            ->whereYear('created_at', $year)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->groupBy('date')
-            ->get()
-            ->keyBy('date')
-            ->toArray();
-
-        // Siapkan data grafik
-        $chartData = [
-            'days' => [],
-            'daysOfWeek' => [],
-            'ticketsCreated' => [],
-            'ticketsClosed' => []
+        // Tentukan rentang waktu setiap shift
+        $shifts = [
+            'shift1' => ['07:00:00', '15:00:00'],
+            'shift2' => ['15:00:00', '23:00:00'],
+            'shift3' => ['23:00:00', '07:00:00'],
         ];
 
-        // Iterasi setiap hari dalam bulan
-        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
-            $formattedDate = $date->toDateString();
-            $chartData['days'][] = $date->day;
-            $chartData['daysOfWeek'][] = $date->translatedFormat('l');
-            $chartData['ticketsCreated'][] = $ticketsCreated[$formattedDate]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$formattedDate]['total'] ?? 0;
+        $ticketsCreated = [];
+        $ticketsClosed = [];
+
+        foreach ($shifts as $shift => [$startShift, $endShift]) {
+            if ($shift === 'shift3') {
+                // Shift malam (melewati tengah malam)
+                $startDateTime = Carbon::parse($date . ' ' . $startShift);
+                $endDateTime = Carbon::parse($date . ' ' . $endShift)->addDay();
+            } else {
+                $startDateTime = Carbon::parse($date . ' ' . $startShift);
+                $endDateTime = Carbon::parse($date . ' ' . $endShift);
+            }
+
+            // Filter tickets based on startTime and endTime
+            $ticketsCreated[] = Ticket::whereBetween('created_at', [$startDateTime, $endDateTime])
+                ->whereBetween('created_at', [$startTime, $endTime]) // Apply additional filter for created_at
+                ->count();
+            $ticketsClosed[] = Ticket::where('status_id', 4)
+                ->whereBetween('updated_at', [$startDateTime, $endDateTime])
+                ->whereBetween('updated_at', [$startTime, $endTime]) // Apply additional filter for updated_at
+                ->count();
         }
 
-        return response()->json($chartData);
+        return response()->json([
+            'ticketsCreated' => $ticketsCreated,
+            'ticketsClosed' => $ticketsClosed,
+        ]);
     }
 }
