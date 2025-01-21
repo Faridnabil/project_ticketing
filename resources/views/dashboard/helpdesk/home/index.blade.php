@@ -163,21 +163,40 @@
                         <!-- Data Harian -->
                         <div class="tab-pane fade show active" id="harian" role="tabpanel">
 
-                            <div class="card card-xxl-stretch mt-3 mb-4">
-                                <div class="row mb-6 ms-6">
-                                    <h4 class="card-title text-black mt-6">Filter Jam Tiket</h4>
-                                    <div class="col-md-2 mt-1">
-                                        <label for="startTime" class="form-label">Jam Mulai</label>
-                                        <input type="time" name="startTime" id="startTime" class="form-control"
-                                            value="00:00">
+                            <template id="materialize-template">
+                                <div>
+                                    <link
+                                        href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+                                        rel="stylesheet">
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                                    <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
+                                        <!-- Header -->
+                                        <div class="card-header" style="padding: 10px 20px; background-color: #009EF7; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
+                                            <h3 class="card-title fw-bolder text-white" style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">Filter Waktu</h3>
+                                        </div>
+
+                                        <!-- Input Fields -->
+                                        <div class="row" style="margin-left:20px">
+                                            <div class="input-field col s6">
+                                                <div class="input-wrapper">
+                                                    <span class="icon"><b>Waktu Mulai</b></span>
+                                                    <input type="text" id="startTime" class="timepicker" placeholder="Jam Mulai">
+                                                </div>
+                                            </div>
+                                            <div class="input-field col s6">
+                                                <div class="input-wrapper">
+                                                    <span class="icon"><b>Waktu Selesai</b></span>
+                                                    <input type="text" id="endTime" class="timepicker" placeholder="Jam Selesai">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 mt-1">
-                                        <label for="endTime" class="form-label">Jam Selesai</label>
-                                        <input type="time" name="endTime" id="endTime" class="form-control"
-                                            value="23:59">
-                                    </div>
+
                                 </div>
-                            </div>
+                            </template>
+
+                            <div id="materialize-container"></div>
 
                             <div class="col-xl-12">
                                 <!--begin::Mixed Widget 2-->
@@ -386,9 +405,13 @@
 
     {{-- DATA TIKET HARIAN --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const startTimeInput = document.getElementById('startTime');
-            const endTimeInput = document.getElementById('endTime');
+        document.addEventListener('DOMContentLoaded', function() {
+            const shadowRoot = document.getElementById('materialize-container').shadowRoot;
+
+            // Referensi elemen input dari Shadow DOM
+            const startTimeInput = shadowRoot.getElementById('startTime');
+            const endTimeInput = shadowRoot.getElementById('endTime');
+
             let chartInstance = null; // Store chart instance
 
             function fetchAndRenderChart() {
@@ -401,16 +424,19 @@
                 }
 
                 // Pass the selected time filter as query params
-                fetch(`{{ route("helpdesk.tickets.todaydailychart") }}?startTime=${startTime}&endTime=${endTime}&date={{ today()->toDateString() }}`)
+                fetch(
+                        `{{ route('helpdesk.tickets.todaydailychart') }}?startTime=${startTime}&endTime=${endTime}&date={{ today()->toDateString() }}`
+                        )
                     .then(response => response.json())
                     .then(data => {
                         const ctx = document.getElementById('TodaydailyDataChart').getContext('2d');
                         chartInstance = new Chart(ctx, {
                             type: 'bar', // Using bar chart
                             data: {
-                                labels: ['Shift 1 (07:00-15:00)', 'Shift 2 (15:00-23:00)', 'Shift 3 (23:00-07:00)'],
-                                datasets: [
-                                    {
+                                labels: ['Shift 1 (07:00-15:00)', 'Shift 2 (15:00-23:00)',
+                                    'Shift 3 (23:00-07:00)'
+                                ],
+                                datasets: [{
                                         label: 'Tiket Dibuat',
                                         data: data.ticketsCreated,
                                         backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -434,8 +460,9 @@
                                     },
                                     tooltip: {
                                         callbacks: {
-                                            label: function (tooltipItem) {
-                                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                                            label: function(tooltipItem) {
+                                                return tooltipItem.dataset.label + ': ' +
+                                                    tooltipItem.raw;
                                             },
                                         },
                                     },
@@ -461,7 +488,7 @@
                     .catch(error => console.error('Error fetching chart data:', error));
             }
 
-            // Fetch data on page load and on filter change
+            // Fetch data on page load
             fetchAndRenderChart();
 
             // Trigger chart update when filter values change
@@ -471,4 +498,22 @@
     </script>
 
 
+    {{-- Filter Jam --}}
+    <script>
+        const template = document.getElementById('materialize-template');
+        const shadowRoot = document.getElementById('materialize-container').attachShadow({
+            mode: 'open'
+        });
+        shadowRoot.appendChild(template.content.cloneNode(true));
+
+        // Initialize Materialize Timepicker
+        document.addEventListener('DOMContentLoaded', function() {
+            const timepickers = shadowRoot.querySelectorAll('.timepicker');
+            M.Timepicker.init(timepickers, {
+                defaultTime: 'now',
+                twelveHour: false,
+                autoClose: true
+            });
+        });
+    </script>
 @endsection
