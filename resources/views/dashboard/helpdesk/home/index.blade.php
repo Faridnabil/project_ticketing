@@ -147,17 +147,20 @@
                     <div class="Header" style="margin-bottom: 30px">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4" href="{{ route('helpdesk.dashboard.index') }}">
+                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
+                                    href="{{ route('helpdesk.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn-custom font-regular" href="{{ route('helpdesk.dashboard.indexAll') }}">
+                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
+                                    href="{{ route('helpdesk.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
                     </div>
+
 
                     <div class="tab-content">
                         <!-- Data Harian -->
@@ -172,27 +175,65 @@
 
                                     <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
                                         <!-- Header -->
-                                        <div class="card-header" style="padding: 10px 20px; background-color: #009EF7; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
-                                            <h3 class="card-title fw-bolder text-white" style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">Filter Waktu</h3>
+                                        <div class="card-header"
+                                            style="padding: 10px 20px; background-color: #009EF7; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
+                                            <h3 class="card-title fw-bolder text-white"
+                                                style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">
+                                                Filter Waktu
+                                            </h3>
                                         </div>
 
-                                        <!-- Input Fields -->
-                                        <div class="row" style="margin-left:20px">
-                                            <div class="input-field col s6">
-                                                <div class="input-wrapper">
-                                                    <span class="icon"><b>Waktu Mulai</b></span>
-                                                    <input type="text" id="startTime" class="timepicker" placeholder="Jam Mulai">
+                                        <!-- Filter Form -->
+                                        <form method="get" action="{{ route('helpdesk.dashboard.index') }}">
+                                            <!-- Input Fields for Time -->
+                                            <div class="row" style="margin-left:20px">
+                                                <div class="input-field col s5">
+                                                    <div class="input-wrapper">
+                                                        <span class="icon"><b>Waktu Mulai</b></span>
+                                                        <input type="text" name="startTime" id="startTime"
+                                                            class="timepicker" placeholder="Jam Mulai"
+                                                            value="{{ request('startTime') }}">
+                                                    </div>
+                                                </div>
+                                                <div class="input-field col s4">
+                                                    <div class="input-wrapper">
+                                                        <span class="icon"><b>Waktu Selesai</b></span>
+                                                        <input type="text" name="endTime" id="endTime"
+                                                            class="timepicker" placeholder="Jam Selesai"
+                                                            value="{{ request('endTime') }}">
+                                                    </div>
+                                                </div>
+                                                <div class="input-field col s1" style="margin-top: 28px">
+                                                    <div class="input-wrapper">
+                                                        <button type="submit" class="btn waves-effect waves-light"
+                                                            id="submitFilter"
+                                                            style="background-color: #19bb52;border-radius:10px">
+                                                            <b>Filter Data</b>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="input-field col s1" style="margin-top: 28px">
+                                                    <div class="input-wrapper">
+                                                        <a href="{{ route('helpdesk.dashboard.index') }}"
+                                                            class="btn waves-effect waves-light"
+                                                            style="background-color: #009EF7;border-radius:10px">
+                                                            <b>Refresh</b>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="input-field col s6">
-                                                <div class="input-wrapper">
-                                                    <span class="icon"><b>Waktu Selesai</b></span>
-                                                    <input type="text" id="endTime" class="timepicker" placeholder="Jam Selesai">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </form>
+
+                                        <script>
+                                            // Initialize timepickers if not already initialized
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                var elems = document.querySelectorAll('.timepicker');
+                                                M.Timepicker.init(elems, {
+                                                    twelveHour: false
+                                                });
+                                            });
+                                        </script>
                                     </div>
-
                                 </div>
                             </template>
 
@@ -403,51 +444,51 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    {{-- DATA TIKET HARIAN --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const shadowRoot = document.getElementById('materialize-container').shadowRoot;
+            // Check if startTime and endTime are present in the URL query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const startTime = urlParams.get('startTime');
+            const endTime = urlParams.get('endTime');
 
-            // Referensi elemen input dari Shadow DOM
-            const startTimeInput = shadowRoot.getElementById('startTime');
-            const endTimeInput = shadowRoot.getElementById('endTime');
+            // Proceed only if both startTime and endTime are present
+            if (startTime && endTime) {
+                fetchAndRenderChart(startTime, endTime);
+            }
 
-            let chartInstance = null; // Store chart instance
-
-            function fetchAndRenderChart() {
-                const startTime = startTimeInput.value;
-                const endTime = endTimeInput.value;
-
-                // Destroy the previous chart if it exists
-                if (chartInstance) {
-                    chartInstance.destroy();
+            function fetchAndRenderChart(startTime, endTime) {
+                // Make sure the time fields are filled
+                if (!startTime || !endTime) {
+                    alert('Harap isi waktu mulai dan waktu selesai terlebih dahulu!');
+                    return;
                 }
 
-                // Pass the selected time filter as query params
+                // Fetch data with the provided time filters
                 fetch(
                         `{{ route('helpdesk.tickets.todaydailychart') }}?startTime=${startTime}&endTime=${endTime}&date={{ today()->toDateString() }}`
-                        )
+                    )
                     .then(response => response.json())
                     .then(data => {
                         const ctx = document.getElementById('TodaydailyDataChart').getContext('2d');
-                        chartInstance = new Chart(ctx, {
-                            type: 'bar', // Using bar chart
+                        new Chart(ctx, {
+                            type: 'bar',
                             data: {
                                 labels: ['Shift 1 (07:00-15:00)', 'Shift 2 (15:00-23:00)',
                                     'Shift 3 (23:00-07:00)'
                                 ],
                                 datasets: [{
-                                        label: 'Tiket Dibuat',
+                                        label: 'Tiket Masuk',
                                         data: data.ticketsCreated,
-                                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
                                         borderWidth: 1,
                                     },
                                     {
-                                        label: 'Tiket Ditutup',
+                                        label: 'Tiket Selesai',
                                         data: data.ticketsClosed,
-                                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+
                                         borderWidth: 1,
                                     },
                                 ],
@@ -487,16 +528,8 @@
                     })
                     .catch(error => console.error('Error fetching chart data:', error));
             }
-
-            // Fetch data on page load
-            fetchAndRenderChart();
-
-            // Trigger chart update when filter values change
-            startTimeInput.addEventListener('change', fetchAndRenderChart);
-            endTimeInput.addEventListener('change', fetchAndRenderChart);
         });
     </script>
-
 
     {{-- Filter Jam --}}
     <script>

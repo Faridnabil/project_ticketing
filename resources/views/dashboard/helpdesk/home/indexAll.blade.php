@@ -147,17 +147,20 @@
                     <div class="Header" style="margin-bottom: 30px">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4" href="{{ route('helpdesk.dashboard.index') }}">
+                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
+                                   href="{{ route('helpdesk.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn-custom font-regular" href="{{ route('helpdesk.dashboard.indexAll') }}">
+                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
+                                   href="{{ route('helpdesk.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
                     </div>
+
 
                     <div class="tab-content">
                         <div class="card card-xxl-stretch mt-3 mb-4">

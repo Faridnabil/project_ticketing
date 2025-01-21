@@ -13,20 +13,48 @@ class HomeHelpdeskController extends Controller
     {
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year); // Default ke tahun berjalan
+        $startTime = $request->query('startTime');
+        $endTime = $request->query('endTime');
 
+        // Parse startTime dan endTime jika ada
+        if ($startTime) {
+            $startTime = Carbon::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s');
+        }
+        if ($endTime) {
+            $endTime = Carbon::createFromFormat('H:i', $endTime)->format('Y-m-d H:i:s');
+        }
+
+        // Construct the query
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
             ->when($month && $year, function ($query) use ($month, $year) {
                 $query->whereYear('created_at', $year)
                     ->whereMonth('created_at', $month);
             })
+            ->when($startTime && $endTime, function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('created_at', [$startTime, $endTime]);
+            })
             ->get();
 
-        $total_tiket = $tickets->count();
-        $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
-        $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        // Calculate the ticket counts
+        if ($startTime && $endTime) {
+
+            // Calculate the ticket counts
+            $total_tiket = $tickets->count();
+            $tiket_belum = $tickets->where('status.status_name', null)->count();
+            $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+            $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
+            $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+            $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        } else {
+            // If no filters are applied, set the ticket counts to null or an empty string
+            $tickets = collect();  // Empty collection
+            $total_tiket = 0;
+            $tiket_belum = 0;
+            $tiket_masuk = 0;
+            $tiket_proses = 0;
+            $tiket_tertunda = 0;
+            $tiket_selesai = 0;
+        }
 
         if ($request->ajax()) {
             return response()->json([
@@ -49,9 +77,12 @@ class HomeHelpdeskController extends Controller
             'tiket_tertunda',
             'month',
             'year',
-            'tiket_selesai'
+            'tiket_selesai',
+            'startTime',
+            'endTime'
         ));
     }
+
 
     public function indexAll(Request $request)
     {
