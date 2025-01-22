@@ -12,49 +12,27 @@ class HomeHelpdeskController extends Controller
     public function index(Request $request)
     {
         $month = $request->query('month', now()->month);
-        $year = $request->query('year', now()->year); // Default ke tahun berjalan
-        $startTime = $request->query('startTime');
-        $endTime = $request->query('endTime');
+        $year = $request->query('year', now()->year);
+        $startTime = $request->query('startTime', '00:00');
+        $endTime = $request->query('endTime', '23:59');
+        $today = today();
 
-        // Parse startTime dan endTime jika ada
-        if ($startTime) {
-            $startTime = Carbon::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s');
-        }
-        if ($endTime) {
-            $endTime = Carbon::createFromFormat('H:i', $endTime)->format('Y-m-d H:i:s');
-        }
+        // Konversi waktu berdasarkan parameter atau default
+        $startDateTime = Carbon::parse($today->toDateString() . ' ' . $startTime);
+        $endDateTime = Carbon::parse($today->toDateString() . ' ' . $endTime);
 
-        // Construct the query
+        // Query tiket
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
-            })
-            ->when($startTime && $endTime, function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('created_at', [$startTime, $endTime]);
-            })
+            ->whereBetween('created_at', [$startDateTime, $endDateTime])
             ->get();
 
-        // Calculate the ticket counts
-        if ($startTime && $endTime) {
-
-            // Calculate the ticket counts
-            $total_tiket = $tickets->count();
-            $tiket_belum = $tickets->where('status.status_name', null)->count();
-            $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
-            $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
-            $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-            $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
-        } else {
-            // If no filters are applied, set the ticket counts to null or an empty string
-            $tickets = collect();  // Empty collection
-            $total_tiket = 0;
-            $tiket_belum = 0;
-            $tiket_masuk = 0;
-            $tiket_proses = 0;
-            $tiket_tertunda = 0;
-            $tiket_selesai = 0;
-        }
+        // Hitung data tiket
+        $total_tiket = $tickets->count();
+        $tiket_belum = $tickets->where('status.status_name', null)->count();
+        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
+        $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
+        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
+        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
         if ($request->ajax()) {
             return response()->json([
@@ -81,6 +59,48 @@ class HomeHelpdeskController extends Controller
             'startTime',
             'endTime'
         ));
+    }
+
+    public function todaygetTicketChartData(Request $request)
+    {
+        $startTime = $request->input('startTime', '00:00');
+        $endTime = $request->input('endTime', '23:59');
+        $date = $request->input('date', today()->toDateString());
+
+        // Konversi waktu dan tanggal
+        $startTime = Carbon::parse($date . ' ' . $startTime);
+        $endTime = Carbon::parse($date . ' ' . $endTime);
+
+        // Definisi shift
+        $shifts = [
+            'shift1' => ['07:00:00', '15:00:00'],
+            'shift2' => ['15:00:00', '23:00:00'],
+            'shift3' => ['23:00:00', '07:00:00'],
+        ];
+
+        $ticketsCreated = [];
+        $ticketsClosed = [];
+
+        foreach ($shifts as $shift => [$startShift, $endShift]) {
+            $shiftStart = Carbon::parse($date . ' ' . $startShift);
+            $shiftEnd = $shift === 'shift3'
+                ? Carbon::parse($date . ' ' . $endShift)->addDay()
+                : Carbon::parse($date . ' ' . $endShift);
+
+            // Filter tiket
+            $ticketsCreated[] = Ticket::whereBetween('created_at', [$shiftStart, $shiftEnd])
+                ->whereBetween('created_at', [$startTime, $endTime])
+                ->count();
+            $ticketsClosed[] = Ticket::where('status_id', 4)
+                ->whereBetween('updated_at', [$shiftStart, $shiftEnd])
+                ->whereBetween('updated_at', [$startTime, $endTime])
+                ->count();
+        }
+
+        return response()->json([
+            'ticketsCreated' => $ticketsCreated,
+            'ticketsClosed' => $ticketsClosed,
+        ]);
     }
 
 
@@ -164,6 +184,7 @@ class HomeHelpdeskController extends Controller
 
         return response()->json($chartData);
     }
+
     public function getDailyTicketChartData(Request $request)
     {
         $month = $request->input('month', Carbon::now()->month);
@@ -204,51 +225,5 @@ class HomeHelpdeskController extends Controller
         }
 
         return response()->json($chartData);
-    }
-
-    public function todaygetTicketChartData(Request $request)
-    {
-        $startTime = $request->input('startTime', '00:00');
-        $endTime = $request->input('endTime', '23:59');
-        $date = $request->input('date', today()->toDateString()); // Ensure there's a date passed
-
-        // Ensure that we are parsing times and dates correctly
-        $startTime = Carbon::parse($startTime);
-        $endTime = Carbon::parse($endTime);
-
-        // Tentukan rentang waktu setiap shift
-        $shifts = [
-            'shift1' => ['07:00:00', '15:00:00'],
-            'shift2' => ['15:00:00', '23:00:00'],
-            'shift3' => ['23:00:00', '07:00:00'],
-        ];
-
-        $ticketsCreated = [];
-        $ticketsClosed = [];
-
-        foreach ($shifts as $shift => [$startShift, $endShift]) {
-            if ($shift === 'shift3') {
-                // Shift malam (melewati tengah malam)
-                $startDateTime = Carbon::parse($date . ' ' . $startShift);
-                $endDateTime = Carbon::parse($date . ' ' . $endShift)->addDay();
-            } else {
-                $startDateTime = Carbon::parse($date . ' ' . $startShift);
-                $endDateTime = Carbon::parse($date . ' ' . $endShift);
-            }
-
-            // Filter tickets based on startTime and endTime
-            $ticketsCreated[] = Ticket::whereBetween('created_at', [$startDateTime, $endDateTime])
-                ->whereBetween('created_at', [$startTime, $endTime]) // Apply additional filter for created_at
-                ->count();
-            $ticketsClosed[] = Ticket::where('status_id', 4)
-                ->whereBetween('updated_at', [$startDateTime, $endDateTime])
-                ->whereBetween('updated_at', [$startTime, $endTime]) // Apply additional filter for updated_at
-                ->count();
-        }
-
-        return response()->json([
-            'ticketsCreated' => $ticketsCreated,
-            'ticketsClosed' => $ticketsClosed,
-        ]);
     }
 }

@@ -446,31 +446,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if startTime and endTime are present in the URL query parameters
             const urlParams = new URLSearchParams(window.location.search);
-            const startTime = urlParams.get('startTime');
-            const endTime = urlParams.get('endTime');
+            const startTime = urlParams.get('startTime') || '00:00';
+            const endTime = urlParams.get('endTime') || '23:59';
 
-            // Proceed only if both startTime and endTime are present
-            if (startTime && endTime) {
-                fetchAndRenderChart(startTime, endTime);
-            }
+            fetchAndRenderChart(startTime, endTime);
 
             function fetchAndRenderChart(startTime, endTime) {
-                // Make sure the time fields are filled
-                if (!startTime || !endTime) {
-                    alert('Harap isi waktu mulai dan waktu selesai terlebih dahulu!');
-                    return;
-                }
-
-                // Fetch data with the provided time filters
                 fetch(
-                        `{{ route('helpdesk.tickets.todaydailychart') }}?startTime=${startTime}&endTime=${endTime}&date={{ today()->toDateString() }}`
+                        `{{ route('helpdesk.tickets.todaydailychart') }}?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&date={{ today()->toDateString() }}`
                     )
                     .then(response => response.json())
                     .then(data => {
                         const ctx = document.getElementById('TodaydailyDataChart').getContext('2d');
-                        new Chart(ctx, {
+
+                        // Hapus chart sebelumnya jika ada
+                        if (window.todaysChart) {
+                            window.todaysChart.destroy();
+                        }
+
+                        // Buat chart baru
+                        window.todaysChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
                                 labels: ['Shift 1 (07:00-15:00)', 'Shift 2 (15:00-23:00)',
@@ -488,7 +484,6 @@
                                         data: data.ticketsClosed,
                                         backgroundColor: 'rgba(75, 192, 192, 0.5)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
-
                                         borderWidth: 1,
                                     },
                                 ],
@@ -539,7 +534,7 @@
         });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
-        // Initialize Materialize Timepicker
+        // Inisialisasi Timepicker di Shadow Root
         document.addEventListener('DOMContentLoaded', function() {
             const timepickers = shadowRoot.querySelectorAll('.timepicker');
             M.Timepicker.init(timepickers, {
