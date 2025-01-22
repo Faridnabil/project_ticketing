@@ -90,8 +90,11 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
 //ADMIN
 Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('dashboard.index');
+    Route::get('/admin/dashboardAll', [HomeAdminController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
     Route::get('/admin/tickets/dailyChart', [HomeAdminController::class, 'getDailyTicketChartData']);
+    Route::get('/admin/tickets/todaydailychart', [HomeAdminController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
     Route::resources([
         '/admin/role' => RoleController::class,
         '/admin/permission' => PermissionController::class,

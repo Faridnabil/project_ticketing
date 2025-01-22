@@ -185,44 +185,48 @@
 
                                         <!-- Filter Form -->
                                         <form method="get" action="{{ route('pejabat.dashboard.index') }}">
-                                            <!-- Input Fields for Time -->
                                             <div class="row" style="margin-left:20px">
-                                                <div class="input-field col s5">
+                                                <!-- Input Field for Date -->
+                                                <div class="input-field col s3">
+                                                    <div class="input-wrapper">
+                                                        <span class="icon"><b>Tanggal</b></span>
+                                                        <input type="date" name="selectedDate" id="selectedDate"
+                                                            value="{{ request('selectedDate', now()->toDateString()) }}">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Input Fields for Time -->
+                                                <div class="input-field col s3">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Mulai</b></span>
                                                         <input type="text" name="startTime" id="startTime"
                                                             class="timepicker" placeholder="Jam Mulai"
-                                                            value="{{ request('startTime') }}">
+                                                            value="{{ request('startTime', '00:00') }}">
                                                     </div>
                                                 </div>
-                                                <div class="input-field col s4">
+                                                <div class="input-field col s3">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Selesai</b></span>
                                                         <input type="text" name="endTime" id="endTime"
                                                             class="timepicker" placeholder="Jam Selesai"
-                                                            value="{{ request('endTime') }}">
+                                                            value="{{ request('endTime', '23:59') }}">
                                                     </div>
                                                 </div>
+                                                <!-- Submit and Refresh Buttons -->
                                                 <div class="input-field col s1" style="margin-top: 28px">
-                                                    <div class="input-wrapper">
-                                                        <button type="submit" class="btn waves-effect waves-light"
-                                                            id="submitFilter"
-                                                            style="background-color: #19bb52;border-radius:10px">
-                                                            <b>Filter Data</b>
-                                                        </button>
-                                                    </div>
+                                                    <button type="submit" class="btn waves-effect waves-light"
+                                                        id="submitFilter"
+                                                        style="background-color: #19bb52;border-radius:10px"><b>Filter
+                                                            Data</b></button>
                                                 </div>
                                                 <div class="input-field col s1" style="margin-top: 28px">
-                                                    <div class="input-wrapper">
-                                                        <a href="{{ route('pejabat.dashboard.index') }}"
-                                                            class="btn waves-effect waves-light"
-                                                            style="background-color: #009EF7;border-radius:10px">
-                                                            <b>Refresh</b>
-                                                        </a>
-                                                    </div>
+                                                    <a href="{{ route('helpdesk.dashboard.index') }}"
+                                                        class="btn waves-effect waves-light"
+                                                        style="background-color: #009EF7;border-radius:10px"><b>Refresh</b></a>
                                                 </div>
                                             </div>
                                         </form>
+
 
                                         <script>
                                             // Initialize timepickers if not already initialized
@@ -447,14 +451,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
+            const selectedDate = urlParams.get('selectedDate') || new Date().toISOString().split('T')[
+                0]; // Default ke hari ini
             const startTime = urlParams.get('startTime') || '00:00';
             const endTime = urlParams.get('endTime') || '23:59';
 
-            fetchAndRenderChart(startTime, endTime);
+            fetchAndRenderChart(selectedDate, startTime, endTime);
 
-            function fetchAndRenderChart(startTime, endTime) {
+            function fetchAndRenderChart(selectedDate, startTime, endTime) {
                 fetch(
-                        `{{ route('pejabat.tickets.todaydailychart') }}?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&date={{ today()->toDateString() }}`
+                        `{{ route('pejabat.tickets.todaydailychart') }}?selectedDate=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`
                     )
                     .then(response => response.json())
                     .then(data => {
@@ -492,7 +498,7 @@
                                 responsive: true,
                                 plugins: {
                                     legend: {
-                                        position: 'top',
+                                        position: 'top'
                                     },
                                     tooltip: {
                                         callbacks: {
@@ -507,15 +513,15 @@
                                     x: {
                                         title: {
                                             display: true,
-                                            text: 'Shift',
-                                        },
+                                            text: 'Shift'
+                                        }
                                     },
                                     y: {
                                         beginAtZero: true,
                                         title: {
                                             display: true,
-                                            text: 'Jumlah Tiket',
-                                        },
+                                            text: 'Jumlah Tiket'
+                                        }
                                     },
                                 },
                             },

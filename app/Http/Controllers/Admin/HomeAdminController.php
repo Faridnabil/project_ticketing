@@ -13,16 +13,16 @@ class HomeAdminController extends Controller
     {
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year);
+        $date = $request->query('selectedDate', now()->toDateString()); // Sinkron dengan input ID selectedDate
         $startTime = $request->query('startTime', '00:00');
         $endTime = $request->query('endTime', '23:59');
-        $today = today();
 
-        // Konversi waktu berdasarkan parameter atau default
-        $startDateTime = Carbon::parse($today->toDateString() . ' ' . $startTime);
-        $endDateTime = Carbon::parse($today->toDateString() . ' ' . $endTime);
+        // Konversi waktu berdasarkan tanggal yang dipilih
+        $startDateTime = Carbon::parse($date . ' ' . $startTime);
+        $endDateTime = Carbon::parse($date . ' ' . $endTime);
 
-        // Query tiket
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat','admin')
+        // Query tiket berdasarkan tanggal dan waktu yang dipilih
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
             ->whereBetween('created_at', [$startDateTime, $endDateTime])
             ->get();
 
@@ -34,6 +34,7 @@ class HomeAdminController extends Controller
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
 
+        // Jika permintaan dari Ajax, kembalikan data sebagai JSON
         if ($request->ajax()) {
             return response()->json([
                 'tickets' => $tickets,
@@ -57,19 +58,21 @@ class HomeAdminController extends Controller
             'year',
             'tiket_selesai',
             'startTime',
-            'endTime'
+            'endTime',
+            'date'
         ));
     }
 
+
     public function todaygetTicketChartData(Request $request)
     {
+        $selectedDate = $request->input('selectedDate', today()->toDateString());
         $startTime = $request->input('startTime', '00:00');
         $endTime = $request->input('endTime', '23:59');
-        $date = $request->input('date', today()->toDateString());
 
         // Konversi waktu dan tanggal
-        $startTime = Carbon::parse($date . ' ' . $startTime);
-        $endTime = Carbon::parse($date . ' ' . $endTime);
+        $startTime = Carbon::parse($selectedDate . ' ' . $startTime);
+        $endTime = Carbon::parse($selectedDate . ' ' . $endTime);
 
         // Definisi shift
         $shifts = [
@@ -82,10 +85,10 @@ class HomeAdminController extends Controller
         $ticketsClosed = [];
 
         foreach ($shifts as $shift => [$startShift, $endShift]) {
-            $shiftStart = Carbon::parse($date . ' ' . $startShift);
+            $shiftStart = Carbon::parse($selectedDate . ' ' . $startShift);
             $shiftEnd = $shift === 'shift3'
-                ? Carbon::parse($date . ' ' . $endShift)->addDay()
-                : Carbon::parse($date . ' ' . $endShift);
+                ? Carbon::parse($selectedDate . ' ' . $endShift)->addDay()
+                : Carbon::parse($selectedDate . ' ' . $endShift);
 
             // Filter tiket
             $ticketsCreated[] = Ticket::whereBetween('created_at', [$shiftStart, $shiftEnd])
@@ -109,7 +112,7 @@ class HomeAdminController extends Controller
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year); // Default ke tahun berjalan
 
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat','admin')
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'admin')
             ->when($month && $year, function ($query) use ($month, $year) {
                 $query->whereYear('created_at', $year)
                     ->whereMonth('created_at', $month);

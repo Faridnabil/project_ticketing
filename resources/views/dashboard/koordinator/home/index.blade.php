@@ -147,14 +147,14 @@
                     <div class="Header" style="margin-bottom: 30px">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('siak-dev.dashboard.index') ? 'active' : '' }}"
-                                    href="{{ route('siak-dev.dashboard.index') }}">
+                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('koordinator.dashboard.index') ? 'active' : '' }}"
+                                    href="{{ route('koordinator.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn-custom font-regular {{ request()->routeIs('siak-dev.dashboard.indexAll') ? 'active' : '' }}"
-                                    href="{{ route('siak-dev.dashboard.indexAll') }}">
+                                <a class="btn-custom font-regular {{ request()->routeIs('koordinator.dashboard.indexAll') ? 'active' : '' }}"
+                                    href="{{ route('koordinator.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
@@ -184,42 +184,45 @@
                                         </div>
 
                                         <!-- Filter Form -->
-                                        <form method="get" action="{{ route('siak-dev.dashboard.index') }}">
-                                            <!-- Input Fields for Time -->
+                                        <form method="get" action="{{ route('koordinator.dashboard.index') }}">
                                             <div class="row" style="margin-left:20px">
-                                                <div class="input-field col s5">
+                                                <!-- Input Field for Date -->
+                                                <div class="input-field col s3">
+                                                    <div class="input-wrapper">
+                                                        <span class="icon"><b>Tanggal</b></span>
+                                                        <input type="date" name="selectedDate" id="selectedDate"
+                                                            value="{{ request('selectedDate', now()->toDateString()) }}">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Input Fields for Time -->
+                                                <div class="input-field col s3">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Mulai</b></span>
                                                         <input type="text" name="startTime" id="startTime"
                                                             class="timepicker" placeholder="Jam Mulai"
-                                                            value="{{ request('startTime') }}">
+                                                            value="{{ request('startTime', '00:00') }}">
                                                     </div>
                                                 </div>
-                                                <div class="input-field col s4">
+                                                <div class="input-field col s3">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Selesai</b></span>
                                                         <input type="text" name="endTime" id="endTime"
                                                             class="timepicker" placeholder="Jam Selesai"
-                                                            value="{{ request('endTime') }}">
+                                                            value="{{ request('endTime', '23:59') }}">
                                                     </div>
                                                 </div>
+                                                <!-- Submit and Refresh Buttons -->
                                                 <div class="input-field col s1" style="margin-top: 28px">
-                                                    <div class="input-wrapper">
-                                                        <button type="submit" class="btn waves-effect waves-light"
-                                                            id="submitFilter"
-                                                            style="background-color: #19bb52;border-radius:10px">
-                                                            <b>Filter Data</b>
-                                                        </button>
-                                                    </div>
+                                                    <button type="submit" class="btn waves-effect waves-light"
+                                                        id="submitFilter"
+                                                        style="background-color: #19bb52;border-radius:10px"><b>Filter
+                                                            Data</b></button>
                                                 </div>
                                                 <div class="input-field col s1" style="margin-top: 28px">
-                                                    <div class="input-wrapper">
-                                                        <a href="{{ route('siak-dev.dashboard.index') }}"
-                                                            class="btn waves-effect waves-light"
-                                                            style="background-color: #009EF7;border-radius:10px">
-                                                            <b>Refresh</b>
-                                                        </a>
-                                                    </div>
+                                                    <a href="{{ route('helpdesk.dashboard.index') }}"
+                                                        class="btn waves-effect waves-light"
+                                                        style="background-color: #009EF7;border-radius:10px"><b>Refresh</b></a>
                                                 </div>
                                             </div>
                                         </form>
@@ -281,7 +284,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 15px;margin-top:7px">
-                                                            <a href="{{ route('siak-dev.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                            <a href="{{ route('koordinator.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
                                                                 class="text-danger fw-bold fs-6">Tiket Masuk</a>
 
 
@@ -310,7 +313,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 2px;margin-top:7px">
-                                                            <a href="{{ route('siak-dev.ticket.index', ['filter' => 'Proses']) }}"
+                                                            <a href="{{ route('koordinator.ticket.index', ['filter' => 'Proses']) }}"
                                                                 class="text-warning fw-bold fs-6">
                                                                 Tiket Dalam Proses
                                                             </a>
@@ -339,7 +342,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 10px;margin-top:7px">
-                                                            <a href="{{ route('siak-dev.ticket.index', ['filter' => 'Tertunda']) }}"
+                                                            <a href="{{ route('koordinator.ticket.index', ['filter' => 'Tertunda']) }}"
                                                                 class="text-info fw-bold fs-6">Tiket Pending</a>
                                                             <div class="text-info fw-bold fs-5 mt-1">
                                                                 <b>{{ $tiket_tertunda }}</b>
@@ -369,7 +372,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 10px">
-                                                            <a href="{{ route('siak-dev.ticket.index', ['filter' => 'Selesai']) }}"
+                                                            <a href="{{ route('koordinator.ticket.index', ['filter' => 'Selesai']) }}"
                                                                 class="text-success fw-bold fs-6">Tiket Selesai</a>
                                                             <div class="text-success fw-bold fs-5 mt-1">
                                                                 <b>{{ $tiket_selesai }}</b>
@@ -397,7 +400,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left:14px;margin-top:7px">
-                                                            <a href="{{ route('siak-dev.ticket.index') }}"
+                                                            <a href="{{ route('koordinator.ticket.index') }}"
                                                                 class="text-primary fw-bold fs-6">Total Tiket</a>
                                                             <div class="text-primary fw-bold fs-5 mt-1">
                                                                 <b>{{ $total_tiket }}</b>
@@ -444,17 +447,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
+            const selectedDate = urlParams.get('selectedDate') || new Date().toISOString().split('T')[
+                0]; // Default ke hari ini
             const startTime = urlParams.get('startTime') || '00:00';
             const endTime = urlParams.get('endTime') || '23:59';
 
-            fetchAndRenderChart(startTime, endTime);
+            fetchAndRenderChart(selectedDate, startTime, endTime);
 
-            function fetchAndRenderChart(startTime, endTime) {
+            function fetchAndRenderChart(selectedDate, startTime, endTime) {
                 fetch(
-                        `{{ route('siak-dev.tickets.todaydailychart') }}?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&date={{ today()->toDateString() }}`
+                        `{{ route('koordinator.tickets.todaydailychart') }}?selectedDate=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`
                     )
                     .then(response => response.json())
                     .then(data => {
@@ -492,7 +498,7 @@
                                 responsive: true,
                                 plugins: {
                                     legend: {
-                                        position: 'top',
+                                        position: 'top'
                                     },
                                     tooltip: {
                                         callbacks: {
@@ -507,15 +513,15 @@
                                     x: {
                                         title: {
                                             display: true,
-                                            text: 'Shift',
-                                        },
+                                            text: 'Shift'
+                                        }
                                     },
                                     y: {
                                         beginAtZero: true,
                                         title: {
                                             display: true,
-                                            text: 'Jumlah Tiket',
-                                        },
+                                            text: 'Jumlah Tiket'
+                                        }
                                     },
                                 },
                             },
