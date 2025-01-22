@@ -147,14 +147,14 @@
                     <div class="Header" style="margin-bottom: 30px">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
-                                   href="{{ route('helpdesk.dashboard.index') }}">
+                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('siakDev.dashboard.index') ? 'active' : '' }}"
+                                   href="{{ route('siakDev.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
-                                   href="{{ route('helpdesk.dashboard.indexAll') }}">
+                                <a class="btn-custom font-regular {{ request()->routeIs('siakDev.dashboard.indexAll') ? 'active' : '' }}"
+                                   href="{{ route('siakDev.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
@@ -236,7 +236,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 15px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                        <a href="{{ route('siakDev.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
                                                             class="text-danger fw-bold fs-6">Tiket Masuk</a>
 
 
@@ -265,7 +265,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 2px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                        <a href="{{ route('siakDev.ticket.index', ['filter' => 'Proses']) }}"
                                                             class="text-warning fw-bold fs-6">
                                                             Tiket Dalam Proses
                                                         </a>
@@ -294,7 +294,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 10px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Tertunda']) }}"
+                                                        <a href="{{ route('siakDev.ticket.index', ['filter' => 'Tertunda']) }}"
                                                             class="text-info fw-bold fs-6">Tiket Pending</a>
                                                         <div class="text-info fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_tertunda }}</b>
@@ -324,7 +324,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 10px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                        <a href="{{ route('siakDev.ticket.index', ['filter' => 'Selesai']) }}"
                                                             class="text-success fw-bold fs-6">Tiket Selesai</a>
                                                         <div class="text-success fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_selesai }}</b>
@@ -352,7 +352,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left:14px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index') }}"
+                                                        <a href="{{ route('siakDev.ticket.index') }}"
                                                             class="text-primary fw-bold fs-6">Total Tiket</a>
                                                         <div class="text-primary fw-bold fs-5 mt-1">
                                                             <b>{{ $total_tiket }}</b>
@@ -426,7 +426,7 @@
                 const year = filterYear.value;
                 const month = filterMonth.value;
 
-                fetch(`{{ url('/helpdesk/tickets/dailyChart') }}?year=${year}&month=${month}`)
+                fetch(`{{ url('/siak-dev/tickets/dailyChart') }}?year=${year}&month=${month}`)
                     .then(response => response.json())
                     .then(data => {
                         const labelsDaily = data.days;
@@ -493,7 +493,7 @@
             function fetchYearlyData() {
                 const year = filterYear.value;
 
-                fetch(`{{ url('/helpdesk/tickets/chart') }}?year=${year}`)
+                fetch(`{{ url('/siak-dev/tickets/chart') }}?year=${year}`)
                     .then(response => response.json())
                     .then(data => {
                         if (ticketChart) {
@@ -589,4 +589,113 @@
         }
     </script>
 
+    {{-- DATA TIKET HARIAN --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctxDaily = document.getElementById('TodaydailyDataChart').getContext('2d');
+            const filterYear = document.getElementById('filterYear');
+            const filterMonth = document.getElementById('filterMonth');
+            let dailyDataChart;
+
+            function fetchDailyData() {
+                const year = filterYear.value;
+                const month = filterMonth.value;
+
+                fetch(`{{ url('/siak-dev/tickets/todaydailychart') }}?year=${year}&month=${month}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error HTTP! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Format label dengan nama hari
+                        const labelsDaily = data.days.map((day, index) =>
+                            `Hari ${day} (${data.daysOfWeek[index]})`);
+                        const dataCreated = data.ticketsCreated;
+                        const dataClosed = data.ticketsClosed;
+
+                        // Hancurkan grafik lama jika ada
+                        if (dailyDataChart) {
+                            dailyDataChart.destroy();
+                        }
+
+                        // Buat grafik baru
+                        dailyDataChart = new Chart(ctxDaily, {
+                            type: 'line',
+                            data: {
+                                labels: labelsDaily,
+                                datasets: [{
+                                        label: 'Total Tiket Harian',
+                                        data: dataCreated,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1,
+                                        fill: true
+                                    },
+                                    {
+                                        label: 'Tiket Selesai Harian',
+                                        data: dataClosed,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1,
+                                        fill: true
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    x: {
+                                        ticks: {
+                                            autoSkip: false, // Pastikan semua label tampil
+                                            maxRotation: 45, // Rotasi label jika terlalu panjang
+                                            minRotation: 0
+                                        }
+                                    },
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                },
+                                elements: {
+                                    line: {
+                                        tension: 0.1
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching daily data:', error));
+            }
+
+            filterYear.addEventListener('change', fetchDailyData);
+            filterMonth.addEventListener('change', fetchDailyData);
+
+            fetchDailyData();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ambil tab aktif dari localStorage
+            const activeTab = localStorage.getItem("activeTab");
+
+            if (activeTab) {
+                // Aktifkan tab yang disimpan
+                const tabElement = document.querySelector(`[data-tab="${activeTab}"]`);
+                if (tabElement) {
+                    const tabInstance = new bootstrap.Tab(tabElement);
+                    tabInstance.show();
+                }
+            }
+
+            // Simpan tab aktif ke localStorage saat diubah
+            const tabLinks = document.querySelectorAll('.nav-item a[data-bs-toggle="tab"]');
+            tabLinks.forEach(link => {
+                link.addEventListener("shown.bs.tab", function(event) {
+                    const tabId = event.target.getAttribute("data-tab");
+                    localStorage.setItem("activeTab", tabId);
+                });
+            });
+        });
+    </script>
 @endsection

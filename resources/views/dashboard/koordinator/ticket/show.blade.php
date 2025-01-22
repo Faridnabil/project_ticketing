@@ -14,7 +14,7 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Show Tiket
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mb-3 mt-3">Show Tiket
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
@@ -124,7 +124,8 @@
         }
     </style>
 
-    <div id="kt_content_container" class="container mt-5">
+
+    <div id="kt_content_container" class="container">
         <div class="card">
             <div class="card-header" style="margin-top: 30px">
                 <ul class="nav custom-tabs" role="tablist">
@@ -138,6 +139,11 @@
                         <a class="btn-custom font-regular" data-bs-toggle="tab" href="#riwayat" role="tab"
                             aria-selected="false">
                             <Strong>Riwayat Aktivitas</Strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-custom font-regular" href="{{ url()->previous() }}" style="background-color: #dc3545;color:white">
+                            <Strong>Kembali</Strong>
                         </a>
                     </li>
                 </ul>
@@ -329,8 +335,8 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('koordinator.tickets.store') }}"
-                                            enctype="multipart/form-data" novalidate>
+                                            action="{{ route('koordinator.tickets.store') }}" enctype="multipart/form-data"
+                                            novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
@@ -380,6 +386,7 @@
                                     @else
                                         <p class="text-center">Tidak ada lampiran.</p>
                                     @endif
+
                                 </div>
                                 <!--end::Slider-->
                                 <!--begin::Slider button-->
@@ -416,12 +423,11 @@
                                 <!--end::Slider button-->
                             </div>
                             <!--end::Product slider-->
-                            <br>
-                            <hr>
-                            <br>
-                            <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
-                            {{-- <a href="{{ session('filtered_url', route('koordinator.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
                         </div>
+                        <br>
+                        <hr>
+                        <br>
+                        {{-- <a href="{{ session('filtered_url', route('koordinator.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
                     </div>
 
                     <!-- Riwayat -->
@@ -448,7 +454,7 @@
                                                         {{ $log->status->status_name ?? 'N/A' }}<br>
                                                         @if ($log->h_level1)
                                                             <strong>Disposisi :</strong>
-                                                            {{ $log->helpdesk->name ?? 'N/A' }}<br>
+                                                            {{ $log->koordinator->name ?? 'N/A' }}<br>
                                                         @elseif ($log->h_level2)
                                                             <strong>Disposisi :</strong>
                                                             {{ $log->koordinator->name ?? 'N/A' }}<br>
@@ -477,8 +483,6 @@
                                                         @else
                                                             N/A
                                                         @endif
-
-
 
                                                         <br>
                                                         <strong>Status Diubah Oleh :</strong>
@@ -550,6 +554,8 @@
             </div>
         @endforeach
     @endif
+
+
     {{-- Refresh Komentar --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

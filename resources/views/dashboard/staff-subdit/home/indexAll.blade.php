@@ -147,14 +147,14 @@
                     <div class="Header" style="margin-bottom: 30px">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
-                                   href="{{ route('helpdesk.dashboard.index') }}">
+                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('staffSubdit.dashboard.index') ? 'active' : '' }}"
+                                   href="{{ route('staffSubdit.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
-                                   href="{{ route('helpdesk.dashboard.indexAll') }}">
+                                <a class="btn-custom font-regular {{ request()->routeIs('staffSubdit.dashboard.indexAll') ? 'active' : '' }}"
+                                   href="{{ route('staffSubdit.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
@@ -236,7 +236,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 15px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
                                                             class="text-danger fw-bold fs-6">Tiket Masuk</a>
 
 
@@ -265,7 +265,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 2px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Proses']) }}"
                                                             class="text-warning fw-bold fs-6">
                                                             Tiket Dalam Proses
                                                         </a>
@@ -294,7 +294,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 10px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Tertunda']) }}"
+                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Tertunda']) }}"
                                                             class="text-info fw-bold fs-6">Tiket Pending</a>
                                                         <div class="text-info fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_tertunda }}</b>
@@ -324,7 +324,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 10px">
-                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Selesai']) }}"
                                                             class="text-success fw-bold fs-6">Tiket Selesai</a>
                                                         <div class="text-success fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_selesai }}</b>
@@ -352,7 +352,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left:14px;margin-top:7px">
-                                                        <a href="{{ route('helpdesk.ticket.index') }}"
+                                                        <a href="{{ route('staffSubdit.ticket.index') }}"
                                                             class="text-primary fw-bold fs-6">Total Tiket</a>
                                                         <div class="text-primary fw-bold fs-5 mt-1">
                                                             <b>{{ $total_tiket }}</b>
@@ -426,7 +426,7 @@
                 const year = filterYear.value;
                 const month = filterMonth.value;
 
-                fetch(`{{ url('/helpdesk/tickets/dailyChart') }}?year=${year}&month=${month}`)
+                fetch(`{{ url('/staff-subdit/tickets/dailyChart') }}?year=${year}&month=${month}`)
                     .then(response => response.json())
                     .then(data => {
                         const labelsDaily = data.days;
@@ -493,7 +493,7 @@
             function fetchYearlyData() {
                 const year = filterYear.value;
 
-                fetch(`{{ url('/helpdesk/tickets/chart') }}?year=${year}`)
+                fetch(`{{ url('/staff-subdit/tickets/chart') }}?year=${year}`)
                     .then(response => response.json())
                     .then(data => {
                         if (ticketChart) {

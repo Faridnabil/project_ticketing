@@ -119,7 +119,9 @@ class TicketHelpdeskController extends Controller
     public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
-            ->where('level1', '!=', null);
+        ->where('level1', '!=', null)
+        ->whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year);
 
         $categories = Category::all();
         if ($request->has('category_id') && $request->category_id) {

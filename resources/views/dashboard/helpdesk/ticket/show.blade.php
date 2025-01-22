@@ -14,7 +14,14 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mb-3 mt-3">Show Tiket
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Detail Tiket</small>
+                    <!--end::Description-->
+                </h1>
                 <!--end::Title-->
             </div>
             <!--end::Page title-->
@@ -119,14 +126,6 @@
 
 
     <div id="kt_content_container" class="container">
-        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mb-6">Show Tiket
-            <!--begin::Separator-->
-            <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-            <!--end::Separator-->
-            <!--begin::Description-->
-            <small class="text-muted fs-7 fw-bold my-1 ms-1">Detail Tiket</small>
-            <!--end::Description-->
-        </h1>
         <div class="card">
             <div class="card-header" style="margin-top: 30px">
                 <ul class="nav custom-tabs" role="tablist">

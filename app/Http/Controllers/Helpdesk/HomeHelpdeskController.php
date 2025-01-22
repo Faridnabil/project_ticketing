@@ -92,8 +92,8 @@ class HomeHelpdeskController extends Controller
                 ->whereBetween('created_at', [$startTime, $endTime])
                 ->count();
             $ticketsClosed[] = Ticket::where('status_id', 4)
-                ->whereBetween('updated_at', [$shiftStart, $shiftEnd])
-                ->whereBetween('updated_at', [$startTime, $endTime])
+                ->whereBetween('created_at', [$shiftStart, $shiftEnd])
+                ->whereBetween('created_at', [$startTime, $endTime])
                 ->count();
         }
 
@@ -161,8 +161,8 @@ class HomeHelpdeskController extends Controller
             ->toArray();
 
         // Ambil data tiket selesai, hanya jika created_at juga dalam tahun yang diminta
-        $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
-            ->whereYear('updated_at', $year)
+        $ticketsClosed = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $year)
             ->whereYear('created_at', $year) // Tambahkan kondisi ini
             ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
             ->groupBy('month')
@@ -202,10 +202,10 @@ class HomeHelpdeskController extends Controller
             ->toArray();
 
         // Tickets Closed Query (only if created_at is within the requested year)
-        $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
+        $ticketsClosed = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
             ->where('status_id', 4)
             ->whereYear('created_at', $year) // Ensure created_at is in the requested year
-            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('day')
             ->get()
             ->keyBy('day')
