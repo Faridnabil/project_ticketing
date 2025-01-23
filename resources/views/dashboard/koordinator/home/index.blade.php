@@ -222,7 +222,7 @@
                                                 <div class="input-field col s1" style="margin-top: 28px">
                                                     <a href="{{ route('helpdesk.dashboard.index') }}"
                                                         class="btn waves-effect waves-light"
-                                                        style="background-color: #009EF7;border-radius:10px"><b>Refresh</b></a>
+                                                        style="background-color: #009EF7;border-radius:10px"><b>Penyegaran</b></a>
                                                 </div>
                                             </div>
                                         </form>
@@ -323,7 +323,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+{{--
                                                 <div class="col"
                                                     style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                     <div class="d-flex align-items-center">
@@ -349,7 +349,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col"
                                                     style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">

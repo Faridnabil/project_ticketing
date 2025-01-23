@@ -112,7 +112,7 @@ class HomeAdminController extends Controller
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year); // Default ke tahun berjalan
 
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'admin')
+        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
             ->when($month && $year, function ($query) use ($month, $year) {
                 $query->whereYear('created_at', $year)
                     ->whereMonth('created_at', $month);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CityOrRegencyExport;
+use App\Exports\CityOrRegencyFormatExport;
 use App\Http\Controllers\Controller;
 use App\Imports\CityOrRegencyImport;
 use App\Models\CityOrRegency;
@@ -105,7 +106,7 @@ class CityOrRegencyController extends Controller
 
     public function exportFormat()
     {
-        return Excel::download(new CityOrRegencyExport, 'cityOrRegency-format.xlsx');
+        return Excel::download(new CityOrRegencyFormatExport, 'cityOrRegency-format.xlsx');
     }
 
     public function export()

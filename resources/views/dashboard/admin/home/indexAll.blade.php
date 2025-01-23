@@ -148,13 +148,13 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}"
-                                   href="{{ route('admin.dashboard.index') }}">
+                                    href="{{ route('admin.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('admin.dashboard.indexAll') ? 'active' : '' }}"
-                                   href="{{ route('admin.dashboard.indexAll') }}">
+                                    href="{{ route('admin.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
@@ -276,12 +276,11 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col"
+                                            {{-- <div class="col"
                                                 style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                 <div class="d-flex align-items-center">
                                                     <!-- SVG Icon -->
-                                                    <span
-                                                        class="svg-icon svg-icon-3x svg-icon-info d-block my-1 mb-3 mt-4">
+                                                    <span class="svg-icon svg-icon-3x svg-icon-info d-block my-1 mb-3 mt-4">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                             version="1.1">
                                                             <path
@@ -301,7 +300,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col"
                                                 style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
@@ -311,8 +310,8 @@
                                                         class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
                                                         <span
                                                             class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24" version="1.1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                                version="1.1">
                                                                 <path
                                                                     d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
                                                                     fill="#000000" opacity="0.3" />
@@ -490,6 +489,12 @@
             const filterYear = document.getElementById('filterYear');
             let ticketChart;
 
+            // Daftar nama bulan dalam bahasa Indonesia
+            const bulanIndonesia = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
             function fetchYearlyData() {
                 const year = filterYear.value;
 
@@ -500,10 +505,13 @@
                             ticketChart.destroy();
                         }
 
+                        // Ubah nama bulan dalam data.months menjadi bulan Indonesia
+                        const labelsInIndonesian = data.months.map((month, index) => bulanIndonesia[index]);
+
                         ticketChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: data.months,
+                                labels: labelsInIndonesian, // Gunakan nama bulan dalam bahasa Indonesia
                                 datasets: [{
                                         label: 'Total Tiket',
                                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -535,6 +543,7 @@
             fetchYearlyData();
         });
     </script>
+
 
     {{-- Title Tahun --}}
     <script>

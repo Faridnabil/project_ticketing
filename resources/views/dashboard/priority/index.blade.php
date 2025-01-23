@@ -58,7 +58,7 @@
                                                 x="4" y="11" width="16" height="2" rx="1" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->Tambah Priority</a>
+                                    <!--end::Svg Icon-->Tambah Prioritas</a>
                                 <!--end::Add user-->
                             </div>
                         @endcan

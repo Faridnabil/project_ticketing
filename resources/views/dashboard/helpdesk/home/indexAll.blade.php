@@ -276,7 +276,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col"
+                                            {{-- <div class="col"
                                                 style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                 <div class="d-flex align-items-center">
                                                     <!-- SVG Icon -->
@@ -301,7 +301,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col"
                                                 style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
@@ -483,58 +483,68 @@
         });
     </script>
 
-    {{-- DATA TIKET TAHUNAN --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('ticketChart').getContext('2d');
-            const filterYear = document.getElementById('filterYear');
-            let ticketChart;
+{{-- DATA TIKET TAHUNAN --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('ticketChart').getContext('2d');
+        const filterYear = document.getElementById('filterYear');
+        let ticketChart;
 
-            function fetchYearlyData() {
-                const year = filterYear.value;
+        // Daftar nama bulan dalam bahasa Indonesia
+        const bulanIndonesia = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
 
-                fetch(`{{ url('/helpdesk/tickets/chart') }}?year=${year}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (ticketChart) {
-                            ticketChart.destroy();
-                        }
+        function fetchYearlyData() {
+            const year = filterYear.value;
 
-                        ticketChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: data.months,
-                                datasets: [{
-                                        label: 'Total Tiket',
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1,
-                                        data: data.tickets
-                                    },
-                                    {
-                                        label: 'Tiket Selesai',
-                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                        borderColor: 'rgba(153, 102, 255, 1)',
-                                        borderWidth: 1,
-                                        data: data.ticketsClosed
-                                    }
-                                ]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+            fetch(`{{ url('/helpdesk/tickets/chart') }}?year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (ticketChart) {
+                        ticketChart.destroy();
+                    }
+
+                    // Ubah nama bulan dalam data.months menjadi bulan Indonesia
+                    const labelsInIndonesian = data.months.map((month, index) => bulanIndonesia[index]);
+
+                    ticketChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labelsInIndonesian, // Gunakan nama bulan dalam bahasa Indonesia
+                            datasets: [{
+                                    label: 'Total Tiket',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                    data: data.tickets
+                                },
+                                {
+                                    label: 'Tiket Selesai',
+                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    borderWidth: 1,
+                                    data: data.ticketsClosed
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
                                 }
                             }
-                        });
+                        }
                     });
-            }
+                });
+        }
 
-            filterYear.addEventListener('change', fetchYearlyData);
-            fetchYearlyData();
-        });
-    </script>
+        filterYear.addEventListener('change', fetchYearlyData);
+        fetchYearlyData();
+    });
+</script>
+
 
     {{-- Title Tahun --}}
     <script>

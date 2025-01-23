@@ -135,7 +135,7 @@
                         <div class="d-flex justify-content-center">
                             <input type="submit" class="btn btn-primary me-2" value="Masukan Data">
                             <a href="{{ route('helpdesk.report.index') }}" type="button"
-                                class="btn btn-secondary">Refresh</a>
+                                class="btn btn-secondary">Atur ulang</a>
                         </div>
                     </form>
                 </div>

@@ -315,7 +315,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Provinsi</span>
+                        <span class="menu-title">Propinsi</span>
                     </a>
                 </div>
             @endcan

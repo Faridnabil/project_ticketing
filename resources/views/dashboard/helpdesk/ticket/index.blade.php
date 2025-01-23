@@ -128,7 +128,7 @@
                             <div class="col-md-2">
                                 <select id="province_id" name="province_id" class="form-select" data-control="select2"
                                     onchange="fetchCityOrRegency(this.value)">
-                                    <option value="" selected disabled>Pilih Provinsi</option>
+                                    <option value="" selected disabled>Pilih Propinsi</option>
                                     @foreach ($provinces as $province)
                                         <option value="{{ $province->id }}"
                                             {{ request('province_id') == $province->id ? 'selected' : '' }}>
@@ -213,7 +213,7 @@
 
                             <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
+                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Atur ulang</a>
                             </div>
                         </form>
                         <!--end::Form-->

@@ -79,7 +79,7 @@
 
                             <div class="col-md-3  d-flex align-items-end">
                             <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
+                            <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Atur ulang</a>
                             </div>
                         </form>
                         <!--end::Form-->

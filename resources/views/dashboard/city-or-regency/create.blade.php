@@ -96,8 +96,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('cityOrRegency.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <a href="{{ route('cityOrRegency.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                             <!--end form-->

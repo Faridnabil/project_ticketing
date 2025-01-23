@@ -276,7 +276,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col"
+                                            {{-- <div class="col"
                                                 style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                 <div class="d-flex align-items-center">
                                                     <!-- SVG Icon -->
@@ -301,7 +301,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col"
                                                 style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
@@ -490,6 +490,12 @@
             const filterYear = document.getElementById('filterYear');
             let ticketChart;
 
+            // Daftar nama bulan dalam bahasa Indonesia
+            const bulanIndonesia = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
             function fetchYearlyData() {
                 const year = filterYear.value;
 
@@ -500,10 +506,13 @@
                             ticketChart.destroy();
                         }
 
+                        // Ubah nama bulan dalam data.months menjadi bulan Indonesia
+                        const labelsInIndonesian = data.months.map((month, index) => bulanIndonesia[index]);
+
                         ticketChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: data.months,
+                                labels: labelsInIndonesian, // Gunakan nama bulan dalam bahasa Indonesia
                                 datasets: [{
                                         label: 'Total Tiket',
                                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
