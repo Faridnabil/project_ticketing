@@ -175,26 +175,21 @@
                                         <!--begin::Priority=-->
                                         <td>
                                             @if ($ticket->priority_id == '4')
-                                                <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Critical</span>
-                                            @elseif($ticket->priority_id == '3')
-                                                <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    High</span>
-                                            @elseif($ticket->priority_id == '2')
-                                                <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Medium</span>
-                                            @elseif($ticket->priority_id == '1')
-                                                <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Low</span>
-                                            @else
-                                                <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
-                                            @endif
+                                            <span class="badge"
+                                                style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                        @elseif($ticket->priority_id == '3')
+                                            <span class="badge"
+                                                style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                        @elseif($ticket->priority_id == '2')
+                                            <span class="badge"
+                                                style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                        @elseif($ticket->priority_id == '1')
+                                            <span class="badge"
+                                                style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                        @else
+                                            <span class="badge"
+                                                style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
+                                        @endif
                                         </td>
                                         <!--end::Priority=-->
                                         <!--begin::Payment method=-->

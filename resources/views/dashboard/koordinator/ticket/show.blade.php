@@ -142,7 +142,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn-custom font-regular" href="{{ url()->previous() }}" style="background-color: #dc3545;color:white">
+                        <a class="btn-custom font-regular" href="{{ url()->previous() }}"
+                            style="background-color: #dc3545;color:white">
                             <Strong>Kembali</Strong>
                         </a>
                     </li>
@@ -203,24 +204,19 @@
                                             <strong></strong>
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                             @endif
 
                                             -
@@ -335,8 +331,8 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('koordinator.tickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
+                                            action="{{ route('koordinator.tickets.store') }}"
+                                            enctype="multipart/form-data" novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
@@ -347,8 +343,8 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <div class="d-flex flex-stack">
-                                                <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send" disabled>Kirim</button>
+                                                <button class="btn btn-primary" type="submit" data-kt-element="send"
+                                                    disabled>Kirim</button>
                                             </div>
                                         </form>
                                     </div>

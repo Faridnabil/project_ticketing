@@ -40,8 +40,7 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}"
-                            class="row g-3 align-items-center">
+                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="row g-3 align-items-center">
 
                             <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                             <input type="hidden" name="level" value="{{ request('level') }}">
@@ -310,16 +309,16 @@
                                         <td data-order="{{ $ticket->priority_id }}">
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @else
                                                 <span class="badge"
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
@@ -411,8 +410,7 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -450,8 +448,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button" title="Lihat Tiket">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button"
+                                                        title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -490,8 +488,7 @@
                                             @else
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -509,8 +506,7 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -573,8 +569,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST"
-                            class="d-inline">
+                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
