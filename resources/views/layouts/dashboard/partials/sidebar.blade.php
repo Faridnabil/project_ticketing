@@ -727,10 +727,41 @@
                             <span class="menu-title">Laporan</span>
                         </a>
                     </div>
-                    @endhasrole
-                @endcan
+                @endhasrole
 
-            </div>
-            <!--end::Menu-->
+
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Solusi Teknis</span>
+                    </div>
+                </div>
+            @endcan
+
+            @hasrole(['Helpdesk', 'Admin'])
+                <div class="menu-item">
+                    <a class="{{ request()->routeIs('helpdesk.solution.index') ? 'menu-link active' : 'menu-link' }}"
+                        href="{{ route('helpdesk.solution.index') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <path
+                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
+                                        fill="#000000" opacity="0.3" />
+                                    <path
+                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
+                                        fill="#000000" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title">Solusi Teknis</span>
+                    </a>
+                </div>
+            @endhasrole
+
         </div>
+        <!--end::Menu-->
     </div>
+</div>

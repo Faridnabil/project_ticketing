@@ -227,7 +227,6 @@
                                             </div>
                                         </form>
 
-
                                         <script>
                                             // Initialize timepickers if not already initialized
                                             document.addEventListener('DOMContentLoaded', function() {

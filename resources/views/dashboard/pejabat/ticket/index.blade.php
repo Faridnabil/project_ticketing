@@ -167,7 +167,7 @@
                                             <!--end::Priority=-->
                                             <!--begin::Payment method=-->
                                             <td>
-                                                {{ date('d F Y', strtotime($ticket->created_at)) }}
+                                                {{ \Carbon\Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y') }}
                                             </td>
                                             <!--end::Payment method=-->
                                             <!--begin::Date=-->
@@ -175,36 +175,32 @@
                                                 <div class="d-flex align-items-center">
                                                     @if ($ticket->status_id == '1')
                                                         <span class="badge"
-                                                            style="background-color:red ; color: white; font-weight:bold">
-                                                            Tertunda</span>
+                                                            style="background-color:red ; color: white; font-weight:bold">Tertunda</span>
                                                     @elseif($ticket->status_id == '2')
                                                         <span class="badge"
-                                                            style="background-color:blue ; color: white; font-weight:bold">
-                                                            Diterima</span>
+                                                            style="background-color:blue ; color: white; font-weight:bold">Diterima</span>
                                                     @elseif($ticket->status_id == '3')
                                                         <span class="badge"
-                                                            style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                            Proses</span>
+                                                            style="background-color:#FF7F3E ; color: white; font-weight:bold">Proses</span>
                                                     @elseif($ticket->status_id == '4')
                                                         <span class="badge"
-                                                            style="background-color:green ; color: white; font-weight:bold">
-                                                            Selesai
-                                                        </span>
+                                                            style="background-color:green ; color: white; font-weight:bold">Selesai</span>
                                                     @elseif($ticket->status_id == '5')
                                                         <span class="badge"
-                                                            style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">
-                                                            Buka Kembali
-                                                        </span>
+                                                            style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">Buka
+                                                            Kembali</span>
                                                     @else
                                                         <span class="badge"
-                                                            style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                            -</span>
+                                                            style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                                     @endif
+
                                                     @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                         <form
                                                             action="{{ route('pejabat.tickets.statusTicket', $ticket->id) }}"
                                                             method="POST" id="statusForm_{{ $ticket->id }}">
                                                             @csrf
+                                                            <input type="hidden" name="completion_notes"
+                                                                id="completionNotesInput_{{ $ticket->id }}">
                                                             <div class="custom-select-wrapper">
                                                                 <select name="status_id" class="custom-select"
                                                                     id="statusSelect_{{ $ticket->id }}">
@@ -500,6 +496,12 @@
                     <div class="modal-body">
                         Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
                             id="status-name-{{ $ticket->id }}"></span>?
+
+                        <div id="completionDetails_{{ $ticket->id }}" style="display: none;">
+                            <label for="completionNotes_{{ $ticket->id }}" class="mt-4 mb-2">Keterangan
+                                Penyelesaian:</label>
+                            <textarea name="completion_notes" id="completionNotes_{{ $ticket->id }}"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
@@ -515,16 +517,60 @@
                 let statusName = selectedOption.text;
                 let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
 
-                // Set status name in modal
                 document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
 
-                // Show modal
+                if (this.value == '4') {
+                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                } else {
+                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                }
+
                 $('#confirmModal_{{ $ticket->id }}').modal('show');
 
-                // On confirm button click
                 document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
-                    statusForm.submit();
+                    let completionNotes = document.getElementById('completionNotes_{{ $ticket->id }}').value.trim();
+
+                    if (document.getElementById('statusSelect_{{ $ticket->id }}').value == 4 && !completionNotes) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Alasan selesainya wajib diisi!',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Konfirmasi Perubahan Status',
+                        text: `Apakah Anda yakin ingin mengubah status tiket ini menjadi ${statusName}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Ubah Status',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('completionNotesInput_{{ $ticket->id }}').value = completionNotes;
+                            statusForm.submit();
+                        }
+                    });
                 };
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll("textarea[id^='completionNotes_{{ $ticket->id }}']").forEach((textarea) => {
+                    ClassicEditor.create(textarea, {
+                        toolbar: ['heading', '|', 'bold', 'italic', 'bulletedList', 'numberedList'],
+                    }).then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            textarea.value = editor.getData();
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                });
             });
         </script>
     @endforeach

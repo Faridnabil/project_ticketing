@@ -22,6 +22,7 @@ class Ticket extends Model
         'city_or_regency_id',
         'pic',
         'jabatan',
+        'completion_notes',
         'no_hp',
         'level1',
         'level2',

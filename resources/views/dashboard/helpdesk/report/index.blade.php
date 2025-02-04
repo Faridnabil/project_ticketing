@@ -231,6 +231,7 @@
                                     <th lass="min-w-70px">Disposisi</th>
                                     <th lass="min-w-70px">Prioritas</th>
                                     <th lass="min-w-70px">Status</th>
+                                    <th lass="min-w-70px">Catatan</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">
@@ -287,6 +288,7 @@
                                             <td>{{ $disposisi }}</td>
                                             <td>{{ $priority }}</td>
                                             <td>{{ $status }}</td>
+                                            <td>{!! Str::limit($ticket->completion_notes, 20) !!}</td>
                                         </tr>
                                     @endforeach
                                 @endif

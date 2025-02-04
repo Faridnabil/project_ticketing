@@ -24,6 +24,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Pejabat\HomePejabatController;
 use App\Http\Controllers\Pejabat\TicketPejabatController;
 use App\Http\Controllers\Helpdesk\ReportController;
+use App\Http\Controllers\Helpdesk\SolutionTechnicalController;
 use App\Http\Controllers\SiakDev\HomeSiakDevController;
 use App\Http\Controllers\SiakDev\TicketSiakDevController;
 use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
@@ -143,6 +144,9 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])
     ->name('report.preview_pdf');
 
+    //Solution
+    Route::get('/helpdesk/solution', [SolutionTechnicalController::class, 'index'])->name('solution.index');
+    Route::get('/helpdesk/reportNoted/export', [ReportController::class, 'export_noted_ticket'])->name('reportNoted.export');
 });
 
 

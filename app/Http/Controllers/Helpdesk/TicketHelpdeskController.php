@@ -119,9 +119,9 @@ class TicketHelpdeskController extends Controller
     public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
-        ->where('level1', '!=', null)
-        ->whereMonth('created_at', now()->month)
-        ->whereYear('created_at', now()->year);
+            ->where('level1', '!=', null)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year);
 
         $categories = Category::all();
         if ($request->has('category_id') && $request->category_id) {
@@ -560,6 +560,11 @@ class TicketHelpdeskController extends Controller
 
         $ticket->status_id = $request->status_id;
 
+        // Simpan completion_notes jika status diubah menjadi Selesai
+        if ($request->status_id == 4) {
+            $ticket->completion_notes = $request->completion_notes;
+        }
+
         $ticket->save();
 
         // Notifikasi Koordinator
@@ -587,7 +592,6 @@ class TicketHelpdeskController extends Controller
             }
         }
 
-
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
             'h_no_ticket' => $ticket->no_ticket,
@@ -606,6 +610,7 @@ class TicketHelpdeskController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
             'created_at' => now(),
             'updated_at' => now(),
             'status_changedBy' => Auth::user()->id,
@@ -613,6 +618,9 @@ class TicketHelpdeskController extends Controller
 
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
+
+
+
 
     public function send_ticket(Request $request, $id)
     {

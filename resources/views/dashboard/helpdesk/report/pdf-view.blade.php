@@ -79,7 +79,8 @@
 
 <body>
     <!-- Header Section -->
-    <header style="background-color: #1c2732;border-radius: 5px;display: flex;justify-content: space-between;padding: 10px 20px;margin-bottom: 10px;">
+    <header
+        style="background-color: #1c2732;border-radius: 5px;display: flex;justify-content: space-between;padding: 10px 20px;margin-bottom: 10px;">
         <img src="{{ asset('template/dist/assets/media/logos/logo.png') }}" />
     </header>
 
@@ -148,12 +149,14 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $ticket->no_ticket }}</td>
-                    <td>{{ $ticket->created_at->format('d-m-Y') }}</td>
+                    <td> {{ \Carbon\Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y') }}</td>
                     <td>{{ $ticket->province->no_province ?? '-' }}</td>
                     <td>{{ $ticket->province->province_name ?? '-' }}</td>
                     <td>{{ $ticket->cityOrRegency->no_city_or_regency ?? '-' }}</td>
                     <td>{{ $ticket->cityOrRegency->city_or_regency_name ?? '-' }}</td>
-                    <td>{{ strip_tags(html_entity_decode($ticket->description)) ?? '-' }}</td>
+                    <td>
+                        {!! nl2br(wordwrap(strip_tags(html_entity_decode($ticket->description)), 30, "\n", true)) ?? '-' !!}
+                    </td>
                     <td>{{ $ticket->category->category_name ?? '-' }}</td>
                     <td>{{ $disposisi }}</td>
                     <td>{{ $priority }}</td>
