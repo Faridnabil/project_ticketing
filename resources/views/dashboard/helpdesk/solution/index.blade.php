@@ -81,8 +81,10 @@
                             <!--begin::Table row-->
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-70px">No</th>
+                                <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
-                                <th class="min-w-70px">Catatan</th>
+                                <th class="min-w-70px">Permasalahan</th>
+                                <th class="min-w-70px">Solusi</th>
                                 <th class="min-w-70px">Diselesaikan Tanggal</th>
                                 <th class="min-w-100px">Aksi</th>
                             </tr>
@@ -97,15 +99,38 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
+                                        {{ $ticket->no_ticket }}
+                                    </td>
+                                    <td>
                                         {{ $ticket->category->category_name }}
                                     </td>
 
+                                    <td>{!! Str::limit($ticket->description, 150) !!}</td>
                                     <td>{!! Str::limit($ticket->completion_notes, 150) !!}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($ticket->updated_at)->locale('id')->translatedFormat('d F Y') }}
                                     </td>
 
                                     <td>
+                                        @can('Edit Ticket')
+                                            <a class="menu-link ms-3" href="{{ route('helpdesk.solution.edit', $ticket->id) }}"
+                                                type="button">
+                                                <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
+                                                    <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+                                                    <span class="svg-icon svg-icon-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                            viewBox="0 0 24 24" version="1.1">
+                                                            <path
+                                                                d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
+                                                            <path
+                                                                d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
+                                                        </svg>
+                                                    </span>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                            </a>
+                                        @endcan
+
                                         @can('Show Ticket')
                                             <!-- Trigger Modal Button -->
                                             <a class="menu-link ms-3" href="#" data-bs-toggle="modal"
@@ -128,18 +153,32 @@
                                         <!-- Modal for each ticket -->
                                         <div class="modal fade" id="PreviewNoted-{{ $ticket->id }}" tabindex="-1"
                                             aria-labelledby="PreviewNotedLabel-{{ $ticket->id }}" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <!-- Center the modal vertically -->
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="PreviewNotedLabel-{{ $ticket->id }}">
-                                                            Detail Catatan</h5>
+                                                            Detail {{ $ticket->no_ticket }} -
+                                                            {{ $ticket->category->category_name }}
+                                                        </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <!-- Display completion_notes for the current ticket -->
-                                                        {!! nl2br($ticket->completion_notes) !!}
+                                                        <div class="row">
+                                                            <!-- Kolom Kiri: Masalah -->
+                                                            <div class="col-md-6 border-end">
+                                                                <h4 class="fw-bold">Permasalahan</h4>
+                                                                <p class="text-wrap">{!! nl2br($ticket->description) !!}</p>
+                                                            </div>
+
+                                                            <!-- Kolom Kanan: Solusi -->
+                                                            <div class="col-md-6">
+                                                                <h4 class="fw-bold">Solusi</h4>
+                                                                <p class="text-wrap">
+                                                                    {!! nl2br($ticket->completion_notes) !!}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -148,6 +187,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </td>
                                     <!--end::Action=-->
                                 </tr>

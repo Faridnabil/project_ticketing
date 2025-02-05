@@ -20,8 +20,10 @@ class ReportNotedTicketExport implements FromCollection, WithHeadings
         return $this->tickets->map(function ($ticket, $index) {
             return [
                 'No' => $index + 1,
+                'Nomor Tiket' => $ticket->no_ticket,
                 'Kategori' => $ticket->category->category_name,
-                'Catatan' => strip_tags(html_entity_decode($ticket->completion_notes)),
+                'Keterangan Permasalahan' => strip_tags(html_entity_decode($ticket->description)),
+                'Solusi' => strip_tags(html_entity_decode($ticket->completion_notes)),
                 'Diselesaikan Tanggal' => Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y'),
             ];
         });
@@ -31,8 +33,10 @@ class ReportNotedTicketExport implements FromCollection, WithHeadings
     {
         return [
             'No',
+            'Nomor Tiket',
             'Kategori',
-            'Catatan',
+            'Keterangan Permasalahan',
+            'Solusi',
             'Diselesaikan Tanggal',
         ];
     }
