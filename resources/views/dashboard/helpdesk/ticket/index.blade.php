@@ -265,14 +265,6 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if (request('tanggal_mulai') ||
-                                    request('tanggal_selesai') ||
-                                    request('level') ||
-                                    request('category_id') ||
-                                    request('priority_id') ||
-                                    request('status_id') ||
-                                    request('city_or_regency_id') ||
-                                    request('province_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -525,7 +517,6 @@
                                     </tr>
                                     <!--end::Table row-->
                                 @endforeach
-                            @endif
                         </tbody>
                         <!--end::Table body-->
                     </table>

@@ -40,7 +40,7 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('helpdesk.ticket.index') }}" class="d-flex">
+                        <form method="GET" action="{{ route('helpdesk.newTickets.index') }}" class="d-flex">
                             <select name="level" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Disposisi">
                                 <option></option>

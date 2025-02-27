@@ -26,30 +26,38 @@ class TicketHelpdeskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Ticket $ticket)
+    public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
+        $query = Ticket::with([
+            'status', 'category', 'priority', 'helpdesk',
+            'koordinator', 'staffSubdit', 'siakDev', 'pejabat'
+        ]);
 
-        // Retrieve filter input
-        $tanggalMulai = $request->tanggal_mulai ?? null;
-        $tanggalSelesai = $request->tanggal_selesai ?? null;
+        // Variabel untuk menandai apakah ada filter yang diterapkan
+        $filtersApplied = false;
 
-        // Filter by date range if provided
+        // Filter Tanggal
+        $tanggalMulai = $request->tanggal_mulai;
+        $tanggalSelesai = $request->tanggal_selesai;
+
         if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
                 $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
                 $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
+                $filtersApplied = true;
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['Invalid date range provided']);
             }
         }
 
-        // Other filters
+        // Filter berdasarkan kategori
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan level
         if ($request->filled('level')) {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
@@ -58,46 +66,47 @@ class TicketHelpdeskController extends Controller
                     ->orWhere('level4', $request->level)
                     ->orWhere('level5', $request->level);
             });
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan prioritas
         if ($request->filled('priority_id')) {
             $query->where('priority_id', $request->priority_id);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan status
         if ($request->filled('status_id')) {
             $query->where('status_id', $request->status_id);
+            $filtersApplied = true;
         }
 
-        // Filter by province
-        $provinceId = $request->province_id ?? null;
-        if ($provinceId) {
+        // Filter berdasarkan provinsi
+        $provinceId = $request->province_id;
+        if (!empty($provinceId)) {
             $query->where('province_id', $provinceId);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan kota/kabupaten
         if ($request->filled('city_or_regency_id')) {
             $query->where('city_or_regency_id', $request->city_or_regency_id);
+            $filtersApplied = true;
         }
 
-        // Apply sorting after all filters
-        $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
+        // Jika ada filter, ambil datanya. Jika tidak, hasil query dikosongkan.
+        $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
 
-        // Retrieve filter data
+        // Ambil data pendukung lainnya
         $categories = Category::all();
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
-
-        $tickets = $query->get();
-
-        // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
-
+        $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
         $provinces = Province::all();
 
-        // Fetch cities based on selected province
-        $city_or_regencies = $provinceId
+        // Ambil kota/kabupaten berdasarkan provinsi yang dipilih
+        $city_or_regencies = !empty($provinceId)
             ? CityOrRegency::where('province_id', $provinceId)->get()
             : collect([]);
 
@@ -112,9 +121,10 @@ class TicketHelpdeskController extends Controller
             'tanggalMulai' => $tanggalMulai,
             'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Kirim filter saat ini ke view
+            'filter' => $request->all() // Mengirim filter yang digunakan ke view
         ]);
     }
+
 
     public function newTicket(Request $request)
     {

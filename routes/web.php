@@ -121,6 +121,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::get('/helpdesk/dashboardAll', [HomeHelpdeskController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
+    Route::get('/helpdesk/tickets/yearlySummary', [HomeHelpdeskController::class, 'yearlySummary']);
     Route::get('/helpdesk/tickets/todaydailychart', [HomeHelpdeskController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
