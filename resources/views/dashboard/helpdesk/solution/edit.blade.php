@@ -24,7 +24,7 @@
                     <div class="card card-xl-stretch mb-xl-8">
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
-                                action="{{ route('helpdesk.ticket.update', $ticket->id) }}" enctype="multipart/form-data"
+                                action="{{ route('helpdesk.solution.update', $ticket->id) }}" enctype="multipart/form-data"
                                 novalidate>
                                 @csrf
                                 @method('PUT')
@@ -48,7 +48,9 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-6"></div>
+
+                                {{-- <div class="col-md-3">
                                     <label for="province_id" class="form-label">Nama Propinsi</label>
                                     <select id="province_id" data-control="select2" name="province_id"
                                         class="form-select @error('province_id') is-invalid @enderror" required>
@@ -163,10 +165,10 @@
                                     @error('no_hp')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">Deskripsi</label>
+                                    <label for="validationCustom01" class="form-label">Deskripsi / Permasalahan</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description"
                                         cols="10" rows="3">{{ old('description', $ticket->description) }}</textarea>
                                     <div class="valid-feedback">Looks good!</div>
@@ -176,6 +178,16 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <label for="validationCustom01" class="form-label">Solusi</label>
+                                    <textarea name="completion_notes" class="form-control @error('completion_notes') is-invalid @enderror"
+                                        id="completion_notes" cols="10" rows="3">{{ old('completion_notes', $ticket->completion_notes) }}</textarea>
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('completion_notes')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>
                                     <div class="custom-dropzone" onclick="document.getElementById('attachments').click()">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
@@ -195,7 +207,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                     <div class="error-message" id="error-message"></div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Ubah</button>
@@ -242,7 +254,8 @@
                         .catch(error => console.error('Error:', error));
                 } else {
                     citySelect.html(
-                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
+                        '<option value="">Pilih Kabupaten/Kota</option>'
+                    ); // Clear cities if no province is selected
                     citySelect.trigger('change');
                 }
             });
@@ -252,6 +265,13 @@
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#completion_notes'))
             .catch(error => {
                 console.error(error);
             });

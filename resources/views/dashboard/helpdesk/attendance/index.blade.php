@@ -148,9 +148,28 @@
                                                 @if ($absen->check_out == null)
                                                     <div class="col-md-6">
                                                         <label for="validationCustom01" class="form-label">File</label>
-                                                        <input type="file" class="form-control" name="attachment"
-                                                            accept=".jpg, .jpeg, .png, .pdf, .docx">
-                                                        <p>File harus berupa <b>jpg, jpeg, png, pdf, dan docx</b></p>
+                                                        <div class="custom-file-upload"
+                                                            style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
+                                                            <label for="fileInput" class="upload-label"
+                                                                style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
+                                                                <span class="upload-button"
+                                                                    style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
+                                                                    file</span>
+                                                                <span id="fileName" style="margin-left: 10px">Tidak ada
+                                                                    file dipilih</span>
+                                                            </label>
+                                                            <input id="fileInput" type="file" name="attachment"
+                                                                style="display: none;"
+                                                                accept=".jpg, .jpeg, .png, .pdf, .docx">
+                                                        </div>
+
+                                                        <script>
+                                                            document.getElementById('fileInput').addEventListener('change', function(event) {
+                                                                const fileName = event.target.files[0]?.name || 'Tidak ada file dipilih';
+                                                                document.getElementById('fileName').textContent = fileName;
+                                                            });
+                                                        </script>
+
                                                     </div>
 
                                                     <script>
@@ -179,7 +198,7 @@
                                                         <div id="checkOutSection">
                                                             <button type="submit" class="btn btn-secondary"
                                                                 id="checkOutBtn">
-                                                                Check Out
+                                                                Pulang
                                                             </button>
                                                         </div>
                                                     </div>
@@ -234,8 +253,7 @@
                                                 <div class="col-md-2 mt-11">
                                                     <div id="checkInSection">
                                                         <button type="submit" class="btn btn-primary"
-                                                            id="checkInBtn">Check
-                                                            In</button>
+                                                            id="checkInBtn">Masuk</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -358,17 +376,21 @@
                                 &nbsp;
 
                                 <input type="date" name="start_date" class="form-control me-2"
-                                    value="{{ request('start_date') }}" placeholder="Start Date">
+                                    style="border: 2px solid #28a745;" value="{{ request('start_date') }}"
+                                    placeholder="Start Date">
                                 &nbsp;
                                 <input type="date" name="end_date" class="form-control me-2"
-                                    value="{{ request('end_date') }}" placeholder="End Date">
+                                    style="border: 2px solid #dc3545;" value="{{ request('end_date') }}"
+                                    placeholder="End Date">
                                 &nbsp;
 
                                 <input type="hidden" name="active_tab" id="active_tab"
                                     value="{{ request('active_tab', 'absen') }}">
 
-                                <button type="submit" class="btn btn-primary me-1">Filter</button>
-                                <a href="#" id="clear-filters" class="btn btn-danger">Reset</a>
+                                <div class="col-md-3  d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary me-1">Filter</button>
+                                    <a href="#" id="clear-filters" class="btn btn-danger">Atur ulang</a>
+                                </div>
                             </form>
                             <!--end::Form-->
 

@@ -26,28 +26,38 @@ class TicketHelpdeskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Ticket $ticket)
+    public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
+        $query = Ticket::with([
+            'status', 'category', 'priority', 'helpdesk',
+            'koordinator', 'staffSubdit', 'siakDev', 'pejabat'
+        ]);
 
-        // Retrieve filter input
-        $reqTanggal = $request->tanggal ?? null;
+        // Variabel untuk menandai apakah ada filter yang diterapkan
+        $filtersApplied = false;
 
-        // Filter by date if provided
-        if (!empty($reqTanggal)) {
+        // Filter Tanggal
+        $tanggalMulai = $request->tanggal_mulai;
+        $tanggalSelesai = $request->tanggal_selesai;
+
+        if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
             try {
-                $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
-                $query->whereDate('tickets.created_at', '=', $date);
+                $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+                $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+                $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
+                $filtersApplied = true;
             } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['Invalid date format provided']);
+                return redirect()->back()->withErrors(['Invalid date range provided']);
             }
         }
 
-        // Other filters
+        // Filter berdasarkan kategori
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan level
         if ($request->filled('level')) {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
@@ -56,44 +66,49 @@ class TicketHelpdeskController extends Controller
                     ->orWhere('level4', $request->level)
                     ->orWhere('level5', $request->level);
             });
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan prioritas
         if ($request->filled('priority_id')) {
             $query->where('priority_id', $request->priority_id);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan status
         if ($request->filled('status_id')) {
             $query->where('status_id', $request->status_id);
+            $filtersApplied = true;
         }
 
-        if ($request->filled('province_id')) {
-            $query->where('province_id', $request->province_id);
+        // Filter berdasarkan provinsi
+        $provinceId = $request->province_id;
+        if (!empty($provinceId)) {
+            $query->where('province_id', $provinceId);
+            $filtersApplied = true;
         }
 
+        // Filter berdasarkan kota/kabupaten
         if ($request->filled('city_or_regency_id')) {
             $query->where('city_or_regency_id', $request->city_or_regency_id);
+            $filtersApplied = true;
         }
 
-        // Apply sorting after all filters
-        $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
+        // Jika ada filter, ambil datanya. Jika tidak, hasil query dikosongkan.
+        $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
 
-        // Retrieve filter data
+        // Ambil data pendukung lainnya
         $categories = Category::all();
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
-
-        $tickets = $query->get();
-
-        // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
-
+        $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
         $provinces = Province::all();
 
-        // Fetch the city or regency for the selected province
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // Ambil kota/kabupaten berdasarkan provinsi yang dipilih
+        $city_or_regencies = !empty($provinceId)
+            ? CityOrRegency::where('province_id', $provinceId)->get()
+            : collect([]);
 
         return view('dashboard.helpdesk.ticket.index', [
             'tickets' => $tickets,
@@ -103,16 +118,20 @@ class TicketHelpdeskController extends Controller
             'priorities' => $priorities,
             'statuses' => $statuses,
             'levels' => $levels,
-            'reqTanggal' => $reqTanggal,
+            'tanggalMulai' => $tanggalMulai,
+            'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Kirim filter saat ini ke view
+            'filter' => $request->all() // Mengirim filter yang digunakan ke view
         ]);
     }
+
 
     public function newTicket(Request $request)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk')
-            ->where('level1', '!=', null);
+            ->where('level1', '!=', null)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year);
 
         $categories = Category::all();
         if ($request->has('category_id') && $request->category_id) {
@@ -436,7 +455,7 @@ class TicketHelpdeskController extends Controller
 
             DB::commit();
             return redirect(session('first_url', route('helpdesk.ticket.index')))
-            ->with('success', 'Tiket Berhasil Dirubah');
+                ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());
@@ -551,6 +570,11 @@ class TicketHelpdeskController extends Controller
 
         $ticket->status_id = $request->status_id;
 
+        // Simpan completion_notes jika status diubah menjadi Selesai
+        if ($request->status_id == 4) {
+            $ticket->completion_notes = $request->completion_notes;
+        }
+
         $ticket->save();
 
         // Notifikasi Koordinator
@@ -578,7 +602,6 @@ class TicketHelpdeskController extends Controller
             }
         }
 
-
         // Simpan data tiket sebelum diupdate ke tabel history_ticket
         DB::table('history_tickets')->insert([
             'h_no_ticket' => $ticket->no_ticket,
@@ -597,6 +620,7 @@ class TicketHelpdeskController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
             'created_at' => now(),
             'updated_at' => now(),
             'status_changedBy' => Auth::user()->id,
@@ -604,6 +628,9 @@ class TicketHelpdeskController extends Controller
 
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
+
+
+
 
     public function send_ticket(Request $request, $id)
     {

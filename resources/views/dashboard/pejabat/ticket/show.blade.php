@@ -14,7 +14,7 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Show Tiket
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3 mb-3 mt-3">Show Tiket
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
@@ -124,7 +124,8 @@
         }
     </style>
 
-    <div id="kt_content_container" class="container mt-5">
+
+    <div id="kt_content_container" class="container">
         <div class="card">
             <div class="card-header" style="margin-top: 30px">
                 <ul class="nav custom-tabs" role="tablist">
@@ -138,6 +139,12 @@
                         <a class="btn-custom font-regular" data-bs-toggle="tab" href="#riwayat" role="tab"
                             aria-selected="false">
                             <Strong>Riwayat Aktivitas</Strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-custom font-regular" href="{{ url()->previous() }}"
+                            style="background-color: #dc3545;color:white">
+                            <Strong>Kembali</Strong>
                         </a>
                     </li>
                 </ul>
@@ -197,24 +204,19 @@
                                             <strong></strong>
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
+                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                             @endif
 
                                             -
@@ -308,7 +310,7 @@
                                                                 {!! $comment->message !!}
                                                             </p>
                                                             <form
-                                                                action="{{ route('pejabat.tickets.update', $comment->id) }}"
+                                                                action="{{ route('helpdesk.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
@@ -329,7 +331,7 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('pejabat.tickets.store') }}" enctype="multipart/form-data"
+                                            action="{{ route('helpdesk.tickets.store') }}" enctype="multipart/form-data"
                                             novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
@@ -341,8 +343,8 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <div class="d-flex flex-stack">
-                                                <button class="btn btn-primary" type="submit"
-                                                    data-kt-element="send" disabled>Kirim</button>
+                                                <button class="btn btn-primary" type="submit" data-kt-element="send"
+                                                    disabled>Kirim</button>
                                             </div>
                                         </form>
                                     </div>
@@ -380,6 +382,7 @@
                                     @else
                                         <p class="text-center">Tidak ada lampiran.</p>
                                     @endif
+
                                 </div>
                                 <!--end::Slider-->
                                 <!--begin::Slider button-->
@@ -416,12 +419,11 @@
                                 <!--end::Slider button-->
                             </div>
                             <!--end::Product slider-->
-                            <br>
-                            <hr>
-                            <br>
-                            <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
-                            {{-- <a href="{{ session('filtered_url', route('pejabat.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
                         </div>
+                        <br>
+                        <hr>
+                        <br>
+                        {{-- <a href="{{ session('filtered_url', route('helpdesk.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
                     </div>
 
                     <!-- Riwayat -->
@@ -477,7 +479,6 @@
                                                         @else
                                                             N/A
                                                         @endif
-
 
                                                         <br>
                                                         <strong>Status Diubah Oleh :</strong>
@@ -549,6 +550,8 @@
             </div>
         @endforeach
     @endif
+
+
     {{-- Refresh Komentar --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

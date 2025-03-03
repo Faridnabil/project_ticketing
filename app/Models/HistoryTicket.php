@@ -28,6 +28,7 @@ class HistoryTicket extends Model
         'h_level3',
         'h_level4',
         'h_level5',
+        'h_completion_notes',
         'status_changedBy',
     ];
 

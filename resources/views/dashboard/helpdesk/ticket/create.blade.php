@@ -73,10 +73,10 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="province_id" class="form-label">Nama Provinsi</label>
+                                    <label for="province_id" class="form-label">Nama Propinsi</label>
                                     <select id="province_id" data-control="select2" name="province_id"
                                         class="form-select @error('province_id') is-invalid @enderror" required>
-                                        <option value="" selected disabled>Pilih Provinsi</option>
+                                        <option value="" selected disabled>Pilih Propinsi</option>
                                         @foreach ($provinces as $province)
                                             <option value="{{ $province->id }}"
                                                 {{ old('province_id') == $province->id ? 'selected' : '' }}>

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Tambah Provinsi | SIAK Dukcapil
+    Tambah Propinsi | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Provinsi
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Propinsi
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Provinsi</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Propinsi</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -43,7 +43,7 @@
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Kode Provinsi</label>
+                                    <label for="validationCustom01" class="form-label">Kode Propinsi</label>
                                     <input type="text" class="form-control @error('no_province') is-invalid @enderror"
                                         id="no_province" name="no_province" autofocus
                                         required>
@@ -59,7 +59,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Nama Provinsi</label>
+                                    <label for="validationCustom01" class="form-label">Nama Propinsi</label>
                                     <input type="text" class="form-control @error('province_name') is-invalid @enderror"
                                         id="province_name" name="province_name" autofocus
                                         required>
@@ -75,8 +75,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Submit</button>
-                                    <a href="{{ route('province.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <a href="{{ route('province.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
                             <!--end form-->

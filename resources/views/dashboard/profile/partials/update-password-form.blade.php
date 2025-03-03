@@ -14,19 +14,19 @@
         @method('put')
 
         <div>
-            <input type="password" id="current_password" class="form-control" placeholder="Current password" name="current_password" autocomplete="current-password"/>
+            <input type="password" id="current_password" class="form-control" placeholder="Password Lama" name="current_password" autocomplete="current-password"/>
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
         <div>
             <label class="form-label" for="form2Example11"></label>
-            <input type="password" id="password" class="form-control" placeholder="New Password" name="password" autocomplete="new-password"/>
+            <input type="password" id="password" class="form-control" placeholder="Password Baru" name="password" autocomplete="new-password"/>
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
         <div>
             <label class="form-label" for="form2Example11"></label>
-            <input type="password" id="password_confirmation" class="form-control" placeholder="Confirm Password" name="password_confirmation" autocomplete="new-password"/>
+            <input type="password" id="password_confirmation" class="form-control" placeholder="Ulangi Password Baru" name="password_confirmation" autocomplete="new-password"/>
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 

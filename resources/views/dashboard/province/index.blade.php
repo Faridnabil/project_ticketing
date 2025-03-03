@@ -1,7 +1,7 @@
 @extends('layouts.dashboard.app')
 
 @section('title')
-    Provinsi | SIAK Dukcapil
+    Propinsi | SIAK Dukcapil
 @endsection
 
 @section('content')
@@ -14,12 +14,12 @@
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Provinsi
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Propinsi
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Provinsi</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Data Propinsi</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -61,7 +61,7 @@
                                         </svg>
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->Download Format
+                                    <!--end::Svg Icon-->Unduh Format
                                 </a>
                                 <!--end::Add user-->
                                 &nbsp;&nbsp;
@@ -115,7 +115,7 @@
                                                     x="4" y="11" width="16" height="2" rx="1" />
                                             </svg>
                                         </span>
-                                        <!--end::Svg Icon-->Tambah Provinsi
+                                        <!--end::Svg Icon-->Tambah Propinsi
                                     </a>
                                     <!--end::Add customer-->
                                 @endcan
@@ -132,13 +132,13 @@
                         <div class="alert alert-info">
                             <strong>Petunjuk Penggunaan Fitur Import :</strong>
                             <ol>
-                                <li>Untuk melakukan import data Provinsi, klik tombol <strong>Download Format</strong> untuk
+                                <li>Untuk melakukan import data Propinsi, klik tombol <strong>Download Format</strong> untuk
                                     mengunduh format Excel yang digunakan.</li>
-                                <li>Isi data Provinsi dalam file Excel sesuai dengan kolom yang tersedia.</li>
+                                <li>Isi data Propinsi dalam file Excel sesuai dengan kolom yang tersedia.</li>
                                 <li>Klik tombol <strong>Import</strong> dan pilih file Excel yang telah diisi dan disimpan.
                                 </li>
                                 <li>Klik <strong>Submit</strong> untuk mengunggah dan memproses data.</li>
-                                <li>Pastikan Anda sudah mengimpor data Provinsi sebelum melanjutkan ke fitur Kota/kabupaten.
+                                <li>Pastikan Anda sudah mengimpor data Propinsi sebelum melanjutkan ke fitur Kota/kabupaten.
                                 </li>
                             </ol>
                         </div>
@@ -156,8 +156,8 @@
                                 <!--begin::Table row-->
                                 <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-10px">No</th>
-                                    <th class="min-w-10px">Kode Provinsi</th>
-                                    <th class="min-w-10px">Provinsi</th>
+                                    <th class="min-w-10px">Kode Propinsi</th>
+                                    <th class="min-w-10px">Propinsi</th>
                                     <th class="min-w-10px">Fitur</th>
                                 </tr>
                                 <!--end::Table row-->
@@ -315,7 +315,26 @@
                             <label class="fs-5 fw-bold form-label mb-5">Masukan file berformat xlsx</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input class="form-control form-control" type="file" name="your_file" />
+                            <div class="custom-file-upload"
+                                style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
+                                <label for="fileInput" class="upload-label"
+                                    style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
+                                    <span class="upload-button"
+                                        style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
+                                        file</span>
+                                    <span id="fileName" style="margin-left: 10px">Tidak ada file dipilih</span>
+                                </label>
+                                <input id="fileInput" type="file" name="your_file" style="display: none;">
+                            </div>
+
+                            <script>
+                                // JavaScript untuk mengupdate nama file
+                                document.getElementById('fileInput').addEventListener('change', function(event) {
+                                    const fileName = event.target.files[0]?.name || 'Tidak ada file dipilih';
+                                    document.getElementById('fileName').textContent = fileName;
+                                });
+                            </script>
+
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -324,7 +343,7 @@
                             <button type="reset" id="kt_customers_export_cancel" class="btn btn-white me-3"
                                 data-bs-dismiss="modal">Batal</button>
                             <button type="submit" id="kt_customers_export_submit" class="btn btn-primary">
-                                <span class="indicator-label">Submit</span>
+                                <span class="indicator-label">Simpan</span>
                             </button>
                         </div>
                         <!--end::Actions-->

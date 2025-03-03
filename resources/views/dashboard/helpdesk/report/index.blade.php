@@ -48,14 +48,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_awal" class="form-label mb-2">Tanggal Awal</label>
-                                    <input type="date" id="tanggal_awal" name="awal" required class="form-control"
+                                    <input type="date" id="tanggal_awal" name="awal" required class="form-control" style=" border: 2px solid #28a745;"
                                         value="{{ old('awal', $req1) }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_akhir" class="form-label mb-2">Tanggal Akhir</label>
-                                    <input type="date" id="tanggal_akhir" name="akhir" required class="form-control"
+                                    <input type="date" id="tanggal_akhir" name="akhir" required class="form-control" style=" border: 2px solid #dc3545;"
                                         value="{{ old('akhir', $req2) }}">
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                         <div class="d-flex justify-content-center">
                             <input type="submit" class="btn btn-primary me-2" value="Masukan Data">
                             <a href="{{ route('helpdesk.report.index') }}" type="button"
-                                class="btn btn-secondary">Refresh</a>
+                                class="btn btn-secondary">Atur ulang</a>
                         </div>
                     </form>
                 </div>
@@ -231,6 +231,7 @@
                                     <th lass="min-w-70px">Disposisi</th>
                                     <th lass="min-w-70px">Prioritas</th>
                                     <th lass="min-w-70px">Status</th>
+                                    <th lass="min-w-70px">Catatan</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">
@@ -287,6 +288,7 @@
                                             <td>{{ $disposisi }}</td>
                                             <td>{{ $priority }}</td>
                                             <td>{{ $status }}</td>
+                                            <td>{!! Str::limit($ticket->completion_notes, 20) !!}</td>
                                         </tr>
                                     @endforeach
                                 @endif

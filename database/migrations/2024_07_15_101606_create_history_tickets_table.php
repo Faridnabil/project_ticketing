@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('h_pic')->nullable();
             $table->string('h_jabatan')->nullable();
             $table->string('h_no_hp')->nullable();
+            $table->text('h_completion_notes')->nullable();
 
             $table->foreignId('status_changedBy')->nullable()->constrained('users');
             $table->timestamps();

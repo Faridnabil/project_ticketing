@@ -387,6 +387,9 @@ class TicketPejabatController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
+        if ($request->status_id == 4) {
+            $ticket->completion_notes = $request->completion_notes;
+        }
 
         $ticket->save();
 
@@ -433,6 +436,7 @@ class TicketPejabatController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
             'created_at' => now(),
             'updated_at' => now(),
             'status_changedBy' => Auth::user()->id,

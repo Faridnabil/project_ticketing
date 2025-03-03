@@ -284,7 +284,7 @@ class TicketKoordinatorController extends Controller
 
             DB::commit();
             return redirect(session('first_url', route('koordinator.ticket.index')))
-            ->with('success', 'Tiket Berhasil Dirubah');
+                ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -366,6 +366,11 @@ class TicketKoordinatorController extends Controller
 
         $ticket->status_id = $request->status_id;
 
+        // Simpan completion_notes jika status diubah menjadi Selesai
+        if ($request->status_id == 4) {
+            $ticket->completion_notes = $request->completion_notes;
+        }
+
         $ticket->save();
 
         // Notifikasi Staff Subdit
@@ -411,6 +416,7 @@ class TicketKoordinatorController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
             'created_at' => now(),
             'updated_at' => now(),
             'status_changedBy' => Auth::user()->id,

@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Carbon\Carbon;
 
 class ReportTicketExport implements FromCollection, WithHeadings
 {
@@ -57,10 +58,10 @@ class ReportTicketExport implements FromCollection, WithHeadings
             return [
                 'No' => $ticket->id,
                 'Nomor Tiket' => $ticket->no_ticket,
-                'Dibuat Tanggal' => date('d F Y', strtotime($ticket->created_at)),
+                'Dibuat Tanggal' => Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y'),
                 'No Provinsi' => $ticket->province->no_province,
                 'Nama Provinsi' => $ticket->province->province_name,
-                'No Kabupaten'=> $ticket->cityOrRegency->no_city_or_regency,
+                'No Kabupaten' => $ticket->cityOrRegency->no_city_or_regency,
                 'Nama Kabupaten' => $ticket->cityOrRegency->city_or_regency_name,
                 'Keterangan Permasalahan' => strip_tags(html_entity_decode($ticket->description)),
                 'Kategori' => $ticket->category->category_name,

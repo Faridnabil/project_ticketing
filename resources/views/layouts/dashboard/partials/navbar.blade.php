@@ -158,7 +158,8 @@
 
                                         </div>
                                         <span
-                                            class="badge badge-light fs-8">{{ $notification->created_at ? $notification->created_at->locale('id')->diffForHumans() : '' }}                                        </span>
+                                            class="badge badge-light fs-8">{{ $notification->created_at ? $notification->created_at->locale('id')->diffForHumans() : '' }}
+                                        </span>
                                     </div>
                                 @endforeach
 
@@ -227,12 +228,13 @@
                                                     </span>
                                                 </div>
                                                 <div class="mb-0 me-2">
-                                                    <form action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
-                                                          method="POST" class="notification-form">
+                                                    <form
+                                                        action="{{ route('notifications.mark-as-read', ['notification' => $notification->id]) }}"
+                                                        method="POST" class="notification-form">
                                                         @csrf
                                                         @method('PATCH')
                                                         <a href="{{ $notification->data['Url'] }}"
-                                                           class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
+                                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
                                                     </form>
                                                     <div class="text-gray-400 fs-7">
                                                         {{ ucwords($notification->data['body']) }}
@@ -329,8 +331,12 @@
                             <div class="d-flex flex-column">
                                 <div class="fw-bolder d-flex align-items-center fs-5">{{ Auth::user()->name }}
                                 </div>
-                                <a href="#"
-                                    class="fw-bold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
+                                <a href="#" class="fw-bold text-muted text-hover-primary fs-7"
+                                    style="max-width: 160px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                    title="{{ Auth::user()->email }}">
+                                    {{ Auth::user()->email }}
+                                </a>
+
                             </div>
                             <!--end::Username-->
                         </div>
@@ -348,7 +354,7 @@
                     <div class="menu-item px-5">
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="menu-link px-5">Sign Out</a>
+                            class="menu-link px-5">Keluar</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>

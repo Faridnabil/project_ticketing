@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Helpdesk;
 
 
 use App\Exports\ReportTicketExport;
+use App\Exports\ReportNotedTicketExport;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Priority;
@@ -144,6 +145,30 @@ class ReportController extends Controller
         // Export ke Excel
         return Excel::download(new ReportTicketExport($tickets), $fileName);
     }
+    public function export_noted_ticket(Request $request)
+    {
+        // Ambil data tiket berdasarkan kondisi yang diberikan
+        $tickets = Ticket::with([
+            'status',
+            'category',
+            'priority',
+            'helpdesk',
+            'koordinator',
+            'staffSubdit',
+            'siakDev',
+            'pejabat'
+        ])
+            ->whereNotNull('completion_notes')
+            ->where('completion_notes', '!=', '')
+            ->get();
+
+        // Format nama file berdasarkan tanggal saat ini
+        $fileName = "Laporan_Tiket_" . now()->format('d-m-Y') . ".xlsx";
+
+        // Export ke Excel
+        return Excel::download(new ReportNotedTicketExport($tickets), $fileName);
+    }
+
 
     // Fungsi Export PDF
     public function export_ticket_pdf(Request $request)

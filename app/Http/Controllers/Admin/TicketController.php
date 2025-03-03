@@ -31,22 +31,18 @@ class TicketController extends Controller
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
-        // Simpan URL pertama di sesi jika belum ada
-        if (!session()->has('first_url')) {
-            session(['first_url' => $request->fullUrl()]);
-        }
-
-
         // Retrieve filter input
-        $reqTanggal = $request->tanggal ?? null;
+        $tanggalMulai = $request->tanggal_mulai ?? null;
+        $tanggalSelesai = $request->tanggal_selesai ?? null;
 
-        // Filter by date if provided
-        if (!empty($reqTanggal)) {
+        // Filter by date range if provided
+        if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
             try {
-                $date = Carbon::createFromFormat('Y-m-d', $reqTanggal)->startOfDay();
-                $query->whereDate('tickets.created_at', '=', $date);
+                $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+                $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+                $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
             } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['Invalid date format provided']);
+                return redirect()->back()->withErrors(['Invalid date range provided']);
             }
         }
 
@@ -73,8 +69,10 @@ class TicketController extends Controller
             $query->where('status_id', $request->status_id);
         }
 
-        if ($request->filled('province_id')) {
-            $query->where('province_id', $request->province_id);
+        // Filter by province
+        $provinceId = $request->province_id ?? null;
+        if ($provinceId) {
+            $query->where('province_id', $provinceId);
         }
 
         if ($request->filled('city_or_regency_id')) {
@@ -99,8 +97,10 @@ class TicketController extends Controller
 
         $provinces = Province::all();
 
-        // Fetch the city or regency for the selected province
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // Fetch cities based on selected province
+        $city_or_regencies = $provinceId
+            ? CityOrRegency::where('province_id', $provinceId)->get()
+            : collect([]);
 
         return view('dashboard.admin.ticket.index', [
             'tickets' => $tickets,
@@ -110,12 +110,12 @@ class TicketController extends Controller
             'priorities' => $priorities,
             'statuses' => $statuses,
             'levels' => $levels,
-            'reqTanggal' => $reqTanggal,
+            'tanggalMulai' => $tanggalMulai,
+            'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
             'filter' => $request->all() // Kirim filter saat ini ke view
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      */

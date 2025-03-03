@@ -40,8 +40,7 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}"
-                            class="row g-3 align-items-center">
+                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="row g-3 align-items-center">
 
                             <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                             <input type="hidden" name="level" value="{{ request('level') }}">
@@ -51,11 +50,22 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    {{-- <label for="tanggal" class="form-label mb-2">Tanggal</label> --}}
-                                    <input type="date" id="tanggal" name="tanggal" class="form-control"
-                                        value="{{ old('tanggal', $reqTanggal) }}">
+                                    <input type="date" id="tanggal_mulai" name="tanggal_mulai" class="form-control"
+                                        style="border: 2px solid #28a745;"
+                                        value="{{ old('tanggal_mulai', request('tanggal_mulai')) }}"
+                                        placeholder="Tanggal Mulai">
                                 </div>
                             </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="date" id="tanggal_selesai" name="tanggal_selesai" class="form-control"
+                                        style="border: 2px solid #dc3545;"
+                                        value="{{ old('tanggal_selesai', request('tanggal_selesai')) }}"
+                                        placeholder="Tanggal Selesai">
+                                </div>
+                            </div>
+
 
                             <div class="col-md-2">
                                 {{-- <label for="disposisi" class="form-label mb-2">Disposisi</label> --}}
@@ -126,24 +136,83 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <!-- Kabupaten/Kota -->
                             <div class="col-md-2">
                                 <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
                                     data-control="select2">
                                     <option value="" selected disabled>Pilih Kabupaten/Kota</option>
-                                    @foreach ($city_or_regencies as $city)
-                                        <option value="{{ $city->id }}"
-                                            {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
-                                            {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
-                                        </option>
-                                    @endforeach
+                                    @if (request('province_id'))
+                                        @foreach ($city_or_regencies as $city)
+                                            @if ($city->province_id == request('province_id'))
+                                                <option value="{{ $city->id }}"
+                                                    {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
+                                                    {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
 
+                            <script>
+                                function fetchCityOrRegency(provinceId) {
+                                    const citySelect = document.getElementById('city_or_regency_id');
+                                    if (provinceId) {
+                                        // Tampilkan placeholder loading
+                                        citySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+                                        fetch(`/get-cities/${provinceId}`)
+                                            .then(response => {
+                                                if (!response.ok) throw new Error('Failed to fetch cities');
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                // Perbarui dropdown kabupaten/kota
+                                                citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                                data.forEach(city => {
+                                                    citySelect.innerHTML +=
+                                                        `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
+                                                });
+                                                // Pastikan opsi yang dipilih tetap terpilih setelah filter
+                                                const selectedCityId = '{{ request('city_or_regency_id') }}';
+                                                if (selectedCityId) {
+                                                    const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                                                    if (option) option.selected = true;
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error fetching cities:', error);
+                                                alert('Gagal mengambil data kabupaten/kota. Silakan coba lagi.');
+                                            });
+                                    } else {
+                                        // Kosongkan dropdown jika provinsi tidak dipilih
+                                        citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                    }
+                                }
 
-                            <div class="col-md-2  d-flex align-items-end">
+                                // Aktifkan ulang dropdown setelah halaman di-load ulang
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const provinceSelect = document.getElementById('province_id');
+                                    const citySelect = document.getElementById('city_or_regency_id');
+                                    const selectedProvinceId = '{{ request('province_id') }}';
+                                    const selectedCityId = '{{ request('city_or_regency_id') }}';
+
+                                    if (selectedProvinceId) {
+                                        // Trigger fetch jika provinsi dipilih sebelumnya
+                                        fetchCityOrRegency(selectedProvinceId);
+                                    }
+
+                                    // Set opsi kabupaten/kota yang dipilih setelah data selesai dimuat
+                                    if (selectedCityId) {
+                                        const option = citySelect.querySelector(`option[value="${selectedCityId}"]`);
+                                        if (option) option.selected = true;
+                                    }
+                                });
+                            </script>
+
+                            <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset</a>
+                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
                             </div>
                         </form>
                         <!--end::Form-->
@@ -195,8 +264,8 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if (
-                                $reqTanggal ||
+                            @if (request('tanggal_mulai') ||
+                                    request('tanggal_selesai') ||
                                     request('level') ||
                                     request('category_id') ||
                                     request('priority_id') ||
@@ -240,16 +309,16 @@
                                         <td data-order="{{ $ticket->priority_id }}">
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">Critical</span>
+                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">High</span>
+                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">Medium</span>
+                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">Low</span>
+                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
                                             @else
                                                 <span class="badge"
                                                     style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
@@ -259,7 +328,7 @@
                                         <!--end::Priority=-->
                                         <!--begin::Payment method=-->
                                         <td>
-                                            {{ date('d F Y', strtotime($ticket->created_at)) }}
+                                            {{ \Carbon\Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y') }}
                                         </td>
 
                                         <!--begin::Date=-->
@@ -267,53 +336,47 @@
                                             <div class="d-flex align-items-center">
                                                 @if ($ticket->status_id == '1')
                                                     <span class="badge"
-                                                        style="background-color:red ; color: white; font-weight:bold">
-                                                        Tertunda</span>
+                                                        style="background-color:red ; color: white; font-weight:bold">Tertunda</span>
                                                 @elseif($ticket->status_id == '2')
                                                     <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">
-                                                        Diterima</span>
+                                                        style="background-color:blue ; color: white; font-weight:bold">Diterima</span>
                                                 @elseif($ticket->status_id == '3')
                                                     <span class="badge"
-                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                        Proses</span>
+                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">Proses</span>
                                                 @elseif($ticket->status_id == '4')
                                                     <span class="badge"
-                                                        style="background-color:green ; color: white; font-weight:bold">
-                                                        Selesai
-                                                    </span>
+                                                        style="background-color:green ; color: white; font-weight:bold">Selesai</span>
                                                 @elseif($ticket->status_id == '5')
                                                     <span class="badge"
-                                                        style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">
-                                                        Buka Kembali
-                                                    </span>
+                                                        style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">Buka
+                                                        Kembali</span>
                                                 @else
                                                     <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                        -</span>
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
                                                 @endif
+
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
-                                                    @if ($ticket->level1 == 2)
-                                                        <form
-                                                            action="{{ route('admin.tickets.statusTicket', $ticket->id) }}"
-                                                            method="POST" id="statusForm_{{ $ticket->id }}">
-                                                            @csrf
-                                                            <div class="custom-select-wrapper">
-                                                                <select name="status_id" class="custom-select"
-                                                                    id="statusSelect_{{ $ticket->id }}">
-                                                                    <option value="2"
-                                                                        {{ $ticket->status_id == '2' ? 'selected' : '' }}>
-                                                                        Diterima</option>
-                                                                    <option value="3"
-                                                                        {{ $ticket->status_id == '3' ? 'selected' : '' }}>
-                                                                        Proses</option>
-                                                                    <option value="4"
-                                                                        {{ $ticket->status_id == '4' ? 'selected' : '' }}>
-                                                                        Selesai</option>
-                                                                </select>
-                                                            </div>
-                                                        </form>
-                                                    @endif
+                                                    <form
+                                                        action="{{ route('admin.tickets.statusTicket', $ticket->id) }}"
+                                                        method="POST" id="statusForm_{{ $ticket->id }}">
+                                                        @csrf
+                                                        <input type="hidden" name="completion_notes"
+                                                            id="completionNotesInput_{{ $ticket->id }}">
+                                                        <div class="custom-select-wrapper">
+                                                            <select name="status_id" class="custom-select"
+                                                                id="statusSelect_{{ $ticket->id }}">
+                                                                <option value="2"
+                                                                    {{ $ticket->status_id == '2' ? 'selected' : '' }}>
+                                                                    Diterima</option>
+                                                                <option value="3"
+                                                                    {{ $ticket->status_id == '3' ? 'selected' : '' }}>
+                                                                    Proses</option>
+                                                                <option value="4"
+                                                                    {{ $ticket->status_id == '4' ? 'selected' : '' }}>
+                                                                    Selesai</option>
+                                                            </select>
+                                                        </div>
+                                                    </form>
                                                 @endif
                                             </div>
                                         </td>
@@ -341,8 +404,7 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -380,8 +442,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button" title="Lihat Tiket">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button"
+                                                        title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -420,8 +482,7 @@
                                             @else
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -439,8 +500,7 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -503,8 +563,7 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST"
-                            class="d-inline">
+                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
@@ -618,6 +677,12 @@
                     <div class="modal-body">
                         Apakah Anda yakin ingin mengubah status ticket ini menjadi <span
                             id="status-name-{{ $ticket->id }}"></span>?
+
+                        <div id="completionDetails_{{ $ticket->id }}" style="display: none;">
+                            <label for="completionNotes_{{ $ticket->id }}" class="mt-4 mb-2">Keterangan
+                                Penyelesaian:</label>
+                            <textarea name="completion_notes" id="completionNotes_{{ $ticket->id }}"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="confirmButton_{{ $ticket->id }}">Ya, Ubah
@@ -633,36 +698,62 @@
                 let statusName = selectedOption.text;
                 let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
 
-                // Set status name in modal
                 document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
 
-                // Show modal
+                if (this.value == '4') {
+                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                } else {
+                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                }
+
                 $('#confirmModal_{{ $ticket->id }}').modal('show');
 
-                // On confirm button click
                 document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
-                    statusForm.submit();
+                    let completionNotes = document.getElementById('completionNotes_{{ $ticket->id }}').value.trim();
+
+                    if (document.getElementById('statusSelect_{{ $ticket->id }}').value == 4 && !completionNotes) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Alasan selesainya wajib diisi!',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Konfirmasi Perubahan Status',
+                        text: `Apakah Anda yakin ingin mengubah status tiket ini menjadi ${statusName}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Ubah Status',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('completionNotesInput_{{ $ticket->id }}').value = completionNotes;
+                            statusForm.submit();
+                        }
+                    });
                 };
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll("textarea[id^='completionNotes_{{ $ticket->id }}']").forEach((textarea) => {
+                    ClassicEditor.create(textarea, {
+                        toolbar: ['heading', '|', 'bold', 'italic', 'bulletedList', 'numberedList'],
+                    }).then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            textarea.value = editor.getData();
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                });
             });
         </script>
 
-
-        <script>
-            function fetchCityOrRegency(provinceId) {
-                if (provinceId) {
-                    fetch(`/get-cities/${provinceId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const citySelect = document.getElementById('city_or_regency_id');
-                            citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
-                            data.forEach(city => {
-                                citySelect.innerHTML +=
-                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
-                            });
-                        })
-                        .catch(error => console.error('Error fetching cities:', error));
-                }
-            }
-        </script>
     @endforeach
 @endsection

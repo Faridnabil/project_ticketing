@@ -24,6 +24,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Pejabat\HomePejabatController;
 use App\Http\Controllers\Pejabat\TicketPejabatController;
 use App\Http\Controllers\Helpdesk\ReportController;
+use App\Http\Controllers\Helpdesk\SolutionTechnicalController;
 use App\Http\Controllers\SiakDev\HomeSiakDevController;
 use App\Http\Controllers\SiakDev\TicketSiakDevController;
 use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
@@ -90,8 +91,11 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
 //ADMIN
 Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('dashboard.index');
+    Route::get('/admin/dashboardAll', [HomeAdminController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
     Route::get('/admin/tickets/dailyChart', [HomeAdminController::class, 'getDailyTicketChartData']);
+    Route::get('/admin/tickets/todaydailychart', [HomeAdminController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
     Route::resources([
         '/admin/role' => RoleController::class,
         '/admin/permission' => PermissionController::class,
@@ -114,8 +118,11 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
 // HELPDESK
 Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.')->group(function () {
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
+    Route::get('/helpdesk/dashboardAll', [HomeHelpdeskController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
+    Route::get('/helpdesk/tickets/yearlySummary', [HomeHelpdeskController::class, 'yearlySummary']);
+    Route::get('/helpdesk/tickets/todaydailychart', [HomeHelpdeskController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
@@ -128,23 +135,31 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::post('/helpdesk/status-ticket/{id}', [TicketHelpdeskController::class, 'status_ticket'])->name('tickets.statusTicket');
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
+    Route::get('/helpdesk/today', [TicketHelpdeskController::class, 'indexToday'])->name('tickets.indexToday');
 
     // Report Routes
     Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');
     Route::post('/helpdesk/report/filter', [ReportController::class, 'index'])->name('report.filter');
     Route::get('/helpdesk/report/export', [ReportController::class, 'export_ticket'])->name('report.export');
     Route::get('/helpdesk/report/export-pdf', [ReportController::class, 'export_ticket_pdf'])->name('report.export_pdf');
-    Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])
-    ->name('report.preview_pdf');
+    Route::get('helpdesk/report/preview_pdf', [ReportController::class, 'preview_ticket_pdf'])->name('report.preview_pdf');
+    Route::get('/helpdesk/reportNoted/export', [ReportController::class, 'export_noted_ticket'])->name('reportNoted.export');
 
+    //Solution
+    Route::get('/helpdesk/solution', [SolutionTechnicalController::class, 'index'])->name('solution.index');
+    Route::get('/helpdesk/solution/{ticket}/edit', [SolutionTechnicalController::class, 'edit'])->name('solution.edit');
+    Route::put('/helpdeks/solution/{id}', [SolutionTechnicalController::class, 'update'])->name('solution.update');
 });
 
 
 //KOORDINATOR
 Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.')->group(function () {
     Route::get('/koordinator/dashboard', [HomeKoordinatorController::class, 'index'])->name('dashboard.index');
+    Route::get('/koordinator/dashboardAll', [HomeKoordinatorController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/koordinator/tickets/chart', [HomeKoordinatorController::class, 'getTicketChartData']);
     Route::get('/koordinator/tickets/dailyChart', [HomeKoordinatorController::class, 'getDailyTicketChartData']);
+    Route::get('/koordinator/tickets/todaydailychart', [HomekoordinatorController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
     Route::resources([
         '/koordinator/ticket' => TicketKoordinatorController::class,
     ]);
@@ -159,8 +174,12 @@ Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.'
 //STAFF SUBDIT
 Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.')->group(function () {
     Route::get('/staff-subdit/dashboard', [HomeStaffSubditController::class, 'index'])->name('dashboard.index');
+    Route::get('/staff-subdit/dashboardAll', [HomeStaffSubditController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/staff-subdit/tickets/chart', [HomeStaffSubditController::class, 'getTicketChartData']);
     Route::get('/staff-subdit/tickets/dailyChart', [HomeStaffSubditController::class, 'getDailyTicketChartData']);
+    Route::get('/staff-subdit/tickets/todaydailychart', [HomeStaffSubditController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
+
     Route::resources([
         '/staff-subdit/ticket' => TicketStaffSubditController::class,
     ]);
@@ -174,8 +193,11 @@ Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.
 //SIAK DEV
 Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->group(function () {
     Route::get('/siak-dev/dashboard', [HomeSiakDevController::class, 'index'])->name('dashboard.index');
+    Route::get('/siak-dev/dashboardAll', [HomeSiakDevController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/siak-dev/tickets/chart', [HomeSiakDevController::class, 'getTicketChartData']);
     Route::get('/siak-dev/tickets/dailyChart', [HomeSiakDevController::class, 'getDailyTicketChartData']);
+    Route::get('/siak-dev/tickets/todaydailychart', [HomeSiakDevController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
     Route::resources([
         '/siak-dev/ticket' => TicketSiakDevController::class,
     ]);
@@ -189,8 +211,11 @@ Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->grou
 //PEJABAT
 Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group(function () {
     Route::get('/pejabat/dashboard', [HomePejabatController::class, 'index'])->name('dashboard.index');
+    Route::get('/pejabat/dashboardAll', [HomePejabatController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/pejabat/tickets/chart', [HomePejabatController::class, 'getTicketChartData']);
     Route::get('/pejabat/tickets/dailyChart', [HomePejabatController::class, 'getDailyTicketChartData']);
+    Route::get('/pejabat/tickets/todaydailychart', [HomePejabatController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+
     Route::resources([
         '/pejabat/ticket' => TicketPejabatController::class,
     ]);

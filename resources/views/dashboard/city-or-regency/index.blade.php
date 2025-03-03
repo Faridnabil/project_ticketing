@@ -57,7 +57,7 @@
                                     </svg>
                                     </svg>
                                 </span>
-                                <!--end::Svg Icon-->Download Format
+                                <!--end::Svg Icon-->Unduh Format
                             </a>
                             <!--end::Add user-->
                             &nbsp;&nbsp;
@@ -310,10 +310,25 @@
                         <div class="fv-row mb-10">
                             <!--begin::Label-->
                             <label class="fs-5 fw-bold form-label mb-5">Masukan file berformat xlsx</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input class="form-control form-control" type="file" name="your_file" />
-                            <!--end::Input-->
+                            <div class="custom-file-upload"
+                                style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
+                                <label for="fileInput" class="upload-label"
+                                    style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
+                                    <span class="upload-button"
+                                        style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
+                                        file</span>
+                                    <span id="fileName" style="margin-left: 10px">Tidak ada file dipilih</span>
+                                </label>
+                                <input id="fileInput" type="file" name="your_file" style="display: none;">
+                            </div>
+
+                            <script>
+                                // JavaScript untuk mengupdate nama file
+                                document.getElementById('fileInput').addEventListener('change', function(event) {
+                                    const fileName = event.target.files[0]?.name || 'Tidak ada file dipilih';
+                                    document.getElementById('fileName').textContent = fileName;
+                                });
+                            </script>
                         </div>
                         <!--end::Input group-->
                         <!--begin::Actions-->
