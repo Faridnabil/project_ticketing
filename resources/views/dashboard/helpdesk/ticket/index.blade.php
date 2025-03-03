@@ -250,6 +250,7 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-70px">No</th>
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
                                 {{-- <th class="min-w-70px">Pemilik</th> --}}
@@ -266,8 +267,11 @@
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
                                 @foreach ($tickets as $ticket)
-                                    <!--begin::Table row-->
-                                    <tr>
+                                <!--begin::Table row-->
+                                <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <!--begin::Nomor Ticket=-->
                                         <td>
                                             {{ $ticket->no_ticket }}
