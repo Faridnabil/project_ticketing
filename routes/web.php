@@ -128,6 +128,9 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
         // '/helpdesk/report' => ReportController::class,
     ]);
+
+    Route::get('/helpdesk/confirm/{ticket}', action: [TicketHelpdeskController::class, 'confirm'])->name('tickets.confirm');
+
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');
     Route::put('/helpdesk/TicketUpdate/{id}', [TicketHelpdeskController::class, 'update_comment'])->name('tickets.update');
     Route::put('/helpdesk/sendTicket/{id}', [TicketHelpdeskController::class, 'send_ticket'])->name('tickets.send');

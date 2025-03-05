@@ -284,10 +284,8 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 15px;margin-top:7px">
-                                                            <a href="{{ route('admin.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                            <a href="{{ route('admin.ticket.index', array_merge(request()->query(), ['status_id' => 2, 'TicketDiterima' => $tiket_masuk, 'year' => now()->year, 'month' => now()->format('m')])) }}"
                                                                 class="text-danger fw-bold fs-6">Tiket Masuk</a>
-
-
                                                             <div class="text-danger fw-bold fs-5 mt-1">
                                                                 <b>{{ $tiket_masuk }}</b>
                                                             </div>
@@ -313,7 +311,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 2px;margin-top:7px">
-                                                            <a href="{{ route('admin.ticket.index', ['filter' => 'Proses']) }}"
+                                                            <a href="{{ route('admin.ticket.index', array_merge(request()->query(), ['status_id' => 3, 'TicketProses' => $tiket_proses, 'year' => now()->year, 'month' => now()->format('m')])) }}"
                                                                 class="text-warning fw-bold fs-6">
                                                                 Tiket Dalam Proses
                                                             </a>
@@ -324,33 +322,6 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- <div class="col"
-                                                    style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-info d-block my-1 mb-3 mt-4">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                version="1.1">
-                                                                <path
-                                                                    d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                    fill="#000000" opacity="0.3" />
-                                                                <path
-                                                                    d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                    fill="#000000" />
-                                                            </svg>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left: 10px;margin-top:7px">
-                                                            <a href="{{ route('admin.ticket.index', ['filter' => 'Tertunda']) }}"
-                                                                class="text-info fw-bold fs-6">Tiket Pending</a>
-                                                            <div class="text-info fw-bold fs-5 mt-1">
-                                                                <b>{{ $tiket_tertunda }}</b>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-
                                                 <div class="col"
                                                     style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                     <div class="d-flex align-items-center">
@@ -359,8 +330,8 @@
                                                             class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
                                                             <span
                                                                 class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 24 24" version="1.1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                                    version="1.1">
                                                                     <path
                                                                         d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
                                                                         fill="#000000" opacity="0.3" />
@@ -372,12 +343,15 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left: 10px">
-                                                            <a href="{{ route('admin.ticket.index', ['filter' => 'Selesai']) }}"
-                                                                class="text-success fw-bold fs-6">Tiket Selesai</a>
+                                                            <a href="{{ route('admin.ticket.index', array_merge(request()->query(), ['status_id' => 4, 'TicketSelesai' => $tiket_selesai, 'year' => now()->year, 'month' => now()->format('m')])) }}"
+                                                                class="text-success fw-bold fs-6">
+                                                                Tiket Selesai
+                                                            </a>
                                                             <div class="text-success fw-bold fs-5 mt-1">
                                                                 <b>{{ $tiket_selesai }}</b>
                                                             </div>
                                                         </div>
+
                                                     </div>
                                                 </div>
 
@@ -400,8 +374,7 @@
                                                         </span>
                                                         <!-- Text next to the SVG -->
                                                         <div style="margin-left:14px;margin-top:7px">
-                                                            <a href="{{ route('admin.ticket.index') }}"
-                                                                class="text-primary fw-bold fs-6">Total Tiket</a>
+                                                            <div class="text-primary fw-bold fs-6">Total Tiket</div>
                                                             <div class="text-primary fw-bold fs-5 mt-1">
                                                                 <b>{{ $total_tiket }}</b>
                                                             </div>

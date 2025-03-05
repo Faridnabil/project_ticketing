@@ -692,7 +692,7 @@
             </div>
         </div>
 
-        <script>
+        {{-- <script>
             document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
                 let selectedOption = this.options[this.selectedIndex];
                 let statusName = selectedOption.text;
@@ -705,6 +705,75 @@
                 } else {
                     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
                 }
+
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    let completionNotes = document.getElementById('completionNotes_{{ $ticket->id }}').value.trim();
+
+                    if (document.getElementById('statusSelect_{{ $ticket->id }}').value == 4 && !completionNotes) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Alasan selesainya wajib diisi!',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Konfirmasi Perubahan Status',
+                        text: `Apakah Anda yakin ingin mengubah status tiket ini menjadi ${statusName}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Ubah Status',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('completionNotesInput_{{ $ticket->id }}').value = completionNotes;
+                            statusForm.submit();
+                        }
+                    });
+                };
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll("textarea[id^='completionNotes_{{ $ticket->id }}']").forEach((textarea) => {
+                    ClassicEditor.create(textarea, {
+                        toolbar: ['heading', '|', 'bold', 'italic', 'bulletedList', 'numberedList'],
+                    }).then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            textarea.value = editor.getData();
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                });
+            });
+        </script> --}}
+
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // if (this.value == '4') {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                // } else {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                // }
+
+                if (this.value == '4') {
+                // Jika status "Selesai", langsung redirect tanpa modal
+                window.location.href = "{{ route('helpdesk.tickets.confirm', $ticket->id) }}";
+                return;
+            }
 
                 $('#confirmModal_{{ $ticket->id }}').modal('show');
 

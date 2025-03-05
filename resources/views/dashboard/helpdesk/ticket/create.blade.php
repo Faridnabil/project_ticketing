@@ -43,6 +43,7 @@
                                 action="{{ route('helpdesk.ticket.store') }}" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <input type="hidden" name="no_ticket" value="{{ old('no_ticket') }}">
+                                <input type="hidden" name="created_by" value="{{ auth()->user()->name }}">
                                 <select name="level1" hidden required>
                                     @foreach ($helpdeskRoles as $roleId)
                                         <option value="{{ $roleId }}"

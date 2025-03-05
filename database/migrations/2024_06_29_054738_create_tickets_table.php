@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('pic')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('no_hp')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

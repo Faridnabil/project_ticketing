@@ -27,7 +27,7 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Ticket $ticket)
+    public function index(Request $request, Ticket $tickets)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
@@ -35,71 +35,120 @@ class TicketController extends Controller
         $tanggalMulai = $request->tanggal_mulai ?? null;
         $tanggalSelesai = $request->tanggal_selesai ?? null;
 
-        // Filter by date range if provided
-        if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
-            try {
-                $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
-                $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
-                $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
-            } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['Invalid date range provided']);
+        // Periksa apakah ada filter yang digunakan
+        $hasFilter = $request->filled('tanggal_mulai') ||
+            $request->filled('tanggal_selesai') ||
+            $request->filled('category_id') ||
+            $request->filled('level') ||
+            $request->filled('priority_id') ||
+            $request->filled('status_id') ||
+            $request->filled('province_id') ||
+            $request->filled('city_or_regency_id');
+
+        // Jika tidak ada filter yang digunakan, jangan ambil tiket
+        if (!$hasFilter) {
+            $tickets = collect(); // Kosongkan hasil query
+        } else {
+            // Filter berdasarkan rentang tanggal
+            if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
+                try {
+                    $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+                    $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+                    $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    return redirect()->back()->withErrors(['Invalid date range provided']);
+                }
+            }
+
+            // Filter berdasarkan kategori
+            if ($request->filled('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
+
+            // Filter berdasarkan level
+            if ($request->filled('level')) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('level1', $request->level)
+                        ->orWhere('level2', $request->level)
+                        ->orWhere('level3', $request->level)
+                        ->orWhere('level4', $request->level)
+                        ->orWhere('level5', $request->level);
+                });
+            }
+
+            // Filter berdasarkan prioritas
+            if ($request->filled('priority_id')) {
+                $query->where('priority_id', $request->priority_id);
+            }
+
+            $yearFilter = $request->year !== 'all' ? $request->year : null;
+
+            // Filter berdasarkan status_id dengan jumlah tiket
+            if ($request->filled('TicketDiterima')) {
+                $query->where('status_id', 2)
+                    ->limit((int) $request->TicketDiterima);
+
+                // Jika tahun bukan 'all', tambahkan filter berdasarkan tahun
+                if (!is_null($yearFilter)) {
+                    $query->whereYear('created_at', $yearFilter);
+                }
+            }
+
+            if ($request->filled('TicketProses')) {
+                $query->where('status_id', 3)
+                    ->limit((int) $request->TicketProses);
+
+                if (!is_null($yearFilter)) {
+                    $query->whereYear('created_at', $yearFilter);
+                }
+            }
+
+            if ($request->filled('TicketSelesai')) {
+                $query->where('status_id', 4)
+                    ->limit((int) $request->TicketSelesai);
+
+                if (!is_null($yearFilter)) {
+                    $query->whereYear('created_at', $yearFilter);
+                }
+            }
+
+            // Filter berdasarkan provinsi
+            if ($request->filled('status_id')) {
+                $query->where('status_id', $request->status_id);
+            }
+
+            // Filter berdasarkan provinsi
+            if ($request->filled('province_id')) {
+                $query->where('province_id', $request->province_id);
+            }
+
+            // Filter berdasarkan kota/kabupaten
+            if ($request->filled('city_or_regency_id')) {
+                $query->where('city_or_regency_id', $request->city_or_regency_id);
             }
         }
 
-        // Other filters
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->filled('level')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('level1', $request->level)
-                    ->orWhere('level2', $request->level)
-                    ->orWhere('level3', $request->level)
-                    ->orWhere('level4', $request->level)
-                    ->orWhere('level5', $request->level);
-            });
-        }
-
-        if ($request->filled('priority_id')) {
-            $query->where('priority_id', $request->priority_id);
-        }
-
-        if ($request->filled('status_id')) {
-            $query->where('status_id', $request->status_id);
-        }
-
-        // Filter by province
-        $provinceId = $request->province_id ?? null;
-        if ($provinceId) {
-            $query->where('province_id', $provinceId);
-        }
-
-        if ($request->filled('city_or_regency_id')) {
-            $query->where('city_or_regency_id', $request->city_or_regency_id);
-        }
-
-        // Apply sorting after all filters
+        // Apply sorting setelah semua filter diterapkan
         $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
 
-        // Retrieve filter data
+        // Mengambil data kategori, prioritas, status, dan level
         $categories = Category::all();
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
 
-        $tickets = $query->get();
+        // Ambil data tiket hanya jika ada filter yang digunakan
+        $tickets = $hasFilter ? $query->get() : collect();
 
         // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
+        $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
 
+        // Ambil data provinsi
         $provinces = Province::all();
 
-        // Fetch cities based on selected province
-        $city_or_regencies = $provinceId
-            ? CityOrRegency::where('province_id', $provinceId)->get()
+        // Ambil data kota/kabupaten berdasarkan provinsi yang dipilih
+        $city_or_regencies = $request->filled('province_id')
+            ? CityOrRegency::where('province_id', $request->province_id)->get()
             : collect([]);
 
         return view('dashboard.admin.ticket.index', [
@@ -116,6 +165,7 @@ class TicketController extends Controller
             'filter' => $request->all() // Kirim filter saat ini ke view
         ]);
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -361,6 +411,8 @@ class TicketController extends Controller
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,
+                'h_created_by' => $ticket->created_by,
+                'h_updated_by' => $ticket->updated_by,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
@@ -400,8 +452,8 @@ class TicketController extends Controller
             $ticket->update($data);
 
             DB::commit();
-            return redirect(session('first_url', route('helpdesk.ticket.index')))
-            ->with('success', 'Tiket Berhasil Dirubah');
+            return redirect(session('first_url', route('admin.ticket.index')))
+                ->with('success', 'Tiket Berhasil Dirubah');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->withInput()->withErrors($th->getMessage());
@@ -508,5 +560,138 @@ class TicketController extends Controller
         }
 
         return redirect()->back()->with('error', 'Anda tidak berhak untuk menyetujui pengajuan ini.');
+    }
+
+    public function status_ticket(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->status_id = $request->status_id;
+        $ticket->updated_by = Auth::user()->name;
+
+
+        // Simpan completion_notes jika status diubah menjadi Selesai
+        if ($request->status_id == 4) {
+            $ticket->completion_notes = $request->completion_notes;
+        }
+
+        $ticket->save();
+
+        // Notifikasi Koordinator
+        if ($request->status_id == 4) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', Sudah diselesaikan',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/helpdesk/ticket'),
+                'koordinator_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan salah satu peran yang disebutkan
+            $roles = ['Helpdesk'];
+            $helpdesks = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('name', $roles);
+            })->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran yang disebutkan
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationKoordinator($notificationData));
+            }
+        }
+
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'h_created_by' => $ticket->created_by,
+            'h_updated_by' => $ticket->updated_by,
+            'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
+
+        return redirect()->back()->with('success', 'Status Tiket telah diubah.');
+    }
+
+    public function send_ticket(Request $request, $id)
+    {
+        // Cari tiket berdasarkan ID
+        $ticket = Ticket::findOrFail($id);
+
+        // Update level2 dengan nilai dari request
+        $ticket->level1 = $request->level1;
+        $ticket->level2 = $request->level2;
+
+        // Simpan perubahan
+        $ticket->save();
+
+        // Notifikasi Koordinator
+        if ($request->level2) {
+            $authenticatedUserName = Auth::user()->name;
+
+            $notificationData = [
+                'name' => $authenticatedUserName,
+                'body' => 'Tiket yang ditangani ' . $authenticatedUserName . ', telah dialihkan kepada anda',
+                'thanks' => 'Terimakasih',
+                'Text' => '',
+                'Url' => url('/koordinator/ticket'),
+                'koordinator_id' => rand(1111, 9999),
+            ];
+
+            // Ambil semua pengguna dengan peran 'admin'
+            $helpdesks = User::role('Koordinator')
+                ->get();
+
+            // Kirim notifikasi kepada semua pengguna dengan peran 'admin'
+            foreach ($helpdesks as $helpdesk) {
+                Notification::send($helpdesk, new NotificationKoordinator($notificationData));
+            }
+        }
+
+        // Simpan data tiket sebelum diupdate ke tabel history_ticket
+        DB::table('history_tickets')->insert([
+            'h_no_ticket' => $ticket->no_ticket,
+            'h_province_id' => $ticket->province_id,
+            'h_city_or_regency_id' => $ticket->city_or_regency_id,
+            'h_level1' => $ticket->level1,
+            'h_level2' => $ticket->level2,
+            'h_level3' => $ticket->level3,
+            'h_level4' => $ticket->level4,
+            'h_level5' => $ticket->level5,
+            'h_priority_id' => $ticket->priority_id,
+            'h_status_id' => $ticket->status_id,
+            'h_category_id' => $ticket->category_id,
+            'h_description' => $ticket->description,
+            'h_attachments' => $ticket->attachments,
+            'h_pic' => $ticket->pic,
+            'h_jabatan' => $ticket->jabatan,
+            'h_no_hp' => $ticket->no_hp,
+            'h_created_by' => $ticket->created_by,
+            'h_updated_by' => $ticket->updated_by,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'status_changedBy' => Auth::user()->id,
+        ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Pengajuan telah dikirim.');
     }
 }

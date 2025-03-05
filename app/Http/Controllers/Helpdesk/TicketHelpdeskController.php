@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Helpdesk;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\CityOrRegency;
@@ -26,7 +25,7 @@ class TicketHelpdeskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Ticket $ticket)
+    public function index(Request $request, Ticket $tickets)
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
@@ -382,7 +381,43 @@ class TicketHelpdeskController extends Controller
         );
     }
 
+    public function confirm(Ticket $ticket, Request $request)
+    {
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
 
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+        $provinces = Province::all();
+
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
+        // Dapatkan ID untuk status yang diperlukan
+        $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
+        $tertundaStatusId = Status::where('status_name', 'Tertunda')->value('id');
+        $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
+        $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
+
+        return view(
+            'dashboard.helpdesk.ticket.confirm',
+            compact(
+                'ticket',
+                'priorities',
+                'statuses',
+                'categories',
+                'provinces',
+                'city_or_regencies',
+                'selesaiStatusId',
+                'tertundaStatusId',
+                'diterimaStatusId',
+                'bukaKembaliStatusId'
+            )
+        );
+    }
 
     /**
      * Update the specified resource in storage.
@@ -454,6 +489,8 @@ class TicketHelpdeskController extends Controller
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,
+                'h_created_by' => $ticket->created_by,
+                'h_updated_by' => $ticket->updated_by,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
@@ -608,6 +645,8 @@ class TicketHelpdeskController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
+        $ticket->updated_by = Auth::user()->name;
+
 
         // Simpan completion_notes jika status diubah menjadi Selesai
         if ($request->status_id == 4) {
@@ -659,6 +698,8 @@ class TicketHelpdeskController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_created_by' => $ticket->created_by,
+            'h_updated_by' => $ticket->updated_by,
             'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,
             'created_at' => now(),
             'updated_at' => now(),
@@ -667,9 +708,6 @@ class TicketHelpdeskController extends Controller
 
         return redirect()->back()->with('success', 'Status Tiket telah diubah.');
     }
-
-
-
 
     public function send_ticket(Request $request, $id)
     {
@@ -724,6 +762,8 @@ class TicketHelpdeskController extends Controller
             'h_pic' => $ticket->pic,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
+            'h_created_by' => $ticket->created_by,
+            'h_updated_by' => $ticket->updated_by,
             'created_at' => now(),
             'updated_at' => now(),
             'status_changedBy' => Auth::user()->id,

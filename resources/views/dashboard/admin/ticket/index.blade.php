@@ -40,7 +40,8 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="row g-3 align-items-center">
+                        <form method="GET" action="{{ route('admin.ticket.index') }}"
+                            class="row g-3 align-items-center">
 
                             <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                             <input type="hidden" name="level" value="{{ request('level') }}">
@@ -127,7 +128,7 @@
                             <div class="col-md-2">
                                 <select id="province_id" name="province_id" class="form-select" data-control="select2"
                                     onchange="fetchCityOrRegency(this.value)">
-                                    <option value="" selected disabled>Pilih Provinsi</option>
+                                    <option value="" selected disabled>Pilih Propinsi</option>
                                     @foreach ($provinces as $province)
                                         <option value="{{ $province->id }}"
                                             {{ request('province_id') == $province->id ? 'selected' : '' }}>
@@ -212,7 +213,7 @@
 
                             <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
+                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Atur ulang</a>
                             </div>
                         </form>
                         <!--end::Form-->
@@ -249,6 +250,7 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-70px">No</th>
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
                                 {{-- <th class="min-w-70px">Pemilik</th> --}}
@@ -264,17 +266,12 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if (request('tanggal_mulai') ||
-                                    request('tanggal_selesai') ||
-                                    request('level') ||
-                                    request('category_id') ||
-                                    request('priority_id') ||
-                                    request('status_id') ||
-                                    request('city_or_regency_id') ||
-                                    request('province_id'))
                                 @foreach ($tickets as $ticket)
-                                    <!--begin::Table row-->
-                                    <tr>
+                                <!--begin::Table row-->
+                                <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <!--begin::Nomor Ticket=-->
                                         <td>
                                             {{ $ticket->no_ticket }}
@@ -404,7 +401,8 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -442,8 +440,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button"
-                                                        title="Lihat Tiket">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -482,7 +480,8 @@
                                             @else
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -500,7 +499,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -521,7 +521,6 @@
                                     </tr>
                                     <!--end::Table row-->
                                 @endforeach
-                            @endif
                         </tbody>
                         <!--end::Table body-->
                     </table>
@@ -563,7 +562,8 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST"
+                            class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
@@ -692,7 +692,7 @@
             </div>
         </div>
 
-        <script>
+        {{-- <script>
             document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
                 let selectedOption = this.options[this.selectedIndex];
                 let statusName = selectedOption.text;
@@ -753,7 +753,75 @@
                     });
                 });
             });
-        </script>
+        </script> --}}
 
+        <script>
+            document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let statusName = selectedOption.text;
+                let statusForm = document.getElementById('statusForm_{{ $ticket->id }}');
+
+                document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
+
+                // if (this.value == '4') {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                // } else {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                // }
+
+                if (this.value == '4') {
+                // Jika status "Selesai", langsung redirect tanpa modal
+                window.location.href = "{{ route('helpdesk.tickets.confirm', $ticket->id) }}";
+                return;
+            }
+
+                $('#confirmModal_{{ $ticket->id }}').modal('show');
+
+                document.getElementById('confirmButton_{{ $ticket->id }}').onclick = function() {
+                    let completionNotes = document.getElementById('completionNotes_{{ $ticket->id }}').value.trim();
+
+                    if (document.getElementById('statusSelect_{{ $ticket->id }}').value == 4 && !completionNotes) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Alasan selesainya wajib diisi!',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Konfirmasi Perubahan Status',
+                        text: `Apakah Anda yakin ingin mengubah status tiket ini menjadi ${statusName}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Ubah Status',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('completionNotesInput_{{ $ticket->id }}').value = completionNotes;
+                            statusForm.submit();
+                        }
+                    });
+                };
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll("textarea[id^='completionNotes_{{ $ticket->id }}']").forEach((textarea) => {
+                    ClassicEditor.create(textarea, {
+                        toolbar: ['heading', '|', 'bold', 'italic', 'bulletedList', 'numberedList'],
+                    }).then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            textarea.value = editor.getData();
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                });
+            });
+        </script>
     @endforeach
 @endsection

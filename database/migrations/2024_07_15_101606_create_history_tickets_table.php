@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('h_jabatan')->nullable();
             $table->string('h_no_hp')->nullable();
             $table->text('h_completion_notes')->nullable();
+            $table->string('h_created_by')->nullable();
+            $table->string('h_updated_by')->nullable();
 
             $table->foreignId('status_changedBy')->nullable()->constrained('users');
             $table->timestamps();

@@ -29,7 +29,7 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
-
+                                <input type="hidden" name="updated_by" value="{{ auth()->user()->name }}">
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Kategori Permasalahan</label>
                                     <select name="category_id"

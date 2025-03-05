@@ -23,6 +23,8 @@ class Ticket extends Model
         'pic',
         'jabatan',
         'completion_notes',
+        'created_by',
+        'updated_by',
         'no_hp',
         'level1',
         'level2',

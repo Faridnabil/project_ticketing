@@ -117,6 +117,7 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-70px">No</th>
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
                                 {{-- <th class="min-w-70px">Pemilik</th> --}}
@@ -136,6 +137,9 @@
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <!--begin::Nomor Ticket=-->
                                         <td>
                                             {{ $ticket->no_ticket }}
@@ -565,11 +569,17 @@
 
                 document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
 
+                // if (this.value == '4') {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                // } else {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                // }
+
                 if (this.value == '4') {
-                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
-                } else {
-                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
-                }
+                // Jika status "Selesai", langsung redirect tanpa modal
+                window.location.href = "{{ route('helpdesk.tickets.confirm', $ticket->id) }}";
+                return;
+            }
 
                 $('#confirmModal_{{ $ticket->id }}').modal('show');
 

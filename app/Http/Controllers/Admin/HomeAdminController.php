@@ -62,8 +62,6 @@ class HomeAdminController extends Controller
             'date'
         ));
     }
-
-
     public function todaygetTicketChartData(Request $request)
     {
         $selectedDate = $request->input('selectedDate', today()->toDateString());
@@ -106,16 +104,21 @@ class HomeAdminController extends Controller
         ]);
     }
 
-
     public function indexAll(Request $request)
     {
-        $month = $request->query('month', now()->month);
-        $year = $request->query('year', now()->year); // Default ke tahun berjalan
+        $month = $request->query('month');
+        $year = $request->query('year');
 
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
+            ->when($year, function ($query) use ($year) {
+                if ($year !== "all") { // Jangan filter jika "Semua Tahun" dipilih
+                    $query->whereYear('created_at', $year);
+                }
+            })
+            ->when($month, function ($query) use ($month) {
+                if ($month !== "all") { // Jangan filter jika "Semua Bulan" dipilih
+                    $query->whereMonth('created_at', $month);
+                }
             })
             ->get();
 
