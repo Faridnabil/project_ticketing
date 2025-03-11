@@ -442,7 +442,7 @@
             var location = (document.location) ? encodeURIComponent(window.location.href.substring(window.location
                 .protocol.length)) : '';
             po.src =
-                '//192.168.36.143:8081/public/index.php/idn/chat/getstatus/(click)/internal/(position)/bottom_right/(ma)/br/(top)/350/(units)/pixels/(leaveamessage)/true/(department)/2/(theme)/2?r=' +
+                '//rafimotors.shop/index.php/chat/getstatus/(click)/internal/(position)/bottom_right/(ma)/br/(top)/350/(units)/pixels/(leaveamessage)/true/(department)/2?r=' +
                 referrer + '&l=' + location;
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(po, s);
