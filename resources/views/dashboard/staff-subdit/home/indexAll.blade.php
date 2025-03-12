@@ -59,7 +59,7 @@
         }
     </style>
 
-    {{-- Riwayat Tiket  --}}
+    {{-- Riwayat Tiket --}}
     <style>
         .timeline {
             list-style: none;
@@ -113,7 +113,7 @@
     </style>
 
     <!--begin::Toolbar-->
-    {{--  card title  --}}
+    {{-- card title --}}
     <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -137,7 +137,7 @@
         <!--end::Container-->
     </div>
     <!--end::Toolbar-->
-    {{--  card main  --}}
+    {{-- card main --}}
     <div class="post" id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row">
@@ -148,13 +148,13 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('staffSubdit.dashboard.index') ? 'active' : '' }}"
-                                   href="{{ route('staffSubdit.dashboard.index') }}">
+                                    href="{{ route('staffSubdit.dashboard.index') }}">
                                     <strong>Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('staffSubdit.dashboard.indexAll') ? 'active' : '' }}"
-                                   href="{{ route('staffSubdit.dashboard.indexAll') }}">
+                                    href="{{ route('staffSubdit.dashboard.indexAll') }}">
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
@@ -164,34 +164,80 @@
 
                     <div class="tab-content">
                         <div class="card card-xxl-stretch mt-3 mb-4">
-                            <div class="row mb-6 ms-6">
-                                <h4 class="card-title text-black mt-6">Filter Grafik</h4>
-                                <div class="col-md-2 mt-1">
-                                    <select id="filterMonth" class="form-select" required>
-                                        <option value="" disabled {{ is_null($month) ? 'selected' : '' }}>Pilih
-                                            Bulan
-                                        </option>
+                            <div class="row mb-6 ms-6 d-flex align-items-center" style="margin-top: 20px">
+                                <div class="col-md-2">
+                                    <h4 class="card-title text-black">Filter Grafik</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <select id="filterYear" class="form-select">
+                                        <option value="all" selected>Semua Tahun</option>
+                                        @foreach (range(now()->year - 5, now()->year + 1) as $y)
+                                            <option value="{{ $y }}">{{ $y }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select id="filterMonth" class="form-select" disabled>
+                                        <option value="all" selected>Semua Bulan</option>
                                         @foreach (range(1, 12) as $m)
-                                            <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
-                                                {{ \Carbon\Carbon::create()->month($m)->format('F') }}
+                                            <option value="{{ $m }}">
+                                                {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2 mt-1">
-                                    <select id="filterYear" class="form-select" required>
-                                        <option value="" disabled {{ is_null($year) ? 'selected' : '' }}>Pilih
-                                            Tahun
-                                        </option>
-                                        @foreach (range(now()->year - 5, now()->year) as $y)
-                                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
-                                                {{ $y }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-4">
+                                    <button id="applyFilter" class="btn btn-primary">Filter</button>
+                                    <button id="resetFilter" class="btn btn-danger">Segarkan</button>
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const filterYear = document.getElementById('filterYear');
+                            const filterMonth = document.getElementById('filterMonth');
+                            const applyFilter = document.getElementById('applyFilter');
+                            const resetFilter = document.getElementById('resetFilter');
+
+                            // Ambil parameter dari URL jika ada
+                            const urlParams = new URLSearchParams(window.location.search);
+                            let savedYear = urlParams.get('year') || "all";
+                            let savedMonth = urlParams.get('month') || "all";
+
+                            // Set nilai dari parameter yang tersimpan
+                            filterYear.value = savedYear;
+                            filterMonth.value = savedMonth;
+
+                            // Jika tahun telah dipilih selain "Semua Tahun", maka bulan diaktifkan
+                            filterMonth.disabled = savedYear === "all";
+
+                            filterYear.addEventListener('change', function () {
+                                if (filterYear.value === "all") {
+                                    filterMonth.value = "all";
+                                    filterMonth.disabled = true;
+                                } else {
+                                    filterMonth.disabled = false;
+                                }
+                            });
+
+                            applyFilter.addEventListener('click', function () {
+                                const year = filterYear.value;
+                                const month = filterMonth.value;
+
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('year', year);
+                                url.searchParams.set('month', month);
+
+                                window.location.href = url.toString();
+                            });
+
+                            resetFilter.addEventListener('click', function () {
+                                window.location.href = window.location.pathname; // Reset ke semua data
+                            });
+                        });
+                        </script>
+
 
                         <div class="col-xl-12">
                             <!-- Konten Data Keseluruhan -->
@@ -236,10 +282,8 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 15px;margin-top:7px">
-                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                        <a href="{{ route('helpdesk.ticket.index',array_merge(request()->query(), ['status_id' => 2, 'TicketDiterima' => $tiket_masuk])) }}"
                                                             class="text-danger fw-bold fs-6">Tiket Masuk</a>
-
-
                                                         <div class="text-danger fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_masuk }}</b>
                                                         </div>
@@ -265,7 +309,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 2px;margin-top:7px">
-                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Proses']) }}"
+                                                        <a href="{{ route('helpdesk.ticket.index',array_merge(request()->query(), ['status_id' => 3, 'TicketProses' => $tiket_proses])) }}"
                                                             class="text-warning fw-bold fs-6">
                                                             Tiket Dalam Proses
                                                         </a>
@@ -276,33 +320,6 @@
                                                 </div>
                                             </div>
 
-                                            {{-- <div class="col"
-                                                style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                <div class="d-flex align-items-center">
-                                                    <!-- SVG Icon -->
-                                                    <span
-                                                        class="svg-icon svg-icon-3x svg-icon-info d-block my-1 mb-3 mt-4">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                            version="1.1">
-                                                            <path
-                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                fill="#000000" opacity="0.3" />
-                                                            <path
-                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                fill="#000000" />
-                                                        </svg>
-                                                    </span>
-                                                    <!-- Text next to the SVG -->
-                                                    <div style="margin-left: 10px;margin-top:7px">
-                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Tertunda']) }}"
-                                                            class="text-info fw-bold fs-6">Tiket Pending</a>
-                                                        <div class="text-info fw-bold fs-5 mt-1">
-                                                            <b>{{ $tiket_tertunda }}</b>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-
                                             <div class="col"
                                                 style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
                                                 <div class="d-flex align-items-center">
@@ -311,8 +328,8 @@
                                                         class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
                                                         <span
                                                             class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24" version="1.1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                                version="1.1">
                                                                 <path
                                                                     d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
                                                                     fill="#000000" opacity="0.3" />
@@ -324,12 +341,15 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 10px">
-                                                        <a href="{{ route('staffSubdit.ticket.index', ['filter' => 'Selesai']) }}"
-                                                            class="text-success fw-bold fs-6">Tiket Selesai</a>
+                                                        <a href="{{ route('helpdesk.ticket.index', array_merge(request()->query(), ['status_id' => 4, 'TicketSelesai' => $tiket_selesai])) }}"
+                                                            class="text-success fw-bold fs-6">
+                                                            Tiket Selesai
+                                                        </a>
                                                         <div class="text-success fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_selesai }}</b>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
 
@@ -352,8 +372,8 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left:14px;margin-top:7px">
-                                                        <a href="{{ route('staffSubdit.ticket.index') }}"
-                                                            class="text-primary fw-bold fs-6">Total Tiket</a>
+                                                        <div
+                                                            class="text-primary fw-bold fs-6">Total Tiket</div>
                                                         <div class="text-primary fw-bold fs-5 mt-1">
                                                             <b>{{ $total_tiket }}</b>
                                                         </div>
@@ -373,37 +393,60 @@
                             </div>
                             <!--end::Mixed Widget 2-->
 
-                            <div class="row">
-                                <div class="col-xxl-12">
-                                    <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
-                                            <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan
-                                                -
-                                                {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Semua Bulan' }}
-                                                {{ $year ?? now()->year }}</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @php
+                                $selectedYear = request('year'); // Ambil nilai tahun dari request
+                                $selectedMonth = request('month'); // Ambil nilai bulan dari request
+                            @endphp
 
-                            <div class="row">
-                                <!-- Left Column -->
-                                <div class="col-xxl-12">
-                                    <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
-                                            <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket
-                                                Pertahun -
-                                                {{ $year ?? now()->year }}</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <canvas id="ticketChart" width="80%" height="20px"></canvas>
+                            @if(($selectedYear && $selectedYear !== 'all') || ($selectedMonth && $selectedMonth !== 'all'))
+                                <div class="row">
+                                    <div class="col-xxl-12">
+                                        <div class="card card-xxl-stretch">
+                                            <div class="card-header border-0 bg-primary py-5">
+                                                <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
+                                                    {{ $selectedMonth ? \Carbon\Carbon::create()->month($selectedMonth)->format('F') : 'Semua Bulan' }}
+                                                    {{ $selectedYear ?? now()->year }}
+                                                </h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                <div class="row">
+                                    <!-- Left Column -->
+                                    <div class="col-xxl-12">
+                                        <div class="card card-xxl-stretch">
+                                            <div class="card-header border-0 bg-primary py-5">
+                                                <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
+                                                    {{ $selectedYear ?? now()->year }}
+                                                </h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="ticketChart" width="80%" height="20px"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <!-- Default Yearly Summary -->
+                                <div class="row" id="yearlySummaryContainer">
+                                    <div class="col-xxl-12">
+                                        <div class="card card-xxl-stretch">
+                                            <div class="card-header border-0 bg-primary py-5">
+                                                <h3 class="card-title fw-bolder text-white">Total Tiket Pertahun</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="yearlySummaryChart" width="80%" height="20px"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+
                         </div>
                     </div>
 
@@ -414,122 +457,173 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    {{-- DATA TIKET BULANAN --}}
+    {{-- DATA TIKET GRAFIK --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctxDaily = document.getElementById('dailyDataChart').getContext('2d');
+        document.addEventListener('DOMContentLoaded', function () {
             const filterYear = document.getElementById('filterYear');
             const filterMonth = document.getElementById('filterMonth');
-            let dailyDataChart;
+            const applyFilter = document.getElementById('applyFilter');
+            const resetFilter = document.getElementById('resetFilter');
+            const ctxDaily = document.getElementById('dailyDataChart').getContext('2d');
+            const ctxYearly = document.getElementById('ticketChart').getContext('2d');
 
-            function fetchDailyData() {
-                const year = filterYear.value;
-                const month = filterMonth.value;
+            let dailyDataChart, ticketChart;
 
-                fetch(`{{ url('/staff-subdit/tickets/dailyChart') }}?year=${year}&month=${month}`)
+            function getSavedFilters() {
+                const params = new URLSearchParams(window.location.search);
+                return {
+                    year: params.get('year') || 'all',
+                    month: params.get('month') || 'all'
+                };
+            }
+
+            function updateURL(year, month) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('year', year);
+                url.searchParams.set('month', month);
+                window.location.href = url.toString();
+            }
+
+            function updateCharts(year, month) {
+                let urlDaily = `/staff-subdit/tickets/dailyChart`;
+                let urlYearly = `/staff-subdit/tickets/chart`;
+
+                if (year !== "all") {
+                    urlDaily += `?year=${year}`;
+                    urlYearly += `?year=${year}`;
+                    if (month !== "all") {
+                        urlDaily += `&month=${month}`;
+                        urlYearly += `&month=${month}`;
+                    }
+                }
+
+                fetch(urlDaily)
                     .then(response => response.json())
                     .then(data => {
-                        const labelsDaily = data.days;
-                        const dataCreated = data.ticketsCreated;
-                        const dataClosed = data.ticketsClosed;
+                        if (dailyDataChart) dailyDataChart.destroy();
 
-                        if (dailyDataChart) {
-                            dailyDataChart.destroy();
-                        }
+                        const selectedYear = savedFilters.year !== 'all' ? parseInt(savedFilters.year) : new Date().getFullYear();
+                        const selectedMonth = savedFilters.month !== 'all' ? parseInt(savedFilters.month) - 1 : new Date().getMonth();
+
+                        const hariIndonesia = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+                        const labelsWithDay = data.days.map(day => {
+                            const date = new Date(selectedYear, selectedMonth, day);
+                            return `${hariIndonesia[date.getDay()]}, ${day}`;
+                        });
 
                         dailyDataChart = new Chart(ctxDaily, {
                             type: 'line',
                             data: {
-                                labels: labelsDaily,
-                                datasets: [{
+                                labels: labelsWithDay,
+                                datasets: [
+                                    {
                                         label: 'Total Tiket',
-                                        data: dataCreated,
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        data: data.ticketsCreated,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Biru
+                                        borderColor: 'rgba(54, 162, 235, 1)', // Biru
                                         borderWidth: 1,
                                         fill: true
                                     },
                                     {
                                         label: 'Tiket Selesai Harian',
-                                        data: dataClosed,
-                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        data: data.ticketsClosed,
+                                        backgroundColor: 'rgba(75, 192, 75, 0.2)', // Hijau
+                                        borderColor: 'rgba(75, 192, 75, 1)', // Hijau
                                         borderWidth: 1,
                                         fill: true
                                     }
                                 ]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                },
-                                elements: {
-                                    line: {
-                                        tension: 0.1
-                                    }
-                                }
                             }
                         });
-                    })
-                    .catch(error => console.error('Error fetching daily data:', error));
-            }
+                    });
 
-            filterYear.addEventListener('change', fetchDailyData);
-            filterMonth.addEventListener('change', fetchDailyData);
-
-            fetchDailyData();
-        });
-    </script>
-
-    {{-- DATA TIKET TAHUNAN --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('ticketChart').getContext('2d');
-            const filterYear = document.getElementById('filterYear');
-            let ticketChart;
-
-            // Daftar nama bulan dalam bahasa Indonesia
-            const bulanIndonesia = [
-                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-            ];
-
-            function fetchYearlyData() {
-                const year = filterYear.value;
-
-                fetch(`{{ url('/staff-subdit/tickets/chart') }}?year=${year}`)
+                fetch(urlYearly)
                     .then(response => response.json())
                     .then(data => {
-                        if (ticketChart) {
-                            ticketChart.destroy();
-                        }
-
-                        // Ubah nama bulan dalam data.months menjadi bulan Indonesia
-                        const labelsInIndonesian = data.months.map((month, index) => bulanIndonesia[index]);
-
-                        ticketChart = new Chart(ctx, {
+                        if (ticketChart) ticketChart.destroy();
+                        ticketChart = new Chart(ctxYearly, {
                             type: 'bar',
                             data: {
-                                labels: labelsInIndonesian, // Gunakan nama bulan dalam bahasa Indonesia
-                                datasets: [{
+                                labels: data.months,
+                                datasets: [
+                                    {
                                         label: 'Total Tiket',
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Biru
+                                        borderColor: 'rgba(54, 162, 235, 1)', // Biru
                                         data: data.tickets
                                     },
                                     {
                                         label: 'Tiket Selesai',
-                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                        borderColor: 'rgba(153, 102, 255, 1)',
-                                        borderWidth: 1,
+                                        backgroundColor: 'rgba(75, 192, 75, 0.2)', // Hijau
+                                        borderColor: 'rgba(75, 192, 75, 1)', // Hijau
                                         data: data.ticketsClosed
+                                    }
+                                ]
+                            }
+                        });
+                    });
+            }
+
+            const savedFilters = getSavedFilters();
+            filterYear.value = savedFilters.year;
+            filterMonth.value = savedFilters.month;
+            filterMonth.disabled = savedFilters.year === 'all';
+
+            updateCharts(savedFilters.year, savedFilters.month);
+
+            filterYear.addEventListener('change', function () {
+                filterMonth.disabled = filterYear.value === 'all';
+                if (filterYear.value === 'all') {
+                    filterMonth.value = 'all';
+                }
+            });
+
+            applyFilter.addEventListener('click', function () {
+                updateURL(filterYear.value, filterMonth.value);
+            });
+
+            resetFilter.addEventListener('click', function () {
+                window.location.href = window.location.pathname;
+            });
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctxYearSummary = document.getElementById('yearlySummaryChart').getContext('2d');
+            let yearlySummaryChart;
+
+            function loadYearlySummary() {
+                fetch('/staff-subdit/tickets/yearlySummary')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (yearlySummaryChart) yearlySummaryChart.destroy();
+
+                        yearlySummaryChart = new Chart(ctxYearSummary, {
+                            type: 'bar',
+                            data: {
+                                labels: data.years,
+                                datasets: [
+                                    {
+                                        label: 'Total Tiket',
+                                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1,
+                                        data: data.total_tickets
+                                    },
+                                    {
+                                        label: 'Tiket Selesai',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1,
+                                        data: data.closed_tickets
                                     }
                                 ]
                             },
                             options: {
+                                responsive: true,
                                 scales: {
                                     y: {
                                         beginAtZero: true
@@ -540,62 +634,8 @@
                     });
             }
 
-            filterYear.addEventListener('change', fetchYearlyData);
-            fetchYearlyData();
+            loadYearlySummary();
         });
+
     </script>
-
-    {{-- Title Tahun --}}
-    <script>
-        const filterMonth = document.getElementById('filterMonth');
-        const filterYear = document.getElementById('filterYear');
-        const cardTitle = document.getElementById('cardTitle');
-        const cardTitle2 = document.getElementById('cardTitle2');
-
-        // Event listeners
-        filterMonth.addEventListener('change', handleFilterChange);
-        filterYear.addEventListener('change', handleFilterChange);
-
-        function handleFilterChange() {
-            const selectedMonth = filterMonth.value;
-            const selectedYear = filterYear.value;
-
-            if (selectedMonth && !selectedYear) {
-                alert('Harap pilih tahun terlebih dahulu sebelum memilih bulan!');
-                filterMonth.value = ""; // Reset pilihan bulan
-                return;
-            }
-
-            // Update URL tanpa reload halaman
-            const url = new URL(window.location.href);
-            if (selectedMonth) url.searchParams.set('month', selectedMonth);
-            if (selectedYear) url.searchParams.set('year', selectedYear);
-
-            window.location.href = url.toString(); // Reload halaman dengan parameter baru
-        }
-
-
-        function updateTitles(month, year) {
-            if (month && year) {
-                const monthName = new Date(year, month - 1).toLocaleString('default', {
-                    month: 'long'
-                });
-                cardTitle.textContent = `Tiket Perbulan - ${monthName} ${year}`;
-                cardTitle2.textContent = `Tiket Pertahun - ${monthName} ${year}`;
-            } else if (year) {
-                cardTitle.textContent = `Tiket Pertahun - ${year}`;
-                cardTitle2.textContent = `Tiket Pertahun - ${year}`;
-            } else if (month) {
-                const monthName = new Date(new Date().getFullYear(), month - 1).toLocaleString('default', {
-                    month: 'long'
-                });
-                cardTitle.textContent = `Tiket Perbulan - ${monthName}`;
-                cardTitle2.textContent = `Tiket Perbulan - ${monthName}`;
-            } else {
-                cardTitle.textContent = 'Tiket Perbulan - Tidak ada filter';
-                cardTitle2.textContent = 'Tiket Pertahun - Tidak ada filter';
-            }
-        }
-    </script>
-
 @endsection

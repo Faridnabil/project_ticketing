@@ -29,6 +29,8 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
+                                <input type="hidden" name="updated_by" value="{{ auth()->user()->name }}">
+
                                 <select name="level3" hidden required>
                                     @foreach ($StaffsubditRoles as $roleId)
                                         <option value="{{ $roleId }}"

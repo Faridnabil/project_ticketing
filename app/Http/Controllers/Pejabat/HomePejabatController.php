@@ -111,12 +111,19 @@ class HomePejabatController extends Controller
 
     public function indexAll(Request $request)
     {
-        $month = $request->query('month', now()->month);
-        $year = $request->query('year', now()->year); // Default ke tahun berjalan
+        $month = $request->query('month');
+        $year = $request->query('year');
+
         $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
+            ->when($year, function ($query) use ($year) {
+                if ($year !== "all") { // Jangan filter jika "Semua Tahun" dipilih
+                    $query->whereYear('created_at', $year);
+                }
+            })
+            ->when($month, function ($query) use ($month) {
+                if ($month !== "all") { // Jangan filter jika "Semua Bulan" dipilih
+                    $query->whereMonth('created_at', $month);
+                }
             })
             ->get();
 
@@ -139,7 +146,7 @@ class HomePejabatController extends Controller
             ]);
         }
 
-        return view('dashboard.pejabat.home.indexAll', data: compact(
+        return view('dashboard.pejabat.home.indexAll', compact(
             'tickets',
             'total_tiket',
             'tiket_belum',
@@ -154,26 +161,33 @@ class HomePejabatController extends Controller
 
     public function getTicketChartData(Request $request)
     {
-        $year = $request->input('year', Carbon::now()->year);
+        $year = $request->input('year', null); // Bisa null jika ingin semua tahun
+        $month = $request->input('month', null); // Bisa null jika ingin semua bulan
 
-        // Ambil data tiket masuk
-        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->where('level5', '!=', null)
-            ->whereYear('created_at', $year)
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        $query = Ticket::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total');
 
-        // Ambil data tiket selesai
-        $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
-            ->whereYear('updated_at', $year)
-            ->where('level5', '!=', null) // Asumsi 4 adalah ID untuk 'Tutup'
-            ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        if ($year) {
+            $query->whereYear('created_at', $year);
+        }
+
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
+
+        $tickets = $query->groupBy('year', 'month')->get()->keyBy('month')->toArray();
+
+        $queryClosed = Ticket::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
+            ->where('status_id', 4);
+
+        if ($year) {
+            $queryClosed->whereYear('created_at', $year);
+        }
+
+        if ($month) {
+            $queryClosed->whereMonth('created_at', $month);
+        }
+
+        $ticketsClosed = $queryClosed->groupBy('year', 'month')->get()->keyBy('month')->toArray();
 
         $chartData = [
             'months' => [],
@@ -181,36 +195,35 @@ class HomePejabatController extends Controller
             'ticketsClosed' => []
         ];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $chartData['months'][] = Carbon::create()->month($i)->format('F');
-            $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+        $monthsRange = $month ? [$month] : range(1, 12);
+
+        foreach ($monthsRange as $m) {
+            $chartData['months'][] = Carbon::create()->month($m)->format('F');
+            $chartData['tickets'][] = $tickets[$m]['total'] ?? 0;
+            $chartData['ticketsClosed'][] = $ticketsClosed[$m]['total'] ?? 0;
         }
 
         return response()->json($chartData);
     }
 
-
     public function getDailyTicketChartData(Request $request)
     {
-        $month = $request->input('month', Carbon::now()->month);
-        $year = $request->input('year', Carbon::now()->year);
+        $year = $request->input('year', null);
+        $month = $request->input('month', null);
 
-        $startDate = Carbon::create($year, $month)->startOfMonth();
-        $endDate = Carbon::create($year, $month)->endOfMonth();
+        $startDate = $year ? Carbon::create($year, $month ?? 1, 1)->startOfMonth() : Ticket::min('created_at');
+        $endDate = $year ? Carbon::create($year, $month ?? 12, 31)->endOfMonth() : Ticket::max('created_at');
 
         $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-            ->where('level5', '!=', null)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('day')
             ->get()
             ->keyBy('day')
             ->toArray();
 
-        $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
-            ->where('level5', '!=', null)
+        $ticketsClosed = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
             ->where('status_id', 4)
-            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('day')
             ->get()
             ->keyBy('day')
@@ -222,13 +235,31 @@ class HomePejabatController extends Controller
             'ticketsClosed' => []
         ];
 
-        for ($i = 1; $i <= $endDate->day; $i++) {
+        $daysInMonth = $endDate ? Carbon::parse($endDate)->day : 31;
+        for ($i = 1; $i <= $daysInMonth; $i++) {
             $chartData['days'][] = $i;
             $chartData['ticketsCreated'][] = $ticketsCreated[$i]['total'] ?? 0;
             $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
         }
 
-        // Debugging output
         return response()->json($chartData);
+    }
+
+    public function yearlySummary()
+    {
+        $yearlyData = Ticket::selectRaw("
+                YEAR(created_at) as year,
+                COUNT(*) as total_tickets,
+                SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as closed_tickets
+            ")
+            ->groupBy('year')
+            ->orderBy('year', 'desc') // Menampilkan tahun terbaru lebih dulu
+            ->get();
+
+        return response()->json([
+            'years' => $yearlyData->pluck('year'),
+            'total_tickets' => $yearlyData->pluck('total_tickets'),
+            'closed_tickets' => $yearlyData->pluck('closed_tickets')->map(fn($value) => $value ?? 0)
+        ]);
     }
 }

@@ -524,11 +524,17 @@
 
                 document.getElementById('status-name-{{ $ticket->id }}').textContent = statusName;
 
+                // if (this.value == '4') {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
+                // } else {
+                //     document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
+                // }
+
                 if (this.value == '4') {
-                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'block';
-                } else {
-                    document.getElementById('completionDetails_{{ $ticket->id }}').style.display = 'none';
-                }
+                // Jika status "Selesai", langsung redirect tanpa modal
+                window.location.href = "{{ route('staffSubdit.tickets.confirm', $ticket->id) }}";
+                return;
+            }
 
                 $('#confirmModal_{{ $ticket->id }}').modal('show');
 

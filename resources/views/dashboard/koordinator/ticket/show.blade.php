@@ -30,7 +30,7 @@
     </div>
     <!--end::Toolbar-->
 
-    {{-- Riwayat Tiket  --}}
+    {{-- Riwayat Tiket --}}
     <style>
         .activity-log {
             padding: 15px;
@@ -159,98 +159,141 @@
                                 <div class="card-body">
                                     <div>
                                         <!-- Ticket Header -->
-                                        <div class="d-flex align-items-center mb-6">
-                                            <span class="svg-icon svg-icon-4qx svg-icon-success ms-n2 me-3">
-                                                <!-- SVG Icon -->
-                                            </span>
-                                            <div class="d-flex flex-column">
-                                                <h1 class="text-gray-800 fw-bold">{{ $ticket->category->category_name }}
-                                                    ({{ $ticket->no_ticket }}) - @if ($ticket->level1 != null)
-                                                        {{ $ticket->helpdesk->name }}
-                                                    @elseif ($ticket->level2 != null)
-                                                        {{ $ticket->koordinator->name }}
-                                                    @elseif ($ticket->level3 != null)
-                                                        {{ $ticket->staffSubdit->name }}
-                                                    @elseif ($ticket->level4 != null)
-                                                        {{ $ticket->siakDev->name }}
-                                                    @elseif ($ticket->level5 != null)
-                                                        {{ $ticket->pejabat->name }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </h1>
-                                                <div class="text-muted">
-                                                    Pelapor: <span class="fw-bolder text-gray-600">{{ $ticket->pic }},
-                                                        {{ $ticket->jabatan ?? '-' }} - {{ $ticket->no_hp }}</span>
-                                                </div>
-                                                <div class="text-muted">
-                                                    <span class="fw-bolder text-gray-600">Provinsi :
-                                                        {{ $ticket->province->province_name }} - Kota/Kabupaten :
-                                                        {{ $ticket->cityOrRegency->city_or_regency_name }}</span>
-                                                </div>
-                                                <div class="text-muted">
-                                                    Dibuat: <span
-                                                        class="fw-bolder text-gray-600">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>
+                                        <div class="card shadow-sm p-4 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <span class="svg-icon svg-icon-4qx svg-icon-success ms-n2 me-3">
+                                                </span>
+                                                <div class="d-flex flex-column">
+                                                    <h1 class="text-primary fw-bold mb-2">
+                                                        {{ $ticket->category->category_name }} ({{ $ticket->no_ticket }})
+                                                        <span class="badge ms-2" style="background-color: black">
+                                                            @if ($ticket->level1) {{ $ticket->helpdesk->name }}
+                                                            @elseif ($ticket->level2) {{ $ticket->koordinator->name }}
+                                                            @elseif ($ticket->level3) {{ $ticket->staffSubdit->name }}
+                                                            @elseif ($ticket->level4) {{ $ticket->siakDev->name }}
+                                                            @elseif ($ticket->level5) {{ $ticket->pejabat->name }}
+                                                            @else -
+                                                            @endif
+                                                        </span>
+                                                    </h1>
+
+                                                    <div class="text-muted mb-1">
+                                                        <i class="fas fa-user me-2"></i>
+                                                        <span class="fw-bolder text-dark">{{ $ticket->pic }},
+                                                            {{ $ticket->jabatan ?? '-' }} - {{ $ticket->no_hp }}</span>
+                                                    </div>
+
+                                                    <div class="text-muted">
+                                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                                        <span class="fw-bolder text-dark">
+                                                            Provinsi: {{ $ticket->province->province_name }} -
+                                                            Kota/Kabupaten:
+                                                            {{ $ticket->cityOrRegency->city_or_regency_name }}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center gap-3 my-3">
+                                                        <i class="fas fa-ticket-alt text-primary"></i>
+                                                        <strong>Prioritas:</strong>
+                                                        @if ($ticket->priority_id == '4')
+                                                            <span class="badge"
+                                                                style="background-color:red; color:white; font-weight:bold;">
+                                                                {{ $ticket->priority->priority_name }}
+                                                            </span>
+                                                        @elseif($ticket->priority_id == '3')
+                                                            <span class="badge"
+                                                                style="background-color:#FF7F3E; color:white; font-weight:bold;">
+                                                                {{ $ticket->priority->priority_name }}
+                                                            </span>
+                                                        @elseif($ticket->priority_id == '2')
+                                                            <span class="badge"
+                                                                style="background-color:blue; color:white; font-weight:bold;">
+                                                                {{ $ticket->priority->priority_name }}
+                                                            </span>
+                                                        @elseif($ticket->priority_id == '1')
+                                                            <span class="badge"
+                                                                style="background-color:green; color:white; font-weight:bold;">
+                                                                {{ $ticket->priority->priority_name }}
+                                                            </span>
+                                                        @else
+                                                            <span class="badge"
+                                                                style="background-color:rgb(77, 75, 75); color:white; font-weight:bold;">
+                                                                -
+                                                            </span>
+                                                        @endif
+
+                                                        <strong>Status:</strong>
+                                                        @if ($ticket->status_id == '1')
+                                                            <span class="badge"
+                                                                style="background-color:red; color:white; font-weight:bold;">
+                                                                Tertunda
+                                                            </span>
+                                                        @elseif($ticket->status_id == '2')
+                                                            <span class="badge"
+                                                                style="background-color:blue; color:white; font-weight:bold;">
+                                                                Diterima
+                                                            </span>
+                                                        @elseif($ticket->status_id == '3')
+                                                            <span class="badge"
+                                                                style="background-color:#FF7F3E; color:white; font-weight:bold;">
+                                                                Proses
+                                                            </span>
+                                                        @elseif($ticket->status_id == '4')
+                                                            <span class="badge"
+                                                                style="background-color:green; color:white; font-weight:bold;">
+                                                                Selesai
+                                                            </span>
+                                                        @elseif($ticket->status_id == '5')
+                                                            <span class="badge"
+                                                                style="background-color:rgb(185, 192, 2); color:white; font-weight:bold;">
+                                                                Buka Kembali
+                                                            </span>
+                                                        @else
+                                                            <span class="badge"
+                                                                style="background-color:rgb(77, 75, 75); color:white; font-weight:bold;">
+                                                                -
+                                                            </span>
+                                                        @endif
+
+                                                    </div>
+
                                                 </div>
                                             </div>
+
+                                            @php
+                                                use Carbon\Carbon;
+                                                Carbon::setLocale('id');
+                                            @endphp
+
+                                            <div
+                                                class="d-flex justify-content-between text-muted mt-3 p-3 bg-light rounded">
+                                                <span>
+                                                    <i class="fas fa-calendar-plus"></i> Dibuat:
+                                                    <span class="fw-bolder text-dark">
+                                                        {{ Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
+                                                        oleh {{ $ticket->created_by }}
+                                                    </span>
+                                                </span>
+
+                                                @if($ticket->updated_by)
+                                                    <span>
+                                                        <i class="fas fa-edit"></i> Diubah:
+                                                        <span class="fw-bolder text-dark">
+                                                            {{ Carbon::parse($ticket->updated_at)->translatedFormat('d F Y H:i') }}
+                                                            oleh {{ $ticket->updated_by }}
+                                                        </span>
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <p class="fs-5 fw-normal text-gray-800">
-                                            {!! $ticket->description ?? '' !!}
-                                        </p>
 
                                         <!-- Ticket Description -->
-                                        <div class="table-responsive mb-10">
-                                            <strong>Prioritas / Status :</strong>
-                                            <strong></strong>
-                                            @if ($ticket->priority_id == '4')
-                                                <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
-                                            @elseif($ticket->priority_id == '3')
-                                                <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
-                                            @elseif($ticket->priority_id == '2')
-                                                <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
-                                            @elseif($ticket->priority_id == '1')
-                                                <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
-                                            @else
-                                                <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
-                                            @endif
-
-                                            -
-
-                                            @if ($ticket->status_id == '1')
-                                                <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">
-                                                    Tertunda</span>
-                                            @elseif($ticket->status_id == '2')
-                                                <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">
-                                                    Diterima</span>
-                                            @elseif($ticket->status_id == '3')
-                                                <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">
-                                                    Proses</span>
-                                            @elseif($ticket->status_id == '4')
-                                                <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">
-                                                    Selesai
-                                                </span>
-                                            @elseif($ticket->status_id == '5')
-                                                <span class="badge"
-                                                    style="background-color:rgb(185, 192, 2) ; color: white; font-weight:bold">
-                                                    Buka Kembali
-                                                </span>
-                                            @else
-                                                <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">
-                                                    -</span>
-                                            @endif
+                                        <div class="card shadow-sm p-4">
+                                            <h1 class="text fw-bold mb-2">Deskripsi Tiket</h1>
+                                            <p class="fs-5 text-dark">
+                                                {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
+                                            </p>
                                         </div>
-
-
 
                                     </div>
                                 </div>
@@ -258,7 +301,7 @@
 
                             <div class="col-xl-5">
                                 <!--begin::Messenger-->
-                                <div class="card" id="kt_chat_messenger"
+                                <div class="card mt-4" id="kt_chat_messenger"
                                     style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
                                     <!--begin::Card header-->
                                     <div class="card-header" id="kt_chat_messenger_header">
@@ -309,13 +352,14 @@
                                                                 id="message-display-{{ $comment->id }}">
                                                                 {!! $comment->message !!}
                                                             </p>
-                                                            <form
-                                                                action="{{ route('koordinator.tickets.update', $comment->id) }}"
+                                                            <form action="{{ route('koordinator.tickets.update', $comment->id) }}"
                                                                 method="POST" class="comment-form"
                                                                 data-comment-id="{{ $comment->id }}">
                                                                 @method('PUT')
                                                                 @csrf
-                                                                <textarea name="message" class="form-control" id="message-{{ $comment->id }}" style="display: none">{{ $comment->message }}</textarea>
+                                                                <textarea name="message" class="form-control"
+                                                                    id="message-{{ $comment->id }}"
+                                                                    style="display: none">{{ $comment->message }}</textarea>
                                                             </form>
                                                         </div>
                                                         @if ($comment->updated_at)
@@ -331,12 +375,13 @@
                                     <!--begin::Card footer-->
                                     <div class="card-footer pt-4" id="kt_chat_messenger_footer">
                                         <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('koordinator.tickets.store') }}"
-                                            enctype="multipart/form-data" novalidate>
+                                            action="{{ route('koordinator.tickets.store') }}" enctype="multipart/form-data"
+                                            novalidate>
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                                            <textarea name="message" class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
+                                            <textarea name="message"
+                                                class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
                                                 id="message" cols="10" rows="1"></textarea>
                                             <div class="valid-feedback">Looks good!</div>
                                             @error('message')
@@ -353,104 +398,91 @@
                                 <!--end::Messenger-->
                             </div>
                         </div>
-                        <br><br>
-                        <hr>
-
-                        <!-- Attachments Slider -->
+                        <br>
+                        <!-- Attachments Card -->
                         <div class="col-xl-12">
-                            <!--begin::Product slider-->
-                            <div class="tns tns-default">
-                                <h3>Lampiran :</h3>
-                                <!--begin::Slider-->
-                                <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false"
-                                    data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000"
-                                    data-tns-controls="true" data-tns-nav="false" data-tns-items="1"
-                                    data-tns-center="false" data-tns-dots="false"
-                                    data-tns-prev-button="#kt_team_slider_prev1"
-                                    data-tns-next-button="#kt_team_slider_next1">
-
-                                    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
-                                        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
-                                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                <img src="{{ asset('storage/' . $attachment) }}"
-                                                    alt="{{ basename($attachment) }}" class="card-rounded shadow mw-100"
-                                                    style="max-width: 400px; max-height: 300px; object-fit: cover;"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_2{{ $ticket->id }}_{{ $index }}" />
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <p class="text-center">Tidak ada lampiran.</p>
-                                    @endif
-
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="mt-8">Lampiran Tiket</h3>
                                 </div>
-                                <!--end::Slider-->
-                                <!--begin::Slider button-->
-                                <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_prev1">
-                                    <span class="svg-icon svg-icon-3x">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                <path
-                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                    fill="#000000" fill-rule="nonzero"
-                                                    transform="translate(12.000003, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                            </g>
-                                        </svg>
-                                    </span>
-                                </button>
-                                <!--end::Slider button-->
-                                <!--begin::Slider button-->
-                                <button class="btn btn-icon btn-active-color-primary" id="kt_team_slider_next1">
-                                    <span class="svg-icon svg-icon-3x">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                <path
-                                                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                                                    fill="#000000" fill-rule="nonzero"
-                                                    transform="translate(12.000003, 11.999999) rotate(-270.000000) translate(-12.000003, -11.999999)" />
-                                            </g>
-                                        </svg>
-                                    </span>
-                                </button>
-                                <!--end::Slider button-->
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap justify-content-start">
+                                        @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+                                            @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+                                                <div class="p-2">
+                                                    <div class="card shadow-sm" style="width: 160px;">
+                                                        <img src="{{ asset('storage/' . $attachment) }}"
+                                                            alt="{{ basename($attachment) }}" class="rounded-top"
+                                                            style="width: 100%; height: 120px; object-fit: cover; cursor: pointer;"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_{{ $ticket->id }}_{{ $index }}" />
+                                                        <div class="card-body text-center p-2">
+                                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_{{ $ticket->id }}_{{ $index }}">
+                                                                Lihat Tiket
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="text-muted">Tidak ada lampiran.</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                            <!--end::Product slider-->
+
+                            @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
+                                @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
+                                    <div class="modal fade" id="kt_modal_{{ $ticket->id }}_{{ $index }}" tabindex="-1"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title">Lampiran</h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <img src="{{ asset('storage/' . $attachment) }}"
+                                                        alt="{{ basename($attachment) }}" class="img-fluid rounded shadow-sm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
-                        <br>
-                        <hr>
-                        <br>
-                        {{-- <a href="{{ session('filtered_url', route('koordinator.ticket.index')) }}" class="btn btn-danger">Kembali</a> --}}
+
                     </div>
 
                     <!-- Riwayat -->
                     <div class="tab-pane fade" id="riwayat" role="tabpanel">
                         <div class="col-xl-12">
-                            <!--begin::List Widget 4-->
-                            <div class="card card-xl-stretch mb-5 mb-xl-8 scrollable-card"
-                                style="max-height: 756px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                            <div class="card card-xl-stretch mb-5 mb-xl-8 scrollable-card activity-log"
+                                style="max-height: 756px; overflow-y: auto;">
                                 <div class="card-body p-12">
                                     <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
                                     <ul class="timeline">
                                         @foreach ($logs as $log)
                                             <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
-                                                <span
-                                                    class="timeline-date">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}</span>
+                                                <span class="timeline-date">
+                                                    {{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}
+                                                </span>
                                                 <div class="timeline-content">
                                                     <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
                                                     <p class="timeline-text">
                                                         <strong>Nomor Tiket :</strong> {{ $log->h_no_ticket }}<br>
-                                                        <strong>Kategori :</strong> {{ $log->category->category_name }}<br>
+                                                        <strong>Kategori :</strong>
+                                                        {{ $log->category->category_name }}<br>
                                                         <strong>Prioritas :</strong>
                                                         {{ $log->priority->priority_name ?? 'N/A' }}<br>
                                                         <strong>Status :</strong>
                                                         {{ $log->status->status_name ?? 'N/A' }}<br>
+
                                                         @if ($log->h_level1)
                                                             <strong>Disposisi :</strong>
-                                                            {{ $log->koordinator->name ?? 'N/A' }}<br>
+                                                            {{ $log->helpdesk->name ?? 'N/A' }}<br>
                                                         @elseif ($log->h_level2)
                                                             <strong>Disposisi :</strong>
                                                             {{ $log->koordinator->name ?? 'N/A' }}<br>
@@ -464,28 +496,55 @@
                                                             <strong>Disposisi :</strong>
                                                             {{ $log->pejabat->name ?? 'N/A' }}<br>
                                                         @endif
+
                                                         <strong>Lampiran :</strong>
-                                                        @if ($log->h_attachments && is_string($log->h_attachments) && json_decode($log->h_attachments))
-                                                            @foreach (json_decode($log->h_attachments) as $attachment)
-                                                                @php
-                                                                    $filename = basename($attachment);
-                                                                    $parts = explode('_', $filename);
-                                                                    $shortenedFilename = end($parts);
-                                                                @endphp
-                                                                <a href="#" class="attachment-link"
-                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
-                                                                    data-src="{{ asset($attachment) }}">{{ $shortenedFilename }}</a><br>
-                                                            @endforeach
+                                                        @if (is_array(json_decode($log->h_attachments, true)) && count(json_decode($log->h_attachments, true)) > 0)
+                                                            <div class="row row-cols-auto g-2 mt-3">
+                                                                @foreach (json_decode($log->h_attachments, true) as $index => $attachment)
+                                                                    <div class="col">
+                                                                        <img src="{{ asset('storage/' . $attachment) }}"
+                                                                            alt="{{ basename($attachment) }}"
+                                                                            class="rounded shadow-sm img-thumbnail"
+                                                                            style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#riwayat_modal_{{ $log->id }}_{{ $index }}" />
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
                                                         @else
-                                                            N/A
+                                                            <p class="text-muted">Tidak ada lampiran.</p>
                                                         @endif
 
-                                                        <br>
-                                                        <strong>Status Diubah Oleh :</strong>
-                                                        {{ $log->statusChangedBy->name ?? 'N/A' }}
+                                                    <br>
+                                                    <strong>Status Diubah Oleh :</strong>
+                                                    {{ $log->statusChangedBy->name ?? 'N/A' }}<br>
+                                                    <strong>Tiket Dibuat Oleh :</strong>
+                                                    {{ $log->h_created_by ?? 'N/A' }}
                                                     </p>
                                                 </div>
                                             </li>
+
+                                            <!-- Modal Riwayat -->
+                                            @if (is_array(json_decode($log->h_attachments, true)) && count(json_decode($log->h_attachments, true)) > 0)
+                                                @foreach (json_decode($log->h_attachments, true) as $index => $attachment)
+                                                    <div class="modal fade" id="riwayat_modal_{{ $log->id }}_{{ $index }}" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h6 class="modal-title">Foto</h6>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center">
+                                                                    <img src="{{ asset('storage/' . $attachment) }}"
+                                                                        alt="{{ basename($attachment) }}" class="img-fluid rounded" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
                                         @endforeach
                                     </ul>
                                 </div>
@@ -497,64 +556,9 @@
         </div>
     </div>
 
-    <!-- Modal Riwayat -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">Lampiran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img id="modalImage" src="" alt="Attachment" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-
-            modal.addEventListener('show.bs.modal', function(event) {
-                const link = event.relatedTarget;
-                const imageSrc = link.getAttribute('data-src');
-                modalImage.src = imageSrc;
-            });
-        });
-    </script>
-
-
-    @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
-        @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
-            <div class="modal fade" tabindex="-1" id="kt_modal_2{{ $ticket->id }}_{{ $index }}"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Ubah ke modal-lg untuk ukuran besar -->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h6 class="modal-title m-0 text" id="exampleModalprimary1">
-                                Foto
-                            </h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div><!--end modal-header-->
-                        <div class="modal-body">
-                            <div class="text-center">
-                                <img src="{{ asset('storage/' . $attachment) }}" alt="{{ basename($attachment) }}"
-                                    class="img-fluid" />
-                            </div>
-                        </div><!--end modal-body-->
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    @endif
-
-
     {{-- Refresh Komentar --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const newCommentId = {{ session('new_comment_id') }};
             if (newCommentId) {
                 const newCommentElement = document.getElementById('comment-' + newCommentId);
@@ -568,8 +572,8 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('.modal').on('click', function(e) {
+        $(document).ready(function () {
+            $('.modal').on('click', function (e) {
                 if ($(e.target).hasClass('modal')) {
                     $(this).modal('hide');
                 }
@@ -591,12 +595,12 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const editButtons = document.querySelectorAll('.edit-button');
             let currentEditor;
 
             editButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const commentId = this.getAttribute('data-comment-id');
                     const textarea = document.getElementById(`message-${commentId}`);
                     const displayParagraph = document.getElementById(
@@ -648,7 +652,7 @@
             // Save the last edited comment ID before form submission
             const commentForms = document.querySelectorAll('.comment-form');
             commentForms.forEach(form => {
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function () {
                     const commentId = this.getAttribute('data-comment-id');
                     localStorage.setItem('lastEditedComment', commentId);
                 });

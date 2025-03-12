@@ -181,6 +181,43 @@ class TicketSiakDevController extends Controller
         );
     }
 
+    public function confirm(Ticket $ticket, Request $request)
+    {
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+        $provinces = Province::all();
+
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
+        // Dapatkan ID untuk status yang diperlukan
+        $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
+        $tertundaStatusId = Status::where('status_name', 'Tertunda')->value('id');
+        $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
+        $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
+
+        return view(
+            'dashboard.siak-dev.ticket.confirm',
+            compact(
+                'ticket',
+                'priorities',
+                'statuses',
+                'categories',
+                'provinces',
+                'city_or_regencies',
+                'selesaiStatusId',
+                'tertundaStatusId',
+                'diterimaStatusId',
+                'bukaKembaliStatusId'
+            )
+        );
+    }
 
     /**
      * Update the specified resource in storage.
@@ -241,6 +278,8 @@ class TicketSiakDevController extends Controller
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,
+                'h_created_by' => $ticket->created_by,
+                'h_updated_by' => $ticket->updated_by,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,

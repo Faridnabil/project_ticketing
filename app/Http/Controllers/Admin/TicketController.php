@@ -393,6 +393,8 @@ class TicketController extends Controller
             // Gabungkan lampiran yang tersisa dan yang baru diunggah
             $data['attachments'] = json_encode(array_merge($remainingAttachments, $newAttachments));
 
+            $ticket->update($data);
+
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
@@ -407,7 +409,7 @@ class TicketController extends Controller
                 'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
+                'h_attachments' => $data['attachments'],
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Helpdesk;
 
 use App\Http\Controllers\Controller;
+use App\Models\HistoryTicket;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\CityOrRegency;
@@ -25,7 +26,8 @@ class SolutionTechnicalController extends Controller
     {
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
         ->whereNotNull('completion_notes')
-        ->where('completion_notes', '!=', '');
+        ->where('completion_notes', '!=', '')
+        ->orderBy('created_at', 'desc'); // Urutkan berdasarkan created_at terbaru
 
         // Other filters
         if ($request->filled('category_id')) {
@@ -201,6 +203,49 @@ class SolutionTechnicalController extends Controller
         }
     }
 
+    public function confirm(Ticket $ticket, Request $request)
+    {
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+        $provinces = Province::all();
+
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
+        // Dapatkan ID untuk status yang diperlukan
+        $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
+        $tertundaStatusId = Status::where('status_name', 'Tertunda')->value('id');
+        $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
+        $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
+
+        $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
+        ->where('h_no_ticket', $ticket->no_ticket)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return view(
+            'dashboard.helpdesk.solution.show',
+            compact(
+                'logs',
+                'ticket',
+                'priorities',
+                'statuses',
+                'categories',
+                'provinces',
+                'city_or_regencies',
+                'selesaiStatusId',
+                'tertundaStatusId',
+                'diterimaStatusId',
+                'bukaKembaliStatusId'
+            )
+        );
+    }
 
 
 

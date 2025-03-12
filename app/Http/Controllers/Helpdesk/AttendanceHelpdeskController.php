@@ -33,7 +33,7 @@ class AttendanceHelpdeskController extends Controller
             $query->where('date_check_out', '<=', $endDate);
         }
 
-        $attendances = $query->get();
+        $attendances = $query->orderBy('created_at', 'desc')->get();
 
         $attendanceToday = Attendance::where('user_id', Auth::user()->id)
             ->whereDate('date_check_in', now())

@@ -452,7 +452,7 @@ class TicketHelpdeskController extends Controller
             $existingAttachments = json_decode($ticket->attachments, true) ?? [];
 
             // Ambil file yang dihapus dari input (jika ada)
-            $removedAttachments = explode(',', $request->input('removed_attachments', ''));
+            $removedAttachments = explode(',', $request->input('removed_attachments', default: ''));
             $remainingAttachments = array_diff($existingAttachments, $removedAttachments);
 
             // Proses file lampiran baru jika ada
@@ -472,20 +472,18 @@ class TicketHelpdeskController extends Controller
             $data['attachments'] = json_encode(array_merge($remainingAttachments, $newAttachments));
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
+            $ticket->update($data);
+
+            // Simpan data tiket **setelah** diperbarui ke tabel history_ticket
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_province_id' => $ticket->province_id,
                 'h_city_or_regency_id' => $ticket->city_or_regency_id,
-                'h_level1' => $ticket->level1,
-                'h_level2' => $ticket->level2,
-                'h_level3' => $ticket->level3,
-                'h_level4' => $ticket->level4,
-                'h_level5' => $ticket->level5,
                 'h_priority_id' => $ticket->priority_id,
                 'h_status_id' => $ticket->status_id,
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
+                'h_attachments' => $data['attachments'],
                 'h_pic' => $ticket->pic,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,
@@ -495,6 +493,7 @@ class TicketHelpdeskController extends Controller
                 'updated_at' => now(),
                 'status_changedBy' => Auth::user()->id,
             ]);
+
 
             // Notifikasi jika status berubah ke 5
             if ($request->status_id == 5) {
@@ -713,6 +712,7 @@ class TicketHelpdeskController extends Controller
     {
         // Cari tiket berdasarkan ID
         $ticket = Ticket::findOrFail($id);
+        $ticket->updated_by = Auth::user()->name;
 
         // Update level2 dengan nilai dari request
         $ticket->level1 = $request->level1;

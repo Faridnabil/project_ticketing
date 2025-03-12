@@ -169,128 +169,166 @@ class TicketKoordinatorController extends Controller
         );
     }
 
+    public function confirm(Ticket $ticket, Request $request)
+    {
+        // Simpan URL sebelumnya hanya jika berasal dari halaman indeks
+        if (!session()->has('first_url') || url()->previous() != url()->current()) {
+            session(['first_url' => url()->previous()]);
+        }
+
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+        $provinces = Province::all();
+
+        // Fetch the city or regency for the selected province
+        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+
+        // Dapatkan ID untuk status yang diperlukan
+        $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
+        $tertundaStatusId = Status::where('status_name', 'Tertunda')->value('id');
+        $diterimaStatusId = Status::where('status_name', 'Diterima')->value('id');
+        $bukaKembaliStatusId = Status::where('status_name', 'Buka Kembali')->value('id');
+
+        return view(
+            'dashboard.koordinator.ticket.confirm',
+            compact(
+                'ticket',
+                'priorities',
+                'statuses',
+                'categories',
+                'provinces',
+                'city_or_regencies',
+                'selesaiStatusId',
+                'tertundaStatusId',
+                'diterimaStatusId',
+                'bukaKembaliStatusId'
+            )
+        );
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        DB::beginTransaction();
-        try {
-            // Ambil tiket yang akan diupdate
-            $ticket = Ticket::findOrFail($id);
+        public function update(Request $request, $id)
+        {
+            DB::beginTransaction();
+            try {
+                // Ambil tiket yang akan diupdate
+                $ticket = Ticket::findOrFail($id);
 
-            // Validasi request
-            $request->validate([
-                'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png',
-                'removed_attachments' => 'nullable|string'
-            ], [
-                'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, atau PNG.',
-            ]);
+                // Validasi request
+                $request->validate([
+                    'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png',
+                    'removed_attachments' => 'nullable|string'
+                ], [
+                    'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, atau PNG.',
+                ]);
 
-            $validate = $request->all();
+                $validate = $request->all();
 
-            // Ambil path lampiran yang ada di database
-            $existingAttachments = json_decode($ticket->attachments, true) ?? [];
+                // Ambil path lampiran yang ada di database
+                $existingAttachments = json_decode($ticket->attachments, true) ?? [];
 
-            // Ambil file yang dihapus dari request
-            $removedAttachments = explode(',', $request->input('removed_attachments', ''));
-            $remainingAttachments = array_filter($existingAttachments, function ($attachment) use ($removedAttachments) {
-                return !in_array(str_replace('storage/', '', $attachment), $removedAttachments);
-            });
+                // Ambil file yang dihapus dari request
+                $removedAttachments = explode(',', $request->input('removed_attachments', ''));
+                $remainingAttachments = array_filter($existingAttachments, function ($attachment) use ($removedAttachments) {
+                    return !in_array(str_replace('storage/', '', $attachment), $removedAttachments);
+                });
 
-            $newAttachments = [];
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $namaFile = time() . "_" . $file->getClientOriginalName();
-                    $filePath = $file->storeAs('public/foto/ticket-koordinator', $namaFile);
-                    $newAttachments[] = str_replace('public/', '', $filePath);
+                $newAttachments = [];
+                if ($request->hasFile('attachments')) {
+                    foreach ($request->file('attachments') as $file) {
+                        $namaFile = time() . "_" . $file->getClientOriginalName();
+                        $filePath = $file->storeAs('public/foto/ticket-koordinator', $namaFile);
+                        $newAttachments[] = str_replace('public/', '', $filePath);
+                    }
                 }
+
+                // Gabungkan file baru dengan file yang tersisa
+                $attachments = array_merge($remainingAttachments, $newAttachments);
+                $validate['attachments'] = json_encode($attachments);
+
+                // Simpan data tiket sebelum diupdate ke tabel history_ticket
+                DB::table('history_tickets')->insert([
+                    'h_no_ticket' => $ticket->no_ticket,
+                    'h_province_id' => $ticket->province_id,
+                    'h_city_or_regency_id' => $ticket->city_or_regency_id,
+                    'h_level1' => $ticket->level1,
+                    'h_level2' => $ticket->level2,
+                    'h_level3' => $ticket->level3,
+                    'h_level4' => $ticket->level4,
+                    'h_level5' => $ticket->level5,
+                    'h_priority_id' => $ticket->priority_id,
+                    'h_status_id' => $ticket->status_id,
+                    'h_category_id' => $ticket->category_id,
+                    'h_description' => $ticket->description,
+                    'h_attachments' => $ticket->attachments,
+                    'h_pic' => $ticket->pic,
+                    'h_jabatan' => $ticket->jabatan,
+                    'h_no_hp' => $ticket->no_hp,
+                    'h_created_by' => $ticket->created_by,
+                    'h_updated_by' => $ticket->updated_by,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'status_changedBy' => Auth::user()->id,
+                ]);
+
+                // Mengirim Notifikasi (Aktifkan sesuai kebutuhan)
+                /*
+                $statusId = $validate['status_id'];
+                $status = Status::findOrFail($statusId);
+                $customerId = $validate['customer'];
+                $customer = User::findOrFail($customerId);
+                $authenticatedUserName = Auth::user()->name;
+
+                if (in_array($status->status_name, ['Diterima', 'Proses'])) {
+                    $assignedDepartmentId = $validate['assign_to'];
+                    $assignedDepartment = User::findOrFail($assignedDepartmentId);
+
+                    // Notifikasi untuk Customer
+                    $notificationDataForCustomer = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Tolong cek kembali',
+                        'Url' => url('/customer/myTicket'),
+                    ];
+                    Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+
+                    // Notifikasi untuk Departemen yang ditugaskan
+                    $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
+                    $notificationDataForDepartment = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket telah diberikan pada anda untuk dikerjakan',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Tolong cek kembali',
+                        'Url' => url('/department/assignedTicket'),
+                    ];
+                    Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
+                } elseif ($status->status_name == 'Selesai') {
+                    $notificationDataForCustomer = [
+                        'name' => $authenticatedUserName,
+                        'body' => 'Tiket anda sudah dikerjakan',
+                        'thanks' => 'Terimakasih',
+                        'Text' => 'Tolong cek hasilnya',
+                        'Url' => url('/customer/myTicket'),
+                    ];
+                    Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
+                }
+                */
+
+                // Update tiket dengan data baru
+                $ticket->update($validate);
+
+                DB::commit();
+                return redirect(session('first_url', route('koordinator.ticket.index')))
+                    ->with('success', 'Tiket Berhasil Dirubah');
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return back()->with('error', $th->getMessage());
             }
-
-            // Gabungkan file baru dengan file yang tersisa
-            $attachments = array_merge($remainingAttachments, $newAttachments);
-            $validate['attachments'] = json_encode($attachments);
-
-            // Simpan data tiket sebelum diupdate ke tabel history_ticket
-            DB::table('history_tickets')->insert([
-                'h_no_ticket' => $ticket->no_ticket,
-                'h_province_id' => $ticket->province_id,
-                'h_city_or_regency_id' => $ticket->city_or_regency_id,
-                'h_level1' => $ticket->level1,
-                'h_level2' => $ticket->level2,
-                'h_level3' => $ticket->level3,
-                'h_level4' => $ticket->level4,
-                'h_level5' => $ticket->level5,
-                'h_priority_id' => $ticket->priority_id,
-                'h_status_id' => $ticket->status_id,
-                'h_category_id' => $ticket->category_id,
-                'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
-                'h_pic' => $ticket->pic,
-                'h_jabatan' => $ticket->jabatan,
-                'h_no_hp' => $ticket->no_hp,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'status_changedBy' => Auth::user()->id,
-            ]);
-
-            // Mengirim Notifikasi (Aktifkan sesuai kebutuhan)
-            /*
-            $statusId = $validate['status_id'];
-            $status = Status::findOrFail($statusId);
-            $customerId = $validate['customer'];
-            $customer = User::findOrFail($customerId);
-            $authenticatedUserName = Auth::user()->name;
-
-            if (in_array($status->status_name, ['Diterima', 'Proses'])) {
-                $assignedDepartmentId = $validate['assign_to'];
-                $assignedDepartment = User::findOrFail($assignedDepartmentId);
-
-                // Notifikasi untuk Customer
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah diterima dan ditugaskan ke departemen: ' . $assignedDepartment->name,
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/customer/myTicket'),
-                ];
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-
-                // Notifikasi untuk Departemen yang ditugaskan
-                $assignedDepartmentUsers = User::role(['Department'])->where('id', $assignedDepartmentId)->get();
-                $notificationDataForDepartment = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket telah diberikan pada anda untuk dikerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek kembali',
-                    'Url' => url('/department/assignedTicket'),
-                ];
-                Notification::send($assignedDepartmentUsers, new NotificationDepartment($notificationDataForDepartment));
-            } elseif ($status->status_name == 'Selesai') {
-                $notificationDataForCustomer = [
-                    'name' => $authenticatedUserName,
-                    'body' => 'Tiket anda sudah dikerjakan',
-                    'thanks' => 'Terimakasih',
-                    'Text' => 'Tolong cek hasilnya',
-                    'Url' => url('/customer/myTicket'),
-                ];
-                Notification::send($customer, new NotificationCustomer($notificationDataForCustomer));
-            }
-            */
-
-            // Update tiket dengan data baru
-            $ticket->update($validate);
-
-            DB::commit();
-            return redirect(session('first_url', route('koordinator.ticket.index')))
-                ->with('success', 'Tiket Berhasil Dirubah');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return back()->with('error', $th->getMessage());
         }
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -365,6 +403,8 @@ class TicketKoordinatorController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $ticket->status_id = $request->status_id;
+        $ticket->updated_by = Auth::user()->name;
+
 
         // Simpan completion_notes jika status diubah menjadi Selesai
         if ($request->status_id == 4) {
@@ -429,6 +469,7 @@ class TicketKoordinatorController extends Controller
     {
         // Cari tiket berdasarkan ID
         $ticket = Ticket::findOrFail($id);
+        $ticket->updated_by = Auth::user()->name;
 
         // Update level2 dengan nilai dari request
         $ticket->level1 = $request->level1;
