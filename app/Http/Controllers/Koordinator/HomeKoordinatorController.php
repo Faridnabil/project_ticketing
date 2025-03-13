@@ -246,22 +246,4 @@ class HomeKoordinatorController extends Controller
         return response()->json($chartData);
     }
 
-    public function yearlySummary()
-    {
-        $yearlyData = Ticket::selectRaw("
-                YEAR(created_at) as year,
-                COUNT(*) as total_tickets,
-                SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as closed_tickets
-            ")
-            ->groupByRaw("YEAR(created_at)")
-            ->orderBy('year', 'desc')
-            ->get();
-
-        return response()->json([
-            'years' => $yearlyData->pluck('year')->toArray(),
-            'total_tickets' => $yearlyData->pluck('total_tickets')->toArray(),
-            'closed_tickets' => $yearlyData->pluck('closed_tickets')->map(fn($v) => $v ?? 0)->toArray()
-        ]);
-    }
-
 }

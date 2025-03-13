@@ -86,6 +86,8 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
     Route::get('/city-or-regency-export-format', [CityOrRegencyController::class, 'exportFormat'])->name('cityOrRegency.exportFormat');
     Route::get('/city-or-regency-export', [CityOrRegencyController::class, 'export'])->name('cityOrRegency.export');
     Route::post('/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
+
+    Route::get('/helpdesk/tickets/yearlySummary', [HomeHelpdeskController::class, 'yearlySummary'])->name('tickets.yearlySummary');
 });
 
 //ADMIN
@@ -121,7 +123,6 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::get('/helpdesk/dashboardAll', [HomeHelpdeskController::class, 'indexAll'])->name('dashboard.indexAll');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
-    Route::get('/helpdesk/tickets/yearlySummary', [HomeHelpdeskController::class, 'yearlySummary'])->name('tickets.yearlySummary');
     Route::get('/helpdesk/tickets/todaydailychart', [HomeHelpdeskController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
@@ -169,7 +170,6 @@ Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.'
         '/koordinator/ticket' => TicketKoordinatorController::class,
     ]);
 
-    Route::get('/koordinator/tickets/yearlySummary', [TicketKoordinatorController::class, 'yearlySummary'])->name('tickets.yearlySummary');
     Route::get('/koordinator/confirm/{ticket}', [TicketKoordinatorController::class, 'confirm'])->name('tickets.confirm');
 
     Route::post('/koordinator/TicketStore', [TicketKoordinatorController::class, 'store_comment'])->name('tickets.store');
@@ -194,8 +194,6 @@ Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.
     ]);
 
     Route::get('/staff-subdit/confirm/{ticket}', [TicketStaffSubditController::class, 'confirm'])->name('tickets.confirm');
-    Route::get('/staff-subdit/tickets/yearlySummary', [TicketStaffSubditController::class, 'yearlySummary'])->name('tickets.yearlySummary');
-
     Route::post('/staff-subdit/TicketStore', [TicketStaffSubditController::class, 'store_comment'])->name('tickets.store');
     Route::put('/staff-subdit/TicketUpdate/{id}', [TicketStaffSubditController::class, 'update_comment'])->name('tickets.update');
     Route::put('/staff-subdit/sendtTicket/{id}', [TicketStaffSubditController::class, 'send_ticket'])->name('tickets.send');
@@ -214,7 +212,6 @@ Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->grou
     Route::resources([
         '/siak-dev/ticket' => TicketSiakDevController::class,
     ]);
-    Route::get('/siak-dev/tickets/yearlySummary', [TicketSiakDevController::class, 'yearlySummary'])->name('tickets.yearlySummary');
     Route::get('/siak-dev/confirm/{ticket}', [TicketSiakDevController::class, 'confirm'])->name('tickets.confirm');
 
     Route::post('/siak-dev/TicketStore', [TicketSiakDevController::class, 'store_comment'])->name('tickets.store');

@@ -596,7 +596,7 @@
             let yearlySummaryChart;
 
             function loadYearlySummary() {
-                fetch('/siak-dev/tickets/yearlySummary')
+                fetch('/helpdesk/tickets/yearlySummary')
                     .then(response => response.json())
                     .then(data => {
                         if (yearlySummaryChart) yearlySummaryChart.destroy();

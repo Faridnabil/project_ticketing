@@ -194,48 +194,48 @@
                         </div>
 
                         <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const filterYear = document.getElementById('filterYear');
-                            const filterMonth = document.getElementById('filterMonth');
-                            const applyFilter = document.getElementById('applyFilter');
-                            const resetFilter = document.getElementById('resetFilter');
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const filterYear = document.getElementById('filterYear');
+                                const filterMonth = document.getElementById('filterMonth');
+                                const applyFilter = document.getElementById('applyFilter');
+                                const resetFilter = document.getElementById('resetFilter');
 
-                            // Ambil parameter dari URL jika ada
-                            const urlParams = new URLSearchParams(window.location.search);
-                            let savedYear = urlParams.get('year') || "all";
-                            let savedMonth = urlParams.get('month') || "all";
+                                // Ambil parameter dari URL jika ada
+                                const urlParams = new URLSearchParams(window.location.search);
+                                let savedYear = urlParams.get('year') || "all";
+                                let savedMonth = urlParams.get('month') || "all";
 
-                            // Set nilai dari parameter yang tersimpan
-                            filterYear.value = savedYear;
-                            filterMonth.value = savedMonth;
+                                // Set nilai dari parameter yang tersimpan
+                                filterYear.value = savedYear;
+                                filterMonth.value = savedMonth;
 
-                            // Jika tahun telah dipilih selain "Semua Tahun", maka bulan diaktifkan
-                            filterMonth.disabled = savedYear === "all";
+                                // Jika tahun telah dipilih selain "Semua Tahun", maka bulan diaktifkan
+                                filterMonth.disabled = savedYear === "all";
 
-                            filterYear.addEventListener('change', function () {
-                                if (filterYear.value === "all") {
-                                    filterMonth.value = "all";
-                                    filterMonth.disabled = true;
-                                } else {
-                                    filterMonth.disabled = false;
-                                }
+                                filterYear.addEventListener('change', function () {
+                                    if (filterYear.value === "all") {
+                                        filterMonth.value = "all";
+                                        filterMonth.disabled = true;
+                                    } else {
+                                        filterMonth.disabled = false;
+                                    }
+                                });
+
+                                applyFilter.addEventListener('click', function () {
+                                    const year = filterYear.value;
+                                    const month = filterMonth.value;
+
+                                    const url = new URL(window.location.href);
+                                    url.searchParams.set('year', year);
+                                    url.searchParams.set('month', month);
+
+                                    window.location.href = url.toString();
+                                });
+
+                                resetFilter.addEventListener('click', function () {
+                                    window.location.href = window.location.pathname; // Reset ke semua data
+                                });
                             });
-
-                            applyFilter.addEventListener('click', function () {
-                                const year = filterYear.value;
-                                const month = filterMonth.value;
-
-                                const url = new URL(window.location.href);
-                                url.searchParams.set('year', year);
-                                url.searchParams.set('month', month);
-
-                                window.location.href = url.toString();
-                            });
-
-                            resetFilter.addEventListener('click', function () {
-                                window.location.href = window.location.pathname; // Reset ke semua data
-                            });
-                        });
                         </script>
 
 
@@ -282,7 +282,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 15px;margin-top:7px">
-                                                        <a href="{{ route('koordinator.ticket.index',array_merge(request()->query(), ['status_id' => 2, 'TicketDiterima' => $tiket_masuk])) }}"
+                                                        <a href="{{ route('koordinator.ticket.index', array_merge(request()->query(), ['status_id' => 2, 'TicketDiterima' => $tiket_masuk])) }}"
                                                             class="text-danger fw-bold fs-6">Tiket Masuk</a>
                                                         <div class="text-danger fw-bold fs-5 mt-1">
                                                             <b>{{ $tiket_masuk }}</b>
@@ -309,7 +309,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left: 2px;margin-top:7px">
-                                                        <a href="{{ route('koordinator.ticket.index',array_merge(request()->query(), ['status_id' => 3, 'TicketProses' => $tiket_proses])) }}"
+                                                        <a href="{{ route('koordinator.ticket.index', array_merge(request()->query(), ['status_id' => 3, 'TicketProses' => $tiket_proses])) }}"
                                                             class="text-warning fw-bold fs-6">
                                                             Tiket Dalam Proses
                                                         </a>
@@ -372,8 +372,7 @@
                                                     </span>
                                                     <!-- Text next to the SVG -->
                                                     <div style="margin-left:14px;margin-top:7px">
-                                                        <div
-                                                            class="text-primary fw-bold fs-6">Total Tiket</div>
+                                                        <div class="text-primary fw-bold fs-6">Total Tiket</div>
                                                         <div class="text-primary fw-bold fs-5 mt-1">
                                                             <b>{{ $total_tiket }}</b>
                                                         </div>
@@ -445,7 +444,6 @@
                                     </div>
                                 </div>
                             @endif
-
                         </div>
                     </div>
 
@@ -595,7 +593,7 @@
             let yearlySummaryChart;
 
             function loadYearlySummary() {
-                fetch('/koordinator/tickets/yearlySummary')
+                fetch('/helpdesk/tickets/yearlySummary')
                     .then(response => response.json())
                     .then(data => {
                         if (yearlySummaryChart) yearlySummaryChart.destroy();
