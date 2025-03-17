@@ -2,97 +2,130 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
+/**
+ * @OA\Tag(
+ *     name="Status",
+ *     description="Operations related to status"
+ * )
+ * @OA\Schema(
+ *     schema="Status",
+ *     type="object",
+ *     required={"status_name", "color"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="status_name", type="string", example="Pending"),
+ *     @OA\Property(property="color", type="string", example="#FF0000"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", example="2025-03-17T12:00:00Z"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-03-17T12:00:00Z")
+ * )
+ */
 class StatusController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/statuses",
+     *     summary="Get all statuses",
+     *     tags={"Statuses"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of statuses",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Status"))
+     *     )
+     * )
      */
     public function index()
     {
-        $statuses = Status::all();
-
-        return view("dashboard.status.index", compact("statuses"));
+        return response()->json(Status::all(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("dashboard.status.create");
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/statuses",
+     *     summary="Create a new status",
+     *     tags={"Statuses"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Status")
+     *     ),
+     *     @OA\Response(response=201, description="Status created successfully")
+     * )
      */
     public function store(Request $request)
     {
         DB::beginTransaction();
         try {
             $status = Status::create($request->all());
-
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Dibuat.");
+            return response()->json($status, 201);
         } catch (\Throwable $th) {
-              throw $th;
             DB::rollBack();
-              dd($th->getMessage()); // Menampilkan pesan error untuk debugging
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Put(
+     *     path="/api/statuses/{id}",
+     *     summary="Update status",
+     *     tags={"Statuses"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Status")
+     *     ),
+     *     @OA\Response(response=200, description="Status updated successfully")
+     * )
      */
-    public function show(Status $status)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $status = Status::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Status $status)
-    {
-        return view("dashboard.status.edit", compact("status"));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Status $status)
-    {
         DB::beginTransaction();
         try {
             $status->update($request->all());
-
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Di Rubah.");
+            return response()->json($status, 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/statuses/{id}",
+     *     summary="Delete status",
+     *     tags={"Statuses"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Status deleted successfully"),
+     *     @OA\Response(response=404, description="Status not found")
+     * )
      */
-    public function destroy(Status $status)
+    public function destroy($id)
     {
+        $status = Status::findOrFail($id);
+
         DB::beginTransaction();
         try {
             $status->delete();
-
             DB::commit();
-            return redirect()->route("status.index")->with("success", "Status Berhasil Dihapus.");
+            return response()->json(null, 204);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 }

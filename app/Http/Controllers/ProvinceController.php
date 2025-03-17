@@ -4,118 +4,219 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProvinceExport;
 use App\Exports\ProvinceFormatExport;
-use App\Http\Controllers\Controller;
 use App\Imports\ProvinceImport;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+/**
+ * @OA\Tag(
+ *     name="Provinces",
+ *     description="Operations related to provinces"
+ * )
+ * @OA\Schema(
+ *     schema="Province",
+ *     type="object",
+ *     required={"no_province", "province_name"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="no_province", type="string", example="32"),
+ *     @OA\Property(property="province_name", type="string", example="Jawa Barat"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ * )
+ */
 class ProvinceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/provinces",
+     *     summary="Get all provinces",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of provinces",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Province"))
+     *     )
+     * )
      */
     public function index()
     {
-        $provinces = Province::all();
-
-        return view("dashboard.province.index", compact("provinces"));
+        return response()->json(Province::all(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("dashboard.province.create");
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/provinces",
+     *     summary="Create a new province",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"no_province", "province_name"},
+     *             @OA\Property(property="no_province", type="string", example="32"),
+     *             @OA\Property(property="province_name", type="string", example="Jawa Barat"),
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Province created successfully", @OA\JsonContent(ref="#/components/schemas/Province")),
+     *     @OA\Response(response=422, description="Validation error"),
+     * )
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'no_province' => 'required|string|max:10|unique:provinces',
+            'province_name' => 'required|string|max:255'
+        ]);
+
         DB::beginTransaction();
         try {
             $province = Province::create($request->all());
-
             DB::commit();
-            return redirect()->route("province.index")->with("success", "Provinsi Berhasil Dibuat!");
+            return response()->json($province, 201);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/provinces/{id}",
+     *     summary="Get a province by ID",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Province details", @OA\JsonContent(ref="#/components/schemas/Province")),
+     *     @OA\Response(response=404, description="Province not found"),
+     * )
      */
-    public function show(Province $province)
+    public function show($id)
     {
-        //
+        $province = Province::findOrFail($id);
+        return response()->json($province);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @OA\Put(
+     *     path="/api/provinces/{id}",
+     *     summary="Update a province",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"no_province", "province_name"},
+     *             @OA\Property(property="no_province", type="string", example="32"),
+     *             @OA\Property(property="province_name", type="string", example="Jawa Timur"),
+     *         )
+     *     ),
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Province updated successfully", @OA\JsonContent(ref="#/components/schemas/Province")),
+     *     @OA\Response(response=404, description="Province not found"),
+     *     @OA\Response(response=422, description="Validation error"),
+     * )
      */
-    public function edit(Province $province)
+    public function update(Request $request, $id)
     {
-        return view("dashboard.province.edit", compact('province'));
-    }
+        $request->validate([
+            'no_province' => 'required|string|max:10|unique:provinces,no_province,' . $id,
+            'province_name' => 'required|string|max:255'
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Province $province)
-    {
+        $province = Province::findOrFail($id);
+
         DB::beginTransaction();
         try {
             $province->update($request->all());
             DB::commit();
-            return redirect()->route("province.index")->with("success", "Provinsi Berhasil Dirubah!");
+            return response()->json($province);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/provinces/{id}",
+     *     summary="Delete a province",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Province deleted successfully"),
+     *     @OA\Response(response=404, description="Province not found")
+     * )
      */
-    public function destroy(Province $province)
+    public function destroy($id)
     {
+        $province = Province::findOrFail($id);
+
         DB::beginTransaction();
         try {
             $province->delete();
             DB::commit();
-            return redirect()->route("province.index")->with("success", "Provinsi Berhasil Dihapus!");
+            return response()->json(null, 204);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/provinces/export-format",
+     *     summary="Export Format province data",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Excel format file exported")
+     * )
+     */
     public function exportFormat()
     {
         return Excel::download(new ProvinceFormatExport, 'province-format.xlsx');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/provinces/export",
+     *     summary="Export province data",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Excel file exported")
+     * )
+     */
     public function export()
     {
-        return Excel::download(new ProvinceExport, 'province.xlsx');
+        return Excel::download(new ProvinceExport, 'provinces.xlsx');
     }
 
-    public function import()
+    /**
+     * @OA\Post(
+     *     path="/api/provinces/import",
+     *     summary="Import province data from Excel",
+     *     tags={"Provinces"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(@OA\Property(property="file", type="file"))
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Import successful")
+     * )
+     */
+    public function import(Request $request)
     {
-        try {
-            Excel::import(new ProvinceImport, request()->file('your_file'));
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx'
+        ]);
 
-            return redirect()->route("province.index")->with('success', 'Provinsi Berhasil Di Import!');
-        } catch (\Throwable $th) {
-            return back()->with("error", $th->getMessage());
-        }
+        Excel::import(new ProvinceImport, $request->file('file'));
+
+        return response()->json(['message' => 'Provinsi Berhasil Diimport!'], 200);
     }
 }

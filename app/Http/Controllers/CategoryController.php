@@ -2,95 +2,169 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Tag(
+ *     name="Categories",
+ *     description="Operations related to categories"
+ * )
+ * @OA\Schema(
+ *     schema="Category",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer", format="int64", example=1),
+ *     @OA\Property(property="category_name", type="string", example="Electronics"),
+ *     @OA\Property(property="description", type="string", example="A category for electronic devices", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ * )
+ */
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/categories",
+     *     summary="Get all categories",
+     *     tags={"Categories"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of categories",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Category")
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
         $categories = Category::all();
-
-        return view("dashboard.category.index", compact("categories"));
+        return response()->json($categories);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("dashboard.category.create");
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/categories",
+     *     summary="Create a new category",
+     *     tags={"Categories"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"category_name"},
+     *             @OA\Property(property="category_name", type="string", example="Electronics"),
+     *             @OA\Property(property="description", type="string", example="A category for electronic devices", nullable=true),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Category created successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/Category")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *     )
+     * )
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500'
+        ]);
+
         DB::beginTransaction();
         try {
             $category = Category::create($request->all());
-
             DB::commit();
-            return redirect()->route("category.index")->with("success", "Kategori Berhasil Dibuat!");
+            return response()->json($category, 201);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Put(
+     *     path="/api/categories/{id}",
+     *     summary="Update a category",
+     *     tags={"Categories"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"category_name"},
+     *             @OA\Property(property="category_name", type="string", example="Updated Electronics"),
+     *             @OA\Property(property="description", type="string", example="Updated description for electronics", nullable=true),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Category updated successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/Category")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category not found",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *     )
+     * )
      */
-    public function show(Category $category)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500'
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        return view("dashboard.category.edit", compact("category"));
-    }
+        $category = Category::findOrFail($id); // Cari kategori berdasarkan ID dari URL
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
         DB::beginTransaction();
         try {
             $category->update($request->all());
             DB::commit();
-            return redirect()->route("category.index")->with("success", "Kategori Berhasil Dirubah!");
+            return response()->json($category);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/categories/{id}",
+     *     summary="Delete a category",
+     *     tags={"Categories"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Category deleted successfully")
+     * )
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
+        $category = Category::findOrFail($id); // Cari kategori berdasarkan ID dari URL
+
         DB::beginTransaction();
         try {
             $category->delete();
             DB::commit();
-            return redirect()->route("category.index")->with("success","Kategori Berhasil Dihapus!");
+            return response()->json(null, 204);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 }

@@ -7,121 +7,194 @@ use App\Exports\CityOrRegencyFormatExport;
 use App\Http\Controllers\Controller;
 use App\Imports\CityOrRegencyImport;
 use App\Models\CityOrRegency;
-use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+/**
+ * @OA\Tag(
+ * name="CityOrRegency",
+ * description="Operations related to city or regencies"
+ * )
+ * @OA\Schema(
+ *     schema="CityOrRegency",
+ *     type="object",
+ *     required={"province_id", "no_city_or_regency", "city_or_regency_name"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="province_id", type="integer", example=1),
+ *     @OA\Property(property="no_city_or_regency", type="string", example="123"),
+ *     @OA\Property(property="city_or_regency_name", type="string", example="Jakarta"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", example="2024-03-17T12:00:00Z"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-03-17T12:00:00Z")
+ * )
+ */
 class CityOrRegencyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/city-or-regency",
+     *     summary="Get all cities or regencies",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="List of cities or regencies")
+     * )
      */
     public function index()
     {
-        $city_or_regencies = CityOrRegency::with('province')
-            ->get();
-
-        return view("dashboard.city-or-regency.index", compact("city_or_regencies"));
+        return response()->json(CityOrRegency::with('province')->get(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $provinces = Province::all();
-
-        return view("dashboard.city-or-regency.create", compact('provinces'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/city-or-regency",
+     *     summary="Create a new city or regency",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"province_id", "no_city_or_regency", "city_or_regency_name"},
+     *             @OA\Property(property="province_id", type="integer"),
+     *             @OA\Property(property="no_city_or_regency", type="string"),
+     *             @OA\Property(property="city_or_regency_name", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="City or regency created")
+     * )
      */
     public function store(Request $request)
     {
         DB::beginTransaction();
         try {
-            $city_or_regency = CityOrRegency::create($request->all());
-
+            $cityOrRegency = CityOrRegency::create($request->all());
             DB::commit();
-            return redirect()->route("cityOrRegency.index")->with("success", "Kota/Kabupaten Berhasil Dibuat!");
+            return response()->json($cityOrRegency, 201);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 400);
         }
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/city-or-regency/{id}",
+     *     summary="Get a specific city or regency",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="City or regency found")
+     * )
      */
-    public function show(CityOrRegency $cityOrRegency)
+    public function show($id)
     {
-        //
+        $cityOrRegency = CityOrRegency::find($id);
+        if (!$cityOrRegency) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+        return response()->json($cityOrRegency, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @OA\Put(
+     *     path="/api/city-or-regency/{id}",
+     *     summary="Update a city or regency",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="province_id", type="integer"),
+     *             @OA\Property(property="no_city_or_regency", type="string"),
+     *             @OA\Property(property="city_or_regency_name", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="City or regency updated")
+     * )
      */
-    public function edit(CityOrRegency $cityOrRegency)
-    {
-        $provinces = Province::all();
-
-        return view("dashboard.city-or-regency.edit", compact('cityOrRegency', 'provinces'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CityOrRegency $cityOrRegency)
+    public function update(Request $request, $id)
     {
         DB::beginTransaction();
         try {
+            $cityOrRegency = CityOrRegency::findOrFail($id);
             $cityOrRegency->update($request->all());
             DB::commit();
-            return redirect()->route("cityOrRegency.index")->with("success", "Kota/Kabupaten Berhasil Dirubah!");
+            return response()->json($cityOrRegency, 200);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 400);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/city-or-regency/{id}",
+     *     summary="Delete a city or regency",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="City or regency deleted")
+     * )
      */
-    public function destroy(CityOrRegency $cityOrRegency)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
+            $cityOrRegency = CityOrRegency::findOrFail($id);
             $cityOrRegency->delete();
             DB::commit();
-            return redirect()->route("cityOrRegency.index")->with("success", "Kota/Kabupaten Berhasil Dihapus!");
+            return response()->json(['message' => 'Deleted successfully'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 400);
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/city-or-regency/export-format",
+     *     summary="Export format city or regency data",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Excel format file exported")
+     * )
+     */
     public function exportFormat()
     {
         return Excel::download(new CityOrRegencyFormatExport, 'cityOrRegency-format.xlsx');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/city-or-regency/export",
+     *     summary="Export city or regency data",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Excel file exported")
+     * )
+     */
     public function export()
     {
         return Excel::download(new CityOrRegencyExport, 'cityOrRegency.xlsx');
     }
 
-    public function import()
+    /**
+     * @OA\Post(
+     *     path="/api/city-or-regency/import",
+     *     summary="Import city or regency data",
+     *     tags={"CityOrRegency"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(mediaType="multipart/form-data", @OA\Schema(@OA\Property(property="file", type="string", format="binary")))
+     *     ),
+     *     @OA\Response(response=200, description="Data imported successfully")
+     * )
+     */
+    public function import(Request $request)
     {
-        try {
-            Excel::import(new CityOrRegencyImport, request()->file('your_file'));
-
-            return redirect()->route("cityOrRegency.index")->with('success', 'Kota/Kabupaten Berhasil Di Import!');
-        } catch (\Throwable $th) {
-            return back()->with("error", $th->getMessage());
-        }
+        $request->validate(['file' => 'required|file|mimes:xlsx']);
+        Excel::import(new CityOrRegencyImport, $request->file('file'));
+        return response()->json(["message" => "Import successful"], 200);
     }
 }
