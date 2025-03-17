@@ -5,57 +5,60 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * @OA\Tag(
+ *     name="Attendance",
+ *     description="Operations related to attendance records"
+ * )
+ *
+ * @OA\Schema(
+ *     schema="Attendance",
+ *     type="object",
+ *     required={"user_id", "check_in", "date_check_in"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="user_id", type="integer", example=2),
+ *     @OA\Property(property="check_in", type="string", example="08:00"),
+ *     @OA\Property(property="date_check_in", type="string", format="date", example="2024-03-17"),
+ *     @OA\Property(property="check_out", type="string", example="17:00"),
+ *     @OA\Property(property="date_check_out", type="string", format="date", example="2024-03-17"),
+ *     @OA\Property(property="activity", type="string", example="Working on project"),
+ *     @OA\Property(property="attachment", type="string", format="binary")
+ * )
+ */
 class AttendanceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/attendance",
+     *     summary="Get all attendance records",
+     *     tags={"Attendance"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="List of attendance records")
+     * )
      */
     public function index(Request $request)
     {
-        $query = Attendance::query();
-
-        // Filter
-        if ($request->has('check_in') && $request->check_in) {
-            $query->where('check_in', $request->check_in);
-        }
-
-        if ($request->has('start_date') && $request->start_date) {
-            $startDate = Carbon::parse($request->start_date)->startOfDay();
-            $query->where('date_check_in', '>=', $startDate);
-        }
-
-        if ($request->has('end_date') && $request->end_date) {
-            $endDate = Carbon::parse($request->end_date)->endOfDay();
-            $query->where('date_check_out', '<=', $endDate);
-        }
-
-        $attendances = $query->get();
-
-        $attendanceToday = Attendance::where('user_id', Auth::user()->id)
-            ->whereDate('date_check_in', now())
-            ->get();
-
-        // Retrieve all unique check-ins for the form dropdowns
-        $allCheckIns = Attendance::select('check_in')->distinct()->pluck('check_in');
-
-        return view('dashboard.admin.attendance.index', compact('attendances', 'attendanceToday', 'allCheckIns'));
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('dashboard.admin.attendance.create');
+        $attendances = Attendance::all();
+        return response()->json($attendances);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/attendance",
+     *     summary="Create a new attendance record",
+     *     tags={"Attendance"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Attendance")
+     *     ),
+     *     @OA\Response(response=201, description="Attendance record created successfully")
+     * )
      */
     public function store(Request $request)
     {
@@ -63,72 +66,70 @@ class AttendanceController extends Controller
         try {
             $validate = $request->all();
             $validate['date_check_in'] = now();
-
-            Attendance::create($validate);
-
+            $attendance = Attendance::create($validate);
             DB::commit();
-            return redirect()->route("attendance.index")->with("success", "Check In berhasil.");
+            return response()->json($attendance, 201);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Put(
+     *     path="/api/attendance/{id}",
+     *     summary="Update an attendance record",
+     *     tags={"Attendance"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Attendance")
+     *     ),
+     *     @OA\Response(response=200, description="Attendance record updated successfully")
+     * )
      */
-    public function show(Attendance $attendance)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $attendance = Attendance::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Attendance $attendance)
-    {
         DB::beginTransaction();
         try {
-            // Update date_check_out with the provided value
-            $attendance->date_check_out = $request->input('date_check_out');
-            $attendance->check_out = $request->input('check_out');
-            $attendance->activity = $request->input('activity');
-            $attendance->status_activity = $request->input('status_activity');
-
-            // Handle file upload
-            if ($request->hasFile('attachment')) {
-                $file = $request->file('attachment');
-                $nama_file = time() . "_" . $file->getClientOriginalName();
-                $nama_folder = 'file/absen';
-                $file->move(public_path($nama_folder), $nama_file);
-
-                // Save the file path to the database
-                $attendance->attachment = $nama_folder . "/" . $nama_file;
-            }
-
-            $attendance->save();
-
+            $attendance->update($request->all());
             DB::commit();
-            return redirect()->route("attendance.index")->with("success", "Check Out berhasil.");
+            return response()->json($attendance);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/attendance/{id}",
+     *     summary="Delete an attendance record",
+     *     tags={"Attendance"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Attendance record deleted successfully")
+     * )
      */
-    public function destroy(Attendance $attendance)
+    public function destroy($id)
     {
-        //
+        $attendance = Attendance::findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            $attendance->delete();
+            DB::commit();
+            return response()->json(['message' => 'Attendance record deleted successfully']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 }

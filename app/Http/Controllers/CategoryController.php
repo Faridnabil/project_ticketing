@@ -94,19 +94,9 @@ class CategoryController extends Controller
      *     summary="Update a category",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"category_name"},
-     *             @OA\Property(property="category_name", type="string", example="Updated Electronics"),
-     *             @OA\Property(property="description", type="string", example="Updated description for electronics", nullable=true),
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/Category")
      *     ),
      *     @OA\Response(
      *         response=200,

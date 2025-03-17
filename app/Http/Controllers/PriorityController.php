@@ -97,17 +97,7 @@ class PriorityController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"priority_name", "color"},
-     *             @OA\Property(property="priority_name", type="string", example="Updated High"),
-     *             @OA\Property(property="color", type="string", example="#ff6600"),
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
+     *         @OA\JsonContent(ref="#/components/schemas/Priority")
      *     ),
      *     @OA\Response(
      *         response=200,

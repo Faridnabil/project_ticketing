@@ -107,13 +107,8 @@ class ProvinceController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"no_province", "province_name"},
-     *             @OA\Property(property="no_province", type="string", example="32"),
-     *             @OA\Property(property="province_name", type="string", example="Jawa Timur"),
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/Province")
      *     ),
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Province updated successfully", @OA\JsonContent(ref="#/components/schemas/Province")),
      *     @OA\Response(response=404, description="Province not found"),
      *     @OA\Response(response=422, description="Validation error"),

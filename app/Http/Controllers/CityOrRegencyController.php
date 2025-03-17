@@ -100,14 +100,9 @@ class CityOrRegencyController extends Controller
      *     summary="Update a city or regency",
      *     tags={"CityOrRegency"},
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="province_id", type="integer"),
-     *             @OA\Property(property="no_city_or_regency", type="string"),
-     *             @OA\Property(property="city_or_regency_name", type="string")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/CityOrRegency")
      *     ),
      *     @OA\Response(response=200, description="City or regency updated")
      * )

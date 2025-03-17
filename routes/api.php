@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityOrRegencyController;
@@ -92,3 +93,12 @@ Route::middleware('auth:api')
         Route::delete('/{id}', [StatusController::class, 'destroy']);
     });
 
+// Group untuk API Attendance
+Route::middleware('auth:api')
+    ->prefix('attendance')
+    ->group(function () {
+        Route::get('/', [AttendanceController::class, 'index']);
+        Route::post('/', [AttendanceController::class, 'store']);
+        Route::put('/{id}', [AttendanceController::class, 'update']);
+        Route::delete('/{id}', [AttendanceController::class, 'destroy']);
+    });

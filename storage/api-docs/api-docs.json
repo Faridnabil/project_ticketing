@@ -6,6 +6,108 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/attendance": {
+            "get": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Get all attendance records",
+                "operationId": "4667c8a5385cf5f94da882c622a99e7d",
+                "responses": {
+                    "200": {
+                        "description": "List of attendance records"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Create a new attendance record",
+                "operationId": "b85110a61d87a2694400aaf32ac9cad8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Attendance"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Attendance record created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/attendance/{id}": {
+            "put": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Update an attendance record",
+                "operationId": "2f5f90a20c794ef74bd204cdad509faa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Attendance"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Attendance record updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Delete an attendance record",
+                "operationId": "5a808741270b479695b4b3b0cc097ddf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Attendance record deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -265,37 +367,12 @@
                 ],
                 "summary": "Update a category",
                 "operationId": "0e686b2748211cc688333ed705dc111f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "category_name"
-                                ],
-                                "properties": {
-                                    "category_name": {
-                                        "type": "string",
-                                        "example": "Updated Electronics"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Updated description for electronics",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/Category"
                             }
                         }
                     }
@@ -448,33 +525,12 @@
                 ],
                 "summary": "Update a city or regency",
                 "operationId": "728eec895da96eeadf65f3dd665b4afb",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "province_id": {
-                                        "type": "integer"
-                                    },
-                                    "no_city_or_regency": {
-                                        "type": "string"
-                                    },
-                                    "city_or_regency_name": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/CityOrRegency"
                             }
                         }
                     }
@@ -678,36 +734,12 @@
                 ],
                 "summary": "Update a priority",
                 "operationId": "ad99fe55e9fe09c8e96919f02184edcf",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "priority_name",
-                                    "color"
-                                ],
-                                "properties": {
-                                    "priority_name": {
-                                        "type": "string",
-                                        "example": "Updated High"
-                                    },
-                                    "color": {
-                                        "type": "string",
-                                        "example": "#ff6600"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/Priority"
                             }
                         }
                     }
@@ -979,36 +1011,12 @@
                 ],
                 "summary": "Update a province",
                 "operationId": "a43b6c9ad0ed88f568856531cbeded4f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "no_province",
-                                    "province_name"
-                                ],
-                                "properties": {
-                                    "no_province": {
-                                        "type": "string",
-                                        "example": "32"
-                                    },
-                                    "province_name": {
-                                        "type": "string",
-                                        "example": "Jawa Timur"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/Province"
                             }
                         }
                     }
@@ -1203,16 +1211,6 @@
                 ],
                 "summary": "Update status",
                 "operationId": "7ba406b9e828f2ce3a0583d7c56583f6",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1268,6 +1266,50 @@
     },
     "components": {
         "schemas": {
+            "Attendance": {
+                "required": [
+                    "user_id",
+                    "check_in",
+                    "date_check_in"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "check_in": {
+                        "type": "string",
+                        "example": "08:00"
+                    },
+                    "date_check_in": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-03-17"
+                    },
+                    "check_out": {
+                        "type": "string",
+                        "example": "17:00"
+                    },
+                    "date_check_out": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-03-17"
+                    },
+                    "activity": {
+                        "type": "string",
+                        "example": "Working on project"
+                    },
+                    "attachment": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
             "Category": {
                 "properties": {
                     "id": {
@@ -1427,6 +1469,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Attendance",
+            "description": "Operations related to attendance records"
+        },
         {
             "name": "Auth",
             "description": "Authentication operations"
