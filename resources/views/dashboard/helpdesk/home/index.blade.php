@@ -44,13 +44,13 @@
         .btn-custom {
             margin-right: 10px;
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffedc5;
             padding: 10px 50px;
             border-radius: 5px;
         }
 
         .btn-custom.active {
-            background-color: #007bff;
+            background-color: #F5AD12;
             color: white;
         }
 
@@ -114,13 +114,13 @@
 
     <!--begin::Toolbar-->
     {{--  card title  --}}
-    <div class="toolbar" id="kt_toolbar">
+    <div class="toolbar" id="kt_toolbar" style="background-color: #fff">
         <!--begin::Container-->
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <!--begin::Page title-->
             <div data-kt-place="true" data-kt-place-mode="prepend"
                 data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+                class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1;">
                 <!--begin::Title-->
                 <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Dashboard
                     <!--begin::Separator-->
@@ -149,13 +149,13 @@
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    <strong style="color: #254166">Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    <strong style="color: #254166">Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
@@ -176,7 +176,7 @@
                                     <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
                                         <!-- Header -->
                                         <div class="card-header"
-                                            style="padding: 10px 20px; background-color: #009EF7; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
+                                            style="padding: 10px 20px; background-color: #254166; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
                                             <h3 class="card-title fw-bolder text-white"
                                                 style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">
                                                 Filter Waktu
@@ -204,7 +204,7 @@
                                                             value="{{ request('startTime', '00:00') }}">
                                                     </div>
                                                 </div>
-                                                <div class="input-field col s3">
+                                                <div class="input-field col s2">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Selesai</b></span>
                                                         <input type="text" name="endTime" id="endTime"
@@ -213,16 +213,16 @@
                                                     </div>
                                                 </div>
                                                 <!-- Submit and Refresh Buttons -->
-                                                <div class="input-field col s1" style="margin-top: 28px">
-                                                    <button type="submit" class="btn waves-effect waves-light"
+                                                <div class="input-field col s2" style="margin-top: 28px">
+                                                    <button type="submit" class=" btn btn-success"
                                                         id="submitFilter"
-                                                        style="background-color: #19bb52;border-radius:10px"><b>Filter
+                                                        style="border-radius:5px; background-color: #5EC07D; color:#ffffff; text-transform: capitalize; font-weight: 400"><b>Filter
                                                             Data</b></button>
                                                 </div>
-                                                <div class="input-field col s1" style="margin-top: 28px">
+                                                <div class="input-field col s2" style="margin-top: 28px">
                                                     <a href="{{ route('helpdesk.dashboard.index') }}"
                                                         class="btn waves-effect waves-light"
-                                                        style="background-color: #009EF7;border-radius:10px"><b>Penyegaran</b></a>
+                                                        style="background-color: #009EF7;border-radius:5px; text-transform: capitalize; font-weight: 400"><b>Penyegaran</b></a>
                                                 </div>
                                             </div>
                                         </form>
@@ -247,7 +247,7 @@
                                 <!--begin::Mixed Widget 2-->
                                 <div class="card card-xxl-stretch" style="height: 190px">
                                     <!--begin::Header-->
-                                    <div class="card-header border-0 bg-primary py-5">
+                                    <div class="card-header border-0 py-5" style="background-color: #254166">
                                         <h3 class="card-title fw-bolder text-white">Data Harian</h3>
                                         <div class="card-toolbar">
                                             <!--begin::Menu-->
@@ -257,8 +257,8 @@
                                     <!--end::Header-->
                                     <div class="card-body p-0">
                                         <!--begin::Chart-->
-                                        <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary"
-                                            style="height: 28px">
+                                        <div class="mixed card-rounded-bottom" data-kt-color="primary"
+                                            style="height: 28px; background-color: #254166">
                                         </div>
                                         <!--begin::Stats-->
                                         <div class="card-p mt-n20 position-relative">
@@ -421,9 +421,9 @@
                                 <!--end::Mixed Widget 2-->
 
                                 <div class="row">
-                                    <div class="col-xxl-12">
+                                    <div class="col-xxl-12 mt-5">
                                         <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
+                                            <div class="card-header border-0  py-5" style="background-color: #254166">
                                                 <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perhari
                                                     -
                                                     {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Mingguan' }}
@@ -452,7 +452,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const selectedDate = urlParams.get('selectedDate') || new Date().toISOString().split('T')[
-            0]; // Default ke hari ini
+                0]; // Default ke hari ini
             const startTime = urlParams.get('startTime') || '00:00';
             const endTime = urlParams.get('endTime') || '23:59';
 

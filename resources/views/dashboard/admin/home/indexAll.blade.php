@@ -41,18 +41,19 @@
             border-top: 1px solid #272727;
         }
 
-        .btn-custom {
+       .btn-custom {
             margin-right: 10px;
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffedc5;
             padding: 10px 50px;
             border-radius: 5px;
         }
 
         .btn-custom.active {
-            background-color: #007bff;
+            background-color: #F5AD12;
             color: white;
         }
+
 
         .font-regular {
             font-size: 1rem;
@@ -149,13 +150,13 @@
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('admin.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    <strong style="color: #254166">Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('admin.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('admin.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    <strong style="color: #254166">Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
@@ -196,10 +197,10 @@
                         <div class="col-xl-12">
                             <!-- Konten Data Keseluruhan -->
                             <!--begin::Mixed Widget 2-->
-                            <div class="card card-xxl-stretch" style="height: 190px">
+                            <div class="card card-xxl-stretch" style="height: 190px; background-color: #254166">
                                 <!--begin::Header-->
-                                <div class="card-header border-0 bg-primary py-5">
-                                    <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
+                                <div class="card-header border-0 py-5" style="color: #254166">
+                                    <h3 class="card-title fw-bolder text-light " >Data Keseluruhan</h3>
                                     <div class="card-toolbar">
                                         <!--begin::Menu-->
                                         <!--end::Menu-->
@@ -208,7 +209,7 @@
                                 <!--end::Header-->
                                 <div class="card-body p-0">
                                     <!--begin::Chart-->
-                                    <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary"
+                                    <div class="mixed card-rounded-bottom  data-kt-color="primary"
                                         style="height: 28px">
                                     </div>
                                     <!--begin::Stats-->
@@ -373,9 +374,9 @@
                             <!--end::Mixed Widget 2-->
 
                             <div class="row">
-                                <div class="col-xxl-12">
-                                    <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
+                                <div class="col-xxl-12 mt-5" >
+                                    <div class="card card-xxl-stretch" >
+                                        <div class="card-header border-0 py-5" style="background-color: #254166">
                                             <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan
                                                 -
                                                 {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Semua Bulan' }}
@@ -390,9 +391,9 @@
 
                             <div class="row">
                                 <!-- Left Column -->
-                                <div class="col-xxl-12">
+                                <div class="col-xxl-12 mt-5">
                                     <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
+                                        <div class="card-header border-0  py-5" style="background-color: #254166">
                                             <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket
                                                 Pertahun -
                                                 {{ $year ?? now()->year }}</h3>

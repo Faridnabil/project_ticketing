@@ -18,6 +18,7 @@
     <link href="{{ asset('template/dist/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"
         type="text/css" />
     <link href="{{ asset('template/dist/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    
     <!--end::Global Stylesheets Bundle-->
     <style>
         /* Custom styles to make the background cover the full viewport */

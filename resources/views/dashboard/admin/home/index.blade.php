@@ -44,13 +44,13 @@
         .btn-custom {
             margin-right: 10px;
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffedc5;
             padding: 10px 50px;
             border-radius: 5px;
         }
 
         .btn-custom.active {
-            background-color: #007bff;
+            background-color: #F5AD12;
             color: white;
         }
 
@@ -149,13 +149,13 @@
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('admin.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    <strong style="color: #254166">Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('admin.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('admin.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    <strong style="color: #254166">Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
@@ -176,7 +176,7 @@
                                     <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
                                         <!-- Header -->
                                         <div class="card-header"
-                                            style="padding: 10px 20px; background-color: #009EF7; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
+                                            style="padding: 10px 20px; background-color: #153A6A; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
                                             <h3 class="card-title fw-bolder text-white"
                                                 style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">
                                                 Filter Waktu
@@ -216,13 +216,16 @@
                                                 <div class="input-field col s1" style="margin-top: 28px">
                                                     <button type="submit" class="btn waves-effect waves-light"
                                                         id="submitFilter"
-                                                        style="background-color: #19bb52;border-radius:10px"><b>Filter
-                                                            Data</b></button>
+                                                        style="background-color: #19bb52; border-radius: 5px; text-transform: capitalize;">
+                                                        <b>Filter Data</b>
+                                                    </button>
                                                 </div>
                                                 <div class="input-field col s1" style="margin-top: 28px">
                                                     <a href="{{ route('admin.dashboard.index') }}"
                                                         class="btn waves-effect waves-light"
-                                                        style="background-color: #009EF7;border-radius:10px"><b>Penyegaran</b></a>
+                                                        style="background-color: #009EF7; border-radius: 5px; text-transform: capitalize;">
+                                                        <b>Penyegaran</b>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </form>
@@ -246,7 +249,7 @@
                                 <!--begin::Mixed Widget 2-->
                                 <div class="card card-xxl-stretch" style="height: 190px">
                                     <!--begin::Header-->
-                                    <div class="card-header border-0 bg-primary py-5">
+                                    <div class="card-header border-0  py-5" style="background-color: #254166">
                                         <h3 class="card-title fw-bolder text-white">Data Harian</h3>
                                         <div class="card-toolbar">
                                             <!--begin::Menu-->
@@ -256,8 +259,8 @@
                                     <!--end::Header-->
                                     <div class="card-body p-0">
                                         <!--begin::Chart-->
-                                        <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary"
-                                            style="height: 28px">
+                                        <div class="mixed card-rounded-bottom" data-kt-color="primary"
+                                            style="height: 28px; background-color: #254166">
                                         </div>
                                         <!--begin::Stats-->
                                         <div class="card-p mt-n20 position-relative">
@@ -420,9 +423,9 @@
                                 <!--end::Mixed Widget 2-->
 
                                 <div class="row">
-                                    <div class="col-xxl-12">
+                                    <div class="col-xxl-12 mt-5">
                                         <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
+                                            <div class="card-header border-0  py-5" style="background-color: #254166">
                                                 <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perhari
                                                     -
                                                     {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Mingguan' }}

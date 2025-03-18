@@ -44,13 +44,13 @@
         .btn-custom {
             margin-right: 10px;
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffedc5;
             padding: 10px 50px;
             border-radius: 5px;
         }
 
         .btn-custom.active {
-            background-color: #007bff;
+            background-color: #F5AD12;
             color: white;
         }
 
@@ -149,13 +149,13 @@
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    <strong style="color: #153A6A">Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    <strong style="color: #153A6A">Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
@@ -163,12 +163,12 @@
 
 
                     <div class="tab-content">
-                        <div class="card card-xxl-stretch mt-3 mb-4">
-                            <div class="row mb-6 ms-6 d-flex align-items-center" style="margin-top: 20px">
+                        <div class="card card-xxl-stretch mt-3 mb-4" style="background-color: #153A6A">
+                            <div class="row mb-6 ms-6 d-flex align-items-center" style="margin-top: 20px; ">
                                 <div class="col-md-2">
-                                    <h4 class="card-title text-black">Filter Grafik</h4>
+                                    <h4 class="card-title text-light">Filter Grafik</h4>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <select id="filterYear" class="form-select">
                                         <option value="all" selected>Semua Tahun</option>
                                         @foreach (range(now()->year - 5, now()->year + 1) as $y)
@@ -176,7 +176,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <select id="filterMonth" class="form-select" disabled>
                                         <option value="all" selected>Semua Bulan</option>
                                         @foreach (range(1, 12) as $m)
@@ -187,8 +187,8 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <button id="applyFilter" class="btn btn-primary">Filter</button>
-                                    <button id="resetFilter" class="btn btn-danger">Segarkan</button>
+                                    <button id="applyFilter" class="btn btn-success" >Filter Data</button>
+                                    <button id="resetFilter" class="btn btn-primary" style="margin-left: 90px">Penyegaran</button>
                                 </div>
                             </div>
                         </div>
@@ -239,14 +239,14 @@
                         </script>
 
 
-                        <div class="col-xl-12">
+                        <div class="col-xl-12" >
                             <!-- Konten Data Keseluruhan -->
                             <!--begin::Mixed Widget 2-->
-                            <div class="card card-xxl-stretch" style="height: 190px">
+                            <div class="card card-xxl-stretch" style="height: 190px; background-color: #153A6A" >
                                 <!--begin::Header-->
-                                <div class="card-header border-0 bg-primary py-5">
+                                <div class="card-header border-0 py-5" style="background-color: #153A6A">
                                     <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
-                                    <div class="card-toolbar">
+                                    <div class="card-toolbar" style="background-color: #153A6A">
                                         <!--begin::Menu-->
                                         <!--end::Menu-->
                                     </div>
@@ -254,7 +254,7 @@
                                 <!--end::Header-->
                                 <div class="card-body p-0">
                                     <!--begin::Chart-->
-                                    <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary"
+                                    <div class="mixed card-rounded-bottom " data-kt-color="primary"
                                         style="height: 28px">
                                     </div>
                                     <!--begin::Stats-->
@@ -458,10 +458,10 @@
                             @else
                                 <!-- Default Yearly Summary -->
                                 <div class="row" id="yearlySummaryContainer">
-                                    <div class="col-xxl-12">
+                                    <div class="col-xxl-12 mt-5" >
                                         <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
-                                                <h3 class="card-title fw-bolder text-white">Total Tiket Pertahun</h3>
+                                            <div class="card-header border-0  py-5" style="background-color: #153A6A">
+                                                <h3 class="card-title fw-bolder text-white" style="background-color: #153A6A">Total Tiket Pertahun</h3>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="yearlySummaryChart" width="80%" height="20px"></canvas>

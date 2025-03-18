@@ -104,12 +104,19 @@
         .custom-select:focus {
             width: auto;
         }
+
+        .custom-bg {
+            background-image: url('/public/template/dist/assets/media/patterns/bg-main.png');
+            background-size: cover;
+            background-position: center;
+
+        }
     </style>
 </head>
 
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px;">
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -125,7 +132,7 @@
                     <!--begin::Logo-->
                     <a href="">
                         <img alt="Logo" src="{{ asset('template/dist/assets/media/logos/logo.png') }}"
-                            class="h-70px logo" />
+                            style="width: 200px" />
                     </a>
                     <!--end::Logo-->
 
@@ -159,7 +166,8 @@
                 <!--end::Header-->
 
                 <!--begin::Content-->
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content"
+                    style="background-image: url('/template/dist/assets/media/patterns/bg-main.png'); background-size: cover; background-position: center;">
                     @yield('content')
                 </div>
                 <!--end::Content-->

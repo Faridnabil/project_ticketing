@@ -8,11 +8,13 @@
     <div class="row d-flex align-items-stretch">
         <!-- Left Card: Image -->
         <div class="col-md-6">
-            <div class="card h-100">
-                <img src="{{ asset('template/dist/assets/media/logos/logo.png') }}" class="card-img-top" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Welcome to Ticketing</h5>
-                    <p class="card-text">Experience seamless ticket booking and management.</p>
+            <div class="card h-100 d-flex justify-content-center align-items-center">
+                <div class="text-center">
+                    <img src="{{ asset('template/dist/assets/media/logos/logo.svg') }}" class="card-img-top logo-center" alt="Card image cap" style="width: 300px">
+                    <div class="card-body">
+                        <h5 class="card-title">Welcome to Ticketing</h5>
+                        <p class="card-text">Experience seamless ticket booking and management.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,63 +23,78 @@
         <div class="col-md-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title" style="margin-bottom: 20px; font-size: 16px;;">Login.</h5>
+                    <h5 class="card-title mb-4">Login</h5>
+
                     @if (session('message'))
-                        <div class="alert alert-warning text-center mb-4">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
                             {{ session('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login') }}" class="form w-100" novalidate="novalidate"
-                        id="kt_sign_in_form">
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>
+                                        @if ($error == 'The email field is required.')
+                                            The email field is required.
+                                        @elseif ($error == 'The password field is required.')
+                                            The password field is required.
+                                        @elseif ($error == 'These credentials do not match our records.')
+                                            The email or password you entered is incorrect.
+                                        @else
+                                            {{ $error }}
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('login') }}" class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
                         @csrf
-                        <div class="fv-row mb-4">
-                            <label class="form-label fs-6 fw-normal text-dark">Email</label>
-                            <input class="form-control form-control-lg form-control-solid" type="text" name="email"
-                                autocomplete="off" id="email" value="{{ old('email') }}" required autofocus
-                                autocomplete="username" />
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <div class="mb-4">
+                            <label class="form-label">Email</label>
+                            <input class="form-control form-control-lg" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
                         </div>
 
-                        <div class="fv-row mb-4">
-                            <label class="form-label fs-6 fw-normal text-dark">Password</label>
-                            <input class="form-control form-control-lg form-control-solid" type="password" name="password"
-                                id="password" required autocomplete="current-password" />
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <div class="mb-4 position-relative">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <input class="form-control form-control-lg" type="password" name="password" id="password" required autocomplete="current-password">
+                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <label for="remember_me" class="inline-flex items-center">
-                                <input id="remember_me" type="checkbox" name="remember"
-                                    class="rounded text-indigo-600 shadow-sm focus:ring-indigo-500" />
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember_me">
+                                <label class="form-check-label" for="remember_me">Remember me</label>
+                            </div>
                             @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder">Forgot
-                                    Password?</a>
+                                <a href="{{ route('password.request') }}" class="text-primary">Forgot Password?</a>
                             @endif
                         </div>
 
                         <div class="text-center">
-                            <x-primary-button class="btn btn-lg btn-primary w-100 mt-4">
-                                {{ __('Log in') }}
-                            </x-primary-button>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Log in</button>
                         </div>
                     </form>
                 </div>
-
             </div>
-
         </div>
-        <!--begin::Copyright-->
-        <div class="text-dark order-2 order-md-1 text-center mt-5">
-            <span class="text-muted fw-bold me-1">Hak Cipta © </span>
-            2025
+
+        <!-- Copyright -->
+        <div class="text-center mt-5">
+            <span class="text-muted fw-bold">Copyright © 2025</span>
             <a href="" target="_blank" class="text-gray-800 text-hover-primary">
-                Kementerian Perdagangan Republik Indonesia.
+                Ministry of Home Affairs, Republic of Indonesia.
             </a>
         </div>
-        <!--end::Copyright-->
     </div>
 @endsection
 
@@ -85,57 +102,85 @@
     <style>
         body {
             background-color: #f8f9fa;
-            /* Light background for the page */
         }
 
         .card {
             border: none;
-            /* Remove card border */
-            border-radius: 10px;
-            /* Rounded corners */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Subtle shadow */
-        }
-
-        .card-img-top {
-            border-top-left-radius: 10px;
-            /* Rounded corners for image */
-            border-top-right-radius: 10px;
-            /* Rounded corners for image */
         }
 
         .form-control {
             border-radius: 5px;
-            /* Rounded corners for input fields */
         }
 
         .btn-primary {
             background-color: #007bff;
-            /* Primary button color */
             border: none;
-            /* No border */
         }
 
         .btn-primary:hover {
             background-color: #0056b3;
-            /* Darker blue on hover */
         }
 
         .alert {
-            background-color: #ff cc00;
-            /* Warning alert color */
-            color: #000;
-            /* Black text for readability */
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
         }
 
-        .link-primary {
-            color: #007bff;
-            /* Link color */
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
         }
 
-        .link-primary:hover {
-            text-decoration: underline;
-            /* Underline on hover */
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .logo-center {
+            max-width: 100px;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .input-group-text {
+            background-color: transparent;
+            border-left: none;
+            cursor: pointer;
         }
     </style>
+@endsection
+
+@section('scripts')
+    <script>
+        // Toggle show/hide password
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 @endsection

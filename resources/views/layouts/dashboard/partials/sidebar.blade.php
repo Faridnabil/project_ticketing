@@ -1,6 +1,9 @@
 <style>
     .menu-accordion.menu-active>.menu-link,
 
+    .text-white {
+        color: white;
+    }
 
     .menu-sub.show {
         display: block;
@@ -84,15 +87,15 @@
         text-decoration: none;
         border-radius: 5px;
         transition: background-color 0.3s, color 0.3s;
-        background-color: white;
-        color: black;
+        background-color: #153A6A;
+        color: #fff;
     }
 
 
 
     .dashboard-link:hover {
-        background-color: #1285C4;
-        color: white;
+        background-color: #e9e9e9;
+        color: #153A6A;
     }
 
     .dashboard-link[style*="background-color: #1285C4; color: white;"] {
@@ -106,8 +109,8 @@
     }
 
     .dashboard-link.active {
-        background-color: #1285C4;
-        color: white;
+        background-color: #F5AD12;
+        color: #fff;
     }
 
     .submenu-icon {
@@ -117,6 +120,7 @@
         /* Ubah warna sesuai tema */
         display: inline-block;
     }
+
 
     .management-pengguna-text {
         color: blue;
@@ -132,7 +136,7 @@
 
 
 
-<div class="aside-menu flex-column-fluid" style="background-color: #fff">
+<div class="aside-menu flex-column-fluid" style="background-color: #254166">
     <!--begin::Aside Menu-->
     <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
@@ -164,12 +168,12 @@
                 <div class="dashboard-link-container">
                     <a href="{{ route('helpdesk.dashboard.index') }}"
                         class="dashboard-link {{ request()->is('helpdesk/dashboard') ? 'active' : '' }}">
-                        <span class="svg-icon svg-icon-2 ">
+                        <span class="svg-icon svg-icon-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
                                 version="1.1">
                                 <path
                                     d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                    fill="#000000" opacity="0.3" />
+                                    fill="#000000" />
                                 <path
                                     d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
                                     fill="#000000" />
@@ -275,45 +279,52 @@
                 </div>
             @endcan
             @can('View User Management')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View Category')
-                <div class="menu-item">
+                <div style="margin-left: 25px;">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View Priority')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View Status')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View Province')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View City Or Regency')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @elsecan('View Aset Perangkat')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Master Data</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
+                            Data</span>
                     </div>
                 </div>
             @endcan
@@ -518,9 +529,9 @@
             @endcan
 
             @can('View Ticket')
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Aplikasi Tiket</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white">Aplikasi Tiket</span>
                     </div>
                 </div>
                 @role('Helpdesk')
@@ -721,9 +732,9 @@
 
             @can('View Report')
 
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Laporan Tiket</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white">Laporan Tiket</span>
                     </div>
                 </div>
 
@@ -752,9 +763,9 @@
                 @endcan
 
 
-                <div class="menu-item">
+                <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Solusi Teknis</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white">Solusi Teknis</span>
                     </div>
                 </div>
             @endcan
