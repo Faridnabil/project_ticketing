@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityOrRegencyController;
@@ -101,4 +104,35 @@ Route::middleware('auth:api')
         Route::post('/', [AttendanceController::class, 'store']);
         Route::put('/{id}', [AttendanceController::class, 'update']);
         Route::delete('/{id}', [AttendanceController::class, 'destroy']);
+    });
+
+// Group untuk API Users
+Route::middleware('auth:api')
+    ->prefix('users')
+    ->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'destroy']);
+    });
+
+// Group untuk API Roles
+Route::middleware('auth:api')
+    ->prefix('roles')
+    ->group(function () {
+        Route::get('/', [RoleController::class, 'index']);
+        Route::post('/', [RoleController::class, 'store']);
+        Route::get('/{id}', [RoleController::class, 'show']);
+        Route::put('/{id}', [RoleController::class, 'update']);
+        Route::delete('/{id}', [RoleController::class, 'destroy']);
+    });
+
+// Group untuk API Permissions
+Route::middleware('auth:api')
+    ->prefix('permissions')
+    ->group(function () {
+        Route::get('/', [PermissionController::class, 'index']);
+        Route::post('/', [PermissionController::class, 'store']);
+        Route::put('/{id}', [PermissionController::class, 'update']);
+        Route::delete('/{id}', [PermissionController::class, 'destroy']);
     });

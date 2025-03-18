@@ -8,81 +8,152 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
+use OpenApi\Annotations as OA;
 
-
+/**
+ * @OA\Tag(
+ *     name="Roles",
+ *     description="API for managing roles"
+ * )
+ */
 class RoleController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * @OA\Get(
+     *     path="/api/roles",
+     *     summary="Get list of roles",
+     *     tags={"Roles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Successful operation"),
+     * )
+     */
+    public function index()
     {
-        //menampilkan semua data role
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
 
-        $permission = Permission::paginate(6);
-        return view('dashboard.admin.user-management.role.index', compact('roles', 'permission'));
+        return response()->json([
+            'message' => 'Roles retrieved successfully',
+            'data' => $roles
+        ], 200);
     }
 
-    public function create()
-    {
-        $permission = Permission::get();
-
-        return view('dashboard.admin.user-management.role.create', compact('permission'));
-    }
-
+    /**
+     * @OA\Post(
+     *     path="/api/roles",
+     *     summary="Create a new role",
+     *     tags={"Roles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Admin"),
+     *             @OA\Property(property="permissions", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Role created successfully"),
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'regex:/^[^0-9!@#$%^&*(),.?":{}|<>]+$/'],
-        ], [
-            'name.required' => 'The name field is required. or do not use characters',
+            'name' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id']
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions(array_map(fn($val)=>(int)$val, $request->input('permission')));
+        DB::transaction(function () use ($request) {
+            $role = Role::create(['name' => $request->input('name')]);
+            $role->syncPermissions($request->input('permissions'));
+        });
 
-        return redirect('admin/role')->with('success', 'Role created successfully');
+        return response()->json(['message' => 'Role created successfully'], 201);
     }
 
-    public function edit($id)
+
+    /**
+     * @OA\Get(
+     *     path="/api/roles/{id}",
+     *     summary="Get a specific role",
+     *     tags={"Roles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Role not found")
+     * )
+     */
+    public function show($id)
     {
-        $role = Role::find($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")
-            ->where("role_has_permissions.role_id", $id)
-            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
-            ->all();
+        $role = Role::with('permissions')->findOrFail($id);
 
-        return view('dashboard.admin.user-management.role.edit', compact('role', 'permission', 'rolePermissions'));
+        return response()->json([
+            'message' => 'Role retrieved successfully',
+            'data' => $role
+        ], 200);
     }
 
+
+    /**
+     * @OA\Put(
+     *     path="/api/roles/{id}",
+     *     summary="Update a role",
+     *     tags={"Roles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Manager"),
+     *             @OA\Property(property="permissions", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Role updated successfully"),
+     *     @OA\Response(response=404, description="Role not found")
+     * )
+     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'regex:/^[^0-9!@#$%^&*(),.?":{}|<>]+$/'],
-        ], [
-            'name.required' => 'The name field is required. or do not use characters',
+            'name' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id']
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
+        DB::transaction(function () use ($request, $id) {
+            $role = Role::findOrFail($id);
+            $role->update(['name' => $request->input('name')]);
+            $role->syncPermissions($request->input('permissions'));
+        });
 
-        // $role->syncPermissions($request->input('permission'));
-        $role->syncPermissions(array_map(fn($val)=>(int)$val, $request->input('permission')));
-
-        return redirect('admin/role')->with('success', 'Role updated successfully');
+        return response()->json(['message' => 'Role updated successfully'], 200);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/roles/{id}",
+     *     summary="Delete a role",
+     *     tags={"Roles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Role deleted successfully"),
+     *     @OA\Response(response=404, description="Role not found")
+     * )
+     */
     public function destroy($id)
     {
-        DB::table("roles")->where('id', $id)->delete();
-        return redirect('admin/role')->with('success', 'Role deleted successfully');
+        $role = Role::find($id);
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+
+        $role->delete();
+        return response()->json(null, 204);
     }
 }
