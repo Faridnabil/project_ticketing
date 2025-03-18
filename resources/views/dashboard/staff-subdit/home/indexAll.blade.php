@@ -44,13 +44,13 @@
         .btn-custom {
             margin-right: 10px;
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffedc5;
             padding: 10px 50px;
             border-radius: 5px;
         }
 
         .btn-custom.active {
-            background-color: #007bff;
+            background-color: #F5AD12;
             color: white;
         }
 
@@ -149,13 +149,13 @@
                             <li class="nav-item">
                                 <a class="btn-custom font-regular mt-4 {{ request()->routeIs('staffSubdit.dashboard.index') ? 'active' : '' }}"
                                    href="{{ route('staffSubdit.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    <strong style="color: #254166">Data Harian ini</strong>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('staffSubdit.dashboard.indexAll') ? 'active' : '' }}"
                                    href="{{ route('staffSubdit.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    <strong style="color: #254166">Data Keseluruhan</strong>
                                 </a>
                             </li>
                         </ul>
@@ -198,7 +198,7 @@
                             <!--begin::Mixed Widget 2-->
                             <div class="card card-xxl-stretch" style="height: 190px">
                                 <!--begin::Header-->
-                                <div class="card-header border-0 bg-primary py-5">
+                                <div class="card-header border-0  py-5" style="background-color: #254166;">
                                     <h3 class="card-title fw-bolder text-white">Data Keseluruhan</h3>
                                     <div class="card-toolbar">
                                         <!--begin::Menu-->
@@ -208,8 +208,8 @@
                                 <!--end::Header-->
                                 <div class="card-body p-0">
                                     <!--begin::Chart-->
-                                    <div class="mixed card-rounded-bottom bg-primary" data-kt-color="primary"
-                                        style="height: 28px">
+                                    <div class="mixed card-rounded-bottom " data-kt-color="primary"
+                                        style="height: 28px; background-color: #254166">
                                     </div>
                                     <!--begin::Stats-->
                                     <div class="card-p mt-n20 position-relative">
@@ -374,9 +374,9 @@
                             <!--end::Mixed Widget 2-->
 
                             <div class="row">
-                                <div class="col-xxl-12">
+                                <div class="col-xxl-12 mt-5">
                                     <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
+                                        <div class="card-header border-0  py-5" style="background-color: #254166">
                                             <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan
                                                 -
                                                 {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Semua Bulan' }}
@@ -391,9 +391,9 @@
 
                             <div class="row">
                                 <!-- Left Column -->
-                                <div class="col-xxl-12">
+                                <div class="col-xxl-12 mt-5">
                                     <div class="card card-xxl-stretch">
-                                        <div class="card-header border-0 bg-primary py-5">
+                                        <div class="card-header border-0  py-5" style="background-color: #254166">
                                             <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket
                                                 Pertahun -
                                                 {{ $year ?? now()->year }}</h3>
