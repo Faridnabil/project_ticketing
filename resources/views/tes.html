@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Form pengajuan tiket">
+    <title>Form Tiket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="toolbar bg-light py-3">
+        <div class="container text-center">
+            <h1 class="text-dark fw-bold">Form Tiket</h1>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <main class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form class="row g-3" id="ticketForm">
+                    
+                    <!-- Kategori Permasalahan -->
+                    <div class="col-md-6">
+                        <label for="category_id" class="form-label">Kategori Permasalahan</label>
+                        <select id="category_id" class="form-select" required>
+                            <option value="">Pilih Kategori</option>
+                        </select>
+                    </div>
+
+                    <!-- Nama Provinsi -->
+                    <div class="col-md-3">
+                        <label for="province_id" class="form-label">Nama Provinsi</label>
+                        <select id="province_id" class="form-select" required>
+                            <option value="">Pilih Provinsi</option>
+                        </select>
+                    </div>
+
+                    <!-- Nama Kabupaten/Kota -->
+                    <div class="col-md-3">
+                        <label for="city_or_regency_id" class="form-label">Nama Kabupaten/Kota</label>
+                        <select id="city_or_regency_id" class="form-select" required>
+                            <option value="">Pilih Kabupaten/Kota</option>
+                        </select>
+                    </div>
+
+                    <!-- Prioritas -->
+                    <div class="col-md-6">
+                        <label for="priority_id" class="form-label">Prioritas</label>
+                        <select id="priority_id" class="form-select" required>
+                            <option value="">Pilih Prioritas</option>
+                        </select>
+                    </div>
+
+                    <!-- Nomor HP -->
+                    <div class="col-md-6">
+                        <label for="no_hp" class="form-label">Nomor HP</label>
+                        <input type="text" id="no_hp" class="form-control" placeholder="Masukkan nomor HP" required>
+                        <small class="text-danger d-none" id="error_no_hp">Nomor HP tidak valid.</small>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="attachments" class="form-label">Lampiran (JPG, PNG)</label>
+                        <input type="file" id="attachments" class="form-control" accept=".jpg, .jpeg, .png" required>
+                        <small class="text-muted">Maksimal 2MB</small>
+                        <small class="text-danger d-none" id="error_attachments">Format file tidak valid atau ukuran terlalu besar.</small>
+                    </div>
+                                        
+
+                    <!-- Deskripsi Permasalahan -->
+                    <div class="col-md-12">
+                        <label for="description" class="form-label">Deskripsi Permasalahan</label>
+                        <textarea id="description" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Tombol Submit -->
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+
+                <!-- Pesan Respon -->
+                <div id="responseMessage" class="mt-3 text-success d-none"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil data untuk dropdown
+            fetchOptions('http://localhost:8000/api/kategori', 'category_id', 'category_name');
+            fetchOptions('http://localhost:8000/api/province', 'province_id', 'province_name');
+            fetchOptions('http://localhost:8000/api/city', 'city_or_regency_id', 'city_or_regency_name');
+            fetchOptions('http://localhost:8000/api/priority', 'priority_id', 'priority_name');
+
+            // Event listener untuk form submit
+            document.getElementById('ticketForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Mencegah reload halaman
+
+                // Ambil nilai inputan
+                const category_id = document.getElementById('category_id').value;
+                const province_id = document.getElementById('province_id').value;
+                const city_or_regency_id = document.getElementById('city_or_regency_id').value;
+                const priority_id = document.getElementById('priority_id').value;
+                const no_hp = document.getElementById('no_hp').value;
+                const description = document.getElementById('description').value;
+
+                // Validasi nomor HP (hanya angka dan minimal 10 digit)
+                const phoneRegex = /^[0-9]{10,13}$/;
+                if (!phoneRegex.test(no_hp)) {
+                    document.getElementById('error_no_hp').classList.remove('d-none');
+                    return;
+                } else {
+                    document.getElementById('error_no_hp').classList.add('d-none');
+                }
+
+                // Siapkan data untuk dikirim
+                const formData = new FormData();
+                formData.append('category_id', category_id);
+                formData.append('province_id', province_id);
+                formData.append('city_or_regency_id', city_or_regency_id);
+                formData.append('priority_id', priority_id);
+                formData.append('no_hp', no_hp);
+                formData.append('description', description);
+
+                const attachments = document.getElementById('attachments').files[0];
+                const allowedTypes = ['image/jpeg', 'image/png'];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (attachments) {
+                    if (!allowedTypes.includes(attachments.type) || attachments.size > maxSize) {
+                        document.getElementById('error_attachments').classList.remove('d-none');
+                        return;
+                    } else {
+                        document.getElementById('error_attachments').classList.add('d-none');
+                        formData.append('attachments', attachments);
+                    }
+                }
+
+                // Kirim data ke API
+                fetch('http://localhost:8000/api/store', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('responseMessage').textContent = data.message;
+                    document.getElementById('responseMessage').classList.remove('d-none', 'text-danger');
+                    document.getElementById('responseMessage').classList.add('text-success');
+
+                    // Reset form setelah submit berhasil
+                    document.getElementById('ticketForm').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('responseMessage').textContent = 'Terjadi kesalahan, coba lagi.';
+                    document.getElementById('responseMessage').classList.remove('d-none', 'text-success');
+                    document.getElementById('responseMessage').classList.add('text-danger');
+                });
+            });
+        });
+
+        // Fungsi untuk mengambil data dropdown
+        function fetchOptions(url, elementId, keyName) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const selectElement = document.getElementById(elementId);
+                    data.outData.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item[keyName];
+                        selectElement.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(`Error fetching ${elementId}:`, error));
+        }
+    </script>
+
+</body>
+</html>

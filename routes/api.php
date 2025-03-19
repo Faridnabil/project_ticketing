@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VersiAPI\TicketHelpdeskApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('province',[TicketHelpdeskApiController::class,'province']);
+Route::get('kategori',[TicketHelpdeskApiController::class,'kategori']);
+// Route::get('status',[TicketHelpdeskApiController::class,'status']);
+Route::get('city',[TicketHelpdeskApiController::class,'city']);
+Route::get('priority',[TicketHelpdeskApiController::class,'priority']);
+Route::get('as',[TicketHelpdeskApiController::class,'get']);
+Route::post('store',[TicketHelpdeskApiController::class,'store']);
+
+Route::get('regional',[TicketHelpdeskApiController::class,'regional']);
+Route::get('prov/{regional_id}',[TicketHelpdeskApiController::class,'getProvince']);
+Route::get('kab/{prov_id}',[TicketHelpdeskApiController::class,'getKabupaten']);
+Route::get('kec/{kab_id}',[TicketHelpdeskApiController::class,'getKecamatan']);
+Route::get('role',[TicketHelpdeskApiController::class,'role']);
+
+

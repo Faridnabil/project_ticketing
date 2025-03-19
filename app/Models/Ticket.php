@@ -14,12 +14,13 @@ class Ticket extends Model
     protected $fillable = [
         'no_ticket',
         'priority_id',
+        'kecamatan_id',
         'status_id',
         'category_id',
         'description',
         'attachments',
-        'province_id',
-        'city_or_regency_id',
+        // 'province_id',
+        // 'city_or_regency_id',
         'pic',
         'jabatan',
         'completion_notes',
@@ -70,6 +71,11 @@ class Ticket extends Model
     public function priority()
     {
         return $this->belongsTo(Priority::class, 'priority_id');
+    }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
     public function helpdesk()

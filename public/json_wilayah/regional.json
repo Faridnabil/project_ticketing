@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "regional_name": "Regional I",
+        "code": "01"
+    },
+    {
+        "id": 2,
+        "regional_name": "Regional II",
+        "code": "02"
+    },
+    {
+        "id": 3,
+        "regional_name": "Regional III",
+        "code": "03"
+    },
+    {
+        "id": 4,
+        "regional_name": "Regional IV",
+        "code": "04"
+    },
+    {
+        "id": 5,
+        "regional_name": "Regional V",
+        "code": "05"
+    }
+]

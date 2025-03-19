@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\TicketStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,20 +13,21 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('no_ticket');
-            $table->foreignId('province_id')->nullable()->constrained();
-            $table->foreignId('city_or_regency_id')->nullable()->constrained('city_or_regencies');
-            $table->foreignId('level1')->nullable()->constrained('roles');
-            $table->foreignId('level2')->nullable()->constrained('roles');
-            $table->foreignId('level3')->nullable()->constrained('roles');
-            $table->foreignId('level4')->nullable()->constrained('roles');
-            $table->foreignId('level5')->nullable()->constrained('roles');
+            $table->string('no_ticket')->unique();
+            // $table->foreignId('province_id')->nullable()->constrained();
+            // $table->foreignId('city_or_regency_id')->nullable()->constrained('city_or_regencies');
+            $table->foreignId('kecamatan_id')->nullable()->constrained('kecamatans')->cascadeOnDelete();
+            $table->foreignId('level1')->nullable()->constrained('roles')->cascadeOnDelete();
+            $table->foreignId('level2')->nullable()->constrained('roles')->cascadeOnDelete();
+            $table->foreignId('level3')->nullable()->constrained('roles')->cascadeOnDelete();
+            $table->foreignId('level4')->nullable()->constrained('roles')->cascadeOnDelete();
+            $table->foreignId('level5')->nullable()->constrained('roles')->cascadeOnDelete();
             $table->foreignId('priority_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('status_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->text('description');
             $table->text('completion_notes')->nullable();
-            $table->text('attachments')->nullable();
+            $table->json('attachments')->nullable();
             $table->string('pic')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('no_hp')->nullable();
