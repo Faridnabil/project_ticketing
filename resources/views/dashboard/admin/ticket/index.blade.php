@@ -40,7 +40,8 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('admin.ticket.index') }}" class="row g-3 align-items-center">
+                        <form method="GET" action="{{ route('helpdesk.ticket.index') }}"
+                            class="row g-3 align-items-center">
 
                             <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                             <input type="hidden" name="level" value="{{ request('level') }}">
@@ -123,39 +124,8 @@
                                 </select>
                             </div>
 
-                            <!-- Provinsi -->
-                            <div class="col-md-2">
-                                <select id="province_id" name="province_id" class="form-select" data-control="select2"
-                                    onchange="fetchCityOrRegency(this.value)">
-                                    <option value="" selected disabled>Pilih Provinsi</option>
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province->id }}"
-                                            {{ request('province_id') == $province->id ? 'selected' : '' }}>
-                                            {{ $province->no_province }} - {{ $province->province_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            <!-- Kabupaten/Kota -->
-                            <div class="col-md-2">
-                                <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
-                                    data-control="select2">
-                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
-                                    @if (request('province_id'))
-                                        @foreach ($city_or_regencies as $city)
-                                            @if ($city->province_id == request('province_id'))
-                                                <option value="{{ $city->id }}"
-                                                    {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
-                                                </option>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-
-                            <script>
+                            <!-- <script>
                                 function fetchCityOrRegency(provinceId) {
                                     const citySelect = document.getElementById('city_or_regency_id');
                                     if (provinceId) {
@@ -208,11 +178,11 @@
                                         if (option) option.selected = true;
                                     }
                                 });
-                            </script>
+                            </script> -->
 
                             <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('admin.ticket.index') }}" class="btn btn-danger">Reset Filter</a>
+                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Atur ulang</a>
                             </div>
                         </form>
                         <!--end::Form-->
@@ -223,7 +193,7 @@
                     {{-- @can('Create Ticket')
                         <div class="card-toolbar">
                             <!--begin::Add Ticket-->
-                            <a href="{{ route('admin.ticket.create') }}" class="btn btn-primary mb-4">
+                            <a href="{{ route('helpdesk.ticket.create') }}" class="btn btn-primary mb-4">
                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -264,14 +234,6 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
-                            @if (request('tanggal_mulai') ||
-                                    request('tanggal_selesai') ||
-                                    request('level') ||
-                                    request('category_id') ||
-                                    request('priority_id') ||
-                                    request('status_id') ||
-                                    request('city_or_regency_id') ||
-                                    request('province_id'))
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->
                                     <tr>
@@ -357,7 +319,7 @@
 
                                                 @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                     <form
-                                                        action="{{ route('admin.tickets.statusTicket', $ticket->id) }}"
+                                                        action="{{ route('helpdesk.tickets.statusTicket', $ticket->id) }}"
                                                         method="POST" id="statusForm_{{ $ticket->id }}">
                                                         @csrf
                                                         <input type="hidden" name="completion_notes"
@@ -404,7 +366,8 @@
                                             @if (($ticket->status && $ticket->status_id == '2') || $ticket->status_id == '3' || $ticket->status_id == '5')
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -442,8 +405,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button"
-                                                        title="Lihat Tiket">
+                                                        href="{{ route('helpdesk.ticket.show', $ticket->id) }}"
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -482,7 +445,8 @@
                                             @else
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.edit', $ticket->id) }}" type="button">
+                                                        href="{{ route('helpdesk.ticket.edit', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -500,7 +464,8 @@
                                                 @endcan
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
-                                                        href="{{ route('admin.ticket.show', $ticket->id) }}" type="button">
+                                                        href="{{ route('admin.ticket.show', $ticket->id) }}"
+                                                        type="button">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -521,7 +486,6 @@
                                     </tr>
                                     <!--end::Table row-->
                                 @endforeach
-                            @endif
                         </tbody>
                         <!--end::Table body-->
                     </table>
@@ -563,7 +527,8 @@
                         <button type="button" class="btn btn-de-secondary btn-sm" data-bs-dismiss="modal">
                             Tutup
                         </button>
-                        <form action="{{ route('admin.ticket.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('helpdesk.ticket.destroy', $ticket->id) }}" method="POST"
+                            class="d-inline">
                             @method('delete')
                             @csrf
                             <button class="btn btn-danger" type="submit">Hapus</button>
@@ -582,7 +547,7 @@
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
-                    <form action="{{ route('admin.tickets.send', $ticket->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('helpdesk.tickets.send', $ticket->id) }}" method="POST" class="d-inline">
                         @method('PUT')
                         @csrf
                         <div class="modal-body">
@@ -631,8 +596,7 @@
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
                                             <span>Status:</span> {{ $ticket->status->status_name ?? '-' }}<br>
                                             <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
-                                            <span>Nama Provinsi:</span> {{ $ticket->province->province_name }}<br>
-                                            <span>Nama Kota:</span> {{ $ticket->cityOrRegency->city_or_regency_name }}
+                                            <span>Nama Provinsi:</span> {{ $ticket->kecamatan->name }}<br>
                                         </p>
 
                                         <hr>
@@ -754,6 +718,5 @@
                 });
             });
         </script>
-
     @endforeach
 @endsection

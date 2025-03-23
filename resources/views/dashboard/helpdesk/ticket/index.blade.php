@@ -124,39 +124,8 @@
                                 </select>
                             </div>
 
-                            <!-- Provinsi -->
-                            <div class="col-md-2">
-                                <select id="province_id" name="province_id" class="form-select" data-control="select2"
-                                    onchange="fetchCityOrRegency(this.value)">
-                                    <option value="" selected disabled>Pilih Propinsi</option>
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province->id }}"
-                                            {{ request('province_id') == $province->id ? 'selected' : '' }}>
-                                            {{ $province->no_province }} - {{ $province->province_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            <!-- Kabupaten/Kota -->
-                            <div class="col-md-2">
-                                <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
-                                    data-control="select2">
-                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
-                                    @if (request('province_id'))
-                                        @foreach ($city_or_regencies as $city)
-                                            @if ($city->province_id == request('province_id'))
-                                                <option value="{{ $city->id }}"
-                                                    {{ request('city_or_regency_id') == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
-                                                </option>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-
-                            <script>
+                            <!-- <script>
                                 function fetchCityOrRegency(provinceId) {
                                     const citySelect = document.getElementById('city_or_regency_id');
                                     if (provinceId) {
@@ -209,7 +178,7 @@
                                         if (option) option.selected = true;
                                     }
                                 });
-                            </script>
+                            </script> -->
 
                             <div class="col-md-3  d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">Filter</button>
@@ -627,8 +596,7 @@
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
                                             <span>Status:</span> {{ $ticket->status->status_name ?? '-' }}<br>
                                             <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
-                                            <span>Nama Provinsi:</span> {{ $ticket->province->province_name }}<br>
-                                            <span>Nama Kota:</span> {{ $ticket->cityOrRegency->city_or_regency_name }}
+                                            <span>Nama Provinsi:</span> {{ $ticket->kecamatan->name }}<br>
                                         </p>
 
                                         <hr>

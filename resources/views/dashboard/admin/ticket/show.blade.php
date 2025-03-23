@@ -185,8 +185,8 @@
                                                 </div>
                                                 <div class="text-muted">
                                                     <span class="fw-bolder text-gray-600">Provinsi :
-                                                        {{ $ticket->province->province_name }} - Kota/Kabupaten :
-                                                        {{ $ticket->cityOrRegency->city_or_regency_name }}</span>
+                                                        {{ $ticket->kecamatan->name }} - Kota/Kabupaten :
+                                                        {{ $ticket->kecamatan->name }}</span>
                                                 </div>
                                                 <div class="text-muted">
                                                     Dibuat: <span

@@ -11,6 +11,7 @@ use App\Models\Comment;
 use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\Province;
+use App\Models\Kecamatan;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationKoordinator;
@@ -26,6 +27,105 @@ class TicketHelpdeskController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+    //     $query = Ticket::with([
+    //         'status', 'category', 'priority', 'helpdesk',
+    //         'koordinator', 'staffSubdit', 'siakDev', 'pejabat'
+    //     ]);
+
+    //     // Variabel untuk menandai apakah ada filter yang diterapkan
+    //     $filtersApplied = false;
+
+    //     // Filter Tanggal
+    //     $tanggalMulai = $request->tanggal_mulai;
+    //     $tanggalSelesai = $request->tanggal_selesai;
+
+    //     if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
+    //         try {
+    //             $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+    //             $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+    //             $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
+    //             $filtersApplied = true;
+    //         } catch (\Exception $e) {
+    //             return redirect()->back()->withErrors(['Invalid date range provided']);
+    //         }
+    //     }
+
+    //     // Filter berdasarkan kategori
+    //     if ($request->filled('category_id')) {
+    //         $query->where('category_id', $request->category_id);
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Filter berdasarkan level
+    //     if ($request->filled('level')) {
+    //         $query->where(function ($q) use ($request) {
+    //             $q->where('level1', $request->level)
+    //                 ->orWhere('level2', $request->level)
+    //                 ->orWhere('level3', $request->level)
+    //                 ->orWhere('level4', $request->level)
+    //                 ->orWhere('level5', $request->level);
+    //         });
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Filter berdasarkan prioritas
+    //     if ($request->filled('priority_id')) {
+    //         $query->where('priority_id', $request->priority_id);
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Filter berdasarkan status
+    //     if ($request->filled('status_id')) {
+    //         $query->where('status_id', $request->status_id);
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Filter berdasarkan provinsi
+    //     $provinceId = $request->province_id;
+    //     if (!empty($provinceId)) {
+    //         $query->where('province_id', $provinceId);
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Filter berdasarkan kota/kabupaten
+    //     if ($request->filled('city_or_regency_id')) {
+    //         $query->where('city_or_regency_id', $request->city_or_regency_id);
+    //         $filtersApplied = true;
+    //     }
+
+    //     // Jika ada filter, ambil datanya. Jika tidak, hasil query dikosongkan.
+    //     $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
+
+    //     // Ambil data pendukung lainnya
+    //     $categories = Category::all();
+    //     $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+    //     $priorities = Priority::all();
+    //     $statuses = Status::all();
+    //     $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
+    //     $provinces = Province::all();
+
+    //     // Ambil kota/kabupaten berdasarkan provinsi yang dipilih
+    //     $city_or_regencies = !empty($provinceId)
+    //         ? CityOrRegency::where('province_id', $provinceId)->get()
+    //         : collect([]);
+
+    //     return view('dashboard.helpdesk.ticket.index', [
+    //         'tickets' => $tickets,
+    //         'provinces' => $provinces,
+    //         'city_or_regencies' => $city_or_regencies,
+    //         'categories' => $categories,
+    //         'priorities' => $priorities,
+    //         'statuses' => $statuses,
+    //         'levels' => $levels,
+    //         'tanggalMulai' => $tanggalMulai,
+    //         'tanggalSelesai' => $tanggalSelesai,
+    //         'koordinatorUsers' => $koordinatorUsers,
+    //         'filter' => $request->all() // Mengirim filter yang digunakan ke view
+    //     ]);
+    // }
+
     public function index(Request $request)
     {
         $query = Ticket::with([
@@ -82,20 +182,28 @@ class TicketHelpdeskController extends Controller
         }
 
         // Filter berdasarkan provinsi
-        $provinceId = $request->province_id;
-        if (!empty($provinceId)) {
-            $query->where('province_id', $provinceId);
+        // $provinceId = $request->province_id;
+        // if (!empty($provinceId)) {
+        //     $query->where('province_id', $provinceId);
+        //     $filtersApplied = true;
+        // }
+
+        $kecamatanId = $request->kecamatan_id;
+        if (!empty($kecamatanId)) {
+            $query->where('kecamatan_id', $kecamatanId);
             $filtersApplied = true;
         }
+
 
         // Filter berdasarkan kota/kabupaten
-        if ($request->filled('city_or_regency_id')) {
-            $query->where('city_or_regency_id', $request->city_or_regency_id);
-            $filtersApplied = true;
-        }
+        // if ($request->filled('city_or_regency_id')) {
+        //     $query->where('city_or_regency_id', $request->city_or_regency_id);
+        //     $filtersApplied = true;
+        // }
 
         // Jika ada filter, ambil datanya. Jika tidak, hasil query dikosongkan.
-        $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
+        // $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
+        $tickets = Ticket::all();
 
         // Ambil data pendukung lainnya
         $categories = Category::all();
@@ -103,7 +211,7 @@ class TicketHelpdeskController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
         $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
-        $provinces = Province::all();
+        $kecamatan = Kecamatan::all();
 
         // Ambil kota/kabupaten berdasarkan provinsi yang dipilih
         $city_or_regencies = !empty($provinceId)
@@ -112,8 +220,8 @@ class TicketHelpdeskController extends Controller
 
         return view('dashboard.helpdesk.ticket.index', [
             'tickets' => $tickets,
-            'provinces' => $provinces,
-            'city_or_regencies' => $city_or_regencies,
+            'kecamatan' => $kecamatan,
+            // 'city_or_regencies' => $city_or_regencies,
             'categories' => $categories,
             'priorities' => $priorities,
             'statuses' => $statuses,
@@ -123,7 +231,22 @@ class TicketHelpdeskController extends Controller
             'koordinatorUsers' => $koordinatorUsers,
             'filter' => $request->all() // Mengirim filter yang digunakan ke view
         ]);
+
+        // return response()->json([
+        //     'tickets' => $tickets,
+        //     'kecamatan' => $kecamatan,
+        //     'categories' => $categories,
+        //     'priorities' => $priorities,
+        //     'statuses' => $statuses,
+        //     'levels' => $levels,
+        //     'tanggalMulai' => $tanggalMulai,
+        //     'tanggalSelesai' => $tanggalSelesai,
+        //     'koordinatorUsers' => $koordinatorUsers,
+        //     'filter' => $request->all()
+        // ]);
+    
     }
+
 
 
     public function newTicket(Request $request)
@@ -272,8 +395,9 @@ class TicketHelpdeskController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
-        $provinces = Province::all();
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // $provinces = Province::all();
+        // $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        $kecamatan =  Kecamatan::all();
 
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
@@ -295,8 +419,7 @@ class TicketHelpdeskController extends Controller
                 'statuses',
                 'categories',
                 'comments',
-                'provinces',
-                'city_or_regencies',
+                'kecamatan'
             )
         );
     }
