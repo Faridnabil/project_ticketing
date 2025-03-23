@@ -115,12 +115,82 @@ class TicketHelpdeskApiController extends Controller
         ]);
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'category_id' => 'required|exists:categories,id',
+    //         'kecamatan_id' => 'required|exists:kecamatans,id',
+    //         // 'priority_id' => 'required|exists:priorities,id',
+    //         'no_hp' => 'required|string',
+    //         'description' => 'required|string',
+    //     ]);
+
+    //     DB::beginTransaction();
+    //     try {
+    //         Log::info('Memulai pembuatan ticket', ['request_data' => $validated]);
+
+            
+    //         $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
+    //             ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
+
+    //         $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
+    //         $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+
+    //         Log::info('Nomor tiket baru', ['no_ticket' => $newTicketId]);
+
+            
+    //         $data = $validated;
+    //         $data['no_ticket'] = $newTicketId;
+    //         $data['level1'] = 2;
+    //         $data['pic'] = "PIC";
+    //         $data['status_id'] = self::STATUS_NEW;
+    //         $data['priority_id'] = 1;
+
+            
+    //         $attachments = [];
+    //         if ($request->hasFile('attachments')) {
+    //             foreach ($request->file('attachments') as $file) {
+    //                 $nama_file = time() . "_" . $file->getClientOriginalName();
+    //                 $filePath = $file->storeAs('ticket', $nama_file); 
+    //                 $attachments[] = Storage::url('ticket/' . $nama_file); 
+    //             }
+    //         }
+    //         $data['attachments'] = json_encode($attachments);
+
+    //         Log::info('Data tiket yang akan disimpan', ['data' => $data]);
+
+            
+    //         $ticket = Ticket::create($data);
+    //         DB::commit();
+
+    //         Log::info('Ticket berhasil dibuat', ['ticket' => $ticket]);
+
+    //         return response()->json([
+    //             "message" => "Ticket Berhasil Dibuat !!",
+    //             "data" => $ticket
+    //         ], 201);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         Log::error('Terjadi kesalahan saat membuat ticket', [
+    //             'error' => $th->getMessage(),
+    //             'line' => $th->getLine(),
+    //             'file' => $th->getFile()
+    //         ]);
+
+    //         return response()->json([
+    //             "message" => "Terjadi kesalahan Pada Ticket !!",
+    //             "error" => $th->getMessage(),
+    //             "line" => $th->getLine(),
+    //             "file" => $th->getFile()
+    //         ], 500);
+    //     }
+    // }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'kecamatan_id' => 'required|exists:kecamatans,id',
-            // 'priority_id' => 'required|exists:priorities,id',
             'no_hp' => 'required|string',
             'description' => 'required|string',
         ]);
@@ -129,16 +199,15 @@ class TicketHelpdeskApiController extends Controller
         try {
             Log::info('Memulai pembuatan ticket', ['request_data' => $validated]);
 
-            
+            // Generate nomor tiket baru
             $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
                 ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
-
             $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
 
             Log::info('Nomor tiket baru', ['no_ticket' => $newTicketId]);
 
-            
+            // Inisialisasi data tiket
             $data = $validated;
             $data['no_ticket'] = $newTicketId;
             $data['level1'] = 2;
@@ -146,20 +215,19 @@ class TicketHelpdeskApiController extends Controller
             $data['status_id'] = self::STATUS_NEW;
             $data['priority_id'] = 1;
 
-            
-            $attachments = [];
+            // Menyimpan file jika ada
             if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $nama_file = time() . "_" . $file->getClientOriginalName();
-                    $filePath = $file->storeAs('ticket', $nama_file); 
-                    $attachments[] = Storage::url('ticket/' . $nama_file); 
-                }
+                $file = $request->file('attachments');
+                $nama_file = time() . "_" . $file->getClientOriginalName();
+                $file->storeAs('public/ticket', $nama_file); 
+                $data['attachments'] = json_encode(["storage/ticket/$nama_file"]); // Simpan dalam format JSON
+            } else {
+                $data['attachments'] = json_encode([]); // Default JSON array kosong
             }
-            $data['attachments'] = json_encode($attachments);
 
             Log::info('Data tiket yang akan disimpan', ['data' => $data]);
 
-            
+            // Simpan ke database
             $ticket = Ticket::create($data);
             DB::commit();
 
@@ -185,5 +253,7 @@ class TicketHelpdeskApiController extends Controller
             ], 500);
         }
     }
+
+
 
 }

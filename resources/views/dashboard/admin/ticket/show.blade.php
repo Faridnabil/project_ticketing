@@ -372,7 +372,7 @@
                                     @if (is_array(json_decode($ticket->attachments, true)) && count(json_decode($ticket->attachments, true)) > 0)
                                         @foreach (json_decode($ticket->attachments, true) as $index => $attachment)
                                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                                <img src="{{ asset('storage/' . $attachment) }}"
+                                                <img src="{{ asset($attachment) }}"
                                                     alt="{{ basename($attachment) }}" class="card-rounded shadow mw-100"
                                                     style="max-width: 400px; max-height: 300px; object-fit: cover;"
                                                     data-bs-toggle="modal"

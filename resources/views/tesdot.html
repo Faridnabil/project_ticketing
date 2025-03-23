@@ -107,20 +107,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil data untuk dropdown
-            fetchOptions('http://localhost:8000/api/kategori', 'category_id', 'category_name');
-            // fetchOptions('http://localhost:8000/api/priority', 'priority_id', 'priority_name');
-            fetchOptions('http://localhost:8000/api/regional', 'regional_id', 'regional_name');
+            fetchOptions('http://82.25.108.179:8081/api/kategori', 'category_id', 'category_name');
+            // fetchOptions('http://82.25.108.179:8081/api/priority', 'priority_id', 'priority_name');
+            fetchOptions('http://82.25.108.179:8081/api/regional', 'regional_id', 'regional_name');
 
             document.getElementById('regional_id').addEventListener('change', function() {
-                fetchOptions('http://localhost:8000/api/prov/' + this.value, 'province_id', 'name');
+                fetchOptions('http://82.25.108.179:8081/api/prov/' + this.value, 'province_id', 'name');
             });
 
             document.getElementById('province_id').addEventListener('change', function() {
-                fetchOptions('http://localhost:8000/api/kab/' + this.value, 'kabupaten_id', 'name');
+                fetchOptions('http://82.25.108.179:8081/api/kab/' + this.value, 'kabupaten_id', 'name');
             });
 
             document.getElementById('kabupaten_id').addEventListener('change', function() {
-                fetchOptions('http://localhost:8000/api/kec/' + this.value, 'kecamatan_id', 'name');
+                fetchOptions('http://82.25.108.179:8081/api/kec/' + this.value, 'kecamatan_id', 'name');
             });
 
             function fetchOptions(url, selectId, keyName) {
@@ -176,7 +176,7 @@
                     }
                 }
 
-                fetch('http://localhost:8000/api/store', {
+                fetch('http://82.25.108.179:8081/api/store', {
                     method: 'POST',
                     body: formData,
                     headers: {
