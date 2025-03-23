@@ -433,7 +433,7 @@
     </script>
 
     {{-- CHATBOT --}}
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         var LHCChatOptions = {};
         LHCChatOptions.opt = {
             widget_height: 340,
@@ -455,7 +455,7 @@
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(po, s);
         })();
-    </script>
+    </script> -->
 
 </body>
 

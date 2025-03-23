@@ -31,12 +31,12 @@
                     </div>
 
                     <!-- Prioritas -->
-                    <div class="col-md-6">
-                        <label for="priority_id" class="form-label">Prioritas</label>
-                        <select id="priority_id" class="form-select" required>
-                            <option value="">Pilih Prioritas</option>
-                        </select>
-                    </div>
+                        <!-- <div class="col-md-6">
+                            <label for="priority_id" class="form-label">Prioritas</label>
+                            <select id="priority_id" class="form-select" required>
+                                <option value="">Pilih Prioritas</option>
+                            </select>
+                        </div> -->
 
                     <!-- Regional -->
                     <div class="col-md-6">
@@ -108,7 +108,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil data untuk dropdown
             fetchOptions('http://localhost:8000/api/kategori', 'category_id', 'category_name');
-            fetchOptions('http://localhost:8000/api/priority', 'priority_id', 'priority_name');
+            // fetchOptions('http://localhost:8000/api/priority', 'priority_id', 'priority_name');
             fetchOptions('http://localhost:8000/api/regional', 'regional_id', 'regional_name');
 
             document.getElementById('regional_id').addEventListener('change', function() {
@@ -143,7 +143,7 @@
 
                 const category_id = document.getElementById('category_id').value;
                 const kecamatan_id = document.getElementById('kecamatan_id').value;
-                const priority_id = document.getElementById('priority_id').value;
+                // const priority_id = document.getElementById('priority_id').value;
                 const no_hp = document.getElementById('no_hp').value;
                 const description = document.getElementById('description').value;
 
@@ -158,7 +158,7 @@
                 const formData = new FormData();
                 formData.append('category_id', category_id);
                 formData.append('kecamatan_id', kecamatan_id);
-                formData.append('priority_id', priority_id);
+                // formData.append('priority_id', priority_id);
                 formData.append('no_hp', no_hp);
                 formData.append('description', description);
 

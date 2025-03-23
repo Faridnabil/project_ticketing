@@ -120,7 +120,7 @@ class TicketHelpdeskApiController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'kecamatan_id' => 'required|exists:kecamatans,id',
-            'priority_id' => 'required|exists:priorities,id',
+            // 'priority_id' => 'required|exists:priorities,id',
             'no_hp' => 'required|string',
             'description' => 'required|string',
         ]);
@@ -144,6 +144,7 @@ class TicketHelpdeskApiController extends Controller
             $data['level1'] = 2;
             $data['pic'] = "PIC";
             $data['status_id'] = self::STATUS_NEW;
+            $data['priority_id'] = 1;
 
             
             $attachments = [];
