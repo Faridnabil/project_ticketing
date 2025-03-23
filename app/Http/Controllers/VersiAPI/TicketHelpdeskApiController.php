@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Regional;
-use App\Models\Provinsi;
+use App\Models\provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 
@@ -36,7 +36,7 @@ class TicketHelpdeskApiController extends Controller
 
     public function getProvince($regional_id)
     {
-        $provinceList = Provinsi::where('regional_id', $regional_id)
+        $provinceList = provinsi::where('regional_id', $regional_id)
             ->select('id', 'name', 'code','regional_id')
             ->get();
 
