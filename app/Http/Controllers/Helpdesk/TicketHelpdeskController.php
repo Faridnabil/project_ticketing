@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 
@@ -128,13 +129,11 @@ class TicketHelpdeskController extends Controller
 
     public function index(Request $request)
     {
+        $filtersApplied = false;
         $query = Ticket::with([
             'status', 'category', 'priority', 'helpdesk',
             'koordinator', 'staffSubdit', 'siakDev', 'pejabat'
         ]);
-
-        // Variabel untuk menandai apakah ada filter yang diterapkan
-        $filtersApplied = false;
 
         // Filter Tanggal
         $tanggalMulai = $request->tanggal_mulai;
@@ -151,13 +150,11 @@ class TicketHelpdeskController extends Controller
             }
         }
 
-        // Filter berdasarkan kategori
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
             $filtersApplied = true;
         }
 
-        // Filter berdasarkan level
         if ($request->filled('level')) {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
@@ -169,59 +166,49 @@ class TicketHelpdeskController extends Controller
             $filtersApplied = true;
         }
 
-        // Filter berdasarkan prioritas
         if ($request->filled('priority_id')) {
             $query->where('priority_id', $request->priority_id);
             $filtersApplied = true;
         }
 
-        // Filter berdasarkan status
         if ($request->filled('status_id')) {
             $query->where('status_id', $request->status_id);
             $filtersApplied = true;
         }
 
-        // Filter berdasarkan provinsi
-        // $provinceId = $request->province_id;
-        // if (!empty($provinceId)) {
-        //     $query->where('province_id', $provinceId);
-        //     $filtersApplied = true;
-        // }
-
-        $kecamatanId = $request->kecamatan_id;
-        if (!empty($kecamatanId)) {
-            $query->where('kecamatan_id', $kecamatanId);
+        if ($request->filled('kecamatan_id')) {
+            $query->where('kecamatan_id', $request->kecamatan_id);
             $filtersApplied = true;
         }
 
+        // Build cache key dari filter
+        $cacheKey = 'tickets_' . md5(json_encode($request->all()));
 
-        // Filter berdasarkan kota/kabupaten
-        // if ($request->filled('city_or_regency_id')) {
-        //     $query->where('city_or_regency_id', $request->city_or_regency_id);
-        //     $filtersApplied = true;
-        // }
+        // Ambil dari cache atau query jika ada filter
+        $tickets = $filtersApplied
+            ? Cache::remember($cacheKey, now()->addMinutes(30), fn () => $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get())
+            : collect([]);
 
-        // Jika ada filter, ambil datanya. Jika tidak, hasil query dikosongkan.
-        // $tickets = $filtersApplied ? $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')")->get() : collect([]);
-        $tickets = Ticket::all();
+        // Caching data referensi (jika belum dicache)
+        $categories = Cache::remember('ticket_categories', now()->addHours(1), fn () => Category::all());
+        $levels = Cache::remember('ticket_levels', now()->addHours(1), fn () => Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get());
+        $priorities = Cache::remember('ticket_priorities', now()->addHours(1), fn () => Priority::all());
+        $statuses = Cache::remember('ticket_statuses', now()->addHours(1), fn () => Status::all());
+        $kecamatan = Cache::remember('ticket_kecamatan', now()->addHours(1), fn () => Kecamatan::all());
+        $koordinatorUsers = Cache::remember('koordinator_user_ids', now()->addHours(1), fn () =>
+            Role::where('name', 'Koordinator')->pluck('id')->toArray()
+        );
 
-        // Ambil data pendukung lainnya
-        $categories = Category::all();
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $koordinatorUsers = Role::where('name', 'Koordinator')->pluck('id')->toArray();
-        $kecamatan = Kecamatan::all();
-
-        // Ambil kota/kabupaten berdasarkan provinsi yang dipilih
+        // Ambil kota/kabupaten berdasarkan provinsi (jika tersedia)
+        $provinceId = $request->province_id ?? null;
         $city_or_regencies = !empty($provinceId)
-            ? CityOrRegency::where('province_id', $provinceId)->get()
+            ? Cache::remember("cities_by_province_{$provinceId}", now()->addMinutes(30), fn () =>
+                CityOrRegency::where('province_id', $provinceId)->get())
             : collect([]);
 
         return view('dashboard.helpdesk.ticket.index', [
             'tickets' => $tickets,
             'kecamatan' => $kecamatan,
-            // 'city_or_regencies' => $city_or_regencies,
             'categories' => $categories,
             'priorities' => $priorities,
             'statuses' => $statuses,
@@ -229,23 +216,11 @@ class TicketHelpdeskController extends Controller
             'tanggalMulai' => $tanggalMulai,
             'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Mengirim filter yang digunakan ke view
+            'city_or_regencies' => $city_or_regencies,
+            'filter' => $request->all()
         ]);
-
-        // return response()->json([
-        //     'tickets' => $tickets,
-        //     'kecamatan' => $kecamatan,
-        //     'categories' => $categories,
-        //     'priorities' => $priorities,
-        //     'statuses' => $statuses,
-        //     'levels' => $levels,
-        //     'tanggalMulai' => $tanggalMulai,
-        //     'tanggalSelesai' => $tanggalSelesai,
-        //     'koordinatorUsers' => $koordinatorUsers,
-        //     'filter' => $request->all()
-        // ]);
-    
     }
+
 
 
 
@@ -819,10 +794,15 @@ class TicketHelpdeskController extends Controller
 
     public function getCities($provinceId)
     {
-        $cities = CityOrRegency::with('province')
-            ->where('province_id', $provinceId)
-            ->get(['id', 'province_id', 'city_or_regency_name', 'no_city_or_regency']);
+        $cacheKey = 'cities_province_' . $provinceId;
+
+        $cities = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($provinceId) {
+            return CityOrRegency::with('province')
+                ->where('province_id', $provinceId)
+                ->get(['id', 'province_id', 'city_or_regency_name', 'no_city_or_regency']);
+        });
 
         return response()->json($cities);
     }
+
 }

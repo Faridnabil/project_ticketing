@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Cache;
 
 class TicketController extends Controller
 {
@@ -29,77 +31,77 @@ class TicketController extends Controller
      */
     public function index(Request $request, Ticket $ticket)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
-
-        // Retrieve filter input
         $tanggalMulai = $request->tanggal_mulai ?? null;
         $tanggalSelesai = $request->tanggal_selesai ?? null;
-
-        // Filter by date range if provided
-        if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
-            try {
-                $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
-                $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
-                $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
-            } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['Invalid date range provided']);
-            }
-        }
-
-        // Other filters
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->filled('level')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('level1', $request->level)
-                    ->orWhere('level2', $request->level)
-                    ->orWhere('level3', $request->level)
-                    ->orWhere('level4', $request->level)
-                    ->orWhere('level5', $request->level);
-            });
-        }
-
-        if ($request->filled('priority_id')) {
-            $query->where('priority_id', $request->priority_id);
-        }
-
-        if ($request->filled('status_id')) {
-            $query->where('status_id', $request->status_id);
-        }
-
-        // Filter by province
         $provinceId = $request->province_id ?? null;
-        if ($provinceId) {
-            $query->where('province_id', $provinceId);
-        }
 
-        if ($request->filled('city_or_regency_id')) {
-            $query->where('city_or_regency_id', $request->city_or_regency_id);
-        }
+        // Generate cache key yang unik berdasarkan semua filter
+        $cacheKey = 'tickets_' . md5(json_encode($request->all()));
 
-        // Apply sorting after all filters
-        $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request, $tanggalMulai, $tanggalSelesai, $provinceId) {
+            $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat');
 
-        // Retrieve filter data
-        $categories = Category::all();
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
-        $priorities = Priority::all();
-        $statuses = Status::all();
+            if (!empty($tanggalMulai) && !empty($tanggalSelesai)) {
+                try {
+                    $startDate = Carbon::createFromFormat('Y-m-d', $tanggalMulai)->startOfDay();
+                    $endDate = Carbon::createFromFormat('Y-m-d', $tanggalSelesai)->endOfDay();
+                    $query->whereBetween('tickets.created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    return redirect()->back()->withErrors(['Invalid date range provided']);
+                }
+            }
 
-        $tickets = $query->get();
+            if ($request->filled('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
 
-        // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
+            if ($request->filled('level')) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('level1', $request->level)
+                        ->orWhere('level2', $request->level)
+                        ->orWhere('level3', $request->level)
+                        ->orWhere('level4', $request->level)
+                        ->orWhere('level5', $request->level);
+                });
+            }
 
-        $provinces = Province::all();
+            if ($request->filled('priority_id')) {
+                $query->where('priority_id', $request->priority_id);
+            }
 
-        // Fetch cities based on selected province
+            if ($request->filled('status_id')) {
+                $query->where('status_id', $request->status_id);
+            }
+
+            if ($provinceId) {
+                $query->where('province_id', $provinceId);
+            }
+
+            if ($request->filled('city_or_regency_id')) {
+                $query->where('city_or_regency_id', $request->city_or_regency_id);
+            }
+
+            $query->orderByRaw("FIELD(priority_id, '4', '3', '2', '1')");
+
+            return $query->get();
+        });
+
+        // Cache data referensi (opsional juga bisa di-cache)
+        $categories = Cache::remember('categories_all', now()->addDay(), fn () => Category::all());
+        $priorities = Cache::remember('priorities_all', now()->addDay(), fn () => Priority::all());
+        $statuses = Cache::remember('statuses_all', now()->addDay(), fn () => Status::all());
+        $levels = Cache::remember('role_levels', now()->addDay(), function () {
+            return Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        });
+
+        $koordinatorUsers = Cache::remember('koordinator_user_ids', now()->addDay(), function () {
+            return Role::where('name', 'Koordinator')->pluck('id')->toArray();
+        });
+
+        $provinces = Cache::remember('provinces_all', now()->addDay(), fn () => Province::all());
+
         $city_or_regencies = $provinceId
-            ? CityOrRegency::where('province_id', $provinceId)->get()
+            ? Cache::remember("cities_province_{$provinceId}", now()->addMinutes(30), fn () => CityOrRegency::where('province_id', $provinceId)->get())
             : collect([]);
 
         return view('dashboard.admin.ticket.index', [
@@ -113,7 +115,7 @@ class TicketController extends Controller
             'tanggalMulai' => $tanggalMulai,
             'tanggalSelesai' => $tanggalSelesai,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Kirim filter saat ini ke view
+            'filter' => $request->all()
         ]);
     }
     /**

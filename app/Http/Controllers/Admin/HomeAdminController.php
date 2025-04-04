@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeAdminController extends Controller
 {
@@ -21,10 +22,14 @@ class HomeAdminController extends Controller
         $startDateTime = Carbon::parse($date . ' ' . $startTime);
         $endDateTime = Carbon::parse($date . ' ' . $endTime);
 
-        // Query tiket berdasarkan tanggal dan waktu yang dipilih
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->whereBetween('created_at', [$startDateTime, $endDateTime])
-            ->get();
+        // Gunakan cache dengan key unik berdasarkan tanggal dan waktu
+        $cacheKey = "tickets_{$date}_{$startTime}_{$endTime}";
+
+        $tickets = Cache::remember($cacheKey, 600, function () use ($startDateTime, $endDateTime) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->whereBetween('created_at', [$startDateTime, $endDateTime])
+                ->get();
+        });
 
         // Hitung data tiket
         $total_tiket = $tickets->count();
@@ -81,109 +86,116 @@ class HomeAdminController extends Controller
             'shift3' => ['23:00:00', '07:00:00'],
         ];
 
-        $ticketsCreated = [];
-        $ticketsClosed = [];
+        // Key unik untuk cache berdasarkan parameter request
+        $cacheKey = "ticket_chart_{$selectedDate}_{$startTime->format('H:i')}_{$endTime->format('H:i')}";
 
-        foreach ($shifts as $shift => [$startShift, $endShift]) {
-            $shiftStart = Carbon::parse($selectedDate . ' ' . $startShift);
-            $shiftEnd = $shift === 'shift3'
-                ? Carbon::parse($selectedDate . ' ' . $endShift)->addDay()
-                : Carbon::parse($selectedDate . ' ' . $endShift);
+        $data = Cache::remember($cacheKey, 600, function () use ($shifts, $selectedDate, $startTime, $endTime) {
+            $ticketsCreated = [];
+            $ticketsClosed = [];
 
-            // Filter tiket
-            $ticketsCreated[] = Ticket::whereBetween('created_at', [$shiftStart, $shiftEnd])
-                ->whereBetween('created_at', [$startTime, $endTime])
-                ->count();
-            $ticketsClosed[] = Ticket::where('status_id', 4)
-                ->whereBetween('created_at', [$shiftStart, $shiftEnd])
-                ->whereBetween('created_at', [$startTime, $endTime])
-                ->count();
-        }
+            foreach ($shifts as $shift => [$startShift, $endShift]) {
+                $shiftStart = Carbon::parse($selectedDate . ' ' . $startShift);
+                $shiftEnd = $shift === 'shift3'
+                    ? Carbon::parse($selectedDate . ' ' . $endShift)->addDay()
+                    : Carbon::parse($selectedDate . ' ' . $endShift);
 
-        return response()->json([
-            'ticketsCreated' => $ticketsCreated,
-            'ticketsClosed' => $ticketsClosed,
-        ]);
+                // Filter tiket
+                $ticketsCreated[] = Ticket::whereBetween('created_at', [$shiftStart, $shiftEnd])
+                    ->whereBetween('created_at', [$startTime, $endTime])
+                    ->count();
+
+                $ticketsClosed[] = Ticket::where('status_id', 4)
+                    ->whereBetween('created_at', [$shiftStart, $shiftEnd])
+                    ->whereBetween('created_at', [$startTime, $endTime])
+                    ->count();
+            }
+
+            return [
+                'ticketsCreated' => $ticketsCreated,
+                'ticketsClosed' => $ticketsClosed,
+            ];
+        });
+
+        return response()->json($data);
     }
 
 
     public function indexAll(Request $request)
     {
         $month = $request->query('month', now()->month);
-        $year = $request->query('year', now()->year); // Default ke tahun berjalan
+        $year = $request->query('year', now()->year);
 
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
-            })
-            ->get();
+        // Key unik untuk cache berdasarkan bulan dan tahun
+        $cacheKey = "tickets_{$year}_{$month}";
 
-        $total_tiket = $tickets->count();
-        $tiket_belum = $tickets->where('status.status_name', null)->count();
-        $tiket_masuk = $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count();
-        $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
-        $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
-        $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+        // Mengambil data dari cache atau query jika belum ada
+        $data = Cache::remember($cacheKey, 600, function () use ($month, $year) {
+            $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->when($month && $year, function ($query) use ($month, $year) {
+                    $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                })
+                ->get();
+
+            return [
+                'tickets' => $tickets,
+                'total_tiket' => $tickets->count(),
+                'tiket_belum' => $tickets->where('status.status_name', null)->count(),
+                'tiket_masuk' => $tickets->count() - $tickets->whereIn('status.status_name', ['Selesai', 'Proses', 'Buka Kembali'])->count(),
+                'tiket_proses' => $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count(),
+                'tiket_tertunda' => $tickets->where('status.status_name', 'Tertunda')->count(),
+                'tiket_selesai' => $tickets->where('status.status_name', 'Selesai')->count(),
+            ];
+        });
 
         if ($request->ajax()) {
-            return response()->json([
-                'tickets' => $tickets,
-                'total_tiket' => $total_tiket,
-                'tiket_belum' => $tiket_belum,
-                'tiket_masuk' => $tiket_masuk,
-                'tiket_proses' => $tiket_proses,
-                'tiket_tertunda' => $tiket_tertunda,
-                'tiket_selesai' => $tiket_selesai,
-            ]);
+            return response()->json($data);
         }
 
-        return view('dashboard.admin.home.indexAll', compact(
-            'tickets',
-            'total_tiket',
-            'tiket_belum',
-            'tiket_masuk',
-            'tiket_proses',
-            'tiket_tertunda',
-            'month',
-            'year',
-            'tiket_selesai'
-        ));
+        return view('dashboard.admin.home.indexAll', array_merge($data, compact('month', 'year')));
     }
 
     public function getTicketChartData(Request $request)
     {
         $year = $request->input('year', Carbon::now()->year);
 
-        // Ambil data tiket masuk
-        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        // Key unik untuk cache berdasarkan tahun
+        $cacheKey = "ticket_chart_data_{$year}";
 
-        // Ambil data tiket selesai, hanya jika created_at juga dalam tahun yang diminta
-        $ticketsClosed = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
-            ->whereYear('created_at', $year) // Tambahkan kondisi ini
-            ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        // Mengambil data dari cache atau query jika belum ada
+        $chartData = Cache::remember($cacheKey, 3600, function () use ($year) {
+            // Ambil data tiket masuk
+            $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->whereYear('created_at', $year)
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
 
-        $chartData = [
-            'months' => [],
-            'tickets' => [],
-            'ticketsClosed' => []
-        ];
+            // Ambil data tiket selesai dengan status_id = 4
+            $ticketsClosed = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->whereYear('created_at', $year)
+                ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
 
-        for ($i = 1; $i <= 12; $i++) {
-            $chartData['months'][] = Carbon::create()->month($i)->format('F');
-            $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
-        }
+            // Inisialisasi data grafik
+            $chartData = [
+                'months' => [],
+                'tickets' => [],
+                'ticketsClosed' => []
+            ];
+
+            for ($i = 1; $i <= 12; $i++) {
+                $chartData['months'][] = Carbon::create()->month($i)->format('F');
+                $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
+                $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+            }
+
+            return $chartData;
+        });
 
         return response()->json($chartData);
     }
@@ -196,36 +208,43 @@ class HomeAdminController extends Controller
         $startDate = Carbon::create($year, $month)->startOfMonth();
         $endDate = Carbon::create($year, $month)->endOfMonth();
 
-        // Tickets Created Query
-        $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('day')
-            ->get()
-            ->keyBy('day')
-            ->toArray();
+        // Gunakan cache dengan key berdasarkan tahun dan bulan
+        $cacheKey = "daily_ticket_chart_{$year}_{$month}";
 
-        // Tickets Closed Query (only if created_at is within the requested year)
-        $ticketsClosed = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-            ->where('status_id', 4)
-            ->whereYear('created_at', $year) // Ensure created_at is in the requested year
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('day')
-            ->get()
-            ->keyBy('day')
-            ->toArray();
+        $chartData = Cache::remember($cacheKey, 3600, function () use ($startDate, $endDate, $year) {
+            // Tickets Created Query
+            $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->groupBy('day')
+                ->get()
+                ->keyBy('day')
+                ->toArray();
 
-        // Prepare Chart Data
-        $chartData = [
-            'days' => [],
-            'ticketsCreated' => [],
-            'ticketsClosed' => []
-        ];
+            // Tickets Closed Query
+            $ticketsClosed = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
+                ->where('status_id', 4)
+                ->whereYear('created_at', $year)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->groupBy('day')
+                ->get()
+                ->keyBy('day')
+                ->toArray();
 
-        for ($i = 1; $i <= $endDate->day; $i++) {
-            $chartData['days'][] = $i;
-            $chartData['ticketsCreated'][] = $ticketsCreated[$i]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
-        }
+            // Siapkan data grafik
+            $chartData = [
+                'days' => [],
+                'ticketsCreated' => [],
+                'ticketsClosed' => []
+            ];
+
+            for ($i = 1; $i <= $endDate->day; $i++) {
+                $chartData['days'][] = $i;
+                $chartData['ticketsCreated'][] = $ticketsCreated[$i]['total'] ?? 0;
+                $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+            }
+
+            return $chartData;
+        });
 
         return response()->json($chartData);
     }

@@ -17,35 +17,43 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 
 class SolutionTechnicalController extends Controller
 {
     public function index(Request $request, Ticket $ticket)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-        ->whereNotNull('completion_notes')
-        ->where('completion_notes', '!=', '');
+        $categoryId = $request->input('category_id');
 
-        // Other filters
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
+        // Cache key berdasarkan filter
+        $cacheKey = 'solution_tickets_' . md5(json_encode(['category_id' => $categoryId]));
 
-        // Retrieve filter data
-        $categories = Category::all();
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
-        $priorities = Priority::all();
-        $statuses = Status::all();
+        // Ambil tiket dari cache atau query jika belum ada
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($categoryId) {
+            $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->whereNotNull('completion_notes')
+                ->where('completion_notes', '!=', '');
 
-        $tickets = $query->get();
+            if ($categoryId) {
+                $query->where('category_id', $categoryId);
+            }
 
-        // Ambil user dengan role Koordinator
-        $koordinatorUsers = Role::where('name', 'Koordinator')
-            ->pluck('id')
-            ->toArray();
+            return $query->get();
+        });
 
-        $provinces = Province::all();
+        // Ambil data filter dari cache
+        $categories = Cache::remember('categories_all', now()->addMinutes(30), fn() => Category::all());
+        $priorities = Cache::remember('priorities_all', now()->addMinutes(30), fn() => Priority::all());
+        $statuses = Cache::remember('statuses_all', now()->addMinutes(30), fn() => Status::all());
+        $provinces = Cache::remember('provinces_all', now()->addMinutes(30), fn() => Province::all());
+        $levels = Cache::remember('levels_roles', now()->addMinutes(30), function () {
+            return Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        });
+
+        $koordinatorUsers = Cache::remember('koordinator_users', now()->addMinutes(30), function () {
+            return Role::where('name', 'Koordinator')->pluck('id')->toArray();
+        });
 
         return view('dashboard.helpdesk.solution.index', [
             'tickets' => $tickets,
@@ -55,9 +63,10 @@ class SolutionTechnicalController extends Controller
             'statuses' => $statuses,
             'levels' => $levels,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Kirim filter saat ini ke view
+            'filter' => $request->all()
         ]);
     }
+
 
     public function edit(Ticket $ticket, Request $request)
     {
