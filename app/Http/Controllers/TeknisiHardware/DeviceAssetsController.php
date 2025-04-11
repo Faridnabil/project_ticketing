@@ -7,6 +7,7 @@ use App\Models\DeviceAssets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class DeviceAssetsController extends Controller
 {
@@ -15,7 +16,10 @@ class DeviceAssetsController extends Controller
      */
     public function index()
     {
-        $deviceAssets = DeviceAssets::all();
+        // Simpan hasil query dalam cache selama 5 menit
+        $deviceAssets = Cache::remember('device_assets_all', now()->addMinutes(5), function () {
+            return DeviceAssets::all();
+        });
 
         return view("dashboard.teknisi-perangkat.device-assets.index", compact("deviceAssets"));
     }

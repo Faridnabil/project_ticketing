@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Cache;
 
 class TicketKoordinatorController extends Controller
 {
@@ -40,22 +41,34 @@ class TicketKoordinatorController extends Controller
             });
         }
 
-        // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        // Gunakan cache untuk levels
+        $levels = Cache::remember('levels_roles', now()->addMinutes(30), function () {
+            return Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        });
 
+        // Gunakan cache untuk categories
+        $categories = Cache::remember('ticket_categories', now()->addMinutes(30), function () {
+            return Category::all();
+        });
 
-
-        $categories = Category::all();
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
         }
 
-        $priorities = Priority::all();
+        // Gunakan cache untuk priorities
+        $priorities = Cache::remember('ticket_priorities', now()->addMinutes(30), function () {
+            return Priority::all();
+        });
+
         if ($request->has('priority_id') && $request->priority_id) {
             $query->where('priority_id', $request->priority_id);
         }
 
-        $statuses = Status::all();
+        // Gunakan cache untuk statuses
+        $statuses = Cache::remember('ticket_statuses', now()->addMinutes(30), function () {
+            return Status::all();
+        });
+
         if ($request->has('status_id') && $request->status_id) {
             $query->where('status_id', $request->status_id);
         }
@@ -68,15 +81,21 @@ class TicketKoordinatorController extends Controller
             });
         }
 
-        $tickets = $query->orderBy('id', 'desc')
-            ->get();
+        $tickets = $query->orderBy('id', 'desc')->get();
 
-        //Pindah ke Staff Subdit
-        $StaffSubditkRoles = Role::where('name', 'Staff Subdit')
-            ->pluck('id')
-            ->toArray();
+        // Staff Subdit roles pakai cache juga
+        $StaffSubditkRoles = Cache::remember('role_staff_subdit_ids', now()->addMinutes(30), function () {
+            return Role::where('name', 'Staff Subdit')->pluck('id')->toArray();
+        });
 
-        return view('dashboard.koordinator.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'StaffSubditkRoles', 'levels'));
+        return view('dashboard.koordinator.ticket.index', compact(
+            'tickets',
+            'categories',
+            'priorities',
+            'statuses',
+            'StaffSubditkRoles',
+            'levels'
+        ));
     }
 
     /**
@@ -88,19 +107,48 @@ class TicketKoordinatorController extends Controller
             session(['filtered_url' => url()->previous()]);
         }
 
-        $ticket = Ticket::find($id);
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $categories = Category::all();
-        $provinces = Province::all();
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // Cache ticket berdasarkan ID
+        $ticket = Cache::remember("ticket_{$id}", now()->addMinutes(10), function () use ($id) {
+            return Ticket::find($id);
+        });
 
+        // Cache priorities, statuses, categories, provinces (statis)
+        $priorities = Cache::remember('ticket_priorities', now()->addMinutes(30), function () {
+            return Priority::all();
+        });
 
-        $logs = HistoryTicket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat', 'statusChangedBy')
+        $statuses = Cache::remember('ticket_statuses', now()->addMinutes(30), function () {
+            return Status::all();
+        });
+
+        $categories = Cache::remember('ticket_categories', now()->addMinutes(30), function () {
+            return Category::all();
+        });
+
+        $provinces = Cache::remember('ticket_provinces', now()->addMinutes(30), function () {
+            return Province::all();
+        });
+
+        // Cache city_or_regencies per province
+        $city_or_regencies = Cache::remember("cities_province_{$ticket->province_id}", now()->addMinutes(30), function () use ($ticket) {
+            return CityOrRegency::where('province_id', $ticket->province_id)->get();
+        });
+
+        // Data yang dinamis seperti logs dan comments sebaiknya tidak di-cache
+        $logs = HistoryTicket::with(
+                'status',
+                'category',
+                'priority',
+                'helpdesk',
+                'koordinator',
+                'staffSubdit',
+                'siakDev',
+                'pejabat',
+                'statusChangedBy'
+            )
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
-
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')

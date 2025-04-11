@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeStaffSubditController extends Controller
 {
@@ -22,10 +23,13 @@ class HomeStaffSubditController extends Controller
         $endDateTime = Carbon::parse($date . ' ' . $endTime);
 
         // Query tiket berdasarkan tanggal dan waktu yang dipilih
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->where('level3', '!=', null)
-            ->whereBetween('created_at', [$startDateTime, $endDateTime])
-            ->get();
+        $cacheKey = "tickets_{$date}_{$startTime}_{$endTime}";
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($startDateTime, $endDateTime) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->whereNotNull('level3')
+                ->whereBetween('created_at', [$startDateTime, $endDateTime])
+                ->get();
+        });
 
         // Hitung data tiket
         $total_tiket = $tickets->count();
@@ -113,12 +117,16 @@ class HomeStaffSubditController extends Controller
     {
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year); // Default ke tahun berjalan
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
-            })
-            ->get();
+        $cacheKey = "tickets_all_{$month}_{$year}";
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($month, $year) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->when($month && $year, function ($query) use ($month, $year) {
+                    $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                })
+                ->get();
+        });
+
 
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets->where('status.status_name', null)->count();
@@ -157,36 +165,40 @@ class HomeStaffSubditController extends Controller
         $year = $request->input('year', Carbon::now()->year);
 
         // Ambil data tiket masuk
-        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        $cacheKey = "monthly_chart_data_{$year}";
+        $chartData = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($year) {
+            $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->whereYear('created_at', $year)
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
 
-        // Ambil data tiket selesai, hanya jika created_at juga dalam tahun yang diminta
-        $ticketsClosed = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $year)
-            ->whereYear('created_at', $year) // Tambahkan kondisi ini
-            ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+            $ticketsClosed = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->whereYear('created_at', $year)
+                ->where('status_id', 4)
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
 
-        $chartData = [
-            'months' => [],
-            'tickets' => [],
-            'ticketsClosed' => []
-        ];
+            $data = [
+                'months' => [],
+                'tickets' => [],
+                'ticketsClosed' => []
+            ];
 
-        for ($i = 1; $i <= 12; $i++) {
-            $chartData['months'][] = Carbon::create()->month($i)->format('F');
-            $chartData['tickets'][] = $tickets[$i]['total'] ?? 0;
-            $chartData['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
-        }
+            for ($i = 1; $i <= 12; $i++) {
+                $data['months'][] = Carbon::create()->month($i)->format('F');
+                $data['tickets'][] = $tickets[$i]['total'] ?? 0;
+                $data['ticketsClosed'][] = $ticketsClosed[$i]['total'] ?? 0;
+            }
+
+            return $data;
+        });
 
         return response()->json($chartData);
+
     }
 
     public function getDailyTicketChartData(Request $request)

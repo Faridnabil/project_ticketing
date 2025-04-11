@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\HistoryTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeSiakDevController extends Controller
 {
@@ -23,10 +24,12 @@ class HomeSiakDevController extends Controller
         $endDateTime = Carbon::parse($date . ' ' . $endTime);
 
         // Query tiket berdasarkan tanggal dan waktu yang dipilih
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->where('level4', '!=', null)
-            ->whereBetween('created_at', [$startDateTime, $endDateTime])
-            ->get();
+        $tickets = Cache::remember("siakdev_tickets_{$date}_{$startTime}_{$endTime}", 60, function () use ($startDateTime, $endDateTime) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->where('level4', '!=', null)
+                ->whereBetween('created_at', [$startDateTime, $endDateTime])
+                ->get();
+        });
 
         // Hitung data tiket
         $total_tiket = $tickets->count();
@@ -113,12 +116,14 @@ class HomeSiakDevController extends Controller
     {
         $month = $request->query('month', now()->month);
         $year = $request->query('year', now()->year); // Default ke tahun berjalan
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->when($month && $year, function ($query) use ($month, $year) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
-            })
-            ->get();
+        $tickets = Cache::remember("siakdev_all_tickets_{$month}_{$year}", 60, function () use ($month, $year) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->when($month && $year, function ($query) use ($month, $year) {
+                    $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                })
+                ->get();
+        });
 
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets->where('status.status_name', null)->count();
@@ -157,23 +162,27 @@ class HomeSiakDevController extends Controller
         $year = $request->input('year', Carbon::now()->year);
 
         // Ambil data tiket masuk
-        $tickets = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->where('level4', '!=', null)
-            ->whereYear('created_at', $year)
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        $tickets = Cache::remember("siakdev_chart_tickets_{$year}", 60, function () use ($year) {
+            return Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->where('level4', '!=', null)
+                ->whereYear('created_at', $year)
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
+        });
 
         // Ambil data tiket selesai
-        $ticketsClosed = Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
-            ->whereYear('updated_at', $year)
-            ->where('level4', '!=', null)
-            ->where('status_id', 4) // Asumsi 4 adalah ID untuk 'Tutup'
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
+        $ticketsClosed = Cache::remember("siakdev_chart_closed_{$year}", 60, function () use ($year) {
+            return Ticket::selectRaw('MONTH(updated_at) as month, COUNT(*) as total')
+                ->whereYear('updated_at', $year)
+                ->where('level4', '!=', null)
+                ->where('status_id', 4)
+                ->groupBy('month')
+                ->get()
+                ->keyBy('month')
+                ->toArray();
+        });
 
         $chartData = [
             'months' => [],
@@ -199,22 +208,26 @@ class HomeSiakDevController extends Controller
         $startDate = Carbon::create($year, $month)->startOfMonth();
         $endDate = Carbon::create($year, $month)->endOfMonth();
 
-        $ticketsCreated = Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-            ->where('level4', '!=', null)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('day')
-            ->get()
-            ->keyBy('day')
-            ->toArray();
+        $ticketsCreated = Cache::remember("siakdev_daily_created_{$year}_{$month}", 60, function () use ($startDate, $endDate) {
+            return Ticket::selectRaw('DAY(created_at) as day, COUNT(*) as total')
+                ->where('level4', '!=', null)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->groupBy('day')
+                ->get()
+                ->keyBy('day')
+                ->toArray();
+        });
 
-        $ticketsClosed = Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
-            ->where('level4', '!=', null)
-            ->where('status_id', 4)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->groupBy('day')
-            ->get()
-            ->keyBy('day')
-            ->toArray();
+        $ticketsClosed = Cache::remember("siakdev_daily_closed_{$year}_{$month}", 60, function () use ($startDate, $endDate) {
+            return Ticket::selectRaw('DAY(updated_at) as day, COUNT(*) as total')
+                ->where('level4', '!=', null)
+                ->where('status_id', 4)
+                ->whereBetween('updated_at', [$startDate, $endDate])
+                ->groupBy('day')
+                ->get()
+                ->keyBy('day')
+                ->toArray();
+        });
 
         $chartData = [
             'days' => [],

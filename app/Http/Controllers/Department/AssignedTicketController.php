@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cache;
 
 class AssignedTicketController extends Controller
 {
@@ -26,36 +27,49 @@ class AssignedTicketController extends Controller
         $userId = auth()->user()->id;
         $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('assignTo', function ($query) use ($userId) {
-                $query->where('id', $userId); // Menggunakan 'id' karena 'user_id' adalah primary key di tabel 'users'
+                $query->where('id', $userId);
             })
             ->get();
 
-        $users = User::role('Helpdesk')
-            ->where('id', '!=', Auth::user()->id)
-            ->get();
-
+        // Cache user Helpdesk selain user yang login
+        $users = Cache::remember("helpdesk_users_except_$userId", 60, function () use ($userId) {
+            return User::role('Helpdesk')
+                ->where('id', '!=', $userId)
+                ->get();
+        });
 
         return view('dashboard.helpdesk.assigned-ticket.index', compact('tickets', 'users'));
     }
 
+
     public function show($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')
-            ->get();
 
-        $assignTo = User::role('Helpdesk')
-            ->get();
+        $customers = Cache::remember('customer_users', 60, function () {
+            return User::role('Customer')->get();
+        });
 
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $categories = Category::all();
+        $assignTo = Cache::remember('helpdesk_users', 60, function () {
+            return User::role('Helpdesk')->get();
+        });
+
+        $priorities = Cache::remember('priorities', 60, function () {
+            return Priority::all();
+        });
+
+        $statuses = Cache::remember('statuses', 60, function () {
+            return Status::all();
+        });
+
+        $categories = Cache::remember('categories', 60, function () {
+            return Category::all();
+        });
 
         $logs = HistoryTicket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->where('h_no_ticket', $ticket->no_ticket)
             ->orderBy('created_at', 'desc')
             ->get();
-
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -76,14 +90,31 @@ class AssignedTicketController extends Controller
         );
     }
 
+
     public function edit($id)
     {
         $ticket = Ticket::find($id);
-        $customers = User::role('Customer')->get();
-        $assignTo = User::role('Helpdesk')->get();
-        $priorities = Priority::all();
-        $statuses = Status::where('status_name', '!=', 'Tertunda')->get();
-        $categories = Category::all();
+
+        $customers = Cache::remember('customer_users', 60, function () {
+            return User::role('Customer')->get();
+        });
+
+        $assignTo = Cache::remember('helpdesk_users', 60, function () {
+            return User::role('Helpdesk')->get();
+        });
+
+        $priorities = Cache::remember('priorities', 60, function () {
+            return Priority::all();
+        });
+
+        $statuses = Cache::remember('statuses_except_tertunda', 60, function () {
+            return Status::where('status_name', '!=', 'Tertunda')->get();
+        });
+
+        $categories = Cache::remember('categories', 60, function () {
+            return Category::all();
+        });
+
         $logs = ActivityLog::where('model_type', Ticket::class)
             ->where('model_id', $ticket->id)
             ->get();
@@ -101,6 +132,7 @@ class AssignedTicketController extends Controller
             )
         );
     }
+
 
 
     public function update(Request $request, $id)

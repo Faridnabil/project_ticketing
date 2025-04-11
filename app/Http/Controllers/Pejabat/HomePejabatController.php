@@ -23,10 +23,12 @@ class HomePejabatController extends Controller
         $endDateTime = Carbon::parse($date . ' ' . $endTime);
 
         // Query tiket berdasarkan tanggal dan waktu yang dipilih
-        $tickets = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
-            ->where('level5', '!=', null)
-            ->whereBetween('created_at', [$startDateTime, $endDateTime])
-            ->get();
+        $tickets = cache()->remember("tickets_{$date}_{$startTime}_{$endTime}", now()->addMinutes(5), function () use ($startDateTime, $endDateTime) {
+            return Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
+                ->where('level5', '!=', null)
+                ->whereBetween('created_at', [$startDateTime, $endDateTime])
+                ->get();
+        });
 
         // Hitung data tiket
         $total_tiket = $tickets->count();

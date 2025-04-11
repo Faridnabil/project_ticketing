@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Role;
 
 class TicketSiakDevController extends Controller
@@ -28,65 +29,76 @@ class TicketSiakDevController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'siakDev')
-            ->where('level4', '!=', null);
+        $cacheKey = 'tickets_' . md5(json_encode($request->all()));
 
-        if ($request->has('level') && $request->level) {
-            $query->where(function ($q) use ($request) {
-                $q->where('level1', $request->level)
-                    ->orWhere('level2', $request->level)
-                    ->orWhere('level3', $request->level)
-                    ->orWhere('level4', $request->level)
-                    ->orWhere('level5', $request->level);
-            });
-        }
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request) {
+            $query = Ticket::with('status', 'category', 'priority', 'siakDev')
+                ->where('level4', '!=', null);
 
-        // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+            if ($request->has('level') && $request->level) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('level1', $request->level)
+                        ->orWhere('level2', $request->level)
+                        ->orWhere('level3', $request->level)
+                        ->orWhere('level4', $request->level)
+                        ->orWhere('level5', $request->level);
+                });
+            }
 
+            if ($request->has('category_id') && $request->category_id) {
+                $query->where('category_id', $request->category_id);
+            }
 
+            if ($request->has('priority_id') && $request->priority_id) {
+                $query->where('priority_id', $request->priority_id);
+            }
 
-        $categories = Category::all();
-        if ($request->has('category_id') && $request->category_id) {
-            $query->where('category_id', $request->category_id);
-        }
+            if ($request->has('status_id') && $request->status_id) {
+                $query->where('status_id', $request->status_id);
+            }
 
-        $priorities = Priority::all();
-        if ($request->has('priority_id') && $request->priority_id) {
-            $query->where('priority_id', $request->priority_id);
-        }
+            if ($request->has('filter')) {
+                $statusesToFilter = explode(',', $request->filter);
+                $query->whereHas('status', function ($q) use ($statusesToFilter) {
+                    $q->whereIn('status_name', $statusesToFilter);
+                });
+            }
 
-        $statuses = Status::all();
-        if ($request->has('status_id') && $request->status_id) {
-            $query->where('status_id', $request->status_id);
-        }
+            return $query->orderBy('id', 'desc')->get();
+        });
 
-        // Filter berdasarkan status_name
-        if ($request->has('filter')) {
-            $statusesToFilter = explode(',', $request->filter);
-            $query->whereHas('status', function ($q) use ($statusesToFilter) {
-                $q->whereIn('status_name', $statusesToFilter);
-            });
-        }
+        $levels = Cache::remember('roles_levels', now()->addDay(), function () {
+            return Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        });
 
-        $tickets = $query->orderBy('id', 'desc')
-            ->get();
+        $categories = Cache::remember('categories_all', now()->addDay(), function () {
+            return Category::all();
+        });
 
-        //Pindah ke Pejabat
-        $pejabatUsers = Role::where('name', 'Pejabat')
-            ->pluck('id')
-            ->toArray();
+        $priorities = Cache::remember('priorities_all', now()->addDay(), function () {
+            return Priority::all();
+        });
 
+        $statuses = Cache::remember('statuses_all', now()->addDay(), function () {
+            return Status::all();
+        });
 
+        $pejabatUsers = Cache::remember('pejabat_user_ids', now()->addDay(), function () {
+            return Role::where('name', 'Pejabat')->pluck('id')->toArray();
+        });
 
         return view('dashboard.siak-dev.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'pejabatUsers', 'levels'));
     }
 
     public function getCities($provinceId)
     {
-        $cities = CityOrRegency::with('province')
-            ->where('province_id', $provinceId)
-            ->get(['id', 'province_id', 'city_or_regency_name']);
+        $cacheKey = 'cities_by_province_' . $provinceId;
+
+        $cities = Cache::remember($cacheKey, now()->addHours(6), function () use ($provinceId) {
+            return CityOrRegency::with('province')
+                ->where('province_id', $provinceId)
+                ->get(['id', 'province_id', 'city_or_regency_name']);
+        });
 
         return response()->json($cities);
     }

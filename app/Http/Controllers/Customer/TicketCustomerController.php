@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cache;
 
 class TicketCustomerController extends Controller
 {
@@ -24,17 +25,22 @@ class TicketCustomerController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $userId = auth()->user()->id;
-        $tickets = Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
+{
+    $userId = Auth::id(); // auth()->user()->id juga bisa, tapi ini lebih clean
+
+    // Gunakan cache dengan key unik berdasarkan user ID
+    $cacheKey = 'user_tickets_' . $userId;
+
+    $tickets = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($userId) {
+        return Ticket::with('status', 'category', 'priority', 'customers', 'assignTo')
             ->whereHas('customers', function ($query) use ($userId) {
                 $query->where('id', $userId);
             })
             ->get();
+    });
 
-        return view('dashboard.customer.ticket.index', compact('tickets'));
-    }
-
+    return view('dashboard.customer.ticket.index', compact('tickets'));
+}
     /**
      * Show the form for creating a new resource.
      */
@@ -116,6 +122,11 @@ class TicketCustomerController extends Controller
             $validate['attachments'] = json_encode($attachments);
 
             Ticket::create($validate);
+
+            // Clear cache untuk user ini setelah create
+            $userId = Auth::id();
+            Cache::forget('user_tickets_' . $userId);
+
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -243,6 +254,10 @@ class TicketCustomerController extends Controller
 
             // Update tiket dengan data baru
             $ticket->update($validate);
+
+            // Clear cache untuk user ini setelah create
+            $userId = Auth::id();
+            Cache::forget('user_tickets_' . $userId);
 
             DB::commit();
             return redirect()->route('myTicket.index')->with('success', 'Tiket Berhasil Diupdate.');

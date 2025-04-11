@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Role;
 
 class TicketStaffSubditController extends Controller
@@ -27,56 +28,69 @@ class TicketStaffSubditController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ticket::with('status', 'category', 'priority', 'staffSubdit')
-            ->where('level3', '!=', null);
+        // Buat cache key dinamis berdasarkan request
+        $cacheKey = 'tickets_' . md5(json_encode($request->all()));
 
-        if ($request->has('level') && $request->level) {
-            $query->where(function ($q) use ($request) {
-                $q->where('level1', $request->level)
-                    ->orWhere('level2', $request->level)
-                    ->orWhere('level3', $request->level)
-                    ->orWhere('level4', $request->level)
-                    ->orWhere('level5', $request->level);
-            });
-        }
+        $tickets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request) {
+            $query = Ticket::with('status', 'category', 'priority', 'staffSubdit')
+                ->whereNotNull('level3');
 
-        // Ambil data untuk filter level dari tabel Role
-        $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+            if ($request->filled('level')) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('level1', $request->level)
+                        ->orWhere('level2', $request->level)
+                        ->orWhere('level3', $request->level)
+                        ->orWhere('level4', $request->level)
+                        ->orWhere('level5', $request->level);
+                });
+            }
 
+            if ($request->filled('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
 
-        $categories = Category::all();
-        if ($request->has('category_id') && $request->category_id) {
-            $query->where('category_id', $request->category_id);
-        }
+            if ($request->filled('priority_id')) {
+                $query->where('priority_id', $request->priority_id);
+            }
 
-        $priorities = Priority::all();
-        if ($request->has('priority_id') && $request->priority_id) {
-            $query->where('priority_id', $request->priority_id);
-        }
+            if ($request->filled('status_id')) {
+                $query->where('status_id', $request->status_id);
+            }
 
-        $statuses = Status::all();
-        if ($request->has('status_id') && $request->status_id) {
-            $query->where('status_id', $request->status_id);
-        }
+            if ($request->filled('filter')) {
+                $statusesToFilter = explode(',', $request->filter);
+                $query->whereHas('status', function ($q) use ($statusesToFilter) {
+                    $q->whereIn('status_name', $statusesToFilter);
+                });
+            }
 
-        // Filter berdasarkan status_name
-        if ($request->has('filter')) {
-            $statusesToFilter = explode(',', $request->filter);
-            $query->whereHas('status', function ($q) use ($statusesToFilter) {
-                $q->whereIn('status_name', $statusesToFilter);
-            });
-        }
+            return $query->orderBy('id', 'desc')->get();
+        });
 
-        $tickets = $query->orderBy('id', 'desc')
-            ->get();
+        // Cache data referensi (statis)
+        $levels = Cache::remember('levels_roles', now()->addMinutes(10), function () {
+            return Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
+        });
 
-        //Pindah ke Siak Dev
-        $siakDevUsers = Role::where('name', 'SIAK Dev')
-            ->pluck('id')
-            ->toArray();
+        $categories = Cache::remember('categories_all', now()->addMinutes(10), function () {
+            return Category::all();
+        });
 
+        $priorities = Cache::remember('priorities_all', now()->addMinutes(10), function () {
+            return Priority::all();
+        });
 
-        return view('dashboard.staff-subdit.ticket.index', compact('tickets', 'categories', 'priorities', 'statuses', 'siakDevUsers', 'levels'));
+        $statuses = Cache::remember('statuses_all', now()->addMinutes(10), function () {
+            return Status::all();
+        });
+
+        $siakDevUsers = Cache::remember('siakdev_roles', now()->addMinutes(10), function () {
+            return Role::where('name', 'SIAK Dev')->pluck('id')->toArray();
+        });
+
+        return view('dashboard.staff-subdit.ticket.index', compact(
+            'tickets', 'categories', 'priorities', 'statuses', 'siakDevUsers', 'levels'
+        ));
     }
 
     /**
