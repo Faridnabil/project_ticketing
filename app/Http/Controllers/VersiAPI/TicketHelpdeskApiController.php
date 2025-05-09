@@ -120,10 +120,14 @@ class TicketHelpdeskApiController extends Controller
     {
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'regional_id' => 'required|exists:regionals,id',
+            'kabupaten_id' => 'required|exists:kabupatens,id',
             'kecamatan_id' => 'required|exists:kecamatans,id',
             'no_hp' => 'required|string',
             'description' => 'required|string',
+            'pic' => 'required|string',
         ]);
+
         DB::beginTransaction();
         try {
             Log::info('Memulai pembuatan ticket', ['request_data' => $validated]);
@@ -131,51 +135,47 @@ class TicketHelpdeskApiController extends Controller
                 ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
             $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
             $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
-
             Log::info('Nomor tiket baru', ['no_ticket' => $newTicketId]);
-
-            // Inisialisasi data tiket
             $data = $validated;
             $data['no_ticket'] = $newTicketId;
             $data['level1'] = 2;
-            $data['pic'] = "PIC";
+            // $data['pic'] = 'PIC-' . $newTicketId;
             $data['status_id'] = self::STATUS_NEW;
             $data['priority_id'] = 1;
             if ($request->hasFile('attachments')) {
                 $file = $request->file('attachments');
                 $nama_file = time() . "_" . $file->getClientOriginalName();
-                $file->storeAs('public/ticket', $nama_file); 
-                $data['attachments'] = json_encode(["storage/ticket/$nama_file"]); // Simpan dalam format JSON
+                $file->storeAs('public/ticket', $nama_file);
+                $data['attachments'] = json_encode(["storage/ticket/$nama_file"]);
             } else {
-                $data['attachments'] = json_encode([]); // Default JSON array kosong
+                $data['attachments'] = json_encode([]);
             }
             Log::info('Data tiket yang akan disimpan', ['data' => $data]);
             $ticket = Ticket::create($data);
+            // Http::post('http://localhost:4000/ticket', $ticket->toArray());
             DB::commit();
-
             Log::info('Ticket berhasil dibuat', ['ticket' => $ticket]);
-            Http::post('http://localhost:4000/ticket', $ticket->toArray());
-
             return response()->json([
                 "message" => "Ticket Berhasil Dibuat !!",
                 "data" => $ticket
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan saat membuat ticket', [
-                'error' => $th->getMessage(),
-                'line' => $th->getLine(),
-                'file' => $th->getFile()
-            ]);
-
+            if ($th instanceof \Illuminate\Database\QueryException && $th->errorInfo[0] === '23000') {
+                if (str_contains($th->getMessage(), 'tickets_pic_unique')) {
+                    return response()->json([
+                        "message" => "PIC sudah digunakan, silakan gunakan nilai lain.",
+                        "error" => $th->getMessage(),
+                    ], 422);
+                }
+            }
             return response()->json([
                 "message" => "Terjadi kesalahan Pada Ticket !!",
                 "error" => $th->getMessage(),
-                "line" => $th->getLine(),
-                "file" => $th->getFile()
             ], 500);
         }
     }
+
 
     public function update(Request $request, $no_ticket)
     {
@@ -183,10 +183,7 @@ class TicketHelpdeskApiController extends Controller
         try {
             Log::info('Memulai pembaruan ticket berdasarkan no_ticket', ['request_data' => $request->all()]);
 
-            // Temukan ticket berdasarkan no_ticket
             $ticket = Ticket::where('no_ticket', $no_ticket)->firstOrFail();
-
-            // Update ticket dengan data dari request (bebas update apa saja)
             $ticket->update($request->all());
 
             // Jika ada file lampiran baru, simpan dan perbarui
@@ -202,10 +199,9 @@ class TicketHelpdeskApiController extends Controller
 
             Log::info('Ticket berhasil diperbarui', ['ticket' => $ticket]);
 
-            // Kirim data tiket yang telah diperbarui ke Kafka
-            Http::post('http://localhost:4000/ticket-log', [
-                'data' => $ticket->toArray()
-            ]);
+            // Http::post('http://localhost:4000/ticket-log', [
+            //     'data' => $ticket->toArray()
+            // ]);
     
             return response()->json([
                 "message" => "Ticket Berhasil Diperbarui !!",
