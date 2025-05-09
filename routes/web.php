@@ -77,7 +77,7 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
         '/category' => CategoryController::class,
     ]);
 
-    Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+
 
     Route::get('/province-export-format', [ProvinceController::class, 'exportFormat'])->name('province.exportFormat');
     Route::get('/province-export', [ProvinceController::class, 'export'])->name('province.export');
@@ -136,6 +136,11 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
     Route::get('/helpdesk/today', [TicketHelpdeskController::class, 'indexToday'])->name('tickets.indexToday');
+
+    // Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
+
+    Route::get('/helpdesk/get-kabupaten/{provinsi_id}', [TicketHelpdeskController::class, 'getKabupaten']);
+    Route::get('/helpdesk/get-provinsi/{regionalId}', [TicketHelpdeskController::class, 'getProvinsi']);
 
     // Report Routes
     Route::get('/helpdesk/report', [ReportController::class, 'index'])->name('report.index');

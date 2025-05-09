@@ -14,52 +14,52 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $category = Category::create([
-            'category_name' => 'Aplikasi SIAK Terpusat',
+            'category_name' => 'Perencanaan',
             'color' => '#ff0000',
-            'description' => 'Permasalahan yang berkaitan dengan Aplikasi SIAK Terpusat'
+            'description' => 'Permasalahan yang berkaitan dengan Perencanaan'
         ]);
 
         $category = Category::create([
-            'category_name' => 'Jarkomdat',
+            'category_name' => 'Anggaran',
             'color' => '#ff0000',
-            'description' => 'Permasalahan yang berkaitan dengan Jaringan Komunikasi Data (jarkomdat) / VPN sehingga pelayanan terganggu'
+            'description' => 'Permasalahan yang berkaitan dengan Pengelolaan dana'
         ]);
 
         $category = Category::create([
-            'category_name' => 'Data',
+            'category_name' => 'Penata Usahaan',
             'color' => '#ff0000',
-            'description' => 'Permasalahan Data yang tidak bisa diselesaikan via aplikasi SIAK Terpusat, perlu penanganan tim kalibata'
+            'description' => 'Permasalahan yang berkaitan dengan Tata Usaha'
         ]);
 
         $category = Category::create([
-            'category_name' => 'TTE/Layanan',
+            'category_name' => 'Akutansi Pelaporan',
             'color' => '#ff0000',
-            'description' => 'Permasalahan terkait Tanda tangan elektronik (TTE), gagal/tidak bisa di TTE/Gangguan BSrE'
+            'description' => 'Permasalahan yang berkaitan dengan Akuntansi dan Pelaporan'
         ]);
 
-        $category = Category::create([
-            'category_name' => 'Informasi',
-            'color' => '#ff0000',
-            'description' => 'Informasi terkait Pelayanan/SIAK Terpusat'
-        ]);
+        // $category = Category::create([
+        //     'category_name' => 'Informasi',
+        //     'color' => '#ff0000',
+        //     'description' => 'Informasi terkait Pelayanan/SIAK Terpusat'
+        // ]);
 
-        $category = Category::create([
-            'category_name' => 'IKD',
-            'color' => '#ff0000',
-            'description' => 'Permasalahan terkait Identitas Kependudukan Digital / email registrasi belum terkirim/ lupa password IKD/ Dokumen tidak muncul pada aplikasi IKD'
-        ]);
+        // $category = Category::create([
+        //     'category_name' => 'IKD',
+        //     'color' => '#ff0000',
+        //     'description' => 'Permasalahan terkait Identitas Kependudukan Digital / email registrasi belum terkirim/ lupa password IKD/ Dokumen tidak muncul pada aplikasi IKD'
+        // ]);
 
-        $category = Category::create([
-            'category_name' => 'Regulasi',
-            'color' => '#ff0000',
-            'description' => 'Permasalahan terkait Masukkan/kebijakan pada aplikasi SIAK Terpusat sesuai dengan regulasi yang ada'
-        ]);
+        // $category = Category::create([
+        //     'category_name' => 'Regulasi',
+        //     'color' => '#ff0000',
+        //     'description' => 'Permasalahan terkait Masukkan/kebijakan pada aplikasi SIAK Terpusat sesuai dengan regulasi yang ada'
+        // ]);
 
-        $category = Category::create([
-            'category_name' => 'KTP Elektronik',
-            'color' => '#ff0000',
-            'description' => 'Permasalahan terkait Pencetakan/ Perekaman/ Aplikasi KTP Elektronik'
-        ]);
+        // $category = Category::create([
+        //     'category_name' => 'KTP Elektronik',
+        //     'color' => '#ff0000',
+        //     'description' => 'Permasalahan terkait Pencetakan/ Perekaman/ Aplikasi KTP Elektronik'
+        // ]);
 
     }
 }
