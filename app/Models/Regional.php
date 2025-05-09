@@ -17,7 +17,7 @@ class Regional extends Model
 
     public function provinsi(): HasMany
     {
-        return $this->hasMany(provinsi::class);
+        return $this->hasMany(Provinsi::class);
     }
 
 }

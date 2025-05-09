@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
-class provinsi extends Model
+class Provinsi extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -20,7 +20,7 @@ class provinsi extends Model
         return $this->belongsTo(Regional::class);
     }
 
-    public function kabupaten()    
+    public function kabupaten()
     {
         return $this->hasMany(Kabupaten::class);
     }

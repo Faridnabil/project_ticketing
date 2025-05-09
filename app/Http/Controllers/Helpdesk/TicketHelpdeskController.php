@@ -12,6 +12,9 @@ use App\Models\HistoryTicket;
 use App\Models\Priority;
 use App\Models\Province;
 use App\Models\Kecamatan;
+use App\Models\Provinsi;
+use App\Models\Kabupaten;
+use App\Models\Regional;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationKoordinator;
@@ -266,34 +269,51 @@ class TicketHelpdeskController extends Controller
     }
 
     /**
+     * Method untuk memanggil dropdown kabupaten berdasarkan provinsi
+     */
+
+     public function getKabupaten($provinsi_id)
+    {
+        $kabupatens = Kabupaten::where('provinsi_id', $provinsi_id)->get();
+
+        return response()->json($kabupatens);
+    }
+
+    /**
+     * Method untuk memanggil dropdown kabupaten berdasarkan provinsi
+     */
+
+     public function getProvinsi($regional_id)
+    {
+        $provinsis = Provinsi::where('regional_id', $regional_id)->get();
+
+        return response()->json($provinsis);
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
-        $provinces = Province::all();
+        $regionals = Regional::with('provinsi')->get(); // eager load provinsi
+        $provinsis = Provinsi::with('kabupaten')->get(); // eager load kabupaten
 
-        $city_or_regencies = CityOrRegency::with('province');
-
-        //Pindah ke Staff Subdit
         $helpdeskRoles = Role::where('name', 'Helpdesk')
             ->pluck('id')
             ->toArray();
 
-        return view(
-            'dashboard.helpdesk.ticket.create',
-            compact(
-                'city_or_regencies',
-                'provinces',
-                'priorities',
-                'statuses',
-                'categories',
-                'helpdeskRoles',
-            )
-        );
+        return view('dashboard.helpdesk.ticket.create', compact(
+            'regionals',
+            'provinsis',
+            'priorities',
+            'statuses',
+            'categories',
+            'helpdeskRoles',
+        ));
     }
 
 
@@ -302,17 +322,20 @@ class TicketHelpdeskController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'category_id' => 'required',
-            'province_id' => 'required',
-            'city_or_regency_id' => 'required',
+            'regional_id' => 'required',
+            'provinsi_id' => 'required',
+            'kabupaten_id' => 'required',
             'status_id' => 'required',
             'priority_id' => 'required',
-            'pic' => 'required',
-            'jabatan' => 'required',
-            'no_hp' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'no_hp' => 'nullable',
+            'pic' => 'nullable',
+            'attachments' => 'nullable|file|mimes:jpg,jpeg,png,pdf'
         ]);
+        // dd($request->all());
 
         DB::beginTransaction();
         try {
@@ -331,10 +354,12 @@ class TicketHelpdeskController extends Controller
                 $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
             }
 
+
             // Ambil semua input yang sudah divalidasi
             $data = $request->all();
             $data['no_ticket'] = $newTicketId;
             $data['level1'] = $request->input('level1'); // Menyimpan role_id jika ada
+            $data['pic'] = $request->input('pic ticket');
 
             // Proses file lampiran jika ada
             $attachments = [];
@@ -342,13 +367,16 @@ class TicketHelpdeskController extends Controller
                 foreach ($request->file('attachments') as $file) {
                     $nama_file = time() . "_" . $file->getClientOriginalName();
                     $filePath = $file->storeAs('public/foto/ticket-heldesk', $nama_file);
-                    $attachments[] = str_replace('public/', '', $filePath); // Hapus prefix 'public/' agar sesuai dengan URL Storage
+                    $attachments[] = str_replace('public/', '', $filePath);
                 }
             }
             $data['attachments'] = json_encode($attachments);
 
+
             // Simpan data tiket
             Ticket::create($data);
+
+
             DB::commit();
             return redirect()->route('helpdesk.newTickets.index')->with('success', 'Tiket Berhasil Dibuat.');
         } catch (\Throwable $th) {
@@ -356,6 +384,7 @@ class TicketHelpdeskController extends Controller
             return back()->withInput()->withErrors($th->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.
