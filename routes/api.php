@@ -26,6 +26,8 @@ Route::get('city',[TicketHelpdeskApiController::class,'city']);
 Route::get('priority',[TicketHelpdeskApiController::class,'priority']);
 Route::get('as',[TicketHelpdeskApiController::class,'get']);
 Route::post('store',[TicketHelpdeskApiController::class,'store']);
+Route::put('ticket/{no_ticket}', [TicketHelpdeskApiController::class,'update']);
+Route::get('log/{no_ticket}', [TicketHelpdeskApiController::class,'logTicket']);
 
 Route::get('regional',[TicketHelpdeskApiController::class,'regional']);
 Route::get('prov/{regional_id}',[TicketHelpdeskApiController::class,'getProvince']);
