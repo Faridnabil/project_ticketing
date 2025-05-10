@@ -183,11 +183,11 @@
                                                     Pelapor: <span class="fw-bolder text-gray-600">{{ $ticket->pic }},
                                                         {{ $ticket->jabatan ?? '-' }} - {{ $ticket->no_hp }}</span>
                                                 </div>
-                                                <div class="text-muted">
+                                                {{-- <div class="text-muted">
                                                     <span class="fw-bolder text-gray-600">Provinsi :
                                                         {{ $ticket->kecamatan->name }} - Kota/Kabupaten :
                                                         {{ $ticket->kecamatan->name }}</span>
-                                                </div>
+                                                </div> --}}
                                                 <div class="text-muted">
                                                     Dibuat: <span
                                                         class="fw-bolder text-gray-600">{{ date('d F Y H:i', strtotime($ticket->created_at)) }}</span>

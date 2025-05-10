@@ -20,4 +20,10 @@ class Regional extends Model
         return $this->hasMany(Provinsi::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasManyThrough(Ticket::class, Provinsi::class, 'regional_id', 'provinsi_id');
+    }
+
+
 }

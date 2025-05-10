@@ -95,7 +95,8 @@
                                 <div class="col-md-3">
                                     <label for="kabupaten_id" class="form-label">Nama Kabupaten/Kota</label>
                                     <select id="kabupaten_id" name="kabupaten_id" class="form-select" required>
-                                        <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                        <option value="" selected disabled>Pilih Kabupaten</option>
+                                            {{-- <option value="{{ $kabupaten->id }}">{{ $kabupaten->code }} - {{ $kabupaten->type }} {{ $kabupaten->name }}</option> --}}
                                     </select>
                                 </div>
 
@@ -235,6 +236,7 @@
 
             // Ketika regional dipilih, load provinsi
             regionalSelect.on('change', function () {
+                console.log('Provinsi changed:', $(this).val()); // DEBUG
                 const regionalId = $(this).val();
                 provinsiSelect.html('<option value="">Memuat Provinsi...</option>');
                 kabupatenSelect.html('<option value="">Pilih Kabupaten/Kota</option>'); // kosongkan kabupaten
@@ -264,9 +266,10 @@
                     fetch(`/helpdesk/get-kabupaten/${provinsiId}`)
                         .then(response => response.json())
                         .then(data => {
+                            console.log('Data kabupaten diterima:', data); // DEBUG
                             kabupatenSelect.html('<option value="">Pilih Kabupaten/Kota</option>');
                             data.forEach(kabupaten => {
-                                kabupatenSelect.append(`<option value="${kabupaten.id}">${kabupaten.code} - ${kabupaten.name}</option>`);
+                                kabupatenSelect.append(`<option value="${kabupaten.id}">${kabupaten.code} - ${kabupaten.type} ${kabupaten.name}</option>`);
                             });
                         })
                         .catch(error => {

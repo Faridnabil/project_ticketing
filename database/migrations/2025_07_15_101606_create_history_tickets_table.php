@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('history_tickets', function (Blueprint $table) {
             $table->id();
             $table->string('h_no_ticket');
-            $table->foreignId('h_province_id')->nullable()->constrained('provinces');
-            $table->foreignId('h_city_or_regency_id')->nullable()->constrained('city_or_regencies');
+            $table->foreignId('h_regional_id')->nullable()->constrained('regionals');
+            $table->foreignId('h_provinsi_id')->nullable()->constrained('provinsis');
+            $table->foreignId('h_kabupaten_id')->nullable()->constrained('kabupatens');
             $table->foreignId('h_level1')->nullable()->constrained('roles');
             $table->foreignId('h_level2')->nullable()->constrained('roles');
             $table->foreignId('h_level3')->nullable()->constrained('roles');

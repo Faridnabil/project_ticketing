@@ -30,4 +30,10 @@ class Provinsi extends Model
         return $this->hasMany(Kecamatan::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasManyThrough(Ticket::class, Kabupaten::class, 'provinsi_id', 'kabupaten_id');
+    }
+
+
 }

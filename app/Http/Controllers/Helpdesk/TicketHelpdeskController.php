@@ -268,26 +268,32 @@ class TicketHelpdeskController extends Controller
         return view('dashboard.helpdesk.ticket.new_ticket', compact('tickets', 'categories', 'priorities', 'statuses', 'koordinatorUsers', 'levels'));
     }
 
-    /**
-     * Method untuk memanggil dropdown kabupaten berdasarkan provinsi
-     */
-
-     public function getKabupaten($provinsi_id)
+    public function getProvinsi($regionalId)
     {
-        $kabupatens = Kabupaten::where('provinsi_id', $provinsi_id)->get();
+        $cacheKey = "provinsi_regional_{$regionalId}";
 
-        return response()->json($kabupatens);
-    }
-
-    /**
-     * Method untuk memanggil dropdown kabupaten berdasarkan provinsi
-     */
-
-     public function getProvinsi($regional_id)
-    {
-        $provinsis = Provinsi::where('regional_id', $regional_id)->get();
+        $provinsis = Cache::remember($cacheKey, now()->addHours(1), function () use ($regionalId) {
+            return Provinsi::select('id', 'code', 'name') // hanya ambil kolom penting
+                ->where('regional_id', $regionalId)
+                ->orderBy('name')
+                ->get();
+        });
 
         return response()->json($provinsis);
+    }
+
+    public function getKabupaten($provinsiId)
+    {
+        $cacheKey = "kabupaten_provinsi_{$provinsiId}";
+
+        $kabupatens = Cache::remember($cacheKey, now()->addHours(1), function () use ($provinsiId) {
+            return Kabupaten::select('id', 'code', 'name', 'type') // hanya ambil kolom penting
+                ->where('provinsi_id', $provinsiId)
+                ->orderBy('name')
+                ->get();
+        });
+
+        return response()->json($kabupatens);
     }
 
 
@@ -423,7 +429,7 @@ class TicketHelpdeskController extends Controller
                 'statuses',
                 'categories',
                 'comments',
-                'kecamatan'
+                // 'kecamatan'
             )
         );
     }
@@ -442,10 +448,12 @@ class TicketHelpdeskController extends Controller
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
-        $provinces = Province::all();
+        $regionals = Regional::all();
+        $provinsis = Provinsi::where('regional_id', $ticket->regional_id)->get();
+        $kabupatens = Kabupaten::where('provinsi_id', $ticket->provinsi_id)->get();
 
         // Fetch the city or regency for the selected province
-        $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
+        // $city_or_regencies = CityOrRegency::where('province_id', $ticket->province_id)->get();
 
         // Dapatkan ID untuk status yang diperlukan
         $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
@@ -460,8 +468,9 @@ class TicketHelpdeskController extends Controller
                 'priorities',
                 'statuses',
                 'categories',
-                'provinces',
-                'city_or_regencies',
+                'regionals',
+                'provinsis',
+                'kabupatens',
                 'selesaiStatusId',
                 'tertundaStatusId',
                 'diterimaStatusId',
@@ -477,6 +486,7 @@ class TicketHelpdeskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         DB::beginTransaction();
         try {
             // Ambil tiket yang akan diupdate
@@ -485,18 +495,19 @@ class TicketHelpdeskController extends Controller
             // Validasi input termasuk file lampiran
             $request->validate([
                 'category_id' => 'required',
-                'province_id' => 'required',
-                'city_or_regency_id' => 'required',
+                'regional_id' => 'required',
+                'provinsi_id' => 'required',
+                'kabupaten_id' => 'required',
                 'status_id' => 'required',
                 'priority_id' => 'required',
-                'pic' => 'required',
-                'jabatan' => 'required',
-                'no_hp' => 'required',
-                'description' => 'required',
+                'pic' => 'nullable',
+                'no_hp' => 'nullable',
+                'description' => 'nullable',
                 'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png',
             ], [
                 'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, atau PNG.',
             ]);
+            // dd($request->all());
 
             // Ambil semua input yang sudah divalidasi
             $data = $request->all();
@@ -525,27 +536,28 @@ class TicketHelpdeskController extends Controller
             $data['attachments'] = json_encode(array_merge($remainingAttachments, $newAttachments));
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
-            DB::table('history_tickets')->insert([
-                'h_no_ticket' => $ticket->no_ticket,
-                'h_province_id' => $ticket->province_id,
-                'h_city_or_regency_id' => $ticket->city_or_regency_id,
-                'h_level1' => $ticket->level1,
-                'h_level2' => $ticket->level2,
-                'h_level3' => $ticket->level3,
-                'h_level4' => $ticket->level4,
-                'h_level5' => $ticket->level5,
-                'h_priority_id' => $ticket->priority_id,
-                'h_status_id' => $ticket->status_id,
-                'h_category_id' => $ticket->category_id,
-                'h_description' => $ticket->description,
-                'h_attachments' => $ticket->attachments,
-                'h_pic' => $ticket->pic,
-                'h_jabatan' => $ticket->jabatan,
-                'h_no_hp' => $ticket->no_hp,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'status_changedBy' => Auth::user()->id,
-            ]);
+            // DB::table('history_tickets')->insert([
+            //     'h_no_ticket' => $ticket->no_ticket,
+            //     'h_regional_id' => $ticket->regional_id,
+            //     'h_provinsi_id' => $ticket->provinsi_id,
+            //     'h_kabupaten_id' => $ticket->kabupaten_id,
+            //     'h_level1' => $ticket->level1,
+            //     'h_level2' => $ticket->level2,
+            //     'h_level3' => $ticket->level3,
+            //     'h_level4' => $ticket->level4,
+            //     'h_level5' => $ticket->level5,
+            //     'h_priority_id' => $ticket->priority_id,
+            //     'h_status_id' => $ticket->status_id,
+            //     'h_category_id' => $ticket->category_id,
+            //     'h_description' => $ticket->description,
+            //     'h_attachments' => $ticket->attachments,
+            //     'h_pic' => $ticket->pic,
+            //     'h_jabatan' => $ticket->jabatan,
+            //     'h_no_hp' => $ticket->no_hp,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            //     'status_changedBy' => Auth::user()->id,
+            // ]);
 
             // Notifikasi jika status berubah ke 5
             if ($request->status_id == 5) {

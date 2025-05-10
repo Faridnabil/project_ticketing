@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Helpdesk\TicketHelpdeskController;
+use App\Http\Controllers\Helpdesk\MonitoringTicketController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PriorityController;
@@ -136,10 +137,12 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
 
     Route::get('/helpdesk/newTicket', [TicketHelpdeskController::class, 'newTicket'])->name('newTickets.index');
     Route::get('/helpdesk/today', [TicketHelpdeskController::class, 'indexToday'])->name('tickets.indexToday');
+    Route::get('/helpdesk/monitoring', [MonitoringTicketController::class, 'index'])->name('monitoring.index');
+
 
     // Route::get('get-cities/{provinceId}', [TicketHelpdeskController::class, 'getCities']);
 
-    Route::get('/helpdesk/get-kabupaten/{provinsi_id}', [TicketHelpdeskController::class, 'getKabupaten']);
+    Route::get('/helpdesk/get-kabupaten/{provinsiId}', [TicketHelpdeskController::class, 'getKabupaten']);
     Route::get('/helpdesk/get-provinsi/{regionalId}', [TicketHelpdeskController::class, 'getProvinsi']);
 
     // Report Routes

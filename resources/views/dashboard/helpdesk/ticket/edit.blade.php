@@ -49,34 +49,50 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="province_id" class="form-label">Nama Propinsi</label>
-                                    <select id="province_id" data-control="select2" name="province_id"
-                                        class="form-select @error('province_id') is-invalid @enderror" required>
-                                        <option value="" selected disabled>Pilih Propinsi</option>
-                                        @foreach ($provinces as $province)
-                                            <option value="{{ $province->id }}"
-                                                {{ $ticket->province_id == $province->id ? 'selected' : '' }}>
-                                                {{ $province->no_province }} - {{ $province->province_name }}</option>
+                                    <label for="regional_id" class="form-label">Nama Wilayah</label>
+                                    <select id="regional_id" data-control="select2" name="regional_id"
+                                        class="form-select @error('regional_id') is-invalid @enderror" required>
+                                        <option value="" selected disabled>Pilih Wilayah</option>
+                                        @foreach ($regionals as $regional)
+                                            <option value="{{ $regional->id }}"
+                                                {{ $ticket->regional_id == $regional->id ? 'selected' : '' }}>
+                                                {{ $regional->no_regional }} - {{ $regional->regional_name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('province_id')
+                                    @error('regional_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="city_or_regency_id" class="form-label">Nama Kabupaten/Kota</label>
-                                    <select id="city_or_regency_id" data-control="select2" name="city_or_regency_id"
-                                        class="form-select @error('city_or_regency_id') is-invalid @enderror" required>
-                                        <option value="" selected disabled>Pilih Kabupaten/Kota</option>
-                                        @foreach ($city_or_regencies as $city)
-                                            <option value="{{ $city->id }}"
-                                                {{ $ticket->city_or_regency_id == $city->id ? 'selected' : '' }}>
-                                                {{ $city->no_city_or_regency }} - {{ $city->city_or_regency_name }}
+                                    <label for="provinsi_id" class="form-label">Nama Provinsi</label>
+                                    <select id="provinsi_id" name="provinsi_id" class="form-select" required>
+                                        <option value="" disabled {{ $ticket->provinsi_id ? '' : 'selected' }}>Pilih Provinsi</option>
+                                        @foreach ($provinsis as $provinsi)
+                                            <option value="{{ $provinsi->id }}"
+                                                {{ $ticket->provinsi_id == $provinsi->id ? 'selected' : '' }}>
+                                                {{ $provinsi->code }} - {{ $provinsi->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('city_or_regency_id')
+                                    @error('provinsi_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="kabupaten_id" class="form-label">Nama Kabupaten/Kota</label>
+                                    <select id="kabupaten_id" name="kabupaten_id" class="form-select" required>
+                                        <option value="" disabled {{ $ticket->kabupaten_id ? '' : 'selected' }}>Pilih Kabupaten</option>
+                                        @foreach ($kabupatens as $kabupaten)
+                                            <option value="{{ $kabupaten->id }}"
+                                                {{ $ticket->kabupaten_id == $kabupaten->id ? 'selected' : '' }}>
+                                                {{ $kabupaten->code }} - {{ $kabupaten->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('kabupaten_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -118,18 +134,6 @@
 
                                     <div class="valid-feedback">Looks good!</div>
                                     @error('pic')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label for="validationCustom01" class="form-label">Jabatan</label>
-                                    <input type="text" name="jabatan"
-                                        class="form-control @error('jabatan') is-invalid @enderror" id="jabatan"
-                                        placeholder="Masukan jabatan" value="{{ old('jabatan', $ticket->jabatan) }}">
-
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('jabatan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -210,40 +214,53 @@
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const provinceSelect = $('#province_id');
-            const citySelect = $('#city_or_regency_id');
+        document.addEventListener('DOMContentLoaded', function () {
+            const regionalSelect = $('#regional_id');
+            const provinsiSelect = $('#provinsi_id');
+            const kabupatenSelect = $('#kabupaten_id');
 
-            // Initialize Select2
-            provinceSelect.select2();
-            citySelect.select2();
+            // Ketika regional dipilih, load provinsi
+            regionalSelect.on('change', function () {
+                const regionalId = $(this).val();
+                provinsiSelect.html('<option value="">Memuat Provinsi...</option>');
+                kabupatenSelect.html('<option value="">Pilih Kabupaten/Kota</option>'); // kosongkan kabupaten
 
-            provinceSelect.on('change', function() {
-                const provinceId = $(this).val();
-
-                if (provinceId) {
-                    fetch(`/get-cities/${provinceId}`)
+                if (regionalId) {
+                    fetch(`/helpdesk/get-provinsi/${regionalId}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Clear previous options
-                            citySelect.html('<option value="">Pilih Kabupaten/Kota</option>');
-
-                            // Add new options
-                            data.forEach(city => {
-                                citySelect.append(
-                                    `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`
-                                );
+                            provinsiSelect.html('<option value="">Pilih Provinsi</option>');
+                            data.forEach(provinsi => {
+                                provinsiSelect.append(`<option value="${provinsi.id}">${provinsi.code} - ${provinsi.name}</option>`);
                             });
-
-                            // Trigger Select2 to update the dropdown
-                            citySelect.trigger('change');
                         })
-                        .catch(error => console.error('Error:', error));
-                } else {
-                    citySelect.html(
-                    '<option value="">Pilih Kabupaten/Kota</option>'); // Clear cities if no province is selected
-                    citySelect.trigger('change');
+                        .catch(error => {
+                            console.error('Gagal memuat provinsi:', error);
+                            provinsiSelect.html('<option value="">Gagal memuat data</option>');
+                        });
+                }
+            });
+
+            // Ketika provinsi dipilih, load kabupaten
+            provinsiSelect.on('change', function () {
+                const provinsiId = $(this).val();
+                kabupatenSelect.html('<option value="">Memuat Kabupaten/Kota...</option>');
+
+                if (provinsiId) {
+                    fetch(`/helpdesk/get-kabupaten/${provinsiId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            kabupatenSelect.html('<option value="">Pilih Kabupaten/Kota</option>');
+                            data.forEach(kabupaten => {
+                                kabupatenSelect.append(`<option value="${kabupaten.id}">${kabupaten.code} - ${kabupaten.name}</option>`);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Gagal memuat kabupaten:', error);
+                            kabupatenSelect.html('<option value="">Gagal memuat data</option>');
+                        });
                 }
             });
         });
@@ -256,4 +273,5 @@
                 console.error(error);
             });
     </script>
+    @endpush
 @endsection
