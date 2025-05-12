@@ -152,7 +152,7 @@ class TicketHelpdeskApiController extends Controller
             }
             Log::info('Data tiket yang akan disimpan', ['data' => $data]);
             $ticket = Ticket::create($data);
-            // Http::post('http://localhost:4000/ticket', $ticket->toArray());
+            Http::post('http://82.25.108.179:50000/api/v1/store', $ticket->toArray());
             DB::commit();
             Log::info('Ticket berhasil dibuat', ['ticket' => $ticket]);
             return response()->json([
@@ -199,14 +199,31 @@ class TicketHelpdeskApiController extends Controller
 
             Log::info('Ticket berhasil diperbarui', ['ticket' => $ticket]);
 
-            // Http::post('http://localhost:4000/ticket-log', [
-            //     'data' => $ticket->toArray()
-            // ]);
-    
+            Http::post('http://82.25.108.179:50000/api/v1/update', [
+                "message" => "Ticket Berhasil Diperbarui !!",
+                "provinsi_id" => $ticket->provinsi_id,
+                "regional_id" => $ticket->regional_id,
+                "kabupaten_id" => $ticket->kabupaten_id,
+                "no_ticket" => $ticket->no_ticket,
+                "pic" => $ticket->pic,
+                "status_id" => $ticket->status_id
+            ]);
+
             return response()->json([
                 "message" => "Ticket Berhasil Diperbarui !!",
-                "data" => $ticket
+                "provinsi_id" => $ticket->provinsi_id,
+                "regional_id" => $ticket->regional_id,
+                "kabupaten_id" => $ticket->kabupaten_id,
+                "no_ticket" => $ticket->no_ticket,
+                "pic" => $ticket->pic,
+                "status_id" => $ticket->status_id
             ], 200);
+
+    
+            // return response()->json([
+            //     "message" => "Ticket Berhasil Diperbarui !!",
+            //     "data" => $ticket
+            // ], 200);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -228,43 +245,61 @@ class TicketHelpdeskApiController extends Controller
     public function logTicket($no_ticket)
     {
         try {
-            $ticket = Ticket::where('no_ticket', $no_ticket)
+            $tickets = Ticket::where('no_ticket', $no_ticket)
                 ->with('status')
                 ->orderBy('updated_at', 'desc')
                 ->get();
-    
-            if ($ticket->isEmpty()) {
+
+            if ($tickets->isEmpty()) {
                 return response()->json([
                     'message' => 'Tidak ada ticket ditemukan untuk ticket tersebut',
                     'data' => []
                 ], 404);
             }
-            $ticketData = ['data' => $ticket->toArray()];
-            $response = Http::post('http://localhost:4000/ticket-log', $ticketData);
-            if ($response->successful()) {
-                return response()->json([
-                    'message' => 'Log ticket berdasarkan ticket berhasil dikirim',
-                    'data' => $ticket
-                ]);
-            } else {
+            $ticket = $tickets->first();
+
+            
+            $response = Http::post('http://82.25.108.179:50000/api/v1/log',[
+                'message'      => 'Log ticket berdasarkan ticket berhasil diambil',
+                'provinsi_id'  => $ticket->provinsi_id,
+                'regional_id'  => $ticket->regional_id,
+                'kabupaten_id' => $ticket->kabupaten_id,
+                'no_ticket'    => $ticket->no_ticket,
+                'pic'          => $ticket->pic,
+                'status_id'  => optional($ticket->status)->status_name,
+
+            ]);
+
+            if (!$response->successful()) {
                 return response()->json([
                     'message' => 'Gagal mengirim log ticket ke Kafka',
-                    'error' => $response->body()
+                    'error'   => $response->body()
                 ], 500);
             }
+            
+
+            return response()->json([
+                'message'      => 'Log ticket berdasarkan ticket berhasil diambil',
+                'provinsi_id'  => $ticket->provinsi_id,
+                'regional_id'  => $ticket->regional_id,
+                'kabupaten_id' => $ticket->kabupaten_id,
+                'no_ticket'    => $ticket->no_ticket,
+                'pic'          => $ticket->pic,
+                'status_id'  => optional($ticket->status)->status_name,
+            ]);
+
         } catch (\Throwable $th) {
             Log::error('Gagal mengambil log ticket berdasarkan ticket', [
                 'error' => $th->getMessage(),
-                'line' => $th->getLine(),
-                'file' => $th->getFile()
+                'line'  => $th->getLine(),
+                'file'  => $th->getFile()
             ]);
+
             return response()->json([
                 'message' => 'Terjadi kesalahan saat mengambil log ticket',
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ], 500);
         }
     }
-    
-
 
 }
