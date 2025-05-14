@@ -131,6 +131,17 @@ class TicketHelpdeskApiController extends Controller
         DB::beginTransaction();
         try {
             Log::info('Memulai pembuatan ticket', ['request_data' => $validated]);
+            $alreadyExists = Ticket::where('category_id', $request->category_id)
+                ->where('pic', $request->pic)
+                ->whereDate('created_at', Carbon::today())
+                ->exists();
+
+            if ($alreadyExists) {
+                return response()->json([
+                    'message' => 'Tiket dengan KATEGORI dan PIC yang sama sudah dibuat hari ini.',
+                ], 422);
+            }
+
             $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
                 ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
             $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;

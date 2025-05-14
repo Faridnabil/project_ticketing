@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('completion_notes')->nullable();
             $table->json('attachments')->nullable();
-            $table->string('pic')->nullable()->unique();
+            $table->string('pic')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('no_hp')->nullable();
             $table->timestamps();
