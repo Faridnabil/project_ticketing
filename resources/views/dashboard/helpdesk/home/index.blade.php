@@ -165,9 +165,8 @@
                     <div class="tab-content">
                         <!-- Data Harian -->
                         <div class="tab-pane fade show active" id="harian" role="tabpanel">
-
                             <template id="materialize-template">
-                                <div>
+                                {{--  <div>
                                     <link
                                         href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
                                         rel="stylesheet">
@@ -195,6 +194,7 @@
                                                     </div>
                                                 </div>
 
+
                                                 <!-- Input Fields for Time -->
                                                 <div class="input-field col s3">
                                                     <div class="input-wrapper">
@@ -214,8 +214,7 @@
                                                 </div>
                                                 <!-- Submit and Refresh Buttons -->
                                                 <div class="input-field col s2" style="margin-top: 28px">
-                                                    <button type="submit" class=" btn btn-success"
-                                                        id="submitFilter"
+                                                    <button type="submit" class=" btn btn-success" id="submitFilter"
                                                         style="border-radius:5px; background-color: #5EC07D; color:#ffffff; text-transform: capitalize; font-weight: 400"><b>Filter
                                                             Data</b></button>
                                                 </div>
@@ -238,212 +237,721 @@
                                             });
                                         </script>
                                     </div>
-                                </div>
+                                </div>  --}}
                             </template>
-
-                            <div id="materialize-container"></div>
 
                             <div class="col-xl-12">
                                 <!--begin::Mixed Widget 2-->
-                                <div class="card card-xxl-stretch" style="height: 190px">
+
+                                <div class="card card-xxl-stretch" style="height: 220px">
+
                                     <!--begin::Header-->
-                                    <div class="card-header border-0 py-5" style="background-color: #254166">
-                                        <h3 class="card-title fw-bolder text-white">Data Harian</h3>
-                                        <div class="card-toolbar">
-                                            <!--begin::Menu-->
-                                            <!--end::Menu-->
-                                        </div>
+                                    <div class="card-header border-0 py-1 d-flex justify-content-between align-items-center"
+                                        style="background-color: #254166">
+                                        <h3 class="card-title fw-bolder text-white">Insight Tiket Regional</h3>
+
+
+                                        <!-- Filter Form -->
+                                        <form method="get" action="{{ route('helpdesk.dashboard.index') }}"
+                                            class="d-flex align-items-end flex-wrap gap-3">
+
+                                            <!-- Tanggal -->
+                                            <div class="d-flex flex-column">
+                                                <div class="input-wrapper">
+                                                    <label for="selectedDate" class="text-white">Tanggal</label>
+                                                    <input type="date" name="selectedDate" id="selectedDate"
+                                                        value="{{ request('selectedDate', now()->toDateString()) }}"
+                                                        class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Waktu Mulai -->
+                                            <div class="d-flex flex-column">
+                                                <label for="startTime" class="text-white">Waktu Mulai</label>
+                                                <input type="time" name="startTime" id="startTime" lang="id"
+                                                    class="form-control form-control-sm" step="60"
+                                                    value="{{ request('startTime', '00:00') }}">
+                                            </div>
+
+                                            <!-- Waktu Selesai -->
+                                            <div class="d-flex flex-column">
+                                                <label for="endTime" class="text-white">Waktu Selesai</label>
+                                                <input type="time" name="endTime" id="endTime" lang="id"
+                                                    class="form-control form-control-sm" step="60"
+                                                    value="{{ request('endTime', '23:59') }}">
+                                            </div>
+
+
+
+
+
+                                            <!-- Tombol Filter -->
+                                            <div class="d-flex flex-column">
+                                                <label class="invisible"><b>Filter</b></label>
+                                                <button type="submit" class="btn btn-success btn-sm"
+                                                    style="border-radius: 5px; background-color: #5EC07D; color: #ffffff;">
+                                                    <b>Filter Data</b>
+                                                </button>
+                                            </div>
+
+                                            <!-- Tombol Refresh -->
+                                            <div class="d-flex flex-column">
+                                                <label class="invisible"><b>Refresh</b></label>
+                                                <a href="{{ route('helpdesk.dashboard.index') }}" class="btn btn-sm"
+                                                    style="background-color: #009EF7; border-radius:5px; color: #fff;">
+                                                    <b>Penyegaran</b>
+                                                </a>
+                                            </div>
+                                        </form>
+
                                     </div>
                                     <!--end::Header-->
-                                    <div class="card-body p-0">
-                                        <!--begin::Chart-->
-                                        <div class="mixed card-rounded-bottom" data-kt-color="primary"
-                                            style="height: 28px; background-color: #254166">
-                                        </div>
-                                        <!--begin::Stats-->
-                                        <div class="card-p mt-n20 position-relative">
-                                            <!--begin::Row-->
-
-                                            <div class="row g-0">
-
-                                                <div class="col"
-                                                    style="width: 20%; background-color: #f8d7da; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-danger d-block my-1 mb-3 mt-5">
-                                                            <!-- SVG Icon -->
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                version="1.1">
-                                                                <path
-                                                                    d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
-                                                                    fill="#000000" opacity="0.3" />
-                                                                <path
-                                                                    d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
-                                                                    fill="#000000" />
-                                                            </svg>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left: 15px;margin-top:7px">
-                                                            <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
-                                                                class="text-danger fw-bold fs-6">Tiket Masuk</a>
 
 
-                                                            <div class="text-danger fw-bold fs-5 mt-1">
-                                                                <b>{{ $tiket_masuk }}</b>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col"
-                                                    style="width: 20%; background-color: #fff3cd; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-warning d-block my-1 mb-3 me-3 mt-4">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                version="1.1">
-                                                                <path
-                                                                    d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
-                                                                    fill="#000000" opacity="0.3" />
-                                                                <path
-                                                                    d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
-                                                                    fill="#000000" />
-                                                            </svg>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left: 2px;margin-top:7px">
-                                                            <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
-                                                                class="text-warning fw-bold fs-6">
-                                                                Tiket Dalam Proses
-                                                            </a>
-                                                            <div class="text-warning fw-bold fs-5 mt-1">
-                                                                <b>{{ $tiket_proses }}</b>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {{-- <div class="col"
-                                                    style="width: 20%; background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-info d-block my-1 mb-3 mt-4">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                version="1.1">
-                                                                <path
-                                                                    d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                    fill="#000000" opacity="0.3" />
-                                                                <path
-                                                                    d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                    fill="#000000" />
-                                                            </svg>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left: 10px;margin-top:7px">
-                                                            <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Tertunda']) }}"
-                                                                class="text-info fw-bold fs-6">Tiket Pending</a>
-                                                            <div class="text-info fw-bold fs-5 mt-1">
-                                                                <b>{{ $tiket_tertunda }}</b>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-
-                                                <div class="col"
-                                                    style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
-                                                            <span
-                                                                class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                        fill="#000000" opacity="0.3" />
-                                                                    <path
-                                                                        d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
-                                                                        fill="#000000" />
-                                                                </svg>
-                                                            </span>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left: 10px">
-                                                            <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
-                                                                class="text-success fw-bold fs-6">Tiket Selesai</a>
-                                                            <div class="text-success fw-bold fs-5 mt-1">
-                                                                <b>{{ $tiket_selesai }}</b>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col"
-                                                    style="width: 20%; background-color: #e9ecef; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- SVG Icon -->
-                                                        <span
-                                                            class="svg-icon svg-icon-3x svg-icon-primary d-block my-1 mb-3 mt-3">
-                                                            <!-- SVG Icon -->
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                version="1.1">
-                                                                <path
-                                                                    d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
-                                                                    fill="#000000" opacity="0.3" />
-                                                                <path
-                                                                    d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
-                                                                    fill="#000000" />
-                                                            </svg>
-                                                        </span>
-                                                        <!-- Text next to the SVG -->
-                                                        <div style="margin-left:14px;margin-top:7px">
-                                                            <a href="{{ route('helpdesk.ticket.index') }}"
-                                                                class="text-primary fw-bold fs-6">Total Tiket</a>
-                                                            <div class="text-primary fw-bold fs-5 mt-1">
-                                                                <b>{{ $total_tiket }}</b>
-                                                            </div>
+                                    <!--begin::Stats-->
+                                    <div class="card-p mt-n50 position-relative">
+                                        <!--begin::Row-->
+                                        <div class="row g-0">
+                                            <div class="col"
+                                                style="width: 20%; background-color: #ffff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                                onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                                <div class="d-flex align-items-center">
+                                                    <!-- SVG Icon -->
+                                                    <span
+                                                        class="svg-icon svg-icon-3x svg-icon-danger d-block my-1 mb-3 me-3 mt-3">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            version="1.1" width="48" height="48">
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#dc3545" opacity="0.3" />
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#dc3545" />
+                                                        </svg>
+                                                    </span>
+                                                    <!-- Text next to SVG -->
+                                                    <div style="margin-top: 5px;">
+                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                            style="color: #dc3545; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                            Regional 1
+                                                        </a>
+                                                        <div
+                                                            style="color: #dc3545; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                            {{ $tiket_masuk }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--end::Row-->
-                                        </div>
-                                        <!--end::Stats-->
-                                    </div>
 
-                                    <br>
-                                    <br>
-                                </div>
-                                <!--end::Mixed Widget 2-->
+                                            <div class="col"
+                                                style="width: 20%; background-color: #ffff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                                onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                                <div class="d-flex align-items-center">
+                                                    <!-- SVG Icon -->
+                                                    <span
+                                                        class="svg-icon svg-icon-3x svg-icon-warning d-block my-1 mb-3 me-3 mt-3">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            version="1.1" width="48" height="48">
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#ffc107" opacity="0.3" />
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#ffc107" />
+                                                        </svg>
+                                                    </span>
 
-                                <div class="row">
-                                    <div class="col-xxl-12 mt-5">
-                                        <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0  py-5" style="background-color: #254166">
-                                                <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perhari
-                                                    -
-                                                    {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Mingguan' }}
-                                                    {{ $year ?? now()->year }}</h3>
+                                                    <!-- Text next to SVG -->
+                                                    <div style="margin-top: 5px;">
+                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                            style="color: #ffc107; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                            Regional 2
+                                                        </a>
+                                                        <div
+                                                            style="color: #ffc107; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                            {{ $tiket_proses }}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="card-body">
-                                                <canvas id="TodaydailyDataChart" width="80%" height="20px"></canvas>
+
+                                            <div class="col"
+                                                style="width: 20%; background-color: #ffff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                                onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.15)';"
+                                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                                <div class="d-flex align-items-center">
+                                                    <!-- SVG Icon -->
+                                                    <span
+                                                        class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            version="1.1" width="48" height="48">
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#28a745" opacity="0.3" />
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#28a745" />
+                                                        </svg>
+                                                    </span>
+                                                    <!-- Text -->
+                                                    <div style="margin-left: 12px">
+                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                            style="color: #28a745; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                            Regional 3
+                                                        </a>
+                                                        <div
+                                                            style="color: #28a745; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                            {{ $tiket_selesai }}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            <div class="col"
+                                                style="width: 20%; background-color: #ffff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                                onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                                <div class="d-flex align-items-center">
+                                                    <!-- SVG Icon -->
+                                                    <span
+                                                        class="svg-icon svg-icon-3x svg-icon-primary d-block my-1 mb-3 mt-3"
+                                                        style="margin-right: 14px;">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            version="1.1" width="48" height="48">
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#0d6efd" opacity="0.3" />
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                                fill="#0d6efd" />
+                                                        </svg>
+                                                    </span>
+                                                    <!-- Text next to SVG -->
+                                                    <div style="margin-top: 5px;">
+                                                        <a href="{{ route('helpdesk.ticket.index') }}"
+                                                            style="color: #0d6efd; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                            Regional 4
+                                                        </a>
+                                                        <div
+                                                            style="color: #0d6efd; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                            {{ $total_tiket }}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col"
+                                                style="width: 20%; background-color: #ffff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                                onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                                <div class="d-flex align-items-center">
+                                                    <!-- SVG Icon -->
+                                                    <span
+                                                        class="svg-icon svg-icon-3x svg-icon-warning d-block my-1 mb-3 me-3 mt-3"
+                                                        style="color: #000000;">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            version="1.1" width="48" height="48"
+                                                            style="fill: currentColor;">
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z" />
+                                                            <path
+                                                                d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z" />
+                                                        </svg>
+                                                    </span>
+
+
+                                                    <!-- Text next to SVG -->
+                                                    <div style="margin-top: 5px;">
+                                                        <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                            style="color: #000000; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                            Regional 5
+                                                        </a>
+                                                        <div
+                                                            style="color: #000000; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                            {{ $tiket_proses }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                         </div>
+                                        <!--end::Row-->
                                     </div>
                                 </div>
+                            </div>
+                            <!--end::Stats-->
+                        </div>
+                        <br>
 
+                    </div>
+                    <!--end::Mixed Widget 2-->
+
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <div class="card card-xxl-stretch">
+                                <div class="card-header border-0  py-5" style="background-color: #254166">
+                                    <h3 id="cardTitle" class="card-title fw-bolder text-white">Regional Tiket
+                                        Trends
+                                        -
+                                        {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Mingguan' }}
+                                        {{ $year ?? now()->year }}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="TodaydailyDataChart" width="80%" height="20px"></canvas>
+                                </div>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
+
+                <div id="materialize-container"></div>
+
+
+                {{--  baru awal  --}}
+                <div class="tab-content">
+                    <!-- Data Harian -->
+                    <div class="tab-pane fade show active" id="harian" role="tabpanel">
+                        <template id="materialize-template">
+                            <div>
+                                <link
+                                    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+                                    rel="stylesheet">
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                                <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
+                                    <!-- Header -->
+                                    <div class="card-header"
+                                        style="padding: 10px 20px; background-color: #254166; border-bottom: 1px solid #ddd; border-radius: 10px 10px 0 0;color:white">
+                                        <h3 class="card-title fw-bolder text-white"
+                                            style="margin: 0; font-weight: bold;font-size:17px;margin-left:10px">
+                                            Filter Waktu
+                                        </h3>
+                                    </div>
+
+                                    <!-- Filter Form -->
+                                    <form method="get" action="{{ route('helpdesk.dashboard.index') }}">
+                                        <div class="row" style="margin-left:20px">
+                                            <!-- Input Field for Date -->
+                                            <div class="input-field col s3">
+                                                <div class="input-wrapper">
+                                                    <span class="icon"><b>Tanggal</b></span>
+                                                    <input type="date" name="selectedDate" id="selectedDate"
+                                                        value="{{ request('selectedDate', now()->toDateString()) }}">
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Input Fields for Time -->
+                                            <div class="input-field col s3">
+                                                <div class="input-wrapper">
+                                                    <span class="icon"><b>Waktu Mulai</b></span>
+                                                    <input type="text" name="startTime" id="startTime"
+                                                        class="timepicker" placeholder="Jam Mulai"
+                                                        value="{{ request('startTime', '00:00') }}">
+                                                </div>
+                                            </div>
+                                            <div class="input-field col s2">
+                                                <div class="input-wrapper">
+                                                    <span class="icon"><b>Waktu Selesai</b></span>
+                                                    <input type="text" name="endTime" id="endTime"
+                                                        class="timepicker" placeholder="Jam Selesai"
+                                                        value="{{ request('endTime', '23:59') }}">
+                                                </div>
+                                            </div>
+                                            <!-- Submit and Refresh Buttons -->
+                                            <div class="input-field col s2" style="margin-top: 28px">
+                                                <button type="submit" class=" btn btn-success" id="submitFilter"
+                                                    style="border-radius:5px; background-color: #5EC07D; color:#ffffff; text-transform: capitalize; font-weight: 400"><b>Filter
+                                                        Data</b></button>
+                                            </div>
+                                            <div class="input-field col s2" style="margin-top: 28px">
+                                                <a href="{{ route('helpdesk.dashboard.index') }}"
+                                                    class="btn waves-effect waves-light"
+                                                    style="background-color: #009EF7;border-radius:5px; text-transform: capitalize; font-weight: 400"><b>Penyegaran</b></a>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+                                    <script>
+                                        // Initialize timepickers if not already initialized
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var elems = document.querySelectorAll('.timepicker');
+                                            M.Timepicker.init(elems, {
+                                                twelveHour: false
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="col-xl-12 mt-6">
+                            <!--begin::Mixed Widget 2-->
+                            <div class="card card-xxl-stretch" style="height: 220px">
+                                <!--begin::Header-->
+                                <div class="card-header border-0 py-1 d-flex justify-content-between align-items-center"
+                                    style="background-color: #254166">
+                                    <h3 class="card-title fw-bolder text-white">Data Tiket Harian</h3>
+
+                                    <!-- Filter Form -->
+                                    <!-- Filter Form -->
+                                    <form method="get" action="{{ route('helpdesk.dashboard.index') }}"
+                                        class="d-flex align-items-end flex-wrap gap-3">
+
+                                        <!-- Tanggal -->
+                                        <div class="d-flex flex-column">
+                                            <div class="input-wrapper">
+                                                <label for="selectedDate" class="text-white">Tanggal</label>
+                                                <input type="date" name="selectedDate" id="selectedDate"
+                                                    value="{{ request('selectedDate', now()->toDateString()) }}"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Waktu Mulai -->
+                                        <div class="d-flex flex-column">
+                                            <label for="startTime" class="text-white">Waktu Mulai</label>
+                                            <input type="time" name="startTime" id="startTime" lang="id"
+                                                class="form-control form-control-sm" step="60"
+                                                value="{{ request('startTime', '00:00') }}">
+                                        </div>
+
+                                        <!-- Waktu Selesai -->
+                                        <div class="d-flex flex-column">
+                                            <label for="endTime" class="text-white">Waktu Selesai</label>
+                                            <input type="time" name="endTime" id="endTime" lang="id"
+                                                class="form-control form-control-sm" step="60"
+                                                value="{{ request('endTime', '23:59') }}">
+                                        </div>
+
+                                        <!-- Tombol Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label class="invisible"><b>Filter</b></label>
+                                            <button type="submit" class="btn btn-success btn-sm"
+                                                style="border-radius: 5px; background-color: #5EC07D; color: #ffffff;">
+                                                <b>Filter Data</b>
+                                            </button>
+                                        </div>
+
+                                        <!-- Tombol Refresh -->
+                                        <div class="d-flex flex-column">
+                                            <label class="invisible"><b>Refresh</b></label>
+                                            <a href="{{ route('helpdesk.dashboard.index') }}" class="btn btn-sm"
+                                                style="background-color: #009EF7; border-radius:5px; color: #fff;">
+                                                <b>Penyegaran</b>
+                                            </a>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <!--end::Header-->
+
+
+                                <!--begin::Stats-->
+                                <div class="card-p mt-n50 position-relative">
+                                    <!--begin::Row-->
+                                    <div class="row g-0">
+                                        <div class="col"
+                                            style="width: 20%; background-color: #f8d7da; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                            <div class="d-flex align-items-center">
+                                                <!-- SVG Icon -->
+                                                <span
+                                                    class="svg-icon svg-icon-3x svg-icon-danger d-block my-1 mb-3 me-3 mt-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        version="1.1">
+                                                        <path
+                                                            d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                        <path
+                                                            d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
+                                                            fill="#000000" />
+                                                    </svg>
+                                                </span>
+                                                <!-- Text next to SVG -->
+                                                <div style="margin-top: 5px;">
+                                                    <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                        style="color: #dc3545; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                        Tiket Masuk
+                                                    </a>
+                                                    <div
+                                                        style="color: #dc3545; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                        {{ $tiket_masuk }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col"
+                                            style="width: 20%; background-color: #fff3cd; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                            <div class="d-flex align-items-center">
+                                                <!-- SVG Icon -->
+                                                <span
+                                                    class="svg-icon svg-icon-3x svg-icon-warning d-block my-1 mb-3 me-3 mt-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        version="1.1">
+                                                        <path
+                                                            d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
+                                                            fill="#000000" opacity="0.3" />
+                                                        <path
+                                                            d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
+                                                            fill="#000000" />
+                                                    </svg>
+                                                </span>
+
+                                                <!-- Text next to SVG -->
+                                                <div style="margin-top: 5px;">
+                                                    <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                        style="color: #ffc107; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                        Tiket Dalam Proses
+                                                    </a>
+                                                    <div
+                                                        style="color: #ffc107; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                        {{ $tiket_proses }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col"
+                                            style="width: 20%; background-color: #c3e6cb; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                            <div class="d-flex align-items-center">
+                                                <!-- SVG Icon -->
+                                                <span class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        version="1.1">
+                                                        <path
+                                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                        <path
+                                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                            fill="#000000" />
+                                                    </svg>
+                                                </span>
+                                                <!-- Text -->
+                                                <div style="margin-left: 12px">
+                                                    <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                        style="color: #28a745; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                        Tiket Selesai
+                                                    </a>
+                                                    <div
+                                                        style="color: #28a745; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                        {{ $tiket_selesai }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col"
+                                            style="width: 20%; background-color: #e9ecef; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+                                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                            <div class="d-flex align-items-center">
+                                                <!-- SVG Icon -->
+                                                <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-1 mb-3 mt-3"
+                                                    style="margin-right: 14px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        version="1.1">
+                                                        <path
+                                                            d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                        <path
+                                                            d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
+                                                            fill="#000000" />
+                                                    </svg>
+                                                </span>
+                                                <!-- Text next to SVG -->
+                                                <div style="margin-top: 5px;">
+                                                    <a href="{{ route('helpdesk.ticket.index') }}"
+                                                        style="color: #0d6efd; font-weight: 600; font-size: 1.1rem; text-decoration: none;">
+                                                        Total Tiket
+                                                    </a>
+                                                    <div
+                                                        style="color: #0d6efd; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
+                                                        {{ $total_tiket }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Stats-->
+                    </div>
+                    <br>
+
+                </div>
+                {{--  baru akhir  --}}
+
+                {{--  <div class="col-xl-12">
+                    <!--begin::Mixed Widget 2-->
+                    <div class="card card-xxl-stretch" style="height: 190px">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 py-5" style="background-color: #254166">
+                            <h3 class="card-title fw-bolder text-white">Data Harian</h3>
+                            <div class="card-toolbar">
+                                <!--begin::Menu-->
+                                <!--end::Menu-->
+                            </div>
+                        </div>
+                        <!--end::Header-->
+                        <div class="card-body p-0">
+                            <!--begin::Chart-->
+                            <div class="mixed card-rounded-bottom" data-kt-color="primary"
+                                style="height: 28px; background-color: #254166">
+                            </div>
+                            <!--begin::Stats-->
+                            <div class="card-p mt-n20 position-relative">
+                                <!--begin::Row-->
+
+                                <div class="row g-0">
+
+                                    <div class="col"
+                                        style="width: 20%; background-color: #f8d7da; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
+                                        <div class="d-flex align-items-center">
+                                            <!-- SVG Icon -->
+                                            <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-1 mb-3 mt-5">
+                                                <!-- SVG Icon -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <path
+                                                        d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
+                                                        fill="#000000" opacity="0.3" />
+                                                    <path
+                                                        d="m15.999,15.5c-.188,0-.379-.053-.548-.164l-4-2.628c-.281-.186-.451-.499-.451-.836v-4.872c0-.553.447-1,1-1s1,.447,1,1v4.333l3.549,2.331c.462.304.59.924.287,1.385-.192.293-.512.451-.837.451Zm-3.285,6.475c-.236.017-.474.025-.714.025-5.514,0-10-4.486-10-10S6.486,2,12,2c3.151,0,6.112,1.512,7.988,4h-2.988c-.553,0-1,.447-1,1s.447,1,1,1h4c1.103,0,2-.897,2-2V2c0-.553-.447-1-1-1s-1,.447-1,1v2.104C18.743,1.543,15.473,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c.288,0,.573-.011.856-.031.551-.039.966-.518.926-1.068-.039-.55-.512-.975-1.068-.926Zm10.286-10.975c-.553,0-1,.447-1,1,0,.455-.031.913-.092,1.36-.074.548.31,1.052.856,1.126.046.006.091.009.136.009.493,0,.922-.364.99-.865.072-.536.109-1.085.109-1.63,0-.553-.447-1-1-1Zm-.863,5.396c-.484-.268-1.093-.088-1.357.396-.217.396-.464.782-.735,1.148-.328.444-.233,1.07.21,1.399.18.132.388.195.594.195.307,0,.609-.141.806-.405.323-.439.62-.902.88-1.377.266-.484.088-1.092-.396-1.357Zm-4.731,4.02c-.383.246-.783.467-1.191.656-.501.233-.719.827-.486,1.328.17.365.53.579.908.579.141,0,.284-.029.42-.093.491-.229.973-.493,1.432-.789.465-.299.599-.917.3-1.382-.299-.463-.918-.597-1.382-.3Z"
+                                                        fill="#000000" />
+                                                </svg>
+                                            </span>
+                                            <!-- Text next to the SVG -->
+                                            <div style="margin-left: 15px;margin-top:7px">
+                                                <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Diterima', 'month' => request('month'), 'year' => request('year')]) }}"
+                                                    class="text-danger fw-bold fs-6">Tiket Masuk</a>
+
+
+                                                <div class="text-danger fw-bold fs-5 mt-1">
+                                                    <b>{{ $tiket_masuk }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"
+                                        style="width: 20%; background-color: #fff3cd; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
+                                        <div class="d-flex align-items-center">
+                                            <!-- SVG Icon -->
+                                            <span
+                                                class="svg-icon svg-icon-3x svg-icon-warning d-block my-1 mb-3 me-3 mt-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <path
+                                                        d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
+                                                        fill="#000000" opacity="0.3" />
+                                                    <path
+                                                        d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
+                                                        fill="#000000" />
+                                                </svg>
+                                            </span>
+                                            <!-- Text next to the SVG -->
+                                            <div style="margin-left: 2px;margin-top:7px">
+                                                <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Proses']) }}"
+                                                    class="text-warning fw-bold fs-6">
+                                                    Tiket Dalam Proses
+                                                </a>
+                                                <div class="text-warning fw-bold fs-5 mt-1">
+                                                    <b>{{ $tiket_proses }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"
+                                        style="width: 20%; background-color: #c3e6cb; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
+                                        <div class="d-flex align-items-center">
+                                            <!-- SVG Icon -->
+                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3 mt-2">
+                                                <span class="svg-icon svg-icon-3x svg-icon-success d-block my-1 mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        version="1.1">
+                                                        <path
+                                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                        <path
+                                                            d="M18,0H14V1a2,2,0,0,1-4,0V0H6A3,3,0,0,0,3,3V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
+                                                            fill="#000000" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                            <!-- Text next to the SVG -->
+                                            <div style="margin-left: 10px">
+                                                <a href="{{ route('helpdesk.ticket.index', ['filter' => 'Selesai']) }}"
+                                                    class="text-success fw-bold fs-6">Tiket Selesai</a>
+                                                <div class="text-success fw-bold fs-5 mt-1">
+                                                    <b>{{ $tiket_selesai }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"
+                                        style="width: 20%; background-color: #e9ecef; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.75rem;">
+                                        <div class="d-flex align-items-center">
+                                            <!-- SVG Icon -->
+                                            <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-1 mb-3 mt-3">
+                                                <!-- SVG Icon -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <path
+                                                        d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
+                                                        fill="#000000" opacity="0.3" />
+                                                    <path
+                                                        d="M19,21H5c-2.757,0-5-2.243-5-5v-.922c0-.552,.448-1,1-1,.024,0,.053,.001,.082,.003,1.106-.021,2-.928,2-2.04s-.894-2.02-2-2.041c-.029,.002-.058,.003-.081,.003-.552,0-1-.448-1-1v-1.004C0,5.243,2.243,3,5,3h14c2.757,0,5,2.243,5,5v1c0,.552-.448,1-1,1-1.103,0-2,.897-2,2s.897,2,2,2c.552,0,1,.448,1,1v1c0,2.757-2.243,5-5,5ZM2,15.967v.033c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3v-.126c-1.723-.445-3-2.013-3-3.874s1.277-3.428,3-3.874v-.126c0-1.654-1.346-3-3-3H5c-1.654,0-3,1.346-3,3v.115c1.767,.432,3.082,2.028,3.082,3.926s-1.315,3.494-3.082,3.926Z"
+                                                        fill="#000000" />
+                                                </svg>
+                                            </span>
+                                            <!-- Text next to the SVG -->
+                                            <div style="margin-left:14px;margin-top:7px">
+                                                <a href="{{ route('helpdesk.ticket.index') }}"
+                                                    class="text-primary fw-bold fs-6">Total Tiket</a>
+                                                <div class="text-primary fw-bold fs-5 mt-1">
+                                                    <b>{{ $total_tiket }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Row-->
+                            </div>
+                            <!--end::Stats-->
+                        </div>
+
+                        <br>
+                        <br>
+                    </div>
+                    <!--end::Mixed Widget 2-->
+                </div>  --}}
             </div>
+
         </div>
+
+    </div>
+    </div>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
