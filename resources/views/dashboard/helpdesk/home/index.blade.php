@@ -339,7 +339,7 @@
                                                         </a>
                                                         <div
                                                             style="color: #dc3545; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
-                                                            {{ $tiket_masuk }}
+                                                            {{ $tickets_by_regional[1] ?? 0 }} {{-- Regional 1 --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -372,7 +372,7 @@
                                                         </a>
                                                         <div
                                                             style="color: #ffc107; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
-                                                            {{ $tiket_proses }}
+                                                            {{ $tickets_by_regional[2] ?? 0 }} {{-- Regional 2 --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -404,7 +404,7 @@
                                                         </a>
                                                         <div
                                                             style="color: #28a745; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
-                                                            {{ $tiket_selesai }}
+                                                            {{ $tickets_by_regional[3] ?? 0 }} {{-- Regional 3 --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -437,7 +437,7 @@
                                                         </a>
                                                         <div
                                                             style="color: #0d6efd; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
-                                                            {{ $total_tiket }}
+                                                            {{ $tickets_by_regional[4] ?? 0 }} {{-- Regional 4 --}}
                                                         </div>
                                                     </div>
 
@@ -472,7 +472,7 @@
                                                         </a>
                                                         <div
                                                             style="color: #000000; font-weight: 700; font-size: 1.5rem; margin-top: 4px;">
-                                                            {{ $tiket_proses }}
+                                                            {{ $tickets_by_regional[5] ?? 0 }} {{-- Regional 5 --}}
                                                         </div>
                                                     </div>
                                                 </div>

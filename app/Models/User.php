@@ -27,7 +27,21 @@ class User extends Authenticatable
         'gender',
         'photo',
         'surat_tugas',
+        'kabupaten_id',
+        'provinsi_id',
+        'regional_id',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if ($user->kabupaten_id && !$user->provinsi_id) {
+                $kabupaten = Kabupaten::with('provinsi.regional')->find($user->kabupaten_id);
+                $user->provinsi_id = $kabupaten->provinsi->id ?? null;
+                $user->regional_id = $kabupaten->provinsi->regional->id ?? null;
+            }
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -62,4 +76,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function kabupaten()
+    {
+        return $this->belongsTo(Kabupaten::class);
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
+
+    public function regional()
+    {
+        return $this->belongsTo(Regional::class);
+    }
+
 }

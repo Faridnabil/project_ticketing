@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Helpdesk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\Regional;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -32,6 +33,14 @@ class HomeHelpdeskController extends Controller
                 ->get();
         });
 
+        // Ambil data regionals dengan cache
+        $regionals = Cache::remember('monitoring_regionals', 60, function () {
+            return Regional::select('id', 'regional_name')
+                ->withCount('tickets')
+                ->orderByDesc('tickets_count')
+                ->get();
+        });
+
         // Hitung data tiket
         $total_tiket = $tickets->count();
         $tiket_belum = $tickets->where('status.status_name', null)->count();
@@ -39,6 +48,11 @@ class HomeHelpdeskController extends Controller
         $tiket_proses = $tickets->whereIn('status.status_name', ['Proses', 'Buka Kembali'])->count();
         $tiket_tertunda = $tickets->where('status.status_name', 'Tertunda')->count();
         $tiket_selesai = $tickets->where('status.status_name', 'Selesai')->count();
+
+        // Hitung jumlah tiket per regional
+        $tickets_by_regional = $tickets->groupBy('regional_id')->map(function ($group) {
+            return $group->count();
+        });
 
         if ($request->ajax()) {
             return response()->json([
@@ -49,11 +63,15 @@ class HomeHelpdeskController extends Controller
                 'tiket_proses' => $tiket_proses,
                 'tiket_tertunda' => $tiket_tertunda,
                 'tiket_selesai' => $tiket_selesai,
+                'tickets_by_regional' => $tickets_by_regional,
+                'regionals' => $regionals,
             ]);
         }
 
         return view('dashboard.helpdesk.home.index', compact(
             'tickets',
+            'tickets_by_regional',
+            'regionals',
             'total_tiket',
             'tiket_belum',
             'tiket_masuk',
@@ -67,6 +85,7 @@ class HomeHelpdeskController extends Controller
             'date'
         ));
     }
+
 
     public function todaygetTicketChartData(Request $request)
     {

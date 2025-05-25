@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Kabupaten;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -363,11 +364,13 @@ class UsersSeeder extends Seeder
 
         $faker = FakerFactory::create();
         $faker->addProvider(new NikProvider($faker));
+        $kabupaten = Kabupaten::with('provinsi.regional')->inRandomOrder()->first();
 
         $user = User::factory()->create([
             'name' => 'Admin',
             'email' => 'Admin@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'kabupaten_id' => $kabupaten->id,
             'nik' => $faker->nik,
         ]);
         $user->assignRole($adminRole);
@@ -376,6 +379,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 1',
             'email' => 'helpdesk1@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'kabupaten_id' => $kabupaten->id,
             'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);
@@ -384,6 +388,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 2',
             'email' => 'helpdesk2@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'kabupaten_id' => $kabupaten->id,
             'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);
@@ -392,6 +397,7 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 3',
             'email' => 'helpdesk3@gmail.com',
             'password' => bcrypt('qwerty12'),
+            'kabupaten_id' => $kabupaten->id,
             'nik' => $faker->nik,
         ]);
         $user->assignRole($helpdeskRole);

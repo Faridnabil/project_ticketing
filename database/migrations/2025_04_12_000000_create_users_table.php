@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('regional_id')->nullable()->constrained('regionals');
+            $table->foreignId('provinsi_id')->nullable()->constrained('provinsis');
+            $table->foreignId('kabupaten_id')->nullable()->constrained('kabupatens');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

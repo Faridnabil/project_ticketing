@@ -596,7 +596,7 @@
                                             <span>Kategori:</span> {{ $ticket->category->category_name }}<br>
                                             <span>Status:</span> {{ $ticket->status->status_name ?? '-' }}<br>
                                             <span>Prioritas:</span> {{ $ticket->priority->priority_name ?? '-' }}<br>
-                                            <span>Nama Provinsi:</span> {{ $ticket->kecamatan->name }}<br>
+                                            {{-- <span>Nama Provinsi:</span> {{ $ticket->kecamatan->name }}<br> --}}
                                         </p>
 
                                         <hr>

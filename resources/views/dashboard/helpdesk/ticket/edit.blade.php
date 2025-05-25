@@ -1,5 +1,9 @@
 @extends('layouts.dashboard.app')
 
+@php
+    $user = auth()->user();
+@endphp
+
 @section('title')
     Edit Tiket | SIAK Dukcapil
 @endsection
@@ -49,52 +53,21 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="regional_id" class="form-label">Nama Wilayah</label>
-                                    <select id="regional_id" data-control="select2" name="regional_id"
-                                        class="form-select @error('regional_id') is-invalid @enderror" required>
-                                        <option value="" selected disabled>Pilih Wilayah</option>
-                                        @foreach ($regionals as $regional)
-                                            <option value="{{ $regional->id }}"
-                                                {{ $ticket->regional_id == $regional->id ? 'selected' : '' }}>
-                                                {{ $regional->no_regional }} - {{ $regional->regional_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('regional_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="regional_name" class="form-label">Nama Wilayah</label>
+                                    <input type="text" class="form-control" id="regional_name" value="{{ $user->regional->code }} - {{ $user->regional->regional_name }}" readonly>
+                                    <input type="hidden" name="regional_id" value="{{ $user->regional_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="provinsi_id" class="form-label">Nama Provinsi</label>
-                                    <select id="provinsi_id" name="provinsi_id" class="form-select" required>
-                                        <option value="" disabled {{ $ticket->provinsi_id ? '' : 'selected' }}>Pilih Provinsi</option>
-                                        @foreach ($provinsis as $provinsi)
-                                            <option value="{{ $provinsi->id }}"
-                                                {{ $ticket->provinsi_id == $provinsi->id ? 'selected' : '' }}>
-                                                {{ $provinsi->code }} - {{ $provinsi->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('provinsi_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="provinsi_name" class="form-label">Nama Provinsi</label>
+                                    <input type="text" class="form-control" id="provinsi_name" value="{{ $user->provinsi->code }} - {{ $user->provinsi->name }}" readonly>
+                                    <input type="hidden" name="provinsi_id" value="{{ $user->provinsi_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="kabupaten_id" class="form-label">Nama Kabupaten/Kota</label>
-                                    <select id="kabupaten_id" name="kabupaten_id" class="form-select" required>
-                                        <option value="" disabled {{ $ticket->kabupaten_id ? '' : 'selected' }}>Pilih Kabupaten</option>
-                                        @foreach ($kabupatens as $kabupaten)
-                                            <option value="{{ $kabupaten->id }}"
-                                                {{ $ticket->kabupaten_id == $kabupaten->id ? 'selected' : '' }}>
-                                                {{ $kabupaten->code }} - {{ $kabupaten->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('kabupaten_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="kabupaten_name" class="form-label">Nama Kabupaten/Kota</label>
+                                    <input type="text" class="form-control" id="kabupaten_name" value="{{ $user->kabupaten->code }} - {{ $user->kabupaten->type }} {{ $user->kabupaten->name }}" readonly>
+                                    <input type="hidden" name="kabupaten_id" value="{{ $user->kabupaten_id }}">
                                 </div>
 
                                 <div class="col-md-6">

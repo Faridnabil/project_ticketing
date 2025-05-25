@@ -1,5 +1,9 @@
 @extends('layouts.dashboard.app')
 
+@php
+    $user = auth()->user();
+@endphp
+
 @section('title')
     Tambah Tiket | SIAK Dukcapil
 @endsection
@@ -73,31 +77,21 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="regional_id" class="form-label">Nama Wilayah</label>
-                                    <select id="regional_id" name="regional_id" class="form-select" required>
-                                        <option value="" selected disabled>Pilih Wilayah</option>
-                                        @foreach ($regionals as $regional)
-                                            <option value="{{ $regional->id }}">{{ $regional->code }} - {{ $regional->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="regional_name" class="form-label">Nama Wilayah</label>
+                                    <input type="text" class="form-control" id="regional_name" value="{{ $user->regional->code }} - {{ $user->regional->regional_name }}" readonly>
+                                    <input type="hidden" name="regional_id" value="{{ $user->regional_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="provinsi_id" class="form-label">Nama Provinsi</label>
-                                    <select id="provinsi_id" name="provinsi_id" class="form-select" required>
-                                        <option value="" selected disabled>Pilih Provinsi</option>
-                                        @foreach ($provinsis as $provinsi)
-                                            <option value="{{ $provinsi->id }}">{{ $provinsi->code }} - {{ $provinsi->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="provinsi_name" class="form-label">Nama Provinsi</label>
+                                    <input type="text" class="form-control" id="provinsi_name" value="{{ $user->provinsi->code }} - {{ $user->provinsi->name }}" readonly>
+                                    <input type="hidden" name="provinsi_id" value="{{ $user->provinsi_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="kabupaten_id" class="form-label">Nama Kabupaten/Kota</label>
-                                    <select id="kabupaten_id" name="kabupaten_id" class="form-select" required>
-                                        <option value="" selected disabled>Pilih Kabupaten</option>
-                                            {{-- <option value="{{ $kabupaten->id }}">{{ $kabupaten->code }} - {{ $kabupaten->type }} {{ $kabupaten->name }}</option> --}}
-                                    </select>
+                                    <label for="kabupaten_name" class="form-label">Nama Kabupaten/Kota</label>
+                                    <input type="text" class="form-control" id="kabupaten_name" value="{{ $user->kabupaten->code }} - {{ $user->kabupaten->type }} {{ $user->kabupaten->name }}" readonly>
+                                    <input type="hidden" name="kabupaten_id" value="{{ $user->kabupaten_id }}">
                                 </div>
 
 
@@ -228,7 +222,7 @@
     </div>
     <!--end::Post-->
     @push('scripts')
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const regionalSelect = $('#regional_id');
             const provinsiSelect = $('#provinsi_id');
@@ -279,7 +273,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         ClassicEditor

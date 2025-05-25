@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Kabupaten;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +21,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $kabupatens = Kabupaten::with('provinsi.regional')->get();
+
+        return view('auth.register', compact('kabupatens'));
     }
 
     /**
@@ -32,14 +35,21 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'kabupaten_id' => ['required', 'exists:kabupatens,id'],
         ]);
+
+        // Ambil data kabupaten beserta provinsi dan regional-nya
+        $kabupaten = Kabupaten::with('provinsi.regional')->findOrFail($request->kabupaten_id);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'kabupaten_id' => $kabupaten->id,
+            'provinsi_id' => $kabupaten->provinsi->id,
+            'regional_id' => $kabupaten->provinsi->regional->id,
         ]);
 
         event(new Registered($user));
