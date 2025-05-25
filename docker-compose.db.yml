@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: ticket_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-kemendagri}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-pondoklabu}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-pondoklabu}
+      MYSQL_USER: ${DB_USERNAME:-pola}
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - polatix
+
+volumes:
+  dbdata:
+
+networks:
+  polatix:
+    external: true
