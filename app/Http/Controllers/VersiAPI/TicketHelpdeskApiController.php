@@ -142,10 +142,17 @@ class TicketHelpdeskApiController extends Controller
                 ], 422);
             }
 
-            $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
-                ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
-            $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
-            $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            // $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
+            //     ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
+            // $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
+            // $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            $today = Carbon::now()->format('Ymd');
+            $prefix = 'TICK-' . $today . '-';
+            $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', $prefix . '%')
+                ->select(DB::raw("MAX(CAST(SUBSTRING(no_ticket, 14) AS UNSIGNED)) AS max_id"))
+                ->value('max_id');
+            $newTicketNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
+            $newTicketId = $prefix . str_pad($newTicketNumber, 5, '0', STR_PAD_LEFT);
             Log::info('Nomor tiket baru', ['no_ticket' => $newTicketId]);
             $data = $validated;
             $data['no_ticket'] = $newTicketId;
