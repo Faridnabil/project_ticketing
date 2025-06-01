@@ -2,9 +2,14 @@
 FROM php:8.2-cli as builder
 
 # Install dependencies
+# RUN apt-get update && apt-get install -y \
+#     git zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
+#     && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd
+
 RUN apt-get update && apt-get install -y \
-    git zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd
+    git zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql zip mbstring exif pcntl bcmath gd
+
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -27,10 +32,16 @@ RUN if [ -f laravel.env ]; then cp laravel.env .env; fi
 FROM php:8.2-cli
 
 # Install system dependencies
+# RUN apt-get update && apt-get install -y \
+#     libzip-dev libpng-dev libonig-dev libxml2-dev unzip git \
+#     && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd \
+#     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN apt-get update && apt-get install -y \
-    libzip-dev libpng-dev libonig-dev libxml2-dev unzip git \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd \
+    libzip-dev libpng-dev libonig-dev libxml2-dev libpq-dev unzip git \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql zip mbstring exif pcntl bcmath gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /var/www/html
 

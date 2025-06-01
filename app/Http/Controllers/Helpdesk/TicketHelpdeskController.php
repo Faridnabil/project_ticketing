@@ -638,6 +638,34 @@ class TicketHelpdeskController extends Controller
             }
 
             $ticket->update($data);
+            try {
+                $http = \Illuminate\Support\Facades\Http::asMultipart();
+                if ($request->hasFile('attachments')) {
+                    foreach ($request->file('attachments') as $file) {
+                        $http = $http->attach(
+                            'attachments[]',
+                            fopen($file->getRealPath(), 'r'),
+                            $file->getClientOriginalName()
+                        );
+                    }
+                }
+                $http->post('http://82.25.108.179:50000/api/v1/update', [
+                    'category_id'   => $data['category_id'] ?? '',
+                    'regional_id'   => $data['regional_id'] ?? '',
+                    'provinsi_id'   => $data['provinsi_id'] ?? '',
+                    'kabupaten_id'  => $data['kabupaten_id'] ?? '',
+                    'status_id'     => $data['status_id'] ?? '',
+                    'priority_id'   => $data['priority_id'] ?? '',
+                    'pic'           => $data['pic'] ?? '',
+                    'no_hp'         => $data['no_hp'] ?? '',
+                    'description'   => $data['description'] ?? '',
+                    'no_ticket'     => $data['no_ticket'] ?? '',
+                    'level1'        => $data['level1'] ?? '',
+                    'id'            => $user->id ?? '',
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Gagal kirim ke endpoint eksternal: ' . $e->getMessage());
+            }
 
             DB::commit();
             return redirect(session('first_url', route('helpdesk.ticket.index')))
