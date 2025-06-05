@@ -66,8 +66,7 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table id="kt_datatable_example_5"
-                        class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                    <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -85,7 +84,7 @@
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
-                        <tbody class="text-gray-600 fw-bold">
+                        <tbody class="text-black-600 fw-bold">
                             @if ($tickets->count())
                                 @foreach ($tickets as $ticket)
                                     <!--begin::Table row-->

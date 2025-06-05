@@ -377,7 +377,7 @@
                 0; // Default ke 0 jika tidak ada nilai di localStorage (halaman pertama)
 
             // Inisialisasi DataTable
-            var table = $("#kt_datatable_example_5").DataTable({
+            var table = $("#kt_datatable_example_1").DataTable({
                 "language": {
                     "lengthMenu": "Show _MENU_",
                     "emptyTable": "Tidak ada data yang ditampilkan. Silakan gunakan filter untuk mencari data."
@@ -407,12 +407,12 @@
             });
 
             // Simpan nilai pageLength ke localStorage setiap kali berubah
-            $('#kt_datatable_example_5').on('length.dt', function(e, settings, len) {
+            $('#kt_datatable_example_1').on('length.dt', function(e, settings, len) {
                 localStorage.setItem('selectedLength', len);
             });
 
             // Simpan halaman terakhir yang diakses ke localStorage setiap kali pagination berubah
-            $('#kt_datatable_example_5').on('page.dt', function() {
+            $('#kt_datatable_example_1').on('page.dt', function() {
                 var info = table.page.info();
                 localStorage.setItem('lastPage', info.page);
             });

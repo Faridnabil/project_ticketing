@@ -216,8 +216,7 @@
                         </div>
                     </div>
                     <div class="card-body pt-0">
-                        <table id="kt_datatable_example_5"
-                            class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                        <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
                             <thead>
                                 <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th lass="min-w-70px">Nomor Tiket</th>
@@ -234,7 +233,7 @@
                                     <th lass="min-w-70px">Catatan</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-gray-600 fw-bold">
+                            <tbody class="text-black-600 fw-bold">
                                 @if (isset($hitung) && $hitung == 0)
                                     <tr>
                                         <td colspan="6" class="text-center">No tickets found for the selected date
