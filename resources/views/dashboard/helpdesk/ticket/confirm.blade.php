@@ -25,7 +25,7 @@
                         <div class="card-body pt-5">
                             <form class="row g-3 needs-validation" method="POST"
                                 action="{{ route('helpdesk.ticket.update', $ticket->id) }}" enctype="multipart/form-data"
-                                novalidate>
+                                novalidate onsubmit="return validateForm()">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="no_ticket" value="{{ $ticket->no_ticket }}">
@@ -79,13 +79,31 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Solusi</label>
-                                    <textarea name="completion_notes" class="form-control @error('completion_notes') is-invalid @enderror" id="completion_notes"
-                                        cols="10" rows="3">{{ old('completion_notes', $ticket->completion_notes) }}</textarea>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('completion_notes')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <textarea name="completion_notes"
+                                        class="form-control"
+                                        id="completion_notes"
+                                        cols="10"
+                                        rows="3"
+                                        required>{{ old('completion_notes', $ticket->completion_notes) }}</textarea>
+                                    <div class="invalid-feedback">Solusi ini wajib diisi.</div>
                                 </div>
+
+                                <script>
+                                    function validateForm() {
+                                        const textarea = document.getElementById('completion_notes');
+                                        const errorFeedback = textarea.nextElementSibling.nextElementSibling; // ambil .invalid-feedback
+
+                                        if (textarea.value.trim() === '') {
+                                            textarea.classList.add('is-invalid');
+                                            errorFeedback.style.display = 'block';
+                                            return false;
+                                        } else {
+                                            textarea.classList.remove('is-invalid');
+                                            errorFeedback.style.display = 'none';
+                                            return true;
+                                        }
+                                    }
+                                    </script>
 
                                 <div class="col-md-12">
                                     <label class="d-block fw-bold fs-6 mb-5">Lampiran</label>

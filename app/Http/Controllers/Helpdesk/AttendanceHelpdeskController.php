@@ -42,7 +42,24 @@ class AttendanceHelpdeskController extends Controller
         // Retrieve all unique check-ins for the form dropdowns
         $allCheckIns = Attendance::select('check_in')->distinct()->pluck('check_in');
 
-        return view('dashboard.helpdesk.attendance.index', compact('attendances', 'attendanceToday', 'allCheckIns'));
+        $today = Carbon::now()->format('Y-m-d');
+
+        $absen = Attendance::where('user_id', Auth::user()->id)
+            ->where(function ($query) {
+                $query
+                    ->where('check_in', 'Shift 1')
+                    ->orWhere('check_in', 'Shift 2')
+                    ->orWhere('check_in', 'Shift 3');
+            })
+            ->whereDate('date_check_in', $today)
+            ->first();
+
+        return view('dashboard.helpdesk.attendance.index', compact(
+            'attendances',
+            'attendanceToday',
+            'allCheckIns',
+            'absen'
+        ));
     }
 
 
@@ -138,4 +155,59 @@ class AttendanceHelpdeskController extends Controller
     {
         //
     }
+    public function storeForgotAttendance(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Validasi input dan file
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'check_in' => 'required|string',
+                'check_out' => 'required|string',
+                'date_check_in' => 'required|date',
+                'date_check_out' => 'required|date',
+                'activity' => 'nullable|string',
+                'user_id' => 'required|integer|exists:users,id',
+                'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+            ]);
+
+            // Ambil data dari request
+            $data = $request->only([
+                'name',
+                'check_in',
+                'check_out',
+                'date_check_in',
+                'date_check_out',
+                'activity',
+                'user_id'
+            ]);
+
+            // Set timestamps manual
+            $data['created_at'] = $request->date_check_in;
+            $data['updated_at'] = $request->date_check_out;
+
+            // Simpan file jika ada
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $originalFilename = $file->getClientOriginalName();
+                $filePath = $file->storeAs('public/absen', $originalFilename);
+                $data['attachment'] = str_replace('public/', '', $filePath); // path relatif
+            }
+
+            // Insert data ke tabel attendance
+            Attendance::insert($data); // gunakan insert agar created_at dan updated_at tidak di-override otomatis
+
+            DB::commit();
+
+            return redirect()->route("helpdesk.attendance.index", ['active_tab' => 'lupa_absen'])
+                ->with("success", "Check In berhasil.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with("error", "Check In Gagal, Data Tidak Boleh Kosong atau File Salah.");
+        }
+    }
+
+
+
 }

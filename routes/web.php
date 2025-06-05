@@ -130,6 +130,10 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
         // '/helpdesk/report' => ReportController::class,
     ]);
 
+    web:
+    // Form untuk lupa absen
+    Route::post('/helpdesk/attendance/forgot', [AttendanceHelpdeskController::class, 'storeForgotAttendance'])->name('attendance.storeForgot');
+
     Route::get('/helpdesk/confirm/{ticket}', [TicketHelpdeskController::class, 'confirm'])->name('tickets.confirm');
 
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');

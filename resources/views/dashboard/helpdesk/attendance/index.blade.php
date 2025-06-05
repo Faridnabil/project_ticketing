@@ -91,6 +91,13 @@
                             <strong>Data Perbulan</strong>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="btn-custom font-regular nav-link {{ request('active_tab', 'absen') == 'lupa_absen' ? 'active' : '' }}"
+                            data-bs-toggle="tab" href="#lupa_absen" role="tab"
+                            aria-selected="{{ request('active_tab', 'absen') == 'lupa_absen' ? 'true' : 'false' }}">
+                            <strong>Lupa Absen</strong>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -139,7 +146,7 @@
                                                         required>
                                                     <div class="valid-feedback">Looks good!</div>
                                                     @error('name')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        {{-- <div class="invalid-feedback">{{ $message }}</div> --}}
                                                     @enderror
 
                                                     <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
@@ -180,7 +187,7 @@
                                                                 const extension = file.name.split('.').pop().toLowerCase();
                                                                 if (!allowedExtensions.includes(extension)) {
                                                                     alert(
-                                                                        'File type not allowed. Please upload a file with one of the following extensions: jpg, jpeg, png, pdf, docx, xlsx.'
+                                                                        'File type not allowed. Please upload a file with one of the following extensions: jpg, jpeg, png, pdf, docx.'
                                                                     );
                                                                     event.target.value = ''; // Clear the input
                                                                 }
@@ -322,20 +329,9 @@
                                                                         @if ($attendance_today->attachment == null)
                                                                             -
                                                                         @else
-                                                                            <a href="#" data-bs-toggle="modal"
-                                                                                data-bs-target="#modal_checkout_{{ $attendance_today->id }}">
-                                                                                @if (str_ends_with($attendance_today->attachment, '.pdf'))
+                                                                               <a href="#" data-bs-toggle="modal" data-bs-target="#modal_checkout_{{ $attendance_today->id }}">
                                                                                     Keluar
-                                                                                @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
-                                                                                        str_ends_with($attendance_today->attachment, '.jpeg') ||
-                                                                                        str_ends_with($attendance_today->attachment, '.png'))
-                                                                                    Keluar
-                                                                                @elseif (str_ends_with($attendance_today->attachment, '.docx'))
-                                                                                    Keluar
-                                                                                @else
-                                                                                    Keluar
-                                                                                @endif
-                                                                            </a>
+                                                                                </a>
                                                                         @endif
 
                                                                     </td>
@@ -357,6 +353,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Bulanan -->
                     <div class="tab-pane fade {{ request('active_tab', 'absen') == 'absen_bulanan' ? 'show active' : '' }}"
                         id="absen_bulanan" role="tabpanel">
@@ -373,6 +370,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+
                                 &nbsp;
 
                                 <input type="date" name="start_date" class="form-control me-2"
@@ -392,51 +390,6 @@
                                     <a href="#" id="clear-filters" class="btn btn-danger">Atur ulang</a>
                                 </div>
                             </form>
-                            <!--end::Form-->
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const urlParams = new URLSearchParams(window.location.search);
-                                    const activeTab = urlParams.get('active_tab') || 'absen';
-
-                                    if (activeTab) {
-                                        const targetTab = document.querySelector(`a[href="#${activeTab}"]`);
-                                        const tabPane = document.querySelector(`#${activeTab}`);
-
-                                        if (targetTab && tabPane) {
-                                            // Deactivate all tabs and tab contents
-                                            document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
-                                            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
-
-                                            // Activate target tab and tab content
-                                            targetTab.classList.add('active');
-                                            tabPane.classList.add('show', 'active');
-                                        }
-                                    }
-
-                                    document.getElementById('clear-filters').addEventListener('click', function(event) {
-                                        event.preventDefault();
-                                        const clearUrl = new URL(window.location.href);
-                                        clearUrl.searchParams.delete('check_in');
-                                        clearUrl.searchParams.delete('start_date');
-                                        clearUrl.searchParams.delete('end_date');
-                                        clearUrl.searchParams.set('active_tab', activeTab);
-                                        window.location.href = clearUrl.href;
-                                    });
-
-                                    // Update the active_tab input and URL when the tab is changed
-                                    document.querySelectorAll('.nav-link').forEach(tab => {
-                                        tab.addEventListener('click', function() {
-                                            const newTab = this.getAttribute('href').substring(1);
-                                            document.getElementById('active_tab').value = newTab;
-
-                                            const newUrl = new URL(window.location.href);
-                                            newUrl.searchParams.set('active_tab', newTab);
-                                            history.pushState(null, '', newUrl.href);
-                                        });
-                                    });
-                                });
-                            </script>
                         </div>
 
                         <table id="kt_datatable_example_5"
@@ -458,97 +411,77 @@
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
+
                             <!--begin::Table body-->
                             <tbody class="text-gray-600 fw-bold">
                                 @if ($attendances->count())
                                     @foreach ($attendances as $attendance)
                                         <tr>
-                                            <td class="min-w-10px">{{ $loop->iteration }}</td>
-                                            <td>{{ $attendance->name }}</td>
-                                            <td>{{ date('d F Y', strtotime($attendance->date_check_in)) }}</td>
+                                            <td class="min-w-10px">
+                                                {{ $loop->iteration }}
+                                            </td>
                                             <td>
-                                                @if ($attendance->check_in)
+                                                {{ $attendance->name }}
+                                            </td>
+                                            <td>
+                                                {{ date('d F Y', strtotime($attendance->date_check_in)) }}
+                                            </td>
+                                            @if ($attendance->check_in)
+                                                <td>
                                                     {{ $attendance->check_out }}
-                                                @else
+                                                </td>
+                                            @else
+                                                <td>
                                                     {{ $attendance->check_in }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($attendance->check_in)
+                                                </td>
+                                            @endif
+                                            @if ($attendance->check_in)
+                                                <td>
                                                     {{ date('H:i', strtotime($attendance->date_check_in)) }}
-                                                @else
+                                                </td>
+                                            @else
+                                                <td>
                                                     -
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($attendance->check_out)
+                                                </td>
+                                            @endif
+                                            @if ($attendance->check_out)
+                                                <td>
                                                     {{ date('H:i', strtotime($attendance->date_check_out)) }}
-                                                @else
+                                                </td>
+                                            @else
+                                                <td>
                                                     -
-                                                @endif
-                                            </td>
+                                                </td>
+                                            @endif
                                             <td>
                                                 @if ($attendance->attachment == null)
                                                     -
                                                 @else
+                                                    @php
+                                                        $ext = strtolower(
+                                                            pathinfo($attendance->attachment, PATHINFO_EXTENSION),
+                                                        );
+
+                                                        if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
+                                                            $icon = 'png.png';
+                                                        } elseif ($ext === 'pdf') {
+                                                            $icon = 'PDF.png';
+                                                        } elseif ($ext === 'docx') {
+                                                            $icon = 'word.png';
+                                                        } else {
+                                                            $icon = 'FILE.png';
+                                                        }
+                                                    @endphp
+
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-                                                        @if (str_ends_with($attendance->attachment, '.pdf'))
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/PDF.png') }}"
-                                                                width="40px" height="50px" alt="file">
-                                                        @elseif (str_ends_with($attendance->attachment, '.jpg') ||
-                                                                str_ends_with($attendance->attachment, '.jpeg') ||
-                                                                str_ends_with($attendance->attachment, '.png'))
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/png.png') }}"
-                                                                width="50px" height="50px" alt="file">
-                                                        @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/word.png') }}"
-                                                                width="50px" height="50px" alt="file">
-                                                        @else
-                                                            <img src="{{ asset('template/dist/assets/media/illustrations/FILE.png') }}"
-                                                                width="50px" height="50px" alt="file">
-                                                        @endif
+                                                        <img src="{{ asset('template/dist/assets/media/illustrations/' . $icon) }}"
+                                                            width="50px" height="50px" alt="file">
                                                     </a>
                                                 @endif
                                             </td>
 
-                                            <div class="modal fade" tabindex="-1"
-                                                id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-primary">
-                                                            <h6 class="modal-title m-0 text-white">
-                                                                File
-                                                            </h6>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div><!--end modal-header-->
-                                                        <div class="modal-body">
-                                                            @if (str_ends_with($attendance->attachment, '.pdf'))
-                                                                <iframe
-                                                                    src="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                    style="width: 100%; height: 560px;"
-                                                                    frameborder="0"></iframe>
-                                                            @elseif (str_ends_with($attendance->attachment, '.jpg') ||
-                                                                    str_ends_with($attendance->attachment, '.jpeg') ||
-                                                                    str_ends_with($attendance->attachment, '.png'))
-                                                                <img src="{{ asset('storage/' . $attendance->attachment) }}"
-                                                                    style="width: 100%; height: auto;" />
-                                                            @elseif (str_ends_with($attendance->attachment, '.docx'))
-                                                                <p>File ini tidak dapat ditampilkan secara langsung di
-                                                                    browser. Silakan unduh file dibawah ini.<a
-                                                                        href="{{ Storage::url($attendance->attachment) }}"
-                                                                        download><br><br>Unduh File Sekarang</a></p>
-                                                            @else
-                                                            @endif
-                                                        </div><!--end modal-body-->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                             <td style="text-align: left">
-
                                                 <a href="" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_attendanceLog_{{ $attendance->id }}_{{ $loop->index }}"
                                                     title="Detail Deskripsi">
@@ -556,14 +489,118 @@
                                                         style="width: auto; height: 30px;" />
                                                 </a>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 @endif
                             </tbody>
-                            <!--end::Table body-->
                         </table>
                     </div>
+
+                    <!-- Form Lupa Absen -->
+                    <div class="tab-pane fade {{ request('active_tab', 'absen') == 'lupa_absen' ? 'show active' : '' }}" id="lupa_absen" role="tabpanel">
+                        <div class="container mt-3">
+
+                            @if (session('success'))
+                                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+
+                            <form class="row g-3 needs-validation" method="POST"
+                                action="{{ route('helpdesk.attendance.storeForgot') }}"
+                                enctype="multipart/form-data" novalidate>
+                                @csrf
+                                <div class="container">
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="name" class="form-label">Nama Helpdesk</label>
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                id="name" name="name" required autofocus>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <label for="shiftSelectIn" class="form-label">Absen Masuk</label>
+                                            <select class="form-select" id="shiftSelectIn" name="check_in" required>
+                                                <option selected disabled>Opsi Shift</option>
+                                                <option value="Shift 1">Shift 1</option>
+                                                <option value="Shift 2">Shift 2</option>
+                                                <option value="Shift 3">Shift 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="date_check_in" class="form-label">Tanggal Masuk</label>
+                                            <input type="datetime-local" name="date_check_in" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="shiftSelectOut" class="form-label">Absen Keluar</label>
+                                            <select class="form-select" id="shiftSelectOut" name="check_out" required>
+                                                <option selected disabled>Opsi Shift</option>
+                                                <option value="Shift 1">Shift 1</option>
+                                                <option value="Shift 2">Shift 2</option>
+                                                <option value="Shift 3">Shift 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="date_check_out" class="form-label">Tanggal Keluar</label>
+                                            <input type="datetime-local" name="date_check_out" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="fileInput2" class="form-label">File</label>
+                                            <div class="custom-file-upload"
+                                                style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
+                                                <label for="fileInput2" class="upload-label"
+                                                    style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
+                                                    <span class="upload-button"
+                                                        style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
+                                                        file</span>
+                                                    <span id="fileName" style="margin-left: 10px">Tidak ada
+                                                        file dipilih</span>
+                                                </label>
+                                                <input id="fileInput2" type="file" name="attachment"
+                                                    style="display: none;"
+                                                    accept=".jpg, .jpeg, .png, .pdf, .docx">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="activity" class="form-label">Aktifitas</label>
+                                            <textarea name="activity" class="form-control" id="activity" rows="5"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+
+                                    <div id="checkInSection">
+                                        <button type="submit" class="btn btn-primary"
+                                            id="checkInBtn">Simpan</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -582,7 +619,7 @@
         <div class="modal fade" tabindex="-1" id="kt_modal_attendance_{{ $attendance->id }}_{{ $loop->index }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-danger">
+                    <div class="modal-header bg-primary">
                         <h6 class="modal-title m-0 text-white">File</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
@@ -625,7 +662,12 @@
     @endforeach
 
     @foreach ($attendances as $attendance_today)
-        <!-- Modal Template -->
+        @php
+            $ext = strtolower(pathinfo($attendance_today->attachment, PATHINFO_EXTENSION));
+            $fileUrl = Storage::url($attendance_today->attachment);
+        @endphp
+
+        <!-- Modal Checkout -->
         <div class="modal fade" tabindex="-1" id="modal_checkout_{{ $attendance_today->id }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -633,20 +675,24 @@
                         <h6 class="modal-title m-0 text-white">File Tidak Dapat Dilihat Langsung</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!--end modal-header-->
+
                     <div class="modal-body">
-                        @if (str_ends_with($attendance_today->attachment, '.pdf'))
-                            <iframe src="{{ Storage::url($attendance_today->attachment) }}"
-                                style="width: 100%; height: 560px;" frameborder="0"></iframe>
-                        @elseif (str_ends_with($attendance_today->attachment, '.jpg') ||
-                                str_ends_with($attendance_today->attachment, '.jpeg') ||
-                                str_ends_with($attendance_today->attachment, '.png'))
-                            <img src="{{ Storage::url($attendance_today->attachment) }}"
-                                style="width: 100%; height: auto;" />
-                        @elseif (str_ends_with($attendance_today->attachment, '.docx'))
-                            <p>File ini tidak dapat ditampilkan secara langsung di browser. Silakan unduh file dibawah
-                                ini.<a href="{{ Storage::url($attendance_today->attachment) }}" download><br><br>Unduh
-                                    File Sekarang</a></p>
+                        @if ($ext === 'pdf')
+                            <iframe src="{{ $fileUrl }}" style="width: 100%; height: 560px;"
+                                frameborder="0"></iframe>
+                        @elseif (in_array($ext, ['jpg', 'jpeg', 'png']))
+                            <img src="{{ $fileUrl }}" style="width: 100%; height: auto;" alt="attachment image" />
+                        @elseif ($ext === 'docx')
+                            <p>
+                                File ini tidak dapat ditampilkan secara langsung di browser.<br><br>
+                                <a href="{{ $fileUrl }}" download class="btn btn-primary btn-sm">Unduh File
+                                    Sekarang</a>
+                            </p>
                         @else
+                            <p>
+                                Tipe file tidak dikenali. <a href="{{ $fileUrl }}" download>Unduh file</a> untuk
+                                melihatnya.
+                            </p>
                         @endif
                     </div><!--end modal-body-->
                 </div>
@@ -655,24 +701,76 @@
     @endforeach
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const activeTab = urlParams.get('active_tab');
+        document.getElementById('fileInput2').addEventListener('change', function(event) {
+            const fileName = event.target.files[0]?.name || 'Tidak ada file dipilih';
+            document.getElementById('fileName').textContent = fileName;
+        });
 
-            if (activeTab) {
-                const targetTab = document.querySelector(`a[href="#${activeTab}"]`);
-                const tabPane = document.querySelector(`#${activeTab}`);
-
-                if (targetTab && tabPane) {
-                    // Deactivate all tabs and tab contents
-                    document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
-                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
-
-                    // Activate target tab and tab content
-                    targetTab.classList.add('active');
-                    tabPane.classList.add('show', 'active');
+        document.querySelector('input[name="attachment"]').addEventListener('change', function(event) {
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'docx'];
+            const file = event.target.files[0];
+            if (file) {
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(extension)) {
+                    alert('File type not allowed. Please upload: jpg, jpeg, png, pdf, docx.');
+                    event.target.value = ''; // Reset
                 }
             }
         });
     </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('active_tab') || 'absen';
+
+            // Fungsi untuk mengaktifkan tab berdasarkan ID
+            function activateTab(tabId) {
+                const targetTab = document.querySelector(`a[href="#${tabId}"]`);
+                const tabPane = document.getElementById(tabId);
+
+                if (targetTab && tabPane) {
+                    // Nonaktifkan semua tab dan konten tab
+                    document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+
+                    // Aktifkan tab yang dituju
+                    targetTab.classList.add('active');
+                    tabPane.classList.add('show', 'active');
+                }
+            }
+
+            // Aktifkan tab dari parameter URL saat halaman dimuat
+            activateTab(activeTab);
+
+            // Handler tombol "clear-filters"
+            const clearButton = document.getElementById('clear-filters');
+            if (clearButton) {
+                clearButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const clearUrl = new URL(window.location.href);
+                    ['check_in', 'start_date', 'end_date'].forEach(param => clearUrl.searchParams.delete(
+                        param));
+                    clearUrl.searchParams.set('active_tab', activeTab);
+                    window.location.href = clearUrl.toString();
+                });
+            }
+
+            // Update URL dan input hidden saat tab diubah secara manual
+            document.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const newTab = this.getAttribute('href').substring(1);
+
+                    const inputTab = document.getElementById('active_tab');
+                    if (inputTab) inputTab.value = newTab;
+
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('active_tab', newTab);
+                    history.replaceState(null, '', newUrl.toString());
+                });
+            });
+        });
+    </script>
+
 @endsection
