@@ -61,6 +61,11 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
+//dummy
+// Route::middleware(['verify.sipd'])->group(function () {
+//     Route::get('/tickets', [TicketController::class, 'index']);
+// });
+
 Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Subdit|SIAK Dev|Pejabat'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
