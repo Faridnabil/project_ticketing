@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VersiAPI\TicketHelpdeskApiController;
+use App\Http\Controllers\VersiAPI\CaptchaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +36,8 @@ Route::get('prov/{regional_id}',[TicketHelpdeskApiController::class,'getProvince
 Route::get('kab/{prov_id}',[TicketHelpdeskApiController::class,'getKabupaten']);
 Route::get('kec/{kab_id}',[TicketHelpdeskApiController::class,'getKecamatan']);
 Route::get('role',[TicketHelpdeskApiController::class,'role']);
+
+Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha'])->name('reload.captcha');
+
 
 

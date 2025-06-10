@@ -43,6 +43,10 @@
                                             The password field is required.
                                         @elseif ($error == 'These credentials do not match our records.')
                                             The email or password you entered is incorrect.
+                                        @elseif ($error == 'The captcha field is required.')
+                                            Please complete the captcha.
+                                        @elseif ($error == 'The captcha is incorrect.')
+                                            The captcha you entered is incorrect.
                                         @else
                                             {{ $error }}
                                         @endif
@@ -69,6 +73,17 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="mb-4">
+                            <label class="form-label">Captcha</label>
+                            <div class="d-flex align-items-center mb-2">
+                                <span>{!! captcha_img() !!}</span>
+                                <button type="button" class="btn btn-link ms-2" id="reloadCaptcha">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="captcha" placeholder="Enter captcha" required>
+                        </div>
+
 
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
@@ -183,4 +198,15 @@
             }
         });
     </script>
+
+    <script>
+        document.getElementById('reloadCaptcha').addEventListener('click', function () {
+            fetch("{{ route('reload.captcha') }}")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('span').innerHTML = data.captcha;
+                });
+        });
+    </script>
+
 @endsection
