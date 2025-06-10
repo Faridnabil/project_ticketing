@@ -1,0 +1,230 @@
+[
+    {
+        "id_daerah": 116,
+        "nama_daerah": "Aceh",
+        "kode_ddn": "11",
+        "regional_id": 1
+    },
+    {
+        "id_daerah": 141,
+        "nama_daerah": "Provinsi Sumatera Utara",
+        "kode_ddn": "12",
+        "regional_id": 1
+    },
+    {
+        "id_daerah": 180,
+        "nama_daerah": "Provinsi Sumatera Barat",
+        "kode_ddn": "13",
+        "regional_id": 1
+    },
+    {
+        "id_daerah": 202,
+        "nama_daerah": "Provinsi Riau",
+        "kode_ddn": "14",
+        "regional_id": 1
+    },
+    {
+        "id_daerah": 216,
+        "nama_daerah": "Provinsi Jambi",
+        "kode_ddn": "15",
+        "regional_id": 1
+    },
+    {
+        "id_daerah": 229,
+        "nama_daerah": "Provinsi Sumatera Selatan",
+        "kode_ddn": "16",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 471,
+        "nama_daerah": "Provinsi Bengkulu",
+        "kode_ddn": "17",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 246,
+        "nama_daerah": "Provinsi Lampung",
+        "kode_ddn": "18",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 501,
+        "nama_daerah": "Provinsi Bangka Belitung",
+        "kode_ddn": "19",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 519,
+        "nama_daerah": "Provinsi Kepulauan Riau",
+        "kode_ddn": "21",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 1,
+        "nama_daerah": "Provinsi DKI Jakarta",
+        "kode_ddn": "31",
+        "regional_id": 2
+    },
+    {
+        "id_daerah": 8,
+        "nama_daerah": "Provinsi Jawa Barat",
+        "kode_ddn": "32",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 35,
+        "nama_daerah": "Provinsi Jawa Tengah",
+        "kode_ddn": "33",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 71,
+        "nama_daerah": "Provinsi DI Yogyakarta",
+        "kode_ddn": "34",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 77,
+        "nama_daerah": "Provinsi Jawa Timur",
+        "kode_ddn": "35",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 492,
+        "nama_daerah": "Provinsi Banten",
+        "kode_ddn": "36",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 396,
+        "nama_daerah": "Provinsi Bali",
+        "kode_ddn": "51",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 407,
+        "nama_daerah": "Provinsi Nusa Tenggara Barat",
+        "kode_ddn": "52",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 418,
+        "nama_daerah": "Provinsi Nusa Tenggara Timur",
+        "kode_ddn": "53",
+        "regional_id": 3
+    },
+    {
+        "id_daerah": 261,
+        "nama_daerah": "Provinsi Kalimantan Barat",
+        "kode_ddn": "61",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 276,
+        "nama_daerah": "Provinsi Kalimantan Tengah",
+        "kode_ddn": "62",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 291,
+        "nama_daerah": "Provinsi Kalimantan Selatan",
+        "kode_ddn": "63",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 307,
+        "nama_daerah": "Provinsi Kalimantan Timur",
+        "kode_ddn": "64",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 546,
+        "nama_daerah": "Provinsi Kalimantan Utara",
+        "kode_ddn": "65",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 318,
+        "nama_daerah": "Provinsi Sulawesi Utara",
+        "kode_ddn": "71",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 334,
+        "nama_daerah": "Provinsi Sulawesi Tengah",
+        "kode_ddn": "72",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 346,
+        "nama_daerah": "Provinsi Sulawesi Selatan",
+        "kode_ddn": "73",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 371,
+        "nama_daerah": "Provinsi Sulawesi Tenggara",
+        "kode_ddn": "74",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 510,
+        "nama_daerah": "Provinsi Gorontalo",
+        "kode_ddn": "75",
+        "regional_id": 4
+    },
+    {
+        "id_daerah": 540,
+        "nama_daerah": "Provinsi Sulawesi Barat",
+        "kode_ddn": "76",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 384,
+        "nama_daerah": "Provinsi Maluku",
+        "kode_ddn": "81",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 482,
+        "nama_daerah": "Provinsi Maluku Utara",
+        "kode_ddn": "82",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 440,
+        "nama_daerah": "Provinsi Papua",
+        "kode_ddn": "91",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 528,
+        "nama_daerah": "Provinsi Papua Barat",
+        "kode_ddn": "92",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 588,
+        "nama_daerah": "Provinsi Papua Selatan",
+        "kode_ddn": "93",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 589,
+        "nama_daerah": "Provinsi Papua Tengah",
+        "kode_ddn": "94",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 590,
+        "nama_daerah": "Provinsi Papua Pegunungan",
+        "kode_ddn": "95",
+        "regional_id": 5
+    },
+    {
+        "id_daerah": 610,
+        "nama_daerah": "Provinsi Papua Barat Daya",
+        "kode_ddn": "96",
+        "regional_id": 5
+    }
+]

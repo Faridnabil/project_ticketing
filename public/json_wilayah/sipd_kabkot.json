@@ -1,0 +1,3561 @@
+[
+
+    {
+            "id_daerah": 119,
+            "kode_ddn": "11.01",
+            "kode_ddn_2": "1101",
+            "nama_daerah": "Kab. Aceh Selatan",
+            "logo": "logo_kab_aceh_selatan.png"
+        },
+        {
+            "id_daerah": 122,
+            "kode_ddn": "11.02",
+            "kode_ddn_2": "1102",
+            "nama_daerah": "Kab. Aceh Tenggara",
+            "logo": "logo_kab_aceh_tenggara.png"
+        },
+        {
+            "id_daerah": 123,
+            "kode_ddn": "11.03",
+            "kode_ddn_2": "1103",
+            "nama_daerah": "Kab. Aceh Timur",
+            "logo": "logo_kab_aceh_timur.png"
+        },
+        {
+            "id_daerah": 121,
+            "kode_ddn": "11.04",
+            "kode_ddn_2": "1104",
+            "nama_daerah": "Kab. Aceh Tengah",
+            "logo": "logo_kab_aceh_tengah.png"
+        },
+        {
+            "id_daerah": 117,
+            "kode_ddn": "11.05",
+            "kode_ddn_2": "1105",
+            "nama_daerah": "Kab. Aceh Barat",
+            "logo": "logo_kab_aceh_barat.png"
+        },
+        {
+            "id_daerah": 118,
+            "kode_ddn": "11.06",
+            "kode_ddn_2": "1106",
+            "nama_daerah": "Kab. Aceh Besar",
+            "logo": "logo_kab_aceh_besar.png"
+        },
+        {
+            "id_daerah": 126,
+            "kode_ddn": "11.07",
+            "kode_ddn_2": "1107",
+            "nama_daerah": "Kab. Pidie",
+            "logo": "logo_kab_pidie.png"
+        },
+        {
+            "id_daerah": 124,
+            "kode_ddn": "11.08",
+            "kode_ddn_2": "1108",
+            "nama_daerah": "Kab. Aceh Utara",
+            "logo": "logo_kab_aceh_utara.png"
+        },
+        {
+            "id_daerah": 127,
+            "kode_ddn": "11.09",
+            "kode_ddn_2": "1109",
+            "nama_daerah": "Kab. Simeulue",
+            "logo": "logo_kab_simeulue.png"
+        },
+        {
+            "id_daerah": 120,
+            "kode_ddn": "11.10",
+            "kode_ddn_2": "1110",
+            "nama_daerah": "Kab. Aceh Singkil",
+            "logo": "logo_kab_aceh_singkil.png"
+        },
+        {
+            "id_daerah": 125,
+            "kode_ddn": "11.11",
+            "kode_ddn_2": "1111",
+            "nama_daerah": "Kab. Bireuen",
+            "logo": "logo_kab_bireuen.png"
+        },
+        {
+            "id_daerah": 134,
+            "kode_ddn": "11.12",
+            "kode_ddn_2": "1112",
+            "nama_daerah": "Kab. Aceh Barat Daya",
+            "logo": "logo_kab_aceh_barat_daya.png"
+        },
+        {
+            "id_daerah": 135,
+            "kode_ddn": "11.13",
+            "kode_ddn_2": "1113",
+            "nama_daerah": "Kab. Gayo Lues",
+            "logo": "logo_kab_gayo_lues.png"
+        },
+        {
+            "id_daerah": 133,
+            "kode_ddn": "11.14",
+            "kode_ddn_2": "1114",
+            "nama_daerah": "Kab. Aceh Jaya",
+            "logo": "logo_kab_aceh_jaya.png"
+        },
+        {
+            "id_daerah": 132,
+            "kode_ddn": "11.15",
+            "kode_ddn_2": "1115",
+            "nama_daerah": "Kab. Nagan Raya",
+            "logo": "logo_kab_nagan_raya.png"
+        },
+        {
+            "id_daerah": 136,
+            "kode_ddn": "11.16",
+            "kode_ddn_2": "1116",
+            "nama_daerah": "Kab. Aceh Tamiang",
+            "logo": "logo_kab_aceh_tamiang.png"
+        },
+        {
+            "id_daerah": 137,
+            "kode_ddn": "11.17",
+            "kode_ddn_2": "1117",
+            "nama_daerah": "Kab. Bener Meriah",
+            "logo": "logo_kab_bener_meriah.png"
+        },
+        {
+            "id_daerah": 139,
+            "kode_ddn": "11.18",
+            "kode_ddn_2": "1118",
+            "nama_daerah": "Kab. Pidie Jaya",
+            "logo": "logo_kab_pidie_jaya.png"
+        },
+        {
+            "id_daerah": 128,
+            "kode_ddn": "11.71",
+            "kode_ddn_2": "1171",
+            "nama_daerah": "Kota Banda Aceh",
+            "logo": "logo_kota_banda_aceh.png"
+        },
+        {
+            "id_daerah": 129,
+            "kode_ddn": "11.72",
+            "kode_ddn_2": "1172",
+            "nama_daerah": "Kota Sabang",
+            "logo": "logo_kota_sabang.png"
+        },
+        {
+            "id_daerah": 131,
+            "kode_ddn": "11.73",
+            "kode_ddn_2": "1173",
+            "nama_daerah": "Kota Lhokseumawe",
+            "logo": "logo_kota_lhokseumawe.png"
+        },
+        {
+            "id_daerah": 130,
+            "kode_ddn": "11.74",
+            "kode_ddn_2": "1174",
+            "nama_daerah": "Kota Langsa",
+            "logo": "logo_kota_langsa.png"
+        },
+        {
+            "id_daerah": 138,
+            "kode_ddn": "11.75",
+            "kode_ddn_2": "1175",
+            "nama_daerah": "Kota Subulussalam",
+            "logo": "logo_kota_subulussalam.png"
+        },
+
+        {
+            "id_daerah": 152,
+            "kode_ddn": "12.01",
+            "kode_ddn_2": "1201",
+            "nama_daerah": "Kab. Tapanuli Tengah",
+            "logo": "logo_kab_tapanuli_tengah.png"
+        },
+        {
+            "id_daerah": 153,
+            "kode_ddn": "12.02",
+            "kode_ddn_2": "1202",
+            "nama_daerah": "Kab. Tapanuli Utara",
+            "logo": "logo_kab_tapanuli_utara.png"
+        },
+        {
+            "id_daerah": 151,
+            "kode_ddn": "12.03",
+            "kode_ddn_2": "1203",
+            "nama_daerah": "Kab. Tapanuli Selatan",
+            "logo": "logo_kab_tapanuli_selatan.png"
+        },
+        {
+            "id_daerah": 149,
+            "kode_ddn": "12.04",
+            "kode_ddn_2": "1204",
+            "nama_daerah": "Kab. Nias",
+            "logo": "logo_kab_nias.png"
+        },
+        {
+            "id_daerah": 147,
+            "kode_ddn": "12.05",
+            "kode_ddn_2": "1205",
+            "nama_daerah": "Kab. Langkat",
+            "logo": "logo_kab_langkat.png"
+        },
+        {
+            "id_daerah": 145,
+            "kode_ddn": "12.06",
+            "kode_ddn_2": "1206",
+            "nama_daerah": "Kab. Karo",
+            "logo": "logo_kab_karo.png"
+        },
+        {
+            "id_daerah": 144,
+            "kode_ddn": "12.07",
+            "kode_ddn_2": "1207",
+            "nama_daerah": "Kab. Deli Serdang",
+            "logo": "logo_kab_deli_serdang.png"
+        },
+        {
+            "id_daerah": 150,
+            "kode_ddn": "12.08",
+            "kode_ddn_2": "1208",
+            "nama_daerah": "Kab. Simalungun",
+            "logo": "logo_kab_simalungun.png"
+        },
+        {
+            "id_daerah": 142,
+            "kode_ddn": "12.09",
+            "kode_ddn_2": "1209",
+            "nama_daerah": "Kab. Asahan",
+            "logo": "logo_kab_asahan.png"
+        },
+        {
+            "id_daerah": 146,
+            "kode_ddn": "12.10",
+            "kode_ddn_2": "1210",
+            "nama_daerah": "Kab. Labuhanbatu",
+            "logo": "logo_kab_labuhanbatu.png"
+        },
+        {
+            "id_daerah": 143,
+            "kode_ddn": "12.11",
+            "kode_ddn_2": "1211",
+            "nama_daerah": "Kab. Dairi",
+            "logo": "logo_kab_dairi.png"
+        },
+        {
+            "id_daerah": 154,
+            "kode_ddn": "12.12",
+            "kode_ddn_2": "1212",
+            "nama_daerah": "Kab. Toba",
+            "logo": "logo_kab_toba_samosir.png"
+        },
+        {
+            "id_daerah": 148,
+            "kode_ddn": "12.13",
+            "kode_ddn_2": "1213",
+            "nama_daerah": "Kab. Mandailing Natal",
+            "logo": "logo_kab_mandailing_natal.png"
+        },
+        {
+            "id_daerah": 163,
+            "kode_ddn": "12.14",
+            "kode_ddn_2": "1214",
+            "nama_daerah": "Kab. Nias Selatan",
+            "logo": "logo_kab_nias_selatan.png"
+        },
+        {
+            "id_daerah": 162,
+            "kode_ddn": "12.15",
+            "kode_ddn_2": "1215",
+            "nama_daerah": "Kab. Pakpak Bharat",
+            "logo": "logo_kab_pakpak_bharat.png"
+        },
+        {
+            "id_daerah": 164,
+            "kode_ddn": "12.16",
+            "kode_ddn_2": "1216",
+            "nama_daerah": "Kab. Humbang Hasundutan",
+            "logo": "logo_kab_humbang_hasundutan.png"
+        },
+        {
+            "id_daerah": 166,
+            "kode_ddn": "12.17",
+            "kode_ddn_2": "1217",
+            "nama_daerah": "Kab. Samosir",
+            "logo": "logo_kab_samosir.png"
+        },
+        {
+            "id_daerah": 165,
+            "kode_ddn": "12.18",
+            "kode_ddn_2": "1218",
+            "nama_daerah": "Kab. Serdang Bedagai",
+            "logo": "logo_kab_serdang_bedagai.png"
+        },
+        {
+            "id_daerah": 167,
+            "kode_ddn": "12.19",
+            "kode_ddn_2": "1219",
+            "nama_daerah": "Kab. Batu Bara",
+            "logo": "logo_kab_batubara.png"
+        },
+        {
+            "id_daerah": 174,
+            "kode_ddn": "12.20",
+            "kode_ddn_2": "1220",
+            "nama_daerah": "Kab. Padang Lawas Utara",
+            "logo": "logo_kab_padang_lawas_utara.png"
+        },
+        {
+            "id_daerah": 173,
+            "kode_ddn": "12.21",
+            "kode_ddn_2": "1221",
+            "nama_daerah": "Kab. Padang Lawas",
+            "logo": "logo_kab_padang_lawas.png"
+        },
+        {
+            "id_daerah": 176,
+            "kode_ddn": "12.22",
+            "kode_ddn_2": "1222",
+            "nama_daerah": "Kab. Labuhanbatu Selatan",
+            "logo": "logo_kab_labuhanbatu_selatan.png"
+        },
+        {
+            "id_daerah": 175,
+            "kode_ddn": "12.23",
+            "kode_ddn_2": "1223",
+            "nama_daerah": "Kab. Labuhanbatu Utara",
+            "logo": "logo_kab_labuhanbatu_utara.png"
+        },
+        {
+            "id_daerah": 177,
+            "kode_ddn": "12.24",
+            "kode_ddn_2": "1224",
+            "nama_daerah": "Kab. Nias Utara",
+            "logo": "logo_kab_nias_utara.png"
+        },
+        {
+            "id_daerah": 178,
+            "kode_ddn": "12.25",
+            "kode_ddn_2": "1225",
+            "nama_daerah": "Kab. Nias Barat",
+            "logo": "logo_kab_nias_barat.png"
+        },
+        {
+            "id_daerah": 156,
+            "kode_ddn": "12.71",
+            "kode_ddn_2": "1271",
+            "nama_daerah": "Kota Medan",
+            "logo": "logo_kota_medan.png"
+        },
+        {
+            "id_daerah": 157,
+            "kode_ddn": "12.72",
+            "kode_ddn_2": "1272",
+            "nama_daerah": "Kota Pematangsiantar",
+            "logo": "logo_kota_pematangsiantar.png"
+        },
+        {
+            "id_daerah": 158,
+            "kode_ddn": "12.73",
+            "kode_ddn_2": "1273",
+            "nama_daerah": "Kota Sibolga",
+            "logo": "logo_kota_sibolga.png"
+        },
+        {
+            "id_daerah": 159,
+            "kode_ddn": "12.74",
+            "kode_ddn_2": "1274",
+            "nama_daerah": "Kota Tanjung Balai",
+            "logo": "logo_kota_tanjungbalai.png"
+        },
+        {
+            "id_daerah": 155,
+            "kode_ddn": "12.75",
+            "kode_ddn_2": "1275",
+            "nama_daerah": "Kota Binjai",
+            "logo": "logo_kota_binjai.png"
+        },
+        {
+            "id_daerah": 160,
+            "kode_ddn": "12.76",
+            "kode_ddn_2": "1276",
+            "nama_daerah": "Kota Tebing Tinggi",
+            "logo": "logo_kota_tebing_tinggi.png"
+        },
+        {
+            "id_daerah": 161,
+            "kode_ddn": "12.77",
+            "kode_ddn_2": "1277",
+            "nama_daerah": "Kota Padangsidempuan",
+            "logo": "logo_kota_padangsidempuan.png"
+        },
+        {
+            "id_daerah": 179,
+            "kode_ddn": "12.78",
+            "kode_ddn_2": "1278",
+            "nama_daerah": "Kota Gunungsitoli",
+            "logo": "logo_kota_Gunungsitoli.png"
+        },
+        {
+            "id_daerah": 186,
+            "kode_ddn": "13.01",
+            "kode_ddn_2": "1301",
+            "nama_daerah": "Kab. Pesisir Selatan",
+            "logo": "logo_kab_pesisir_selatan.png"
+        },
+        {
+            "id_daerah": 188,
+            "kode_ddn": "13.02",
+            "kode_ddn_2": "1302",
+            "nama_daerah": "Kab. Solok",
+            "logo": "logo_kab_solok.png"
+        },
+        {
+            "id_daerah": 187,
+            "kode_ddn": "13.03",
+            "kode_ddn_2": "1303",
+            "nama_daerah": "Kab. Sijunjung",
+            "logo": "logo_kab_sijunjung.png"
+        },
+        {
+            "id_daerah": 189,
+            "kode_ddn": "13.04",
+            "kode_ddn_2": "1304",
+            "nama_daerah": "Kab. Tanah Datar",
+            "logo": "logo_kab_tanah_datar.png"
+        },
+        {
+            "id_daerah": 184,
+            "kode_ddn": "13.05",
+            "kode_ddn_2": "1305",
+            "nama_daerah": "Kab. Padang Pariaman",
+            "logo": "logo_kab_padang_pariaman.png"
+        },
+        {
+            "id_daerah": 182,
+            "kode_ddn": "13.06",
+            "kode_ddn_2": "1306",
+            "nama_daerah": "Kab. Agam",
+            "logo": "logo_kab_agam.png"
+        },
+        {
+            "id_daerah": 181,
+            "kode_ddn": "13.07",
+            "kode_ddn_2": "1307",
+            "nama_daerah": "Kab. Lima Puluh Kota",
+            "logo": "logo_kab_lima_puluh_kota.png"
+        },
+        {
+            "id_daerah": 185,
+            "kode_ddn": "13.08",
+            "kode_ddn_2": "1308",
+            "nama_daerah": "Kab. Pasaman",
+            "logo": "logo_kab_pasaman.png"
+        },
+        {
+            "id_daerah": 183,
+            "kode_ddn": "13.09",
+            "kode_ddn_2": "1309",
+            "nama_daerah": "Kab. Kepulauan Mentawai",
+            "logo": "logo_kab_kepulauan_mentawai.png"
+        },
+        {
+            "id_daerah": 198,
+            "kode_ddn": "13.10",
+            "kode_ddn_2": "1310",
+            "nama_daerah": "Kab. Dharmasraya",
+            "logo": "logo_kab_dharmasraya.png"
+        },
+        {
+            "id_daerah": 199,
+            "kode_ddn": "13.11",
+            "kode_ddn_2": "1311",
+            "nama_daerah": "Kab. Solok Selatan",
+            "logo": "logo_kab_solok_selatan.png"
+        },
+        {
+            "id_daerah": 197,
+            "kode_ddn": "13.12",
+            "kode_ddn_2": "1312",
+            "nama_daerah": "Kab. Pasaman Barat",
+            "logo": "logo_kab_pasaman_barat.png"
+        },
+        {
+            "id_daerah": 192,
+            "kode_ddn": "13.71",
+            "kode_ddn_2": "1371",
+            "nama_daerah": "Kota Padang",
+            "logo": "logo_kota_padang.png"
+        },
+        {
+            "id_daerah": 195,
+            "kode_ddn": "13.72",
+            "kode_ddn_2": "1372",
+            "nama_daerah": "Kota Solok",
+            "logo": "logo_kota_solok.png"
+        },
+        {
+            "id_daerah": 194,
+            "kode_ddn": "13.73",
+            "kode_ddn_2": "1373",
+            "nama_daerah": "Kota Sawahlunto",
+            "logo": "logo_kota_sawahlunto.png"
+        },
+        {
+            "id_daerah": 191,
+            "kode_ddn": "13.74",
+            "kode_ddn_2": "1374",
+            "nama_daerah": "Kota Padang Panjang",
+            "logo": "logo_kota_padang_panjang.png"
+        },
+        {
+            "id_daerah": 190,
+            "kode_ddn": "13.75",
+            "kode_ddn_2": "1375",
+            "nama_daerah": "Kota Bukittinggi",
+            "logo": "logo_kota_bukit_tinggi.png"
+        },
+        {
+            "id_daerah": 193,
+            "kode_ddn": "13.76",
+            "kode_ddn_2": "1376",
+            "nama_daerah": "Kota Payakumbuh",
+            "logo": "logo_kota_payakumbuh.png"
+        },
+        {
+            "id_daerah": 196,
+            "kode_ddn": "13.77",
+            "kode_ddn_2": "1377",
+            "nama_daerah": "Kota Pariaman",
+            "logo": "logo_kota_pariaman.png"
+        },
+        {
+            "id_daerah": 206,
+            "kode_ddn": "14.01",
+            "kode_ddn_2": "1401",
+            "nama_daerah": "Kab. Kampar",
+            "logo": "logo_kab_kampar.png"
+        },
+        {
+            "id_daerah": 205,
+            "kode_ddn": "14.02",
+            "kode_ddn_2": "1402",
+            "nama_daerah": "Kab. Indragiri Hulu",
+            "logo": "logo_kab_indragiri_hulu.png"
+        },
+        {
+            "id_daerah": 203,
+            "kode_ddn": "14.03",
+            "kode_ddn_2": "1403",
+            "nama_daerah": "Kab. Bengkalis",
+            "logo": "logo_kab_bengkalis.png"
+        },
+        {
+            "id_daerah": 204,
+            "kode_ddn": "14.04",
+            "kode_ddn_2": "1404",
+            "nama_daerah": "Kab. Indragiri Hilir",
+            "logo": "logo_kab_indragiri_hilir.png"
+        },
+        {
+            "id_daerah": 208,
+            "kode_ddn": "14.05",
+            "kode_ddn_2": "1405",
+            "nama_daerah": "Kab. Pelalawan",
+            "logo": "logo_kab_pelalawan.png"
+        },
+        {
+            "id_daerah": 210,
+            "kode_ddn": "14.06",
+            "kode_ddn_2": "1406",
+            "nama_daerah": "Kab. Rokan Hulu",
+            "logo": "logo_kab_rokan_hulu.png"
+        },
+        {
+            "id_daerah": 209,
+            "kode_ddn": "14.07",
+            "kode_ddn_2": "1407",
+            "nama_daerah": "Kab. Rokan Hilir",
+            "logo": "logo_kab_rokan_hilir.png"
+        },
+        {
+            "id_daerah": 211,
+            "kode_ddn": "14.08",
+            "kode_ddn_2": "1408",
+            "nama_daerah": "Kab. Siak",
+            "logo": "logo_kab_siak.png"
+        },
+        {
+            "id_daerah": 207,
+            "kode_ddn": "14.09",
+            "kode_ddn_2": "1409",
+            "nama_daerah": "Kab. Kuantan Singingi",
+            "logo": "logo_kab_kuantan_singingi.png"
+        },
+        {
+            "id_daerah": 215,
+            "kode_ddn": "14.10",
+            "kode_ddn_2": "1410",
+            "nama_daerah": "Kab. Kepulauan Meranti",
+            "logo": "logo_kab_kepulauan_meranti.png"
+        },
+        {
+            "id_daerah": 213,
+            "kode_ddn": "14.71",
+            "kode_ddn_2": "1471",
+            "nama_daerah": "Kota Pekanbaru",
+            "logo": "logo_kota_pekanbaru.png"
+        },
+        {
+            "id_daerah": 212,
+            "kode_ddn": "14.72",
+            "kode_ddn_2": "1472",
+            "nama_daerah": "Kota Dumai",
+            "logo": "logo_kota_dumai.png"
+        },
+        {
+            "id_daerah": 219,
+            "kode_ddn": "15.01",
+            "kode_ddn_2": "1501",
+            "nama_daerah": "Kab. Kerinci",
+            "logo": "logo_kab_kerinci.png"
+        },
+        {
+            "id_daerah": 220,
+            "kode_ddn": "15.02",
+            "kode_ddn_2": "1502",
+            "nama_daerah": "Kab. Merangin",
+            "logo": "logo_kab_merangin.png"
+        },
+        {
+            "id_daerah": 222,
+            "kode_ddn": "15.03",
+            "kode_ddn_2": "1503",
+            "nama_daerah": "Kab. Sarolangun",
+            "logo": "logo_kab_sarolangun.png"
+        },
+        {
+            "id_daerah": 217,
+            "kode_ddn": "15.04",
+            "kode_ddn_2": "1504",
+            "nama_daerah": "Kab. Batanghari",
+            "logo": "logo_kab_batang_hari.png"
+        },
+        {
+            "id_daerah": 221,
+            "kode_ddn": "15.05",
+            "kode_ddn_2": "1505",
+            "nama_daerah": "Kab. Muaro Jambi",
+            "logo": "logo_kab_muaro_jambi.png"
+        },
+        {
+            "id_daerah": 223,
+            "kode_ddn": "15.06",
+            "kode_ddn_2": "1506",
+            "nama_daerah": "Kab. Tanjung Jabung Barat",
+            "logo": "logo_kab_tanjung_jabung_barat.png"
+        },
+        {
+            "id_daerah": 224,
+            "kode_ddn": "15.07",
+            "kode_ddn_2": "1507",
+            "nama_daerah": "Kab. Tanjung Jabung Timur",
+            "logo": "logo_kab_tanjung_jabung_timur.png"
+        },
+        {
+            "id_daerah": 218,
+            "kode_ddn": "15.08",
+            "kode_ddn_2": "1508",
+            "nama_daerah": "Kab. Bungo",
+            "logo": "logo_kab_bungo.png"
+        },
+        {
+            "id_daerah": 225,
+            "kode_ddn": "15.09",
+            "kode_ddn_2": "1509",
+            "nama_daerah": "Kab. Tebo",
+            "logo": "logo_kab_tebo.png"
+        },
+        {
+            "id_daerah": 226,
+            "kode_ddn": "15.71",
+            "kode_ddn_2": "1571",
+            "nama_daerah": "Kota Jambi",
+            "logo": "logo_kota_jambi.png"
+        },
+        {
+            "id_daerah": 228,
+            "kode_ddn": "15.72",
+            "kode_ddn_2": "1572",
+            "nama_daerah": "Kota Sungai Penuh",
+            "logo": "logo_kota_sungai_penuh.png"
+        },
+        {
+            "id_daerah": 235,
+            "kode_ddn": "16.01",
+            "kode_ddn_2": "1601",
+            "nama_daerah": "Kab. Ogan Komering Ulu",
+            "logo": "logo_kab_ogan_komering_ulu.png"
+        },
+        {
+            "id_daerah": 234,
+            "kode_ddn": "16.02",
+            "kode_ddn_2": "1602",
+            "nama_daerah": "Kab. Ogan Komering Ilir",
+            "logo": "logo_kab_ogan_komering_ilir.png"
+        },
+        {
+            "id_daerah": 233,
+            "kode_ddn": "16.03",
+            "kode_ddn_2": "1603",
+            "nama_daerah": "Kab. Muara Enim",
+            "logo": "logo_kab_muara_enim.png"
+        },
+        {
+            "id_daerah": 230,
+            "kode_ddn": "16.04",
+            "kode_ddn_2": "1604",
+            "nama_daerah": "Kab. Lahat",
+            "logo": "logo_kab_lahat.png"
+        },
+        {
+            "id_daerah": 232,
+            "kode_ddn": "16.05",
+            "kode_ddn_2": "1605",
+            "nama_daerah": "Kab. Musi Rawas",
+            "logo": "logo_kab_musi_rawas.png"
+        },
+        {
+            "id_daerah": 231,
+            "kode_ddn": "16.06",
+            "kode_ddn_2": "1606",
+            "nama_daerah": "Kab. Musi Banyuasin",
+            "logo": "logo_kab_musi_banyuasin.png"
+        },
+        {
+            "id_daerah": 240,
+            "kode_ddn": "16.07",
+            "kode_ddn_2": "1607",
+            "nama_daerah": "Kab. Banyuasin",
+            "logo": "logo_kab_banyuasin.png"
+        },
+        {
+            "id_daerah": 242,
+            "kode_ddn": "16.08",
+            "kode_ddn_2": "1608",
+            "nama_daerah": "Kab. Ogan Komering Ulu Timur",
+            "logo": "logo_kab_ogan_komering_ulu_timur.png"
+        },
+        {
+            "id_daerah": 243,
+            "kode_ddn": "16.09",
+            "kode_ddn_2": "1609",
+            "nama_daerah": "Kab. Ogan Komering Ulu Selatan",
+            "logo": "logo_kab_ogan_komering_ulu_selatan.png"
+        },
+        {
+            "id_daerah": 241,
+            "kode_ddn": "16.10",
+            "kode_ddn_2": "1610",
+            "nama_daerah": "Kab. Ogan Ilir",
+            "logo": "logo_kab_ogan_ilir.png"
+        },
+        {
+            "id_daerah": 244,
+            "kode_ddn": "16.11",
+            "kode_ddn_2": "1611",
+            "nama_daerah": "Kab. Empat Lawang",
+            "logo": "logo_kab_empat_lawang.png"
+        },
+        {
+            "id_daerah": 570,
+            "kode_ddn": "16.12",
+            "kode_ddn_2": "1612",
+            "nama_daerah": "Kab. Penukal Abab Lematang Ilir",
+            "logo": "logo_kab_penukal_abab_lematang_ilir.png"
+        },
+        {
+            "id_daerah": 569,
+            "kode_ddn": "16.13",
+            "kode_ddn_2": "1613",
+            "nama_daerah": "Kab. Musi Rawas Utara",
+            "logo": "logo_kab_musi_rawas_utara.png"
+        },
+        {
+            "id_daerah": 236,
+            "kode_ddn": "16.71",
+            "kode_ddn_2": "1671",
+            "nama_daerah": "Kota Palembang",
+            "logo": "logo_kota_palembang.png"
+        },
+        {
+            "id_daerah": 237,
+            "kode_ddn": "16.72",
+            "kode_ddn_2": "1672",
+            "nama_daerah": "Kota Pagar Alam",
+            "logo": "logo_kota_pagar_alam.png"
+        },
+        {
+            "id_daerah": 238,
+            "kode_ddn": "16.73",
+            "kode_ddn_2": "1673",
+            "nama_daerah": "Kota Lubuk Linggau",
+            "logo": "logo_kota_lubuklinggau.png"
+        },
+        {
+            "id_daerah": 239,
+            "kode_ddn": "16.74",
+            "kode_ddn_2": "1674",
+            "nama_daerah": "Kota Prabumulih",
+            "logo": "logo_kota_prabumulih.png"
+        },
+        {
+            "id_daerah": 472,
+            "kode_ddn": "17.01",
+            "kode_ddn_2": "1701",
+            "nama_daerah": "Kab. Bengkulu Selatan",
+            "logo": "logo_kab_bengkulu_selatan.png"
+        },
+        {
+            "id_daerah": 474,
+            "kode_ddn": "17.02",
+            "kode_ddn_2": "1702",
+            "nama_daerah": "Kab. Rejang Lebong",
+            "logo": "logo_kab_rejang_lebong.png"
+        },
+        {
+            "id_daerah": 473,
+            "kode_ddn": "17.03",
+            "kode_ddn_2": "1703",
+            "nama_daerah": "Kab. Bengkulu Utara",
+            "logo": "logo_kab_bengkulu_utara.png"
+        },
+        {
+            "id_daerah": 476,
+            "kode_ddn": "17.04",
+            "kode_ddn_2": "1704",
+            "nama_daerah": "Kab. Kaur",
+            "logo": "logo_kab_kaur.png"
+        },
+        {
+            "id_daerah": 477,
+            "kode_ddn": "17.05",
+            "kode_ddn_2": "1705",
+            "nama_daerah": "Kab. Seluma",
+            "logo": "logo_kab_seluma.png"
+        },
+        {
+            "id_daerah": 478,
+            "kode_ddn": "17.06",
+            "kode_ddn_2": "1706",
+            "nama_daerah": "Kab. Muko Muko",
+            "logo": "logo_kab_mukomuko.png"
+        },
+        {
+            "id_daerah": 479,
+            "kode_ddn": "17.07",
+            "kode_ddn_2": "1707",
+            "nama_daerah": "Kab. Lebong",
+            "logo": "logo_kab_lebong.png"
+        },
+        {
+            "id_daerah": 480,
+            "kode_ddn": "17.08",
+            "kode_ddn_2": "1708",
+            "nama_daerah": "Kab. Kepahiang",
+            "logo": "logo_kab_kepahiang.png"
+        },
+        {
+            "id_daerah": 481,
+            "kode_ddn": "17.09",
+            "kode_ddn_2": "1709",
+            "nama_daerah": "Kab. Bengkulu Tengah",
+            "logo": "logo_kab_bengkulu_tengah.png"
+        },
+        {
+            "id_daerah": 475,
+            "kode_ddn": "17.71",
+            "kode_ddn_2": "1771",
+            "nama_daerah": "Kota Bengkulu",
+            "logo": "logo_kota_bengkulu.png"
+        },
+         {
+            "id_daerah": 248,
+            "kode_ddn": "18.01",
+            "kode_ddn_2": "1801",
+            "nama_daerah": "Kab. Lampung Selatan",
+            "logo": "logo_kab_lampung_selatan.png"
+        },
+        {
+            "id_daerah": 249,
+            "kode_ddn": "18.02",
+            "kode_ddn_2": "1802",
+            "nama_daerah": "Kab. Lampung Tengah",
+            "logo": "logo_kab_lampung_tengah.png"
+        },
+        {
+            "id_daerah": 250,
+            "kode_ddn": "18.03",
+            "kode_ddn_2": "1803",
+            "nama_daerah": "Kab. Lampung Utara",
+            "logo": "logo_kab_lampung_utara.png"
+        },
+        {
+            "id_daerah": 247,
+            "kode_ddn": "18.04",
+            "kode_ddn_2": "1804",
+            "nama_daerah": "Kab. Lampung Barat",
+            "logo": "logo_kab_lampung_barat.png"
+        },
+        {
+            "id_daerah": 253,
+            "kode_ddn": "18.05",
+            "kode_ddn_2": "1805",
+            "nama_daerah": "Kab. Tulang Bawang",
+            "logo": "logo_kab_tulang_bawang.png"
+        },
+        {
+            "id_daerah": 252,
+            "kode_ddn": "18.06",
+            "kode_ddn_2": "1806",
+            "nama_daerah": "Kab. Tanggamus",
+            "logo": "logo_kab_tanggamus.png"
+        },
+        {
+            "id_daerah": 251,
+            "kode_ddn": "18.07",
+            "kode_ddn_2": "1807",
+            "nama_daerah": "Kab. Lampung Timur",
+            "logo": "logo_kab_lampung_timur.png"
+        },
+        {
+            "id_daerah": 254,
+            "kode_ddn": "18.08",
+            "kode_ddn_2": "1808",
+            "nama_daerah": "Kab. Way Kanan",
+            "logo": "logo_kab_way_kanan.png"
+        },
+        {
+            "id_daerah": 257,
+            "kode_ddn": "18.09",
+            "kode_ddn_2": "1809",
+            "nama_daerah": "Kab. Pesawaran",
+            "logo": "logo_kab_pesawaran.png"
+        },
+        {
+            "id_daerah": 258,
+            "kode_ddn": "18.10",
+            "kode_ddn_2": "1810",
+            "nama_daerah": "Kab. Pringsewu",
+            "logo": "logo_kab_pringsewu.png"
+        },
+        {
+            "id_daerah": 259,
+            "kode_ddn": "18.11",
+            "kode_ddn_2": "1811",
+            "nama_daerah": "Kab. Mesuji",
+            "logo": "logo_kab_mesuji.png"
+        },
+        {
+            "id_daerah": 260,
+            "kode_ddn": "18.12",
+            "kode_ddn_2": "1812",
+            "nama_daerah": "Kab. Tulang Bawang Barat",
+            "logo": "logo_kab_tulang_bawang_barat.png"
+        },
+        {
+            "id_daerah": 555,
+            "kode_ddn": "18.13",
+            "kode_ddn_2": "1813",
+            "nama_daerah": "Kab. Pesisir Barat",
+            "logo": "logo_kab_pesisir_barat.png"
+        },
+        {
+            "id_daerah": 255,
+            "kode_ddn": "18.71",
+            "kode_ddn_2": "1871",
+            "nama_daerah": "Kota Bandar Lampung",
+            "logo": "logo_kota_bandar_lampung.png"
+        },
+        {
+            "id_daerah": 256,
+            "kode_ddn": "18.72",
+            "kode_ddn_2": "1872",
+            "nama_daerah": "Kota Metro",
+            "logo": "logo_kota_metro.png"
+        },
+        {
+            "id_daerah": 502,
+            "kode_ddn": "19.01",
+            "kode_ddn_2": "1901",
+            "nama_daerah": "Kab. Bangka",
+            "logo": "logo_kab_bangka.png"
+        },
+        {
+            "id_daerah": 503,
+            "kode_ddn": "19.02",
+            "kode_ddn_2": "1902",
+            "nama_daerah": "Kab. Belitung",
+            "logo": "logo_kab_belitung.png"
+        },
+        {
+            "id_daerah": 505,
+            "kode_ddn": "19.03",
+            "kode_ddn_2": "1903",
+            "nama_daerah": "Kab. Bangka Selatan",
+            "logo": "logo_kab_bangka_selatan.png"
+        },
+        {
+            "id_daerah": 506,
+            "kode_ddn": "19.04",
+            "kode_ddn_2": "1904",
+            "nama_daerah": "Kab. Bangka Tengah",
+            "logo": "logo_kab_bangka_tengah.png"
+        },
+        {
+            "id_daerah": 507,
+            "kode_ddn": "19.05",
+            "kode_ddn_2": "1905",
+            "nama_daerah": "Kab. Bangka Barat",
+            "logo": "logo_kab_bangka_barat.png"
+        },
+        {
+            "id_daerah": 508,
+            "kode_ddn": "19.06",
+            "kode_ddn_2": "1906",
+            "nama_daerah": "Kab. Belitung Timur",
+            "logo": "logo_kab_belitung_timur.png"
+        },
+        {
+            "id_daerah": 504,
+            "kode_ddn": "19.71",
+            "kode_ddn_2": "1971",
+            "nama_daerah": "Kota Pangkal Pinang",
+            "logo": "logo_kota_pangkal_pinang.png"
+        },
+        {
+            "id_daerah": 520,
+            "kode_ddn": "21.01",
+            "kode_ddn_2": "2101",
+            "nama_daerah": "Kab. Bintan",
+            "logo": "logo_kab_bintan.png"
+        },
+        {
+            "id_daerah": 522,
+            "kode_ddn": "21.02",
+            "kode_ddn_2": "2102",
+            "nama_daerah": "Kab. Karimun",
+            "logo": "logo_kab_karimun.png"
+        },
+        {
+            "id_daerah": 521,
+            "kode_ddn": "21.03",
+            "kode_ddn_2": "2103",
+            "nama_daerah": "Kab. Natuna",
+            "logo": "logo_kab_natuna.png"
+        },
+        {
+            "id_daerah": 525,
+            "kode_ddn": "21.04",
+            "kode_ddn_2": "2104",
+            "nama_daerah": "Kab. Lingga",
+            "logo": "logo_kab_lingga.png"
+        },
+        {
+            "id_daerah": 527,
+            "kode_ddn": "21.05",
+            "kode_ddn_2": "2105",
+            "nama_daerah": "Kab. Kepulauan Anambas",
+            "logo": "logo_kab_kepulauan_anambas.png"
+        },
+        {
+            "id_daerah": 523,
+            "kode_ddn": "21.71",
+            "kode_ddn_2": "2171",
+            "nama_daerah": "Kota Batam",
+            "logo": "logo_kota_batam.png"
+        },
+        {
+            "id_daerah": 524,
+            "kode_ddn": "21.72",
+            "kode_ddn_2": "2172",
+            "nama_daerah": "Kota Tanjung Pinang",
+            "logo": "logo_kota_tanjungpinang.png"
+        },
+        {
+            "id_daerah": 11,
+            "kode_ddn": "32.01",
+            "kode_ddn_2": "3201",
+            "nama_daerah": "Kab. Bogor",
+            "logo": "logo_kab_bogor.png"
+        },
+        {
+            "id_daerah": 22,
+            "kode_ddn": "32.02",
+            "kode_ddn_2": "3202",
+            "nama_daerah": "Kab. Sukabumi",
+            "logo": "logo_kab_sukabumi.png"
+        },
+        {
+            "id_daerah": 13,
+            "kode_ddn": "32.03",
+            "kode_ddn_2": "3203",
+            "nama_daerah": "Kab. Cianjur",
+            "logo": "logo_kab_cianjur.png"
+        },
+        {
+            "id_daerah": 9,
+            "kode_ddn": "32.04",
+            "kode_ddn_2": "3204",
+            "nama_daerah": "Kab. Bandung",
+            "logo": "logo_kab_bandung.png"
+        },
+        {
+            "id_daerah": 15,
+            "kode_ddn": "32.05",
+            "kode_ddn_2": "3205",
+            "nama_daerah": "Kab. Garut",
+            "logo": "logo_kab_garut.png"
+        },
+        {
+            "id_daerah": 24,
+            "kode_ddn": "32.06",
+            "kode_ddn_2": "3206",
+            "nama_daerah": "Kab. Tasikmalaya",
+            "logo": "logo_kab_tasikmalaya.png"
+        },
+        {
+            "id_daerah": 12,
+            "kode_ddn": "32.07",
+            "kode_ddn_2": "3207",
+            "nama_daerah": "Kab. Ciamis",
+            "logo": "logo_kab_ciamis.png"
+        },
+        {
+            "id_daerah": 18,
+            "kode_ddn": "32.08",
+            "kode_ddn_2": "3208",
+            "nama_daerah": "Kab. Kuningan",
+            "logo": "logo_kab_kuningan.png"
+        },
+        {
+            "id_daerah": 14,
+            "kode_ddn": "32.09",
+            "kode_ddn_2": "3209",
+            "nama_daerah": "Kab. Cirebon",
+            "logo": "logo_kab_cirebon.png"
+        },
+        {
+            "id_daerah": 19,
+            "kode_ddn": "32.10",
+            "kode_ddn_2": "3210",
+            "nama_daerah": "Kab. Majalengka",
+            "logo": "logo_kab_majalengka.png"
+        },
+        {
+            "id_daerah": 23,
+            "kode_ddn": "32.11",
+            "kode_ddn_2": "3211",
+            "nama_daerah": "Kab. Sumedang",
+            "logo": "logo_kab_sumedang.png"
+        },
+        {
+            "id_daerah": 16,
+            "kode_ddn": "32.12",
+            "kode_ddn_2": "3212",
+            "nama_daerah": "Kab. Indramayu",
+            "logo": "logo_kab_indramayu.png"
+        },
+        {
+            "id_daerah": 21,
+            "kode_ddn": "32.13",
+            "kode_ddn_2": "3213",
+            "nama_daerah": "Kab. Subang",
+            "logo": "logo_kab_subang.png"
+        },
+        {
+            "id_daerah": 20,
+            "kode_ddn": "32.14",
+            "kode_ddn_2": "3214",
+            "nama_daerah": "Kab. Purwakarta",
+            "logo": "logo_kab_purwakarta.png"
+        },
+        {
+            "id_daerah": 17,
+            "kode_ddn": "32.15",
+            "kode_ddn_2": "3215",
+            "nama_daerah": "Kab. Karawang",
+            "logo": "logo_kab_karawang.png"
+        },
+        {
+            "id_daerah": 10,
+            "kode_ddn": "32.16",
+            "kode_ddn_2": "3216",
+            "nama_daerah": "Kab. Bekasi",
+            "logo": "logo_kab_bekasi.png"
+        },
+        {
+            "id_daerah": 34,
+            "kode_ddn": "32.17",
+            "kode_ddn_2": "3217",
+            "nama_daerah": "Kab. Bandung Barat",
+            "logo": "logo_kab_bandung_barat.png"
+        },
+        {
+            "id_daerah": 552,
+            "kode_ddn": "32.18",
+            "kode_ddn_2": "3218",
+            "nama_daerah": "Kab. Pangandaran",
+            "logo": "logo_kab_pangandaran.png"
+        },
+        {
+            "id_daerah": 27,
+            "kode_ddn": "32.71",
+            "kode_ddn_2": "3271",
+            "nama_daerah": "Kota Bogor",
+            "logo": "logo_kota_bogor.png"
+        },
+        {
+            "id_daerah": 30,
+            "kode_ddn": "32.72",
+            "kode_ddn_2": "3272",
+            "nama_daerah": "Kota Sukabumi",
+            "logo": "logo_kota_sukabumi.png"
+        },
+        {
+            "id_daerah": 25,
+            "kode_ddn": "32.73",
+            "kode_ddn_2": "3273",
+            "nama_daerah": "Kota Bandung",
+            "logo": "logo_kota_bandung.png"
+        },
+        {
+            "id_daerah": 28,
+            "kode_ddn": "32.74",
+            "kode_ddn_2": "3274",
+            "nama_daerah": "Kota Cirebon",
+            "logo": "logo_kota_cirebon.png"
+        },
+        {
+            "id_daerah": 26,
+            "kode_ddn": "32.75",
+            "kode_ddn_2": "3275",
+            "nama_daerah": "Kota Bekasi",
+            "logo": "logo_kota_bekasi.png"
+        },
+        {
+            "id_daerah": 29,
+            "kode_ddn": "32.76",
+            "kode_ddn_2": "3276",
+            "nama_daerah": "Kota Depok",
+            "logo": "logo_kota_depok.png"
+        },
+        {
+            "id_daerah": 31,
+            "kode_ddn": "32.77",
+            "kode_ddn_2": "3277",
+            "nama_daerah": "Kota Cimahi",
+            "logo": "logo_kota_cimahi.png"
+        },
+        {
+            "id_daerah": 32,
+            "kode_ddn": "32.78",
+            "kode_ddn_2": "3278",
+            "nama_daerah": "Kota Tasikmalaya",
+            "logo": "logo_kota_tasikmalaya.png"
+        },
+        {
+            "id_daerah": 33,
+            "kode_ddn": "32.79",
+            "kode_ddn_2": "3279",
+            "nama_daerah": "Kota Banjar",
+            "logo": "logo_kota_banjar.png"
+        },
+        {
+            "id_daerah": 42,
+            "kode_ddn": "33.01",
+            "kode_ddn_2": "3301",
+            "nama_daerah": "Kab. Cilacap",
+            "logo": "logo_kab_cilacap.png"
+        },
+        {
+            "id_daerah": 37,
+            "kode_ddn": "33.02",
+            "kode_ddn_2": "3302",
+            "nama_daerah": "Kab. Banyumas",
+            "logo": "logo_kab_banyumas.png"
+        },
+        {
+            "id_daerah": 55,
+            "kode_ddn": "33.03",
+            "kode_ddn_2": "3303",
+            "nama_daerah": "Kab. Purbalingga",
+            "logo": "logo_kab_purbalingga.png"
+        },
+        {
+            "id_daerah": 36,
+            "kode_ddn": "33.04",
+            "kode_ddn_2": "3304",
+            "nama_daerah": "Kab. Banjarnegara",
+            "logo": "logo_kab_banjarnegara.png"
+        },
+        {
+            "id_daerah": 47,
+            "kode_ddn": "33.05",
+            "kode_ddn_2": "3305",
+            "nama_daerah": "Kab. Kebumen",
+            "logo": "logo_kab_kebumen.png"
+        },
+        {
+            "id_daerah": 56,
+            "kode_ddn": "33.06",
+            "kode_ddn_2": "3306",
+            "nama_daerah": "Kab. Purworejo",
+            "logo": "logo_kab_purworejo.png"
+        },
+        {
+            "id_daerah": 64,
+            "kode_ddn": "33.07",
+            "kode_ddn_2": "3307",
+            "nama_daerah": "Kab. Wonosobo",
+            "logo": "logo_kab_wonosobo.png"
+        },
+        {
+            "id_daerah": 51,
+            "kode_ddn": "33.08",
+            "kode_ddn_2": "3308",
+            "nama_daerah": "Kab. Magelang",
+            "logo": "logo_kab_magelang.png"
+        },
+        {
+            "id_daerah": 40,
+            "kode_ddn": "33.09",
+            "kode_ddn_2": "3309",
+            "nama_daerah": "Kab. Boyolali",
+            "logo": "logo_kab_boyolali.png"
+        },
+        {
+            "id_daerah": 49,
+            "kode_ddn": "33.10",
+            "kode_ddn_2": "3310",
+            "nama_daerah": "Kab. Klaten",
+            "logo": "logo_kab_klaten.png"
+        },
+        {
+            "id_daerah": 60,
+            "kode_ddn": "33.11",
+            "kode_ddn_2": "3311",
+            "nama_daerah": "Kab. Sukoharjo",
+            "logo": "logo_kab_sukoharjo.png"
+        },
+        {
+            "id_daerah": 63,
+            "kode_ddn": "33.12",
+            "kode_ddn_2": "3312",
+            "nama_daerah": "Kab. Wonogiri",
+            "logo": "logo_kab_wonogiri.png"
+        },
+        {
+            "id_daerah": 46,
+            "kode_ddn": "33.13",
+            "kode_ddn_2": "3313",
+            "nama_daerah": "Kab. Karanganyar",
+            "logo": "logo_kab_karanganyar.png"
+        },
+        {
+            "id_daerah": 59,
+            "kode_ddn": "33.14",
+            "kode_ddn_2": "3314",
+            "nama_daerah": "Kab. Sragen",
+            "logo": "logo_kab_sragen.png"
+        },
+        {
+            "id_daerah": 44,
+            "kode_ddn": "33.15",
+            "kode_ddn_2": "3315",
+            "nama_daerah": "Kab. Grobogan",
+            "logo": "logo_kab_grobogan.png"
+        },
+        {
+            "id_daerah": 39,
+            "kode_ddn": "33.16",
+            "kode_ddn_2": "3316",
+            "nama_daerah": "Kab. Blora",
+            "logo": "logo_kab_blora.png"
+        },
+        {
+            "id_daerah": 57,
+            "kode_ddn": "33.17",
+            "kode_ddn_2": "3317",
+            "nama_daerah": "Kab. Rembang",
+            "logo": "logo_kab_rembang.png"
+        },
+        {
+            "id_daerah": 52,
+            "kode_ddn": "33.18",
+            "kode_ddn_2": "3318",
+            "nama_daerah": "Kab. Pati",
+            "logo": "logo_kab_pati.png"
+        },
+        {
+            "id_daerah": 50,
+            "kode_ddn": "33.19",
+            "kode_ddn_2": "3319",
+            "nama_daerah": "Kab. Kudus",
+            "logo": "logo_kab_kudus.png"
+        },
+        {
+            "id_daerah": 45,
+            "kode_ddn": "33.20",
+            "kode_ddn_2": "3320",
+            "nama_daerah": "Kab. Jepara",
+            "logo": "logo_kab_jepara.png"
+        },
+        {
+            "id_daerah": 43,
+            "kode_ddn": "33.21",
+            "kode_ddn_2": "3321",
+            "nama_daerah": "Kab. Demak",
+            "logo": "logo_kab_demak.png"
+        },
+        {
+            "id_daerah": 58,
+            "kode_ddn": "33.22",
+            "kode_ddn_2": "3322",
+            "nama_daerah": "Kab. Semarang",
+            "logo": "logo_kab_semarang.png"
+        },
+        {
+            "id_daerah": 62,
+            "kode_ddn": "33.23",
+            "kode_ddn_2": "3323",
+            "nama_daerah": "Kab. Temanggung",
+            "logo": "logo_kab_temanggung.png"
+        },
+        {
+            "id_daerah": 48,
+            "kode_ddn": "33.24",
+            "kode_ddn_2": "3324",
+            "nama_daerah": "Kab. Kendal",
+            "logo": "logo_kab_kendal.png"
+        },
+        {
+            "id_daerah": 38,
+            "kode_ddn": "33.25",
+            "kode_ddn_2": "3325",
+            "nama_daerah": "Kab. Batang",
+            "logo": "logo_kab_batang.png"
+        },
+        {
+            "id_daerah": 53,
+            "kode_ddn": "33.26",
+            "kode_ddn_2": "3326",
+            "nama_daerah": "Kab. Pekalongan",
+            "logo": "logo_kab_pekalongan.png"
+        },
+        {
+            "id_daerah": 54,
+            "kode_ddn": "33.27",
+            "kode_ddn_2": "3327",
+            "nama_daerah": "Kab. Pemalang",
+            "logo": "logo_kab_pemalang.png"
+        },
+        {
+            "id_daerah": 61,
+            "kode_ddn": "33.28",
+            "kode_ddn_2": "3328",
+            "nama_daerah": "Kab. Tegal",
+            "logo": "logo_kab_tegal.png"
+        },
+        {
+            "id_daerah": 41,
+            "kode_ddn": "33.29",
+            "kode_ddn_2": "3329",
+            "nama_daerah": "Kab. Brebes",
+            "logo": "logo_kab_brebes.png"
+        },
+        {
+            "id_daerah": 65,
+            "kode_ddn": "33.71",
+            "kode_ddn_2": "3371",
+            "nama_daerah": "Kota Magelang",
+            "logo": "logo_kota_magelang.png"
+        },
+        {
+            "id_daerah": 69,
+            "kode_ddn": "33.72",
+            "kode_ddn_2": "3372",
+            "nama_daerah": "Kota Surakarta",
+            "logo": "logo_kota_surakarta.png"
+        },
+        {
+            "id_daerah": 67,
+            "kode_ddn": "33.73",
+            "kode_ddn_2": "3373",
+            "nama_daerah": "Kota Salatiga",
+            "logo": "logo_kota_salatiga.png"
+        },
+        {
+            "id_daerah": 68,
+            "kode_ddn": "33.74",
+            "kode_ddn_2": "3374",
+            "nama_daerah": "Kota Semarang",
+            "logo": "logo_kota_semarang.png"
+        },
+        {
+            "id_daerah": 66,
+            "kode_ddn": "33.75",
+            "kode_ddn_2": "3375",
+            "nama_daerah": "Kota Pekalongan",
+            "logo": "logo_kota_pekalongan.png"
+        },
+        {
+            "id_daerah": 70,
+            "kode_ddn": "33.76",
+            "kode_ddn_2": "3376",
+            "nama_daerah": "Kota Tegal",
+            "logo": "logo_kota_tegal.png"
+        },
+        {
+            "id_daerah": 74,
+            "kode_ddn": "34.01",
+            "kode_ddn_2": "3401",
+            "nama_daerah": "Kab. Kulon Progo",
+            "logo": "logo_kab_kulon_progo.png"
+        },
+        {
+            "id_daerah": 72,
+            "kode_ddn": "34.02",
+            "kode_ddn_2": "3402",
+            "nama_daerah": "Kab. Bantul",
+            "logo": "logo_kab_bantul.png"
+        },
+        {
+            "id_daerah": 73,
+            "kode_ddn": "34.03",
+            "kode_ddn_2": "3403",
+            "nama_daerah": "Kab. Gunungkidul",
+            "logo": "logo_kab_gunungkidul.png"
+        },
+        {
+            "id_daerah": 75,
+            "kode_ddn": "34.04",
+            "kode_ddn_2": "3404",
+            "nama_daerah": "Kab. Sleman",
+            "logo": "logo_kab_sleman.png"
+        },
+        {
+            "id_daerah": 76,
+            "kode_ddn": "34.71",
+            "kode_ddn_2": "3471",
+            "nama_daerah": "Kota Yogyakarta",
+            "logo": "logo_kota_yogyakarta.png"
+        },
+        {
+            "id_daerah": 95,
+            "kode_ddn": "35.01",
+            "kode_ddn_2": "3501",
+            "nama_daerah": "Kab. Pacitan",
+            "logo": "logo_kab_pacitan.png"
+        },
+        {
+            "id_daerah": 98,
+            "kode_ddn": "35.02",
+            "kode_ddn_2": "3502",
+            "nama_daerah": "Kab. Ponorogo",
+            "logo": "logo_kab_ponorogo.png"
+        },
+        {
+            "id_daerah": 104,
+            "kode_ddn": "35.03",
+            "kode_ddn_2": "3503",
+            "nama_daerah": "Kab. Trenggalek",
+            "logo": "logo_kab_trenggalek.png"
+        },
+        {
+            "id_daerah": 106,
+            "kode_ddn": "35.04",
+            "kode_ddn_2": "3504",
+            "nama_daerah": "Kab. Tulungagung",
+            "logo": "logo_kab_tulungagung.png"
+        },
+        {
+            "id_daerah": 80,
+            "kode_ddn": "35.05",
+            "kode_ddn_2": "3505",
+            "nama_daerah": "Kab. Blitar",
+            "logo": "logo_kab_blitar.png"
+        },
+        {
+            "id_daerah": 86,
+            "kode_ddn": "35.06",
+            "kode_ddn_2": "3506",
+            "nama_daerah": "Kab. Kediri",
+            "logo": "logo_kab_kediri.png"
+        },
+        {
+            "id_daerah": 91,
+            "kode_ddn": "35.07",
+            "kode_ddn_2": "3507",
+            "nama_daerah": "Kab. Malang",
+            "logo": "logo_kab_malang.png"
+        },
+        {
+            "id_daerah": 88,
+            "kode_ddn": "35.08",
+            "kode_ddn_2": "3508",
+            "nama_daerah": "Kab. Lumajang",
+            "logo": "logo_kab_lumajang.png"
+        },
+        {
+            "id_daerah": 84,
+            "kode_ddn": "35.09",
+            "kode_ddn_2": "3509",
+            "nama_daerah": "Kab. Jember",
+            "logo": "logo_kab_jember.png"
+        },
+        {
+            "id_daerah": 79,
+            "kode_ddn": "35.10",
+            "kode_ddn_2": "3510",
+            "nama_daerah": "Kab. Banyuwangi",
+            "logo": "logo_kab_banyuwangi.png"
+        },
+        {
+            "id_daerah": 82,
+            "kode_ddn": "35.11",
+            "kode_ddn_2": "3511",
+            "nama_daerah": "Kab. Bondowoso",
+            "logo": "logo_kab_bondowoso.png"
+        },
+        {
+            "id_daerah": 102,
+            "kode_ddn": "35.12",
+            "kode_ddn_2": "3512",
+            "nama_daerah": "Kab. Situbondo",
+            "logo": "logo_kab_situbondo.png"
+        },
+        {
+            "id_daerah": 99,
+            "kode_ddn": "35.13",
+            "kode_ddn_2": "3513",
+            "nama_daerah": "Kab. Probolinggo",
+            "logo": "logo_kab_probolinggo.png"
+        },
+        {
+            "id_daerah": 97,
+            "kode_ddn": "35.14",
+            "kode_ddn_2": "3514",
+            "nama_daerah": "Kab. Pasuruan",
+            "logo": "logo_kab_pasuruan.png"
+        },
+        {
+            "id_daerah": 101,
+            "kode_ddn": "35.15",
+            "kode_ddn_2": "3515",
+            "nama_daerah": "Kab. Sidoarjo",
+            "logo": "logo_kab_sidoarjo.png"
+        },
+        {
+            "id_daerah": 92,
+            "kode_ddn": "35.16",
+            "kode_ddn_2": "3516",
+            "nama_daerah": "Kab. Mojokerto",
+            "logo": "logo_kab_mojokerto.png"
+        },
+        {
+            "id_daerah": 85,
+            "kode_ddn": "35.17",
+            "kode_ddn_2": "3517",
+            "nama_daerah": "Kab. Jombang",
+            "logo": "logo_kab_jombang.png"
+        },
+        {
+            "id_daerah": 93,
+            "kode_ddn": "35.18",
+            "kode_ddn_2": "3518",
+            "nama_daerah": "Kab. Nganjuk",
+            "logo": "logo_kab_nganjuk.png"
+        },
+        {
+            "id_daerah": 89,
+            "kode_ddn": "35.19",
+            "kode_ddn_2": "3519",
+            "nama_daerah": "Kab. Madiun",
+            "logo": "logo_kab_madiun.png"
+        },
+        {
+            "id_daerah": 90,
+            "kode_ddn": "35.20",
+            "kode_ddn_2": "3520",
+            "nama_daerah": "Kab. Magetan",
+            "logo": "logo_kab_magetan.png"
+        },
+        {
+            "id_daerah": 94,
+            "kode_ddn": "35.21",
+            "kode_ddn_2": "3521",
+            "nama_daerah": "Kab. Ngawi",
+            "logo": "logo_kab_ngawi.png"
+        },
+        {
+            "id_daerah": 81,
+            "kode_ddn": "35.22",
+            "kode_ddn_2": "3522",
+            "nama_daerah": "Kab. Bojonegoro",
+            "logo": "logo_kab_bojonegoro.png"
+        },
+        {
+            "id_daerah": 105,
+            "kode_ddn": "35.23",
+            "kode_ddn_2": "3523",
+            "nama_daerah": "Kab. Tuban",
+            "logo": "logo_kab_tuban.png"
+        },
+        {
+            "id_daerah": 87,
+            "kode_ddn": "35.24",
+            "kode_ddn_2": "3524",
+            "nama_daerah": "Kab. Lamongan",
+            "logo": "logo_kab_lamongan.png"
+        },
+        {
+            "id_daerah": 83,
+            "kode_ddn": "35.25",
+            "kode_ddn_2": "3525",
+            "nama_daerah": "Kab. Gresik",
+            "logo": "logo_kab_gresik.png"
+        },
+        {
+            "id_daerah": 78,
+            "kode_ddn": "35.26",
+            "kode_ddn_2": "3526",
+            "nama_daerah": "Kab. Bangkalan",
+            "logo": "logo_kab_bangkalan.png"
+        },
+        {
+            "id_daerah": 100,
+            "kode_ddn": "35.27",
+            "kode_ddn_2": "3527",
+            "nama_daerah": "Kab. Sampang",
+            "logo": "logo_kab_sampang.png"
+        },
+        {
+            "id_daerah": 96,
+            "kode_ddn": "35.28",
+            "kode_ddn_2": "3528",
+            "nama_daerah": "Kab. Pamekasan",
+            "logo": "logo_kab_pemekasan.png"
+        },
+        {
+            "id_daerah": 103,
+            "kode_ddn": "35.29",
+            "kode_ddn_2": "3529",
+            "nama_daerah": "Kab. Sumenep",
+            "logo": "logo_kab_sumenep.png"
+        },
+        {
+            "id_daerah": 108,
+            "kode_ddn": "35.71",
+            "kode_ddn_2": "3571",
+            "nama_daerah": "Kota Kediri",
+            "logo": "logo_kota_kediri.png"
+        },
+        {
+            "id_daerah": 107,
+            "kode_ddn": "35.72",
+            "kode_ddn_2": "3572",
+            "nama_daerah": "Kota Blitar",
+            "logo": "logo_kota_blitar.png"
+        },
+        {
+            "id_daerah": 110,
+            "kode_ddn": "35.73",
+            "kode_ddn_2": "3573",
+            "nama_daerah": "Kota Malang",
+            "logo": "logo_kota_malang.png"
+        },
+        {
+            "id_daerah": 113,
+            "kode_ddn": "35.74",
+            "kode_ddn_2": "3574",
+            "nama_daerah": "Kota Probolinggo",
+            "logo": "logo_kota_probolinggo.png"
+        },
+        {
+            "id_daerah": 112,
+            "kode_ddn": "35.75",
+            "kode_ddn_2": "3575",
+            "nama_daerah": "Kota Pasuruan",
+            "logo": "logo_kota_pasuruan.png"
+        },
+        {
+            "id_daerah": 111,
+            "kode_ddn": "35.76",
+            "kode_ddn_2": "3576",
+            "nama_daerah": "Kota Mojokerto",
+            "logo": "logo_kota_mojokerto.png"
+        },
+        {
+            "id_daerah": 109,
+            "kode_ddn": "35.77",
+            "kode_ddn_2": "3577",
+            "nama_daerah": "Kota Madiun",
+            "logo": "logo_kota_madiun.png"
+        },
+        {
+            "id_daerah": 114,
+            "kode_ddn": "35.78",
+            "kode_ddn_2": "3578",
+            "nama_daerah": "Kota Surabaya",
+            "logo": "logo_kota_surabaya.png"
+        },
+        {
+            "id_daerah": 115,
+            "kode_ddn": "35.79",
+            "kode_ddn_2": "3579",
+            "nama_daerah": "Kota Batu",
+            "logo": "logo_kota_batu.png"
+        },
+        {
+            "id_daerah": 494,
+            "kode_ddn": "36.01",
+            "kode_ddn_2": "3601",
+            "nama_daerah": "Kab. Pandeglang",
+            "logo": "logo_kab_pandeglang.png"
+        },
+        {
+            "id_daerah": 493,
+            "kode_ddn": "36.02",
+            "kode_ddn_2": "3602",
+            "nama_daerah": "Kab. Lebak",
+            "logo": "logo_kab_lebak.png"
+        },
+        {
+            "id_daerah": 496,
+            "kode_ddn": "36.03",
+            "kode_ddn_2": "3603",
+            "nama_daerah": "Kab. Tangerang",
+            "logo": "logo_kab_tangerang.png"
+        },
+        {
+            "id_daerah": 495,
+            "kode_ddn": "36.04",
+            "kode_ddn_2": "3604",
+            "nama_daerah": "Kab. Serang",
+            "logo": "logo_kab_serang.png"
+        },
+        {
+            "id_daerah": 498,
+            "kode_ddn": "36.71",
+            "kode_ddn_2": "3671",
+            "nama_daerah": "Kota Tangerang",
+            "logo": "logo_kota_tangerang.png"
+        },
+        {
+            "id_daerah": 497,
+            "kode_ddn": "36.72",
+            "kode_ddn_2": "3672",
+            "nama_daerah": "Kota Cilegon",
+            "logo": "logo_kota_cilegon.png"
+        },
+        {
+            "id_daerah": 499,
+            "kode_ddn": "36.73",
+            "kode_ddn_2": "3673",
+            "nama_daerah": "Kota Serang",
+            "logo": "logo_kota_serang.png"
+        },
+        {
+            "id_daerah": 500,
+            "kode_ddn": "36.74",
+            "kode_ddn_2": "3674",
+            "nama_daerah": "Kota Tangerang Selatan",
+            "logo": "logo_kota_tangerang_selatan.png"
+        },
+        {
+            "id_daerah": 401,
+            "kode_ddn": "51.01",
+            "kode_ddn_2": "5101",
+            "nama_daerah": "Kab. Jembrana",
+            "logo": "logo_kab_jembrana.png"
+        },
+        {
+            "id_daerah": 404,
+            "kode_ddn": "51.02",
+            "kode_ddn_2": "5102",
+            "nama_daerah": "Kab. Tabanan",
+            "logo": "logo_kab_tabanan.png"
+        },
+        {
+            "id_daerah": 397,
+            "kode_ddn": "51.03",
+            "kode_ddn_2": "5103",
+            "nama_daerah": "Kab. Badung",
+            "logo": "logo_kab_badung.png"
+        },
+        {
+            "id_daerah": 400,
+            "kode_ddn": "51.04",
+            "kode_ddn_2": "5104",
+            "nama_daerah": "Kab. Gianyar",
+            "logo": "logo_kab_gianyar.png"
+        },
+        {
+            "id_daerah": 403,
+            "kode_ddn": "51.05",
+            "kode_ddn_2": "5105",
+            "nama_daerah": "Kab. Klungkung",
+            "logo": "logo_kab_klungkung.png"
+        },
+        {
+            "id_daerah": 398,
+            "kode_ddn": "51.06",
+            "kode_ddn_2": "5106",
+            "nama_daerah": "Kab. Bangli",
+            "logo": "logo_kab_bangli.png"
+        },
+        {
+            "id_daerah": 402,
+            "kode_ddn": "51.07",
+            "kode_ddn_2": "5107",
+            "nama_daerah": "Kab. Karangasem",
+            "logo": "logo_kab_karangasem.png"
+        },
+        {
+            "id_daerah": 399,
+            "kode_ddn": "51.08",
+            "kode_ddn_2": "5108",
+            "nama_daerah": "Kab. Buleleng",
+            "logo": "logo_kab_buleleng.png"
+        },
+        {
+            "id_daerah": 405,
+            "kode_ddn": "51.71",
+            "kode_ddn_2": "5171",
+            "nama_daerah": "Kota Denpasar",
+            "logo": "logo_kota_denpasar.png"
+        },
+        {
+            "id_daerah": 410,
+            "kode_ddn": "52.01",
+            "kode_ddn_2": "5201",
+            "nama_daerah": "Kab. Lombok Barat",
+            "logo": "logo_kab_lombok_barat.png"
+        },
+        {
+            "id_daerah": 411,
+            "kode_ddn": "52.02",
+            "kode_ddn_2": "5202",
+            "nama_daerah": "Kab. Lombok Tengah",
+            "logo": "logo_kab_lombok_tengah.png"
+        },
+        {
+            "id_daerah": 412,
+            "kode_ddn": "52.03",
+            "kode_ddn_2": "5203",
+            "nama_daerah": "Kab. Lombok Timur",
+            "logo": "logo_kab_lombok_timur.png"
+        },
+        {
+            "id_daerah": 413,
+            "kode_ddn": "52.04",
+            "kode_ddn_2": "5204",
+            "nama_daerah": "Kab. Sumbawa",
+            "logo": "logo_kab_sumbawa.png"
+        },
+        {
+            "id_daerah": 409,
+            "kode_ddn": "52.05",
+            "kode_ddn_2": "5205",
+            "nama_daerah": "Kab. Dompu",
+            "logo": "logo_kab_dompu.png"
+        },
+        {
+            "id_daerah": 408,
+            "kode_ddn": "52.06",
+            "kode_ddn_2": "5206",
+            "nama_daerah": "Kab. Bima",
+            "logo": "logo_kab_bima.png"
+        },
+        {
+            "id_daerah": 416,
+            "kode_ddn": "52.07",
+            "kode_ddn_2": "5207",
+            "nama_daerah": "Kab. Sumbawa Barat",
+            "logo": "logo_kab_sumbawa_barat.png"
+        },
+        {
+            "id_daerah": 417,
+            "kode_ddn": "52.08",
+            "kode_ddn_2": "5208",
+            "nama_daerah": "Kab. Lombok Utara",
+            "logo": "logo_kab_lombok_utara.png"
+        },
+        {
+            "id_daerah": 414,
+            "kode_ddn": "52.71",
+            "kode_ddn_2": "5271",
+            "nama_daerah": "Kota Mataram",
+            "logo": "logo_kota_mataram.png"
+        },
+        {
+            "id_daerah": 415,
+            "kode_ddn": "52.72",
+            "kode_ddn_2": "5272",
+            "nama_daerah": "Kota Bima",
+            "logo": "logo_kota_bima.png"
+        },
+        {
+            "id_daerah": 423,
+            "kode_ddn": "53.01",
+            "kode_ddn_2": "5301",
+            "nama_daerah": "Kab. Kupang",
+            "logo": "logo_kab_kupang.png"
+        },
+        {
+            "id_daerah": 430,
+            "kode_ddn": "53.02",
+            "kode_ddn_2": "5302",
+            "nama_daerah": "Kab. Timor Tengah Selatan",
+            "logo": "logo_kab_timor_tengah_selatan.png"
+        },
+        {
+            "id_daerah": 431,
+            "kode_ddn": "53.03",
+            "kode_ddn_2": "5303",
+            "nama_daerah": "Kab. Timor Tengah Utara",
+            "logo": "logo_kab_timor_tengah_utara.png"
+        },
+        {
+            "id_daerah": 420,
+            "kode_ddn": "53.04",
+            "kode_ddn_2": "5304",
+            "nama_daerah": "Kab. Belu",
+            "logo": "logo_kab_belu.png"
+        },
+        {
+            "id_daerah": 419,
+            "kode_ddn": "53.05",
+            "kode_ddn_2": "5305",
+            "nama_daerah": "Kab. Alor",
+            "logo": "logo_kab_alor.png"
+        },
+        {
+            "id_daerah": 422,
+            "kode_ddn": "53.06",
+            "kode_ddn_2": "5306",
+            "nama_daerah": "Kab. Flores Timur",
+            "logo": "logo_kab_flores_timur.png"
+        },
+        {
+            "id_daerah": 427,
+            "kode_ddn": "53.07",
+            "kode_ddn_2": "5307",
+            "nama_daerah": "Kab. Sikka",
+            "logo": "logo_kab_sikka.png"
+        },
+        {
+            "id_daerah": 421,
+            "kode_ddn": "53.08",
+            "kode_ddn_2": "5308",
+            "nama_daerah": "Kab. Ende",
+            "logo": "logo_kab_ende.png"
+        },
+        {
+            "id_daerah": 426,
+            "kode_ddn": "53.09",
+            "kode_ddn_2": "5309",
+            "nama_daerah": "Kab. Ngada",
+            "logo": "logo_kab_ngada.png"
+        },
+        {
+            "id_daerah": 425,
+            "kode_ddn": "53.10",
+            "kode_ddn_2": "5310",
+            "nama_daerah": "Kab. Manggarai",
+            "logo": "logo_kab_manggarai.png"
+        },
+        {
+            "id_daerah": 429,
+            "kode_ddn": "53.11",
+            "kode_ddn_2": "5311",
+            "nama_daerah": "Kab. Sumba Timur",
+            "logo": "logo_kab_sumba_timur.png"
+        },
+        {
+            "id_daerah": 428,
+            "kode_ddn": "53.12",
+            "kode_ddn_2": "5312",
+            "nama_daerah": "Kab. Sumba Barat",
+            "logo": "logo_kab_sumba_barat.png"
+        },
+        {
+            "id_daerah": 424,
+            "kode_ddn": "53.13",
+            "kode_ddn_2": "5313",
+            "nama_daerah": "Kab. Lembata",
+            "logo": "logo_kab_lembata.png"
+        },
+        {
+            "id_daerah": 433,
+            "kode_ddn": "53.14",
+            "kode_ddn_2": "5314",
+            "nama_daerah": "Kab. Rote Ndao",
+            "logo": "logo_kab_rote_ndao.png"
+        },
+        {
+            "id_daerah": 434,
+            "kode_ddn": "53.15",
+            "kode_ddn_2": "5315",
+            "nama_daerah": "Kab. Manggarai Barat",
+            "logo": "logo_kab_manggarai_barat.png"
+        },
+        {
+            "id_daerah": 435,
+            "kode_ddn": "53.16",
+            "kode_ddn_2": "5316",
+            "nama_daerah": "Kab. Nagekeo",
+            "logo": "logo_kab_nagekeo.png"
+        },
+        {
+            "id_daerah": 437,
+            "kode_ddn": "53.17",
+            "kode_ddn_2": "5317",
+            "nama_daerah": "Kab. Sumba Tengah",
+            "logo": "logo_kab_sumba_tengah.png"
+        },
+        {
+            "id_daerah": 436,
+            "kode_ddn": "53.18",
+            "kode_ddn_2": "5318",
+            "nama_daerah": "Kab. Sumba Barat Daya",
+            "logo": "logo_kab_sumba_barat_daya.png"
+        },
+        {
+            "id_daerah": 438,
+            "kode_ddn": "53.19",
+            "kode_ddn_2": "5319",
+            "nama_daerah": "Kab. Manggarai Timur",
+            "logo": "logo_kab_manggarai_timur.png"
+        },
+        {
+            "id_daerah": 439,
+            "kode_ddn": "53.20",
+            "kode_ddn_2": "5320",
+            "nama_daerah": "Kab. Sabu Raijua",
+            "logo": "logo_kab_sabu_raijua.png"
+        },
+        {
+            "id_daerah": 557,
+            "kode_ddn": "53.21",
+            "kode_ddn_2": "5321",
+            "nama_daerah": "Kab. Malaka",
+            "logo": "logo_kab_malaka.png"
+        },
+        {
+            "id_daerah": 432,
+            "kode_ddn": "53.71",
+            "kode_ddn_2": "5371",
+            "nama_daerah": "Kota Kupang",
+            "logo": "logo_kota_kupang.png"
+        },
+        {
+            "id_daerah": 267,
+            "kode_ddn": "61.01",
+            "kode_ddn_2": "6101",
+            "nama_daerah": "Kab. Sambas",
+            "logo": "logo_kab_sambas.png"
+        },
+        {
+            "id_daerah": 553,
+            "kode_ddn": "61.02",
+            "kode_ddn_2": "6102",
+            "nama_daerah": "Kab. Mempawah",
+            "logo": "logo_kab_mempawah.png"
+        },
+        {
+            "id_daerah": 268,
+            "kode_ddn": "61.03",
+            "kode_ddn_2": "6103",
+            "nama_daerah": "Kab. Sanggau",
+            "logo": "logo_kab_sanggau.png"
+        },
+        {
+            "id_daerah": 265,
+            "kode_ddn": "61.04",
+            "kode_ddn_2": "6104",
+            "nama_daerah": "Kab. Ketapang",
+            "logo": "logo_kab_ketapang.png"
+        },
+        {
+            "id_daerah": 269,
+            "kode_ddn": "61.05",
+            "kode_ddn_2": "6105",
+            "nama_daerah": "Kab. Sintang",
+            "logo": "logo_kab_sintang.png"
+        },
+        {
+            "id_daerah": 264,
+            "kode_ddn": "61.06",
+            "kode_ddn_2": "6106",
+            "nama_daerah": "Kab. Kapuas Hulu",
+            "logo": "logo_kab_kapuas_hulu.png"
+        },
+        {
+            "id_daerah": 262,
+            "kode_ddn": "61.07",
+            "kode_ddn_2": "6107",
+            "nama_daerah": "Kab. Bengkayang",
+            "logo": "logo_kab_bengkayang.png"
+        },
+        {
+            "id_daerah": 263,
+            "kode_ddn": "61.08",
+            "kode_ddn_2": "6108",
+            "nama_daerah": "Kab. Landak",
+            "logo": "logo_kab_landak.png"
+        },
+        {
+            "id_daerah": 272,
+            "kode_ddn": "61.09",
+            "kode_ddn_2": "6109",
+            "nama_daerah": "Kab. Sekadau",
+            "logo": "logo_kab_sekadau.png"
+        },
+        {
+            "id_daerah": 273,
+            "kode_ddn": "61.10",
+            "kode_ddn_2": "6110",
+            "nama_daerah": "Kab. Melawi",
+            "logo": "logo_kab_melawi.png"
+        },
+        {
+            "id_daerah": 274,
+            "kode_ddn": "61.11",
+            "kode_ddn_2": "6111",
+            "nama_daerah": "Kab. Kayong Utara",
+            "logo": "logo_kab_kayong_utara.png"
+        },
+        {
+            "id_daerah": 275,
+            "kode_ddn": "61.12",
+            "kode_ddn_2": "6112",
+            "nama_daerah": "Kab. Kubu Raya",
+            "logo": "logo_kab_kubu_raya.png"
+        },
+        {
+            "id_daerah": 270,
+            "kode_ddn": "61.71",
+            "kode_ddn_2": "6171",
+            "nama_daerah": "Kota Pontianak",
+            "logo": "logo_kota_pontianak.png"
+        },
+        {
+            "id_daerah": 271,
+            "kode_ddn": "61.72",
+            "kode_ddn_2": "6172",
+            "nama_daerah": "Kota Singkawang",
+            "logo": "logo_kota_singkawang.png"
+        },
+        {
+            "id_daerah": 280,
+            "kode_ddn": "62.01",
+            "kode_ddn_2": "6201",
+            "nama_daerah": "Kab. Kotawaringin Barat",
+            "logo": "logo_kab_kotawaringin_barat.png"
+        },
+        {
+            "id_daerah": 281,
+            "kode_ddn": "62.02",
+            "kode_ddn_2": "6202",
+            "nama_daerah": "Kab. Kotawaringin Timur",
+            "logo": "logo_kab_kotawaringin_timur.png"
+        },
+        {
+            "id_daerah": 279,
+            "kode_ddn": "62.03",
+            "kode_ddn_2": "6203",
+            "nama_daerah": "Kab. Kapuas",
+            "logo": "logo_kab_kapuas.png"
+        },
+        {
+            "id_daerah": 277,
+            "kode_ddn": "62.04",
+            "kode_ddn_2": "6204",
+            "nama_daerah": "Kab. Barito Selatan",
+            "logo": "logo_kab_barito_selatan.png"
+        },
+        {
+            "id_daerah": 278,
+            "kode_ddn": "62.05",
+            "kode_ddn_2": "6205",
+            "nama_daerah": "Kab. Barito Utara",
+            "logo": "logo_kab_barito_utara.png"
+        },
+        {
+            "id_daerah": 289,
+            "kode_ddn": "62.06",
+            "kode_ddn_2": "6206",
+            "nama_daerah": "Kab. Katingan",
+            "logo": "logo_kab_katingan.png"
+        },
+        {
+            "id_daerah": 290,
+            "kode_ddn": "62.07",
+            "kode_ddn_2": "6207",
+            "nama_daerah": "Kab. Seruyan",
+            "logo": "logo_kab_seruyan.png"
+        },
+        {
+            "id_daerah": 288,
+            "kode_ddn": "62.08",
+            "kode_ddn_2": "6208",
+            "nama_daerah": "Kab. Sukamara",
+            "logo": "logo_kab_sukamara.png"
+        },
+        {
+            "id_daerah": 287,
+            "kode_ddn": "62.09",
+            "kode_ddn_2": "6209",
+            "nama_daerah": "Kab. Lamandau",
+            "logo": "logo_kab_lamandau.png"
+        },
+        {
+            "id_daerah": 286,
+            "kode_ddn": "62.10",
+            "kode_ddn_2": "6210",
+            "nama_daerah": "Kab. Gunung Mas",
+            "logo": "logo_kab_gunung_mas.png"
+        },
+        {
+            "id_daerah": 285,
+            "kode_ddn": "62.11",
+            "kode_ddn_2": "6211",
+            "nama_daerah": "Kab. Pulang Pisau",
+            "logo": "logo_kab_pulang_pisau.png"
+        },
+        {
+            "id_daerah": 284,
+            "kode_ddn": "62.12",
+            "kode_ddn_2": "6212",
+            "nama_daerah": "Kab. Murung Raya",
+            "logo": "logo_kab_murung_raya.png"
+        },
+        {
+            "id_daerah": 283,
+            "kode_ddn": "62.13",
+            "kode_ddn_2": "6213",
+            "nama_daerah": "Kab. Barito Timur",
+            "logo": "logo_kab_barito_timur.png"
+        },
+        {
+            "id_daerah": 282,
+            "kode_ddn": "62.71",
+            "kode_ddn_2": "6271",
+            "nama_daerah": "Kota Palangkaraya",
+            "logo": "logo_kota_palangkaraya.png"
+        },
+        {
+            "id_daerah": 299,
+            "kode_ddn": "63.01",
+            "kode_ddn_2": "6301",
+            "nama_daerah": "Kab. Tanah Laut",
+            "logo": "logo_kab_tanah_laut.png"
+        },
+        {
+            "id_daerah": 297,
+            "kode_ddn": "63.02",
+            "kode_ddn_2": "6302",
+            "nama_daerah": "Kab. Kotabaru",
+            "logo": "logo_kab_kota_baru.png"
+        },
+        {
+            "id_daerah": 292,
+            "kode_ddn": "63.03",
+            "kode_ddn_2": "6303",
+            "nama_daerah": "Kab. Banjar",
+            "logo": "logo_kab_banjar.png"
+        },
+        {
+            "id_daerah": 293,
+            "kode_ddn": "63.04",
+            "kode_ddn_2": "6304",
+            "nama_daerah": "Kab. Barito Kuala",
+            "logo": "logo_kab_barito_kuala.png"
+        },
+        {
+            "id_daerah": 300,
+            "kode_ddn": "63.05",
+            "kode_ddn_2": "6305",
+            "nama_daerah": "Kab. Tapin",
+            "logo": "logo_kab_tapin.png"
+        },
+        {
+            "id_daerah": 294,
+            "kode_ddn": "63.06",
+            "kode_ddn_2": "6306",
+            "nama_daerah": "Kab. Hulu Sungai Selatan",
+            "logo": "logo_kab_hulu_sungai_selatan.png"
+        },
+        {
+            "id_daerah": 295,
+            "kode_ddn": "63.07",
+            "kode_ddn_2": "6307",
+            "nama_daerah": "Kab. Hulu Sungai Tengah",
+            "logo": "logo_kab_hulu_sungai_tengah.png"
+        },
+        {
+            "id_daerah": 296,
+            "kode_ddn": "63.08",
+            "kode_ddn_2": "6308",
+            "nama_daerah": "Kab. Hulu Sungai Utara",
+            "logo": "logo_kab_hulu_sungai_utara.png"
+        },
+        {
+            "id_daerah": 298,
+            "kode_ddn": "63.09",
+            "kode_ddn_2": "6309",
+            "nama_daerah": "Kab. Tabalong",
+            "logo": "logo_kab_tabalong.png"
+        },
+        {
+            "id_daerah": 304,
+            "kode_ddn": "63.10",
+            "kode_ddn_2": "6310",
+            "nama_daerah": "Kab. Tanah Bumbu",
+            "logo": "logo_kab_tanah_bumbu.png"
+        },
+        {
+            "id_daerah": 303,
+            "kode_ddn": "63.11",
+            "kode_ddn_2": "6311",
+            "nama_daerah": "Kab. Balangan",
+            "logo": "logo_kab_balangan.png"
+        },
+        {
+            "id_daerah": 302,
+            "kode_ddn": "63.71",
+            "kode_ddn_2": "6371",
+            "nama_daerah": "Kota Banjarmasin",
+            "logo": "logo_kota_banjarmasin.png"
+        },
+        {
+            "id_daerah": 301,
+            "kode_ddn": "63.72",
+            "kode_ddn_2": "6372",
+            "nama_daerah": "Kota Banjarbaru",
+            "logo": "logo_kota_banjarbaru.png"
+        },
+        {
+            "id_daerah": 312,
+            "kode_ddn": "64.01",
+            "kode_ddn_2": "6401",
+            "nama_daerah": "Kab. Paser",
+            "logo": "logo_kab_paser.png"
+        },
+        {
+            "id_daerah": 309,
+            "kode_ddn": "64.02",
+            "kode_ddn_2": "6402",
+            "nama_daerah": "Kab. Kutai Kartanegara",
+            "logo": "logo_kab_kutai_kartanegara.png"
+        },
+        {
+            "id_daerah": 308,
+            "kode_ddn": "64.03",
+            "kode_ddn_2": "6403",
+            "nama_daerah": "Kab. Berau",
+            "logo": "logo_kab_berau.png"
+        },
+        {
+            "id_daerah": 310,
+            "kode_ddn": "64.07",
+            "kode_ddn_2": "6407",
+            "nama_daerah": "Kab. Kutai Barat",
+            "logo": "logo_kab_kutai_barat.png"
+        },
+        {
+            "id_daerah": 311,
+            "kode_ddn": "64.08",
+            "kode_ddn_2": "6408",
+            "nama_daerah": "Kab. Kutai Timur",
+            "logo": "logo_kab_kutai_timur.png"
+        },
+        {
+            "id_daerah": 316,
+            "kode_ddn": "64.09",
+            "kode_ddn_2": "6409",
+            "nama_daerah": "Kab. Penajam Paser Utara",
+            "logo": "logo_kab_penajam_paser_utara.png"
+        },
+        {
+            "id_daerah": 554,
+            "kode_ddn": "64.11",
+            "kode_ddn_2": "6411",
+            "nama_daerah": "Kab. Mahakam Ulu",
+            "logo": "logo_mahakam_ulu_baru.png"
+        },
+        {
+            "id_daerah": 313,
+            "kode_ddn": "64.71",
+            "kode_ddn_2": "6471",
+            "nama_daerah": "Kota Balikpapan",
+            "logo": "logo_kota_balikpapan.png"
+        },
+        {
+            "id_daerah": 315,
+            "kode_ddn": "64.72",
+            "kode_ddn_2": "6472",
+            "nama_daerah": "Kota Samarinda",
+            "logo": "logo_kota_samarinda.png"
+        },
+        {
+            "id_daerah": 314,
+            "kode_ddn": "64.74",
+            "kode_ddn_2": "6474",
+            "nama_daerah": "Kota Bontang",
+            "logo": "logo_kota_bontang.png"
+        },
+        {
+            "id_daerah": 547,
+            "kode_ddn": "65.01",
+            "kode_ddn_2": "6501",
+            "nama_daerah": "Kab. Bulungan",
+            "logo": "logo_kab_bulungan.png"
+        },
+        {
+            "id_daerah": 548,
+            "kode_ddn": "65.02",
+            "kode_ddn_2": "6502",
+            "nama_daerah": "Kab. Malinau",
+            "logo": "logo_kab_malinau.png"
+        },
+        {
+            "id_daerah": 549,
+            "kode_ddn": "65.03",
+            "kode_ddn_2": "6503",
+            "nama_daerah": "Kab. Nunukan",
+            "logo": "logo_kab_nunukan.png"
+        },
+        {
+            "id_daerah": 550,
+            "kode_ddn": "65.04",
+            "kode_ddn_2": "6504",
+            "nama_daerah": "Kab. Tana Tidung",
+            "logo": "logo_kab_tana_tidung.png"
+        },
+        {
+            "id_daerah": 551,
+            "kode_ddn": "65.71",
+            "kode_ddn_2": "6571",
+            "nama_daerah": "Kota Tarakan",
+            "logo": "logo_kota_tarakan.png"
+        },
+        {
+            "id_daerah": 319,
+            "kode_ddn": "71.01",
+            "kode_ddn_2": "7101",
+            "nama_daerah": "Kab. Bolaang Mongondow",
+            "logo": "logo_kab_bolaang_mongondow.png"
+        },
+        {
+            "id_daerah": 320,
+            "kode_ddn": "71.02",
+            "kode_ddn_2": "7102",
+            "nama_daerah": "Kab. Minahasa",
+            "logo": "logo_kab_minahasa.png"
+        },
+        {
+            "id_daerah": 321,
+            "kode_ddn": "71.03",
+            "kode_ddn_2": "7103",
+            "nama_daerah": "Kab. Kepulauan Sangihe",
+            "logo": "logo_kab_kepulauan_sangihe.png"
+        },
+        {
+            "id_daerah": 324,
+            "kode_ddn": "71.04",
+            "kode_ddn_2": "7104",
+            "nama_daerah": "Kab. Kepulauan Talaud",
+            "logo": "logo_kab_kepulauan_talaud.png"
+        },
+        {
+            "id_daerah": 325,
+            "kode_ddn": "71.05",
+            "kode_ddn_2": "7105",
+            "nama_daerah": "Kab. Minahasa Selatan",
+            "logo": "logo_kab_minahasa_selatan.png"
+        },
+        {
+            "id_daerah": 327,
+            "kode_ddn": "71.06",
+            "kode_ddn_2": "7106",
+            "nama_daerah": "Kab. Minahasa Utara",
+            "logo": "logo_kab_minahasa_utara.png"
+        },
+        {
+            "id_daerah": 331,
+            "kode_ddn": "71.07",
+            "kode_ddn_2": "7107",
+            "nama_daerah": "Kab. Minahasa Tenggara",
+            "logo": "logo_kab_minahasa_tenggara.png"
+        },
+        {
+            "id_daerah": 329,
+            "kode_ddn": "71.08",
+            "kode_ddn_2": "7108",
+            "nama_daerah": "Kab. Bolaang Mongondow Utara",
+            "logo": "logo_kab_bolaang_mongondow_utara.png"
+        },
+        {
+            "id_daerah": 330,
+            "kode_ddn": "71.09",
+            "kode_ddn_2": "7109",
+            "nama_daerah": "Kab. Kep. Siau Tagulandang Biaro",
+            "logo": "logo_kepulauan_siau_tagulandang_biaro.png"
+        },
+        {
+            "id_daerah": 332,
+            "kode_ddn": "71.10",
+            "kode_ddn_2": "7110",
+            "nama_daerah": "Kab. Bolaang Mongondow Timur",
+            "logo": "logo_kab_bolaang_mongondow_timur.png"
+        },
+        {
+            "id_daerah": 333,
+            "kode_ddn": "71.11",
+            "kode_ddn_2": "7111",
+            "nama_daerah": "Kab. Bolaang Mongondow Selatan",
+            "logo": "logo_kab_bolaang_mongondow_selatan.png"
+        },
+        {
+            "id_daerah": 323,
+            "kode_ddn": "71.71",
+            "kode_ddn_2": "7171",
+            "nama_daerah": "Kota Manado",
+            "logo": "logo_kota_manado.png"
+        },
+        {
+            "id_daerah": 322,
+            "kode_ddn": "71.72",
+            "kode_ddn_2": "7172",
+            "nama_daerah": "Kota Bitung",
+            "logo": "logo_kota_bitung.png"
+        },
+        {
+            "id_daerah": 326,
+            "kode_ddn": "71.73",
+            "kode_ddn_2": "7173",
+            "nama_daerah": "Kota Tomohon",
+            "logo": "logo_kota_tomohon.png"
+        },
+        {
+            "id_daerah": 328,
+            "kode_ddn": "71.74",
+            "kode_ddn_2": "7174",
+            "nama_daerah": "Kota Kotamobagu",
+            "logo": "logo_kota_kotamobagu.png"
+        },
+        {
+            "id_daerah": 335,
+            "kode_ddn": "72.01",
+            "kode_ddn_2": "7201",
+            "nama_daerah": "Kab. Banggai",
+            "logo": "logo_kab_banggai.png"
+        },
+        {
+            "id_daerah": 341,
+            "kode_ddn": "72.02",
+            "kode_ddn_2": "7202",
+            "nama_daerah": "Kab. Poso",
+            "logo": "logo_kab_poso.png"
+        },
+        {
+            "id_daerah": 339,
+            "kode_ddn": "72.03",
+            "kode_ddn_2": "7203",
+            "nama_daerah": "Kab. Donggala",
+            "logo": "logo_kab_donggala.png"
+        },
+        {
+            "id_daerah": 338,
+            "kode_ddn": "72.04",
+            "kode_ddn_2": "7204",
+            "nama_daerah": "Kab. Toli Toli",
+            "logo": "logo_kab_tolitoli.png"
+        },
+        {
+            "id_daerah": 337,
+            "kode_ddn": "72.05",
+            "kode_ddn_2": "7205",
+            "nama_daerah": "Kab. Buol",
+            "logo": "logo_kab_buol.png"
+        },
+        {
+            "id_daerah": 340,
+            "kode_ddn": "72.06",
+            "kode_ddn_2": "7206",
+            "nama_daerah": "Kab. Morowali",
+            "logo": "logo_kab_morowali.png"
+        },
+        {
+            "id_daerah": 336,
+            "kode_ddn": "72.07",
+            "kode_ddn_2": "7207",
+            "nama_daerah": "Kab. Banggai Kepulauan",
+            "logo": "logo_kab_banggai_kepulauan.png"
+        },
+        {
+            "id_daerah": 343,
+            "kode_ddn": "72.08",
+            "kode_ddn_2": "7208",
+            "nama_daerah": "Kab. Parigi Moutong",
+            "logo": "logo_kab_parigi_moutong.png"
+        },
+        {
+            "id_daerah": 344,
+            "kode_ddn": "72.09",
+            "kode_ddn_2": "7209",
+            "nama_daerah": "Kab. Tojo Una Una",
+            "logo": "logo_kab_tojo_una_una.png"
+        },
+        {
+            "id_daerah": 345,
+            "kode_ddn": "72.10",
+            "kode_ddn_2": "7210",
+            "nama_daerah": "Kab. Sigi",
+            "logo": "logo_kab_sigi.png"
+        },
+        {
+            "id_daerah": 561,
+            "kode_ddn": "72.11",
+            "kode_ddn_2": "7211",
+            "nama_daerah": "Kab. Banggai Laut",
+            "logo": "logo_kab_banggai_laut.png"
+        },
+        {
+            "id_daerah": 562,
+            "kode_ddn": "72.12",
+            "kode_ddn_2": "7212",
+            "nama_daerah": "Kab. Morowali Utara",
+            "logo": "logo_kab_morowali_utara.png"
+        },
+        {
+            "id_daerah": 342,
+            "kode_ddn": "72.71",
+            "kode_ddn_2": "7271",
+            "nama_daerah": "Kota Palu",
+            "logo": "logo_kota_palu.png"
+        },
+        {
+            "id_daerah": 359,
+            "kode_ddn": "73.01",
+            "kode_ddn_2": "7301",
+            "nama_daerah": "Kab. Kepulauan Selayar",
+            "logo": "logo_kab_selayar.png"
+        },
+        {
+            "id_daerah": 350,
+            "kode_ddn": "73.02",
+            "kode_ddn_2": "7302",
+            "nama_daerah": "Kab. Bulukumba",
+            "logo": "logo_kab_bulukumba.png"
+        },
+        {
+            "id_daerah": 347,
+            "kode_ddn": "73.03",
+            "kode_ddn_2": "7303",
+            "nama_daerah": "Kab. Bantaeng",
+            "logo": "logo_kab_bantaeng.png"
+        },
+        {
+            "id_daerah": 353,
+            "kode_ddn": "73.04",
+            "kode_ddn_2": "7304",
+            "nama_daerah": "Kab. Jeneponto",
+            "logo": "logo_kab_jeneponto.png"
+        },
+        {
+            "id_daerah": 363,
+            "kode_ddn": "73.05",
+            "kode_ddn_2": "7305",
+            "nama_daerah": "Kab. Takalar",
+            "logo": "logo_kab_takalar.png"
+        },
+        {
+            "id_daerah": 352,
+            "kode_ddn": "73.06",
+            "kode_ddn_2": "7306",
+            "nama_daerah": "Kab. Gowa",
+            "logo": "logo_kab_gowa.png"
+        },
+        {
+            "id_daerah": 361,
+            "kode_ddn": "73.07",
+            "kode_ddn_2": "7307",
+            "nama_daerah": "Kab. Sinjai",
+            "logo": "logo_kab_sinjai.png"
+        },
+        {
+            "id_daerah": 349,
+            "kode_ddn": "73.08",
+            "kode_ddn_2": "7308",
+            "nama_daerah": "Kab. Bone",
+            "logo": "logo_kab_bone.png"
+        },
+        {
+            "id_daerah": 356,
+            "kode_ddn": "73.09",
+            "kode_ddn_2": "7309",
+            "nama_daerah": "Kab. Maros",
+            "logo": "logo_kab_maros.png"
+        },
+        {
+            "id_daerah": 357,
+            "kode_ddn": "73.10",
+            "kode_ddn_2": "7310",
+            "nama_daerah": "Kab. Pangkajene Kepulauan",
+            "logo": "logo_kab_pangkajene_kepulauan.png"
+        },
+        {
+            "id_daerah": 348,
+            "kode_ddn": "73.11",
+            "kode_ddn_2": "7311",
+            "nama_daerah": "Kab. Barru",
+            "logo": "logo_kab_barru.png"
+        },
+        {
+            "id_daerah": 362,
+            "kode_ddn": "73.12",
+            "kode_ddn_2": "7312",
+            "nama_daerah": "Kab. Soppeng",
+            "logo": "logo_kab_soppeng.png"
+        },
+        {
+            "id_daerah": 365,
+            "kode_ddn": "73.13",
+            "kode_ddn_2": "7313",
+            "nama_daerah": "Kab. Wajo",
+            "logo": "logo_kab_wajo.png"
+        },
+        {
+            "id_daerah": 360,
+            "kode_ddn": "73.14",
+            "kode_ddn_2": "7314",
+            "nama_daerah": "Kab. Sidenreng Rappang",
+            "logo": "logo_kab_sidenreng_rappang.png"
+        },
+        {
+            "id_daerah": 358,
+            "kode_ddn": "73.15",
+            "kode_ddn_2": "7315",
+            "nama_daerah": "Kab. Pinrang",
+            "logo": "logo_kab_pinrang.png"
+        },
+        {
+            "id_daerah": 351,
+            "kode_ddn": "73.16",
+            "kode_ddn_2": "7316",
+            "nama_daerah": "Kab. Enrekang",
+            "logo": "logo_kab_enrekang.png"
+        },
+        {
+            "id_daerah": 354,
+            "kode_ddn": "73.17",
+            "kode_ddn_2": "7317",
+            "nama_daerah": "Kab. Luwu",
+            "logo": "logo_kab_luwu.png"
+        },
+        {
+            "id_daerah": 364,
+            "kode_ddn": "73.18",
+            "kode_ddn_2": "7318",
+            "nama_daerah": "Kab. Tana Toraja",
+            "logo": "logo_kab_tana_toraja.png"
+        },
+        {
+            "id_daerah": 355,
+            "kode_ddn": "73.22",
+            "kode_ddn_2": "7322",
+            "nama_daerah": "Kab. Luwu Utara",
+            "logo": "logo_kab_luwu_utara.png"
+        },
+        {
+            "id_daerah": 369,
+            "kode_ddn": "73.24",
+            "kode_ddn_2": "7324",
+            "nama_daerah": "Kab. Luwu Timur",
+            "logo": "logo_kab_luwu_timur.png"
+        },
+        {
+            "id_daerah": 370,
+            "kode_ddn": "73.26",
+            "kode_ddn_2": "7326",
+            "nama_daerah": "Kab. Toraja Utara",
+            "logo": "logo_kab_toraja_utara.png"
+        },
+        {
+            "id_daerah": 367,
+            "kode_ddn": "73.71",
+            "kode_ddn_2": "7371",
+            "nama_daerah": "Kota Makassar",
+            "logo": "logo_kota_makassar.png"
+        },
+        {
+            "id_daerah": 366,
+            "kode_ddn": "73.72",
+            "kode_ddn_2": "7372",
+            "nama_daerah": "Kota Pare Pare",
+            "logo": "logo_kota_parepare.png"
+        },
+        {
+            "id_daerah": 368,
+            "kode_ddn": "73.73",
+            "kode_ddn_2": "7373",
+            "nama_daerah": "Kota Palopo",
+            "logo": "logo_kota_palopo.png"
+        },
+        {
+            "id_daerah": 374,
+            "kode_ddn": "74.01",
+            "kode_ddn_2": "7401",
+            "nama_daerah": "Kab. Kolaka",
+            "logo": "logo_kab_kolaka.png"
+        },
+        {
+            "id_daerah": 373,
+            "kode_ddn": "74.02",
+            "kode_ddn_2": "7402",
+            "nama_daerah": "Kab. Konawe",
+            "logo": "logo_kab_konawe.png"
+        },
+        {
+            "id_daerah": 375,
+            "kode_ddn": "74.03",
+            "kode_ddn_2": "7403",
+            "nama_daerah": "Kab. Muna",
+            "logo": "logo_kab_muna.png"
+        },
+        {
+            "id_daerah": 372,
+            "kode_ddn": "74.04",
+            "kode_ddn_2": "7404",
+            "nama_daerah": "Kab. Buton",
+            "logo": "logo_kab_buton.png"
+        },
+        {
+            "id_daerah": 378,
+            "kode_ddn": "74.05",
+            "kode_ddn_2": "7405",
+            "nama_daerah": "Kab. Konawe Selatan",
+            "logo": "logo_kab_konawe_selatan.png"
+        },
+        {
+            "id_daerah": 379,
+            "kode_ddn": "74.06",
+            "kode_ddn_2": "7406",
+            "nama_daerah": "Kab. Bombana",
+            "logo": "logo_kab_bombana.png"
+        },
+        {
+            "id_daerah": 380,
+            "kode_ddn": "74.07",
+            "kode_ddn_2": "7407",
+            "nama_daerah": "Kab. Wakatobi",
+            "logo": "logo_kab_wakatobi.png"
+        },
+        {
+            "id_daerah": 381,
+            "kode_ddn": "74.08",
+            "kode_ddn_2": "7408",
+            "nama_daerah": "Kab. Kolaka Utara",
+            "logo": "logo_kab_kolaka_utara.png"
+        },
+        {
+            "id_daerah": 382,
+            "kode_ddn": "74.09",
+            "kode_ddn_2": "7409",
+            "nama_daerah": "Kab. Konawe Utara",
+            "logo": "logo_kab_konawe_utara.png"
+        },
+        {
+            "id_daerah": 383,
+            "kode_ddn": "74.10",
+            "kode_ddn_2": "7410",
+            "nama_daerah": "Kab. Buton Utara",
+            "logo": "logo_kab_buton_utara.png"
+        },
+        {
+            "id_daerah": 565,
+            "kode_ddn": "74.11",
+            "kode_ddn_2": "7411",
+            "nama_daerah": "Kab. Kolaka Timur",
+            "logo": "logo_kab_kolaka_timur.png"
+        },
+        {
+            "id_daerah": 566,
+            "kode_ddn": "74.12",
+            "kode_ddn_2": "7412",
+            "nama_daerah": "Kab. Konawe Kepulauan",
+            "logo": "logo_kab_konawe_kepulauan.png"
+        },
+        {
+            "id_daerah": 567,
+            "kode_ddn": "74.13",
+            "kode_ddn_2": "7413",
+            "nama_daerah": "Kab. Muna Barat",
+            "logo": "logo_kab_muna_barat.png"
+        },
+        {
+            "id_daerah": 564,
+            "kode_ddn": "74.14",
+            "kode_ddn_2": "7414",
+            "nama_daerah": "Kab. Buton Tengah",
+            "logo": "logo_kab_buton_tengah.png"
+        },
+        {
+            "id_daerah": 563,
+            "kode_ddn": "74.15",
+            "kode_ddn_2": "7415",
+            "nama_daerah": "Kab. Buton Selatan",
+            "logo": "logo_kab_buton_selatan.png"
+        },
+        {
+            "id_daerah": 376,
+            "kode_ddn": "74.71",
+            "kode_ddn_2": "7471",
+            "nama_daerah": "Kota Kendari",
+            "logo": "logo_kota_kendari.png"
+        },
+        {
+            "id_daerah": 377,
+            "kode_ddn": "74.72",
+            "kode_ddn_2": "7472",
+            "nama_daerah": "Kota Bau Bau",
+            "logo": "logo_kota_bau_bau.png"
+        },
+        {
+            "id_daerah": 512,
+            "kode_ddn": "75.01",
+            "kode_ddn_2": "7501",
+            "nama_daerah": "Kab. Gorontalo",
+            "logo": "logo_kab_gorontalo.png"
+        },
+        {
+            "id_daerah": 511,
+            "kode_ddn": "75.02",
+            "kode_ddn_2": "7502",
+            "nama_daerah": "Kab. Boalemo",
+            "logo": "logo_kab_boalemo.png"
+        },
+        {
+            "id_daerah": 515,
+            "kode_ddn": "75.03",
+            "kode_ddn_2": "7503",
+            "nama_daerah": "Kab. Bone Bolango",
+            "logo": "logo_kab_bone_bolango.png"
+        },
+        {
+            "id_daerah": 514,
+            "kode_ddn": "75.04",
+            "kode_ddn_2": "7504",
+            "nama_daerah": "Kab. Pohuwato",
+            "logo": "logo_kab_pohuwato.png"
+        },
+        {
+            "id_daerah": 516,
+            "kode_ddn": "75.05",
+            "kode_ddn_2": "7505",
+            "nama_daerah": "Kab. Gorontalo Utara",
+            "logo": "logo_kab_gorontalo_utara.png"
+        },
+        {
+            "id_daerah": 513,
+            "kode_ddn": "75.71",
+            "kode_ddn_2": "7571",
+            "nama_daerah": "Kota Gorontalo",
+            "logo": "logo_kota_gorontalo.png"
+        },
+        {
+            "id_daerah": 545,
+            "kode_ddn": "76.01",
+            "kode_ddn_2": "7601",
+            "nama_daerah": "Kab. Pasangkayu",
+            "logo": "logo_kab_mamuju_utara.png"
+        },
+        {
+            "id_daerah": 542,
+            "kode_ddn": "76.02",
+            "kode_ddn_2": "7602",
+            "nama_daerah": "Kab. Mamuju",
+            "logo": "logo_kab_mamuju.png"
+        },
+        {
+            "id_daerah": 544,
+            "kode_ddn": "76.03",
+            "kode_ddn_2": "7603",
+            "nama_daerah": "Kab. Mamasa",
+            "logo": "logo_kab_mamasa.png"
+        },
+        {
+            "id_daerah": 543,
+            "kode_ddn": "76.04",
+            "kode_ddn_2": "7604",
+            "nama_daerah": "Kab. Polewali Mandar",
+            "logo": "logo_kab_polewali_mandar.png"
+        },
+        {
+            "id_daerah": 541,
+            "kode_ddn": "76.05",
+            "kode_ddn_2": "7605",
+            "nama_daerah": "Kab. Majene",
+            "logo": "logo_kab_majene.png"
+        },
+        {
+            "id_daerah": 560,
+            "kode_ddn": "76.06",
+            "kode_ddn_2": "7606",
+            "nama_daerah": "Kab. Mamuju Tengah",
+            "logo": "logo_kab_mamuju_tengah.png"
+        },
+        {
+            "id_daerah": 386,
+            "kode_ddn": "81.01",
+            "kode_ddn_2": "8101",
+            "nama_daerah": "Kab. Maluku Tengah",
+            "logo": "logo_kab_maluku_tengah.png"
+        },
+        {
+            "id_daerah": 387,
+            "kode_ddn": "81.02",
+            "kode_ddn_2": "8102",
+            "nama_daerah": "Kab. Maluku Tenggara",
+            "logo": "logo_kab_maluku_tenggara.png"
+        },
+        {
+            "id_daerah": 385,
+            "kode_ddn": "81.03",
+            "kode_ddn_2": "8103",
+            "nama_daerah": "Kab. Kepulauan Tanimbar",
+            "logo": "logo_kab_kep_tanimbar.png"
+        },
+        {
+            "id_daerah": 388,
+            "kode_ddn": "81.04",
+            "kode_ddn_2": "8104",
+            "nama_daerah": "Kab. Buru",
+            "logo": "logo_kab_buru.png"
+        },
+        {
+            "id_daerah": 391,
+            "kode_ddn": "81.05",
+            "kode_ddn_2": "8105",
+            "nama_daerah": "Kab. Seram Bagian Timur",
+            "logo": "logo_kab_seram_bagian_timur.png"
+        },
+        {
+            "id_daerah": 390,
+            "kode_ddn": "81.06",
+            "kode_ddn_2": "8106",
+            "nama_daerah": "Kab. Seram Bagian Barat",
+            "logo": "logo_kab_seram_bagian_barat.png"
+        },
+        {
+            "id_daerah": 392,
+            "kode_ddn": "81.07",
+            "kode_ddn_2": "8107",
+            "nama_daerah": "Kab. Kepulauan Aru",
+            "logo": "logo_kab_kepulauan_aru.png"
+        },
+        {
+            "id_daerah": 394,
+            "kode_ddn": "81.08",
+            "kode_ddn_2": "8108",
+            "nama_daerah": "Kab. Maluku Barat Daya",
+            "logo": "logo_kab_maluku_barat_daya.png"
+        },
+        {
+            "id_daerah": 395,
+            "kode_ddn": "81.09",
+            "kode_ddn_2": "8109",
+            "nama_daerah": "Kab. Buru Selatan",
+            "logo": "logo_kab_buru_selatan.png"
+        },
+        {
+            "id_daerah": 389,
+            "kode_ddn": "81.71",
+            "kode_ddn_2": "8171",
+            "nama_daerah": "Kota Ambon",
+            "logo": "logo_kota_ambon.png"
+        },
+        {
+            "id_daerah": 393,
+            "kode_ddn": "81.72",
+            "kode_ddn_2": "8172",
+            "nama_daerah": "Kota Tual",
+            "logo": "logo_kota_tual.png"
+        },
+        {
+            "id_daerah": 484,
+            "kode_ddn": "82.01",
+            "kode_ddn_2": "8201",
+            "nama_daerah": "Kab. Halmahera Barat",
+            "logo": "logo_kab_halmahera_barat.png"
+        },
+        {
+            "id_daerah": 483,
+            "kode_ddn": "82.02",
+            "kode_ddn_2": "8202",
+            "nama_daerah": "Kab. Halmahera Tengah",
+            "logo": "logo_kab_halmahera_tengah.png"
+        },
+        {
+            "id_daerah": 490,
+            "kode_ddn": "82.03",
+            "kode_ddn_2": "8203",
+            "nama_daerah": "Kab. Halmahera Utara",
+            "logo": "logo_kab_halmahera_utara.png"
+        },
+        {
+            "id_daerah": 489,
+            "kode_ddn": "82.04",
+            "kode_ddn_2": "8204",
+            "nama_daerah": "Kab. Halmahera Selatan",
+            "logo": "logo_kab_halmahera_selatan.png"
+        },
+        {
+            "id_daerah": 488,
+            "kode_ddn": "82.05",
+            "kode_ddn_2": "8205",
+            "nama_daerah": "Kab. Kepulauan Sula",
+            "logo": "logo_kab_kepulauan_sula.png"
+        },
+        {
+            "id_daerah": 486,
+            "kode_ddn": "82.06",
+            "kode_ddn_2": "8206",
+            "nama_daerah": "Kab. Halmahera Timur",
+            "logo": "logo_kab_halmahera_timur.png"
+        },
+        {
+            "id_daerah": 491,
+            "kode_ddn": "82.07",
+            "kode_ddn_2": "8207",
+            "nama_daerah": "Kab. Pulau Morotai",
+            "logo": "logo_kab_pulau_morotai.png"
+        },
+        {
+            "id_daerah": 556,
+            "kode_ddn": "82.08",
+            "kode_ddn_2": "8208",
+            "nama_daerah": "Kab. Pulau Taliabu",
+            "logo": "logo_kab_taliabu.png"
+        },
+        {
+            "id_daerah": 485,
+            "kode_ddn": "82.71",
+            "kode_ddn_2": "8271",
+            "nama_daerah": "Kota Ternate",
+            "logo": "logo_kota_ternate.png"
+        },
+        {
+            "id_daerah": 487,
+            "kode_ddn": "82.72",
+            "kode_ddn_2": "8272",
+            "nama_daerah": "Kota Tidore Kepulauan",
+            "logo": "logo_kota_tidore_kepulauan.png"
+        },
+        {
+            "id_daerah": 442,
+            "kode_ddn": "91.03",
+            "kode_ddn_2": "9103",
+            "nama_daerah": "Kab. Jayapura",
+            "logo": "logo_kab_jayapura.png"
+        },
+        {
+            "id_daerah": 449,
+            "kode_ddn": "91.05",
+            "kode_ddn_2": "9105",
+            "nama_daerah": "Kab. Kepulauan Yapen",
+            "logo": "logo_kab_kepulauan_yapen.png"
+        },
+        {
+            "id_daerah": 441,
+            "kode_ddn": "91.06",
+            "kode_ddn_2": "9106",
+            "nama_daerah": "Kab. Biak Numfor",
+            "logo": "logo_kab_biak_numfor.png"
+        },
+        {
+            "id_daerah": 451,
+            "kode_ddn": "91.10",
+            "kode_ddn_2": "9110",
+            "nama_daerah": "Kab. Sarmi",
+            "logo": "logo_kab_sarmi.png"
+        },
+        {
+            "id_daerah": 452,
+            "kode_ddn": "91.11",
+            "kode_ddn_2": "9111",
+            "nama_daerah": "Kab. Keerom",
+            "logo": "logo_kab_keerom.png"
+        },
+        {
+            "id_daerah": 459,
+            "kode_ddn": "91.15",
+            "kode_ddn_2": "9115",
+            "nama_daerah": "Kab. Waropen",
+            "logo": "logo_kab_waropen.png"
+        },
+        {
+            "id_daerah": 460,
+            "kode_ddn": "91.19",
+            "kode_ddn_2": "9119",
+            "nama_daerah": "Kab. Supiori",
+            "logo": "logo_kab_supiori.png"
+        },
+        {
+            "id_daerah": 461,
+            "kode_ddn": "91.20",
+            "kode_ddn_2": "9120",
+            "nama_daerah": "Kab. Mamberamo Raya",
+            "logo": "logo_kab_mamberamo_raya.png"
+        },
+        {
+            "id_daerah": 450,
+            "kode_ddn": "91.71",
+            "kode_ddn_2": "9171",
+            "nama_daerah": "Kota Jayapura",
+            "logo": "logo_kota_jayapura.png"
+        },
+        {
+            "id_daerah": 530,
+            "kode_ddn": "92.02",
+            "kode_ddn_2": "9202",
+            "nama_daerah": "Kab. Manokwari",
+            "logo": "logo_kab_manokwari.png"
+        },
+        {
+            "id_daerah": 531,
+            "kode_ddn": "92.03",
+            "kode_ddn_2": "9203",
+            "nama_daerah": "Kab. Fak Fak",
+            "logo": "logo_kab_fakfak.png"
+        },
+        {
+            "id_daerah": 535,
+            "kode_ddn": "92.06",
+            "kode_ddn_2": "9206",
+            "nama_daerah": "Kab. Teluk Bintuni",
+            "logo": "logo_kab_teluk_bintuni.png"
+        },
+        {
+            "id_daerah": 536,
+            "kode_ddn": "92.07",
+            "kode_ddn_2": "9207",
+            "nama_daerah": "Kab. Teluk Wondama",
+            "logo": "logo_kab_teluk_wondama.png"
+        },
+        {
+            "id_daerah": 537,
+            "kode_ddn": "92.08",
+            "kode_ddn_2": "9208",
+            "nama_daerah": "Kab. Kaimana",
+            "logo": "logo_kab_kaimana.png"
+        },
+        {
+            "id_daerah": 558,
+            "kode_ddn": "92.11",
+            "kode_ddn_2": "9211",
+            "nama_daerah": "Kab. Manokwari Selatan",
+            "logo": "logo_kab_manokwari_selatan.png"
+        },
+        {
+            "id_daerah": 559,
+            "kode_ddn": "92.12",
+            "kode_ddn_2": "9212",
+            "nama_daerah": "Kab. Pegunungan Arfak",
+            "logo": "logo_kab_pegunungan_arfak.png"
+        },
+         {
+            "id_daerah": 591,
+            "kode_ddn": "93.01",
+            "kode_ddn_2": "9301",
+            "nama_daerah": "Kab. Merauke",
+            "logo": "logo_kab_merauke.png"
+        },
+        {
+            "id_daerah": 592,
+            "kode_ddn": "93.02",
+            "kode_ddn_2": "9302",
+            "nama_daerah": "Kab. Boven Digoel",
+            "logo": "logo_kab_boven_digoel.png"
+        },
+        {
+            "id_daerah": 593,
+            "kode_ddn": "93.03",
+            "kode_ddn_2": "9303",
+            "nama_daerah": "Kab. Mappi",
+            "logo": "logo_kab_mappi.png"
+        },
+        {
+            "id_daerah": 594,
+            "kode_ddn": "93.04",
+            "kode_ddn_2": "9304",
+            "nama_daerah": "Kab. Asmat",
+            "logo": "logo_kab_asmat.png"
+        },
+        {
+            "id_daerah": 595,
+            "kode_ddn": "94.01",
+            "kode_ddn_2": "9401",
+            "nama_daerah": "Kab. Nabire",
+            "logo": "logo_kab_nabire.png"
+        },
+        {
+            "id_daerah": 596,
+            "kode_ddn": "94.02",
+            "kode_ddn_2": "9402",
+            "nama_daerah": "Kab. Puncak Jaya",
+            "logo": "logo_kab_puncak_jaya.png"
+        },
+        {
+            "id_daerah": 597,
+            "kode_ddn": "94.03",
+            "kode_ddn_2": "9403",
+            "nama_daerah": "Kab. Paniai",
+            "logo": "logo_kab_paniai.png"
+        },
+        {
+            "id_daerah": 598,
+            "kode_ddn": "94.04",
+            "kode_ddn_2": "9404",
+            "nama_daerah": "Kab. Mimika",
+            "logo": "logo_kab_mimika.png"
+        },
+        {
+            "id_daerah": 468,
+            "kode_ddn": "94.05",
+            "kode_ddn_2": "9405",
+            "nama_daerah": "Kab. Puncak",
+            "logo": "logo_kab_puncak.png"
+        },
+        {
+            "id_daerah": 599,
+            "kode_ddn": "94.06",
+            "kode_ddn_2": "9406",
+            "nama_daerah": "Kab. Dogiyai",
+            "logo": "logo_kab_dogiyai.png"
+        },
+        {
+            "id_daerah": 600,
+            "kode_ddn": "94.07",
+            "kode_ddn_2": "9407",
+            "nama_daerah": "Kab. Intan Jaya",
+            "logo": "logo_kab_intan_jaya.png"
+        },
+        {
+            "id_daerah": 601,
+            "kode_ddn": "94.08",
+            "kode_ddn_2": "9408",
+            "nama_daerah": "Kab. Deiyai",
+            "logo": "logo_kab_deiyai.png"
+        },
+        {
+            "id_daerah": 602,
+            "kode_ddn": "95.01",
+            "kode_ddn_2": "9501",
+            "nama_daerah": "Kab. Jayawijaya",
+            "logo": "logo_kab_jayawijaya.png"
+        },
+        {
+            "id_daerah": 603,
+            "kode_ddn": "95.02",
+            "kode_ddn_2": "9502",
+            "nama_daerah": "Kab. Pegunungan Bintang",
+            "logo": "logo_kab_pegunungan_bintang.png"
+        },
+        {
+            "id_daerah": 604,
+            "kode_ddn": "95.03",
+            "kode_ddn_2": "9503",
+            "nama_daerah": "Kab. Yahukimo",
+            "logo": "logo_kab_yahukimo.png"
+        },
+        {
+            "id_daerah": 605,
+            "kode_ddn": "95.04",
+            "kode_ddn_2": "9504",
+            "nama_daerah": "Kab. Tolikara",
+            "logo": "logo_kab_tolikara.png"
+        },
+        {
+            "id_daerah": 606,
+            "kode_ddn": "95.05",
+            "kode_ddn_2": "9505",
+            "nama_daerah": "Kab. Mamberamo Tengah",
+            "logo": "logo_kab_mamberamo_tengah.png"
+        },
+        {
+            "id_daerah": 607,
+            "kode_ddn": "95.06",
+            "kode_ddn_2": "9506",
+            "nama_daerah": "Kab. Yalimo",
+            "logo": "logo_kab_yalimo.png"
+        },
+        {
+            "id_daerah": 608,
+            "kode_ddn": "95.07",
+            "kode_ddn_2": "9507",
+            "nama_daerah": "Kab. Lanny Jaya",
+            "logo": "logo_kab_lanny_jaya.png"
+        },
+        {
+            "id_daerah": 609,
+            "kode_ddn": "95.08",
+            "kode_ddn_2": "9508",
+            "nama_daerah": "Kab. Nduga",
+            "logo": "logo_kab_nduga.png"
+        },
+        {
+            "id_daerah": 611,
+            "kode_ddn": "96.01",
+            "kode_ddn_2": "9601",
+            "nama_daerah": "Kab. Sorong",
+            "logo": "logo_kab_sorong.png"
+        },
+        {
+            "id_daerah": 612,
+            "kode_ddn": "96.02",
+            "kode_ddn_2": "9602",
+            "nama_daerah": "Kab. Sorong Selatan",
+            "logo": "logo_kab_sorong_selatan.png"
+        },
+        {
+            "id_daerah": 613,
+            "kode_ddn": "96.03",
+            "kode_ddn_2": "9603",
+            "nama_daerah": "Kab. Raja Ampat",
+            "logo": "logo_kab_kepulauan_raja_ampat.png"
+        },
+        {
+            "id_daerah": 614,
+            "kode_ddn": "96.04",
+            "kode_ddn_2": "9604",
+            "nama_daerah": "Kab. Tambrauw",
+            "logo": "logo_kab_tambrauw.png"
+        },
+        {
+            "id_daerah": 615,
+            "kode_ddn": "96.05",
+            "kode_ddn_2": "9605",
+            "nama_daerah": "Kab. Maybrat",
+            "logo": "logo_kab_maybrat.png"
+        },
+        {
+            "id_daerah": 616,
+            "kode_ddn": "96.71",
+            "kode_ddn_2": "9671",
+            "nama_daerah": "Kota Sorong",
+            "logo": "logo_kota_sorong.png"
+        }
+
+]
