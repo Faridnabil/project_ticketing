@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('no_ticket')->unique();
-            $table->foreignId('regional_id')->nullable()->constrained('regionals');
-            $table->foreignId('provinsi_id')->nullable()->constrained('provinsis');
-            $table->foreignId('kabupaten_id')->nullable()->constrained('kabupatens');
-            $table->foreignId('kecamatan_id')->nullable()->constrained('kecamatans')->cascadeOnDelete();
+            // $table->foreignId('regional_id')->nullable()->constrained('regionals');
+            $table->foreignId('sipd_provinsi_id')->nullable()->constrained('sipd_provinsis');
+            $table->foreignId('sipd_kabkot_id')->nullable()->constrained('sipd_kabkots');
+            // $table->foreignId('kecamatan_id')->nullable()->constrained('kecamatans')->cascadeOnDelete();
             $table->foreignId('level1')->nullable()->constrained('roles')->cascadeOnDelete();
             $table->foreignId('level2')->nullable()->constrained('roles')->cascadeOnDelete();
             $table->foreignId('level3')->nullable()->constrained('roles')->cascadeOnDelete();

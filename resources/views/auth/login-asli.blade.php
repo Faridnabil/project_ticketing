@@ -37,8 +37,8 @@
                             <ul class="mb-0">
                                 @foreach ($errors->all() as $error)
                                     <li>
-                                        @if ($error == 'The nip field is required.')
-                                            The nip field is required.
+                                        @if ($error == 'The email field is required.')
+                                            The email field is required.
                                         @elseif ($error == 'The password field is required.')
                                             The password field is required.
                                         @elseif ($error == 'These credentials do not match our records.')
@@ -57,11 +57,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="" class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
+                    <form method="POST" action="{{ route('login') }}" class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
                         @csrf
                         <div class="mb-4">
-                            <label class="form-label">NIP</label>
-                            <input class="form-control form-control-lg" type="nip" name="nip" value="{{ old('nip') }}" required autofocus autocomplete="nip">
+                            <label class="form-label">Email</label>
+                            <input class="form-control form-control-lg" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
                         </div>
 
                         <div class="mb-4 position-relative">

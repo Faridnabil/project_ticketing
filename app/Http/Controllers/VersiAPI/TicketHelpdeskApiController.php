@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Http;
 
 class TicketHelpdeskApiController extends Controller
 {
-    const STATUS_NEW = 1; 
+    const STATUS_NEW = 1;
 
     public function regional()
     {
@@ -120,9 +120,9 @@ class TicketHelpdeskApiController extends Controller
     {
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'regional_id' => 'required|exists:regionals,id',
-            'kabupaten_id' => 'required|exists:kabupatens,id',
-            'kecamatan_id' => 'required|exists:kecamatans,id',
+            // 'regional_id' => 'required|exists:regionals,id',
+            'sipd_kabkot_id' => 'required|exists:sipd_kabkots,id',
+            // 'kecamatan_id' => 'required|exists:kecamatans,id',
             'no_hp' => 'required|string',
             'description' => 'required|string',
             'pic' => 'required|string',
@@ -142,10 +142,6 @@ class TicketHelpdeskApiController extends Controller
                 ], 422);
             }
 
-            // $lastTicketNumber = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
-            //     ->max(DB::raw("CAST(SUBSTRING(no_ticket, 6) AS UNSIGNED)"));
-            // $newTicketIdNumber = $lastTicketNumber ? $lastTicketNumber + 1 : 1;
-            // $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
             $today = \Carbon\Carbon::now()->format('Ymd');
             $prefix = 'TICK-' . $today . '-';
 
@@ -244,7 +240,7 @@ class TicketHelpdeskApiController extends Controller
                 "status_id" => $ticket->status_id
             ], 200);
 
-    
+
             // return response()->json([
             //     "message" => "Ticket Berhasil Diperbarui !!",
             //     "data" => $ticket
@@ -283,7 +279,7 @@ class TicketHelpdeskApiController extends Controller
             }
             $ticket = $tickets->first();
 
-            
+
             $response = Http::post('http://82.25.108.179:50000/api/v1/log',[
                 'message'      => 'Log ticket berdasarkan ticket berhasil diambil',
                 'provinsi_id'  => $ticket->provinsi_id,
@@ -301,7 +297,7 @@ class TicketHelpdeskApiController extends Controller
                     'error'   => $response->body()
                 ], 500);
             }
-            
+
 
             return response()->json([
                 'message'      => 'Log ticket berdasarkan ticket berhasil diambil',
