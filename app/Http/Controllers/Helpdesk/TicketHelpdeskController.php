@@ -430,7 +430,7 @@ class TicketHelpdeskController extends Controller
                         );
                     }
                 }
-                $http->post('http://82.25.108.179:50000/api/v1/store', [
+                $http->post('http://192.168.112.45:50000/api/v1/store', [
                     'category_id'   => $data['category_id'] ?? '',
                     'regional_id'   => $data['regional_id'] ?? '',
                     'provinsi_id'   => $data['sipd_provinsi_id'] ?? '',
@@ -674,7 +674,7 @@ class TicketHelpdeskController extends Controller
                         );
                     }
                 }
-                $http->post('http://82.25.108.179:50000/api/v1/update', [
+                $http->post('http://192.168.112.45:50000/api/v1/update', [
                     'category_id'   => $data['category_id'] ?? '',
                     'regional_id'   => $data['regional_id'] ?? '',
                     'provinsi_id'   => $data['sipd_provinsi_id'] ?? '',
