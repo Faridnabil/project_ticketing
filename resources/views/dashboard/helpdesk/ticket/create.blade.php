@@ -1,8 +1,7 @@
 @extends('layouts.dashboard.app')
 
-@php
-    $user = auth()->user();
-@endphp
+{{-- HAPUS BARIS INI: @php $user = Auth::user(); @endphp --}}
+{{-- Objek $user sudah diteruskan dari controller dan sudah eager loaded --}}
 
 @section('title')
     Tambah Tiket | SIAK Dukcapil
@@ -78,23 +77,30 @@
 
                                 <div class="col-md-3">
                                     <label for="regional_name" class="form-label">Nama Wilayah</label>
-                                    <input type="text" class="form-control" id="regional_name" value="{{ $user->regional->code }} - {{ $user->regional->regional_name }}" readonly>
+                                    {{-- Gunakan null-safe operator ?-> --}}
+                                    <input type="text" class="form-control" id="regional_name"
+                                           value="{{ $user->regional?->code }} - {{ $user->regional?->regional_name ?? 'Tidak Ada' }}" readonly>
                                     <input type="hidden" name="regional_id" value="{{ $user->regional_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="provinsi_name" class="form-label">Nama Provinsi</label>
-                                    <input type="text" class="form-control" id="provinsi_name" value="{{ $user->provinsi->code }} - {{ $user->provinsi->name }}" readonly>
-                                    <input type="hidden" name="provinsi_id" value="{{ $user->provinsi_id }}">
+                                    <label for="sipd_provinsi_name" class="form-label">Nama Provinsi</label>
+                                    {{-- Gunakan null-safe operator ?-> --}}
+                                    <input type="text" class="form-control" id="sipd_provinsi_name"
+                                           value="{{ $user->sipdProvinsi?->kode_ddn }} - {{ $user->sipdProvinsi?->nama_daerah ?? 'Tidak Ada' }}" readonly>
+                                    <input type="hidden" name="sipd_provinsi_id" value="{{ $user->sipd_provinsi_id }}">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="kabupaten_name" class="form-label">Nama Kabupaten/Kota</label>
-                                    <input type="text" class="form-control" id="kabupaten_name" value="{{ $user->kabupaten->code }} - {{ $user->kabupaten->type }} {{ $user->kabupaten->name }}" readonly>
-                                    <input type="hidden" name="kabupaten_id" value="{{ $user->kabupaten_id }}">
+                                    <label for="sipd_kabkot_name" class="form-label">Nama Kabupaten/Kota</label>
+                                    {{-- MENGGANTI DARI $user->kabupaten KE $user->sipdKabkot --}}
+                                    {{-- Menggunakan kode_ddn dan nama_daerah dari sipdKabkot --}}
+                                    {{-- Gunakan null-safe operator ?-> --}}
+                                    <input type="text" class="form-control" id="sipd_kabkot_name"
+                                           value="{{ $user->sipdKabkot?->kode_ddn }} - {{ $user->sipdKabkot?->nama_daerah ?? 'Tidak Ada' }}" readonly>
+                                    {{-- Menggunakan sipd_kabkot_id dari user --}}
+                                    <input type="hidden" name="sipd_kabkot_id" value="{{ $user->sipd_kabkot_id }}">
                                 </div>
-
-
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Status</label>
@@ -144,17 +150,11 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="validationCustom01" class="form-label">PIC</label>
-                                    <textarea name="pic" class="form-control @error('pic') is-invalid @enderror" id="pic"
-                                        cols="10" rows="3">{{ old('pic') }}</textarea>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    @error('pic')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                                    <label for="user_nip" class="form-label">NIP</label>
+                                    <input type="text" class="form-control" id="user_nip"
+                                           value="{{ $user->nip ?? 'Tidak Ada' }}" readonly>
+                                    {{-- Menggunakan sipd_kabkot_id dari user --}}
+                                    <input type="hidden" name="user_nip" value="{{ $user->nip }}">
                                 </div>
 
                                 <div class="col-md-6">
@@ -283,6 +283,4 @@
             });
     </script>
     @endpush
-
-
 @endsection

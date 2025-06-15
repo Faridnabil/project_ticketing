@@ -42,6 +42,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>Kode Daerah</th>
                         <th>Provinsi</th>
                         <th>Jumlah Tiket</th>
                     </tr>
@@ -49,7 +50,8 @@
                 <tbody>
                     @foreach ($provinsis as $provinsi)
                         <tr>
-                            <td>{{ $provinsi->name }}</td>
+                            <td>{{ $provinsi->kode_ddn }}</td>
+                            <td>{{ $provinsi->nama_daerah }}</td>
                             <td>{{ $provinsi->tickets_count }}</td>
                         </tr>
                     @endforeach
@@ -62,6 +64,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>Kode Daerah</th>
                         <th>Kabupaten/Kota</th>
                         <th>Jumlah Tiket</th>
                     </tr>
@@ -69,7 +72,8 @@
                 <tbody>
                     @foreach ($kabupatens as $kabupaten)
                         <tr>
-                            <td>{{ $kabupaten->type }} {{ $kabupaten->name }}</td>
+                            <td>{{ $kabupaten->kode_ddn }}</td>
+                            <td>{{ $kabupaten->nama_daerah }}</td>
                             <td>{{ $kabupaten->tickets_count }}</td>
                         </tr>
                     @endforeach

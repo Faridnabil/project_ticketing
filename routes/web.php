@@ -13,10 +13,12 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeAdminController;
+use App\Http\Controllers\Helpdesk\PermissionHelpdeskController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\RequestApprovalTicketController;
-
+use App\Http\Controllers\Helpdesk\RoleHelpdeskController;
+use App\Http\Controllers\Helpdesk\UserHelpdeskController;
 use App\Http\Controllers\Helpdesk\AttendanceHelpdeskController;
 use App\Http\Controllers\Helpdesk\HomeHelpdeskController;
 use App\Http\Controllers\Koordinator\HomeKoordinatorController;
@@ -132,6 +134,9 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,
+        '/helpdesk/role' => RoleHelpdeskController::class,
+        '/helpdesk/permission' => PermissionHelpdeskController::class,
+        '/helpdesk/user' => UserHelpdeskController::class,
         // '/helpdesk/report' => ReportController::class,
     ]);
     Route::post('/helpdesk/TicketStore', [TicketHelpdeskController::class, 'store_comment'])->name('tickets.store');

@@ -21,27 +21,27 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'nik',
+        'nip',
         'email',
         'password',
         'gender',
         'photo',
         'surat_tugas',
-        'kabupaten_id',
-        'provinsi_id',
+        'sipd_kabkot_id',
+        'sipd_provinsi_id',
         'regional_id',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($user) {
-            if ($user->kabupaten_id && !$user->provinsi_id) {
-                $kabupaten = Kabupaten::with('provinsi.regional')->find($user->kabupaten_id);
-                $user->provinsi_id = $kabupaten->provinsi->id ?? null;
-                $user->regional_id = $kabupaten->provinsi->regional->id ?? null;
-            }
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::creating(function ($user) {
+    //         if ($user->kabupaten_id && !$user->provinsi_id) {
+    //             $kabupaten = Kabupaten::with('provinsi.regional')->find($user->kabupaten_id);
+    //             $user->provinsi_id = $kabupaten->provinsi->id ?? null;
+    //             $user->regional_id = $kabupaten->provinsi->regional->id ?? null;
+    //         }
+    //     });
+    // }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -90,6 +90,19 @@ class User extends Authenticatable
     public function regional()
     {
         return $this->belongsTo(Regional::class);
+    }
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function sipdProvinsi(){
+        return $this->belongsTo(SipdProvinsi::class);
+    }
+
+    public function sipdKabkot(){
+        return $this->belongsTo(SipdKabkot::class);
     }
 
 }

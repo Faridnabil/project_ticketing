@@ -21,7 +21,7 @@ class Ticket extends Model
         'attachments',
         'sipd_provinsi_id',
         // 'kabupaten_id',
-        'pic',
+        'nip',
         // 'jabatan',
         'completion_notes',
         'no_hp',
@@ -117,4 +117,8 @@ class Ticket extends Model
         return $this->hasOne(HistoryTicket::class, 'h_no_ticket', 'no_ticket')
             ->latest('created_at');
     }
+
+    // public function user(){
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Regional;
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
+use App\Models\SipdKabkot;
+use App\Models\SipdProvinsi;
 use Illuminate\Support\Facades\Cache;
 
 class MonitoringTicketController extends Controller
@@ -22,7 +24,7 @@ class MonitoringTicketController extends Controller
 
         // Cache untuk data provinsi
         $provinsis = Cache::remember('monitoring_provinsis', 60, function () {
-            return Provinsi::select('id', 'name', 'regional_id')
+            return SipdProvinsi::select('kode_ddn', 'nama_daerah', 'regional_id')
                 ->withCount('tickets')
                 ->orderByDesc('tickets_count')
                 ->get();
@@ -30,7 +32,7 @@ class MonitoringTicketController extends Controller
 
         // Cache untuk data kabupaten
         $kabupatens = Cache::remember('monitoring_kabupatens', 60, function () {
-            return Kabupaten::select('id', 'name', 'type', 'provinsi_id')
+            return SipdKabkot::select('kode_ddn', 'nama_daerah')
                 ->withCount('tickets')
                 ->orderByDesc('tickets_count')
                 ->get();

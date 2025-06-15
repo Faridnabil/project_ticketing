@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nik')->unique();
+            $table->string('nip')->unique();
             $table->string('name');
             $table->string('gender')->nullable();
             $table->text('photo')->nullable();
@@ -22,8 +22,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('regional_id')->nullable()->constrained('regionals');
-            $table->foreignId('provinsi_id')->nullable()->constrained('provinsis');
-            $table->foreignId('kabupaten_id')->nullable()->constrained('kabupatens');
+            $table->foreignId('sipd_provinsi_id')->nullable()->constrained('sipd_provinsis');
+            $table->foreignId('sipd_kabkot_id')->nullable()->constrained('sipd_kabkots');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

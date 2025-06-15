@@ -22,7 +22,11 @@ class Regional extends Model
 
     public function tickets()
     {
-        return $this->hasManyThrough(Ticket::class, Provinsi::class, 'regional_id', 'provinsi_id');
+        return $this->hasManyThrough(Ticket::class, Provinsi::class, 'regional_id', 'sipd_provinsi_id');
+    }
+
+    public function sipdProvinsi(){
+        return $this->hasMany(SipdProvinsi::class);
     }
 
 

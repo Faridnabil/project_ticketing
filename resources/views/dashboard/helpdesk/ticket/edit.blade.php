@@ -1,8 +1,7 @@
 @extends('layouts.dashboard.app')
 
-@php
-    $user = auth()->user();
-@endphp
+{{-- HAPUS BARIS INI: @php $user = auth()->user(); @endphp --}}
+{{-- Objek $user sudah diteruskan dari controller dan sudah eager loaded --}}
 
 @section('title')
     Edit Tiket | SIAK Dukcapil
@@ -54,20 +53,28 @@
 
                                 <div class="col-md-3">
                                     <label for="regional_name" class="form-label">Nama Wilayah</label>
-                                    <input type="text" class="form-control" id="regional_name" value="{{ $user->regional->code }} - {{ $user->regional->regional_name }}" readonly>
+                                    {{-- Gunakan null-safe operator ?-> dan null coalescing ?? --}}
+                                    <input type="text" class="form-control" id="regional_name"
+                                           value="{{ $user->regional?->code }} - {{ $user->regional?->regional_name ?? 'Tidak Ada' }}" readonly>
                                     <input type="hidden" name="regional_id" value="{{ $user->regional_id }}">
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="provinsi_name" class="form-label">Nama Provinsi</label>
-                                    <input type="text" class="form-control" id="provinsi_name" value="{{ $user->provinsi->code }} - {{ $user->provinsi->name }}" readonly>
-                                    <input type="hidden" name="provinsi_id" value="{{ $user->provinsi_id }}">
+                                    {{-- Menggunakan sipdProvinsi sesuai model User --}}
+                                    {{-- Gunakan null-safe operator ?-> dan null coalescing ?? --}}
+                                    <input type="text" class="form-control" id="provinsi_name"
+                                           value="{{ $user->sipdProvinsi?->kode_ddn }} - {{ $user->sipdProvinsi?->nama_daerah ?? 'Tidak Ada' }}" readonly>
+                                    <input type="hidden" name="sipd_provinsi_id" value="{{ $user->sipd_provinsi_id }}">
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="kabupaten_name" class="form-label">Nama Kabupaten/Kota</label>
-                                    <input type="text" class="form-control" id="kabupaten_name" value="{{ $user->kabupaten->code }} - {{ $user->kabupaten->type }} {{ $user->kabupaten->name }}" readonly>
-                                    <input type="hidden" name="kabupaten_id" value="{{ $user->kabupaten_id }}">
+                                    {{-- Menggunakan sipdKabkot sesuai model User --}}
+                                    {{-- Gunakan null-safe operator ?-> dan null coalescing ?? --}}
+                                    <input type="text" class="form-control" id="kabupaten_name"
+                                           value="{{ $user->sipdKabkot?->kode_ddn }} - {{ $user->sipdKabkot?->nama_daerah ?? 'Tidak Ada' }}" readonly>
+                                    <input type="hidden" name="sipd_kabkot_id" value="{{ $user->sipd_kabkot_id }}">
                                 </div>
 
                                 <div class="col-md-6">
@@ -99,16 +106,12 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label for="validationCustom01" class="form-label">PIC</label>
-                                    <input type="text" name="pic"
-                                        class="form-control @error('pic') is-invalid @enderror" id="pic"
-                                        placeholder="Masukan PIC" value="{{ old('pic', $ticket->pic) }}">
-
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('pic')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                <div class="col-md-6">
+                                    <label for="user_nip" class="form-label">NIP</label>
+                                    <input type="text" class="form-control" id="user_nip"
+                                           value="{{ $user->nip ?? 'Tidak Ada' }}" readonly>
+                                    {{-- Menggunakan sipd_kabkot_id dari user --}}
+                                    <input type="hidden" name="user_nip" value="{{ $user->nip }}">
                                 </div>
 
                                 <div class="col-md-6">

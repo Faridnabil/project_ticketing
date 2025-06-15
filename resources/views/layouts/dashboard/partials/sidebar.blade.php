@@ -1,6 +1,5 @@
 <style>
     .menu-accordion.menu-active>.menu-link,
-
     .text-white {
         color: white;
     }
@@ -91,8 +90,6 @@
         color: #fff;
     }
 
-
-
     .dashboard-link:hover {
         background-color: #e9e9e9;
         color: #153A6A;
@@ -133,7 +130,6 @@
         /* Jika aktif */
     }
 </style>
-
 
 
 <div class="aside-menu flex-column-fluid" style="background-color: #254166">
@@ -221,25 +217,6 @@
                     </a>
                 </div>
             @endcan
-            @can('View Dashboard SIAK Dev')
-                <div class="dashboard-link-container">
-                    <a href="{{ route('siakDev.dashboard.index') }}"
-                        class="dashboard-link {{ request()->is('siakDev.dashboard.index') ? 'active' : '' }}">
-                        <span class="svg-icon svg-icon-2 ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                version="1.1">
-                                <path
-                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                    fill="#000000" opacity="0.3" />
-                                <path
-                                    d="M14,10c0,1.019-.308,1.964-.832,2.754l-3.168-3.168V5.101c2.282,.463,4,2.48,4,4.899Zm-6-4.899c-2.282,.463-4,2.48-4,4.899,0,2.761,2.239,5,5,5,1.019,0,1.964-.308,2.754-.832l-3.754-3.754V5.101Zm8,1.899h4v-2h-4v2Zm0,4h4v-2h-4v2Zm0,4h4v-2h-4v2Zm-3,4v2h5v2H6v-2h5v-2H0V4C0,2.346,1.346,1,3,1H21c1.654,0,3,1.346,3,3v15H13Zm-11-2H22V4c0-.551-.448-1-1-1H3c-.552,0-1,.449-1,1v13Z"
-                                    fill="#000000" />
-                            </svg>
-                        </span>
-                        <span style="margin-left: 10px">Dashboard</span>
-                    </a>
-                </div>
-            @endcan
             @can('View Dashboard Pejabat')
                 <div class="dashboard-link-container">
                     <a href="{{ route('pejabat.dashboard.index') }}"
@@ -278,7 +255,8 @@
                     </a>
                 </div>
             @endcan
-            @can('View User Management')
+            {{-- Mengubah @can('View User Management') untuk header 'Master Data' --}}
+            @hasanyrole(['Admin', 'Helpdesk']) {{-- PERUBAHAN DI SINI --}}
                 <div style="margin-left: 25px; ">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1 text-white" style="color: #fff">Master
@@ -327,7 +305,7 @@
                             Data</span>
                     </div>
                 </div>
-            @endcan
+            @endhasanyrole {{-- Pindah @endcan ke @endhasanyrole --}}
 
             @can('View Province')
                 <div class="dashboard-link-container">
@@ -373,7 +351,8 @@
                 </div>
             @endcan
 
-            @can('View User Management')
+            {{-- Mengubah @can('View User Management') untuk menu 'Management Pengguna' --}}
+            @hasanyrole(['Admin', 'Helpdesk']) {{-- PERUBAHAN DI SINI --}}
                 @php
                     // Cek apakah salah satu submenu aktif
                     $userManagementActive =
@@ -413,23 +392,40 @@
                         </span>
                     </div>
                     <div id="userManagementDropdown" style="display: none; margin-top: 10px;">
-                        <a href="{{ route('admin.user.index') }}"
-                            class="dashboard-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
-                            <span class="dot-icon"
-                                style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
-                            Pengguna
-                        </a>
-                        <a href="{{ route('admin.role.index') }}"
-                            class="dashboard-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}"
-                            style="margin-top: 5px">
-                            <span class="dot-icon"
-                                style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
-                            Hak Akses
-                        </a>
+                        {{-- Logika rute dinamis berdasarkan role --}}
+                        @role('Admin')
+                            <a href="{{ route('admin.user.index') }}"
+                                class="dashboard-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
+                                <span class="dot-icon"
+                                    style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                                Pengguna
+                            </a>
+                            <a href="{{ route('admin.role.index') }}"
+                                class="dashboard-link {{ request()->routeIs('admin.role.index') ? 'active' : '' }}"
+                                style="margin-top: 5px">
+                                <span class="dot-icon"
+                                    style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                                Hak Akses
+                            </a>
+                        @endrole
+                        @role('Helpdesk')
+                            <a href="{{ route('helpdesk.user.index') }}" {{-- UBAH INI --}}
+                                class="dashboard-link {{ request()->routeIs('helpdesk.user.index') ? 'active' : '' }}"> {{-- UBAH INI --}}
+                                <span class="dot-icon"
+                                    style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                                Pengguna
+                            </a>
+                            <a href="{{ route('helpdesk.role.index') }}" {{-- UBAH INI --}}
+                                class="dashboard-link {{ request()->routeIs('helpdesk.role.index') ? 'active' : '' }}" {{-- UBAH INI --}}
+                                style="margin-top: 5px">
+                                <span class="dot-icon"
+                                    style="display: inline-block; width: 8px; height: 8px; background-color: #f1f1f1; border-radius: 50%; margin-right: 8px;"></span>
+                                Hak Akses
+                            </a>
+                        @endrole
                     </div>
                 </div>
-            @endcan
-
+            @endhasanyrole
 
 
 
@@ -784,7 +780,7 @@
                             <span style="margin-left: 10px">Laporan</span>
                         </a>
                     </div>
-                @endcan
+                @endhasrole
 
 
                 <div style="margin-left: 25px; ">
@@ -804,7 +800,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                     viewBox="0 0 24 24" version="1.1">
                                     <path
-                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
+                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24h7V23a2,2,0,0,1,4,0v1h7V3A3,3,0,0,0,18,0ZM15.874,22a4,4,0,0,0-7.748,0H5V17H8V15H5V3A1,1,0,0,1,6,2H8.126a4,4,0,0,0,7.748,0H18a1,1,0,0,1,1,1V15H16v2h3v5Z"
                                         fill="#000000" opacity="0.3" />
                                     <path
                                         d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
@@ -816,38 +812,12 @@
                         <span style="margin-left: 10px">Solusi Teknis</span>
                     </a>
                 </div>
-            @endcan
-
-
-            {{--  @hasrole(['Helpdesk', 'Admin'])
-                <div class="menu-item">
-                    <a class="{{ request()->routeIs('helpdesk.solution.index') ? 'menu-link active' : 'menu-link' }}"
-                        href="{{ route('helpdesk.solution.index') }}">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <path
-                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
-                                        fill="#000000" opacity="0.3" />
-                                    <path
-                                        d="M21,2h-3V0h-2V2H8V0h-2V2H3C1.346,2,0,3.346,0,5V24H24V5c0-1.654-1.346-3-3-3Zm1,20H2V10H22v12Zm0-14H2v-3c0-.551,.448-1,1-1H21c.552,0,1,.449,1,1v3Zm-12.914,11.414l-2.782-2.696,1.393-1.437,2.793,2.707,5.809-5.701,1.404,1.425-5.793,5.707c-.387,.387-.896,.58-1.407,.58s-1.025-.195-1.416-.585Z"
-                                        fill="#000000" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-title">Solusi Teknis</span>
-                    </a>
-                </div>
-            @endhasrole  --}}
+            @endhasrole
 
         </div>
         <!--end::Menu-->
     </div>
 </div>
-
 
 <script>
     function toggleDropdown(id) {

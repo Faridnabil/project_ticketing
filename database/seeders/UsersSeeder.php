@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Kabupaten;
+use App\Models\SipdKabkot;
+use App\Models\SipdProvinsi;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 use Faker\Factory as FakerFactory;
-use Database\Factories\NikProvider;
+use Database\Factories\NipProvider;
 
 class UsersSeeder extends Seeder
 {
@@ -22,7 +24,7 @@ class UsersSeeder extends Seeder
         Permission::create(['name' => 'View Dashboard Helpdesk']);
         Permission::create(['name' => 'View Dashboard Koordinator']);
         Permission::create(['name' => 'View Dashboard Staff Subdit']);
-        Permission::create(['name' => 'View Dashboard SIAK Dev']);
+        Permission::create(['name' => 'View Dashboard SIPD Dev']);
         Permission::create(['name' => 'View Dashboard Pejabat']);
         Permission::create(['name' => 'View Dashboard Department']);
         Permission::create(['name' => 'View Dashboard Teknisi Hardware']);
@@ -99,7 +101,7 @@ class UsersSeeder extends Seeder
         $helpdeskRole = Role::create(['name' => 'Helpdesk']);
         $koordinatorRole = Role::create(['name' => 'Koordinator']);
         $staffSubditRole = Role::create(['name' => 'Staff Subdit']);
-        $siakDevRole = Role::create(['name' => 'SIAK Dev']);
+        $sipdDevRole = Role::create(['name' => 'SIPD Dev']);
         $pejabatRole = Role::create(['name' => 'Pejabat']);
         $teknisiHardwareRole = Role::create(['name' => 'Teknisi Hardware']);
 
@@ -296,33 +298,33 @@ class UsersSeeder extends Seeder
         $staffSubditRole->givePermissionTo('Send Ticket');
 
         //SIAK Dev
-        $siakDevRole->givePermissionTo('View Dashboard SIAK Dev');
+        $sipdDevRole->givePermissionTo('View Dashboard SIPD Dev');
 
-        $siakDevRole->givePermissionTo('View Category');
-        $siakDevRole->givePermissionTo('Create Category');
-        $siakDevRole->givePermissionTo('Edit Category');
-        // $siakDevRole->givePermissionTo('Delete Category');
-        $siakDevRole->givePermissionTo('Show Category');
+        $sipdDevRole->givePermissionTo('View Category');
+        $sipdDevRole->givePermissionTo('Create Category');
+        $sipdDevRole->givePermissionTo('Edit Category');
+        // $sipdDevRole->givePermissionTo('Delete Category');
+        $sipdDevRole->givePermissionTo('Show Category');
 
-        $siakDevRole->givePermissionTo('View Priority');
-        $siakDevRole->givePermissionTo('Create Priority');
-        $siakDevRole->givePermissionTo('Edit Priority');
-        // $siakDevRole->givePermissionTo('Delete Priority');
-        $siakDevRole->givePermissionTo('Show Priority');
+        $sipdDevRole->givePermissionTo('View Priority');
+        $sipdDevRole->givePermissionTo('Create Priority');
+        $sipdDevRole->givePermissionTo('Edit Priority');
+        // $sipdDevRole->givePermissionTo('Delete Priority');
+        $sipdDevRole->givePermissionTo('Show Priority');
 
-        $siakDevRole->givePermissionTo('View Status');
-        $siakDevRole->givePermissionTo('Create Status');
-        $siakDevRole->givePermissionTo('Edit Status');
-        // $siakDevRole->givePermissionTo('Delete Status');
-        $siakDevRole->givePermissionTo('Show Status');
+        $sipdDevRole->givePermissionTo('View Status');
+        $sipdDevRole->givePermissionTo('Create Status');
+        $sipdDevRole->givePermissionTo('Edit Status');
+        // $sipdDevRole->givePermissionTo('Delete Status');
+        $sipdDevRole->givePermissionTo('Show Status');
 
-        $siakDevRole->givePermissionTo('View Ticket');
-        $siakDevRole->givePermissionTo('Create Ticket');
-        $siakDevRole->givePermissionTo('Edit Ticket');
-        // $siakDevRole->givePermissionTo('Delete Ticket');
-        $siakDevRole->givePermissionTo('Show Ticket');
+        $sipdDevRole->givePermissionTo('View Ticket');
+        $sipdDevRole->givePermissionTo('Create Ticket');
+        $sipdDevRole->givePermissionTo('Edit Ticket');
+        // $sipdDevRole->givePermissionTo('Delete Ticket');
+        $sipdDevRole->givePermissionTo('Show Ticket');
 
-        $siakDevRole->givePermissionTo('Send Ticket');
+        $sipdDevRole->givePermissionTo('Send Ticket');
 
         //Pejabat
         $pejabatRole->givePermissionTo('View Dashboard Pejabat');
@@ -363,15 +365,18 @@ class UsersSeeder extends Seeder
         $teknisiHardwareRole->givePermissionTo('Show Aset Perangkat');
 
         $faker = FakerFactory::create();
-        $faker->addProvider(new NikProvider($faker));
-        $kabupaten = Kabupaten::with('provinsi.regional')->inRandomOrder()->first();
+        $faker->addProvider(new NipProvider($faker));
+        $sipdProvinsi = SipdProvinsi::with('regional')->inRandomOrder()->first();
+        $sipdKabkot = SipdKabkot::inRandomOrder()->first();
 
         $user = User::factory()->create([
             'name' => 'Admin',
             'email' => 'Admin@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'kabupaten_id' => $kabupaten->id,
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($adminRole);
 
@@ -379,17 +384,21 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 1',
             'email' => 'helpdesk1@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'kabupaten_id' => $kabupaten->id,
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($helpdeskRole);
 
         $user = User::factory()->create([
-            'name' => 'Helpdesk 2',
-            'email' => 'helpdesk2@gmail.com',
+            'name' => 'Kemendagri',
+            'email' => 'sipd@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'kabupaten_id' => $kabupaten->id,
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($helpdeskRole);
 
@@ -397,41 +406,22 @@ class UsersSeeder extends Seeder
             'name' => 'Helpdesk 3',
             'email' => 'helpdesk3@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'kabupaten_id' => $kabupaten->id,
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($helpdeskRole);
 
         // User Koordinator
         $user = User::factory()->create([
-            'name' => 'Firman Sanjaya',
+            'name' => 'Koordinator Network',
             'email' => 'koordinatorNetwork@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
-        ]);
-        $user->assignRole($koordinatorRole);
-
-        $user = User::factory()->create([
-            'name' => 'Erwinsyah',
-            'email' => 'koordinatorDatabase@gmail.com',
-            'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
-        ]);
-        $user->assignRole($koordinatorRole);
-
-        $user = User::factory()->create([
-            'name' => 'Ahmad Jazuli',
-            'email' => 'koordinatorSysadmin@gmail.com',
-            'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
-        ]);
-        $user->assignRole($koordinatorRole);
-
-        $user = User::factory()->create([
-            'name' => 'Ridzqy Dini Hari',
-            'email' => 'koordinatorSecurity@gmail.com',
-            'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($koordinatorRole);
 
@@ -442,7 +432,10 @@ class UsersSeeder extends Seeder
             'name' => 'Staff Subdit 1',
             'email' => 'staffSubdit1@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($staffSubditRole);
 
@@ -450,7 +443,10 @@ class UsersSeeder extends Seeder
             'name' => 'Staff Subdit 2',
             'email' => 'staffSubdit2@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($staffSubditRole);
 
@@ -458,20 +454,26 @@ class UsersSeeder extends Seeder
 
         // User Stafsubdit
         $user = User::factory()->create([
-            'name' => 'SIAK Dev 1',
-            'email' => 'siakdev1@gmail.com',
+            'name' => 'SIPD Dev 1',
+            'email' => 'sipddev1@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
-        $user->assignRole($siakDevRole);
+        $user->assignRole($sipdDevRole);
 
         $user = User::factory()->create([
-            'name' => 'SIAK Dev 2',
-            'email' => 'siakdev2@gmail.com',
+            'name' => 'SIPD Dev 2',
+            'email' => 'sipddev2@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
-        $user->assignRole($siakDevRole);
+        $user->assignRole($sipdDevRole);
 
         //------------------------------------------
         // Akun User Pejabat
@@ -479,7 +481,10 @@ class UsersSeeder extends Seeder
             'name' => 'Pejabat 1',
             'email' => 'pejabat1@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($pejabatRole);
 
@@ -487,16 +492,19 @@ class UsersSeeder extends Seeder
             'name' => 'Pejabat 2',
             'email' => 'pejabat2@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'regional_id' => $sipdProvinsi->regional_id,
+            'sipd_provinsi_id' => $sipdProvinsi->id,
+            'sipd_kabkot_id' => $sipdKabkot->id,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($pejabatRole);
 
         // Akun Teknisi Hardware
         $user = User::factory()->create([
-            'name' => 'Bintang',
-            'email' => 'bintang@gmail.com',
+            'name' => 'Teknisi Hardware',
+            'email' => 'teknisiHardware@gmail.com',
             'password' => bcrypt('qwerty12'),
-            'nik' => $faker->nik,
+            'nip' => $faker->nip,
         ]);
         $user->assignRole($teknisiHardwareRole);
     }

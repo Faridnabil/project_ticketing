@@ -15,6 +15,7 @@ use App\Models\Kecamatan;
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Regional;
+use App\Models\SipdKabkot;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\NotificationKoordinator;
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
+
 
 class TicketHelpdeskController extends Controller
 {
@@ -319,32 +324,33 @@ class TicketHelpdeskController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
+        if (!$user) {
+            return redirect('/login')->with('error', 'Anda harus login untuk membuat tiket.');
+        }
+
+        // PENTING: Muat (eager load) SEMUA relasi yang akan diakses di tampilan.
+        // Sekarang termasuk 'kabupaten' juga, selain 'regional', 'sipdProvinsi', dan 'sipdKabkot'.
+        $user->load(['regional', 'sipdProvinsi', 'sipdKabkot']);
+
+        // Data lain yang dibutuhkan untuk form
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
 
-        // Ambil hanya data sesuai user
-        $regionals = Regional::where('id', $user->regional_id)
-            ->with(['provinsi' => function ($query) use ($user) {
-                $query->where('id', $user->provinsi_id)
-                    ->with(['kabupaten' => function ($q) use ($user) {
-                        $q->where('id', $user->kabupaten_id);
-                    }]);
-            }])
-            ->get();
-
+        // Ambil ID dari role 'Helpdesk'
         $helpdeskRoles = Role::where('name', 'Helpdesk')
             ->pluck('id')
             ->toArray();
 
+        // Teruskan SEMUA data yang dibutuhkan ke view.
         return view('dashboard.helpdesk.ticket.create', compact(
-            'regionals',
+            'user', // <-- Objek user ini sudah memiliki semua relasi yang dimuat
             'priorities',
             'statuses',
             'categories',
-            'helpdeskRoles',
+            'helpdeskRoles'
         ));
     }
 
@@ -362,8 +368,9 @@ class TicketHelpdeskController extends Controller
             'priority_id' => 'required',
             'description' => 'required',
             'no_hp' => 'nullable',
-            'pic' => 'nullable',
-            'attachments' => 'nullable|file|mimes:jpg,jpeg,png,pdf'
+            // 'pic' => 'nullable',
+            'attachments' => 'required|array',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
         // dd($request->all());
 
@@ -392,12 +399,12 @@ class TicketHelpdeskController extends Controller
 
             $user = auth()->user();
             $data['regional_id'] = $user->regional_id;
-            $data['provinsi_id'] = $user->provinsi_id;
-            $data['kabupaten_id'] = $user->kabupaten_id;
+            $data['sipd_provinsi_id'] = $user->sipd_provinsi_id;
+            $data['sipd_kabupaten_id'] = $user->sipd_kabupaten_id;
+            $data['pic'] = $user->nip;
 
             $data['no_ticket'] = $newTicketId;
             $data['level1'] = $request->input('level1');
-            $data['pic'] = $request->input('pic ticket');
 
             // Proses file lampiran jika ada
             $attachments = [];
@@ -426,11 +433,11 @@ class TicketHelpdeskController extends Controller
                 $http->post('http://82.25.108.179:50000/api/v1/store', [
                     'category_id'   => $data['category_id'] ?? '',
                     'regional_id'   => $data['regional_id'] ?? '',
-                    'provinsi_id'   => $data['provinsi_id'] ?? '',
-                    'kabupaten_id'  => $data['kabupaten_id'] ?? '',
+                    'provinsi_id'   => $data['sipd_provinsi_id'] ?? '',
+                    'kabupaten_id'  => $data['sipd_kabkot_id'] ?? '',
                     'status_id'     => $data['status_id'] ?? '',
                     'priority_id'   => $data['priority_id'] ?? '',
-                    'pic'           => $data['pic'] ?? '',
+                    'pic'           => $data['nip'] ?? '',
                     'no_hp'         => $data['no_hp'] ?? '',
                     'description'   => $data['description'] ?? '',
                     'no_ticket'     => $data['no_ticket'] ?? '',
@@ -438,7 +445,7 @@ class TicketHelpdeskController extends Controller
                     'id'            => $user->id ?? '',
                 ]);
             } catch (\Exception $e) {
-                \Log::error('Gagal kirim ke endpoint eksternal: ' . $e->getMessage());
+                Log::error('Gagal kirim ke endpoint eksternal: ' . $e->getMessage());
             }
             DB::commit();
             return redirect()->route('helpdesk.newTickets.index')->with('success', 'Tiket Berhasil Dibuat.');
@@ -500,21 +507,37 @@ class TicketHelpdeskController extends Controller
             session(['first_url' => url()->previous()]);
         }
 
-        $user = auth()->user();
+        $user = Auth::user(); // Ambil user yang sedang login
 
+        // Pastikan user ada sebelum mencoba memuat relasi
+        if (!$user) {
+            // Handle jika user tidak ditemukan (misal, redirect ke halaman login)
+            return redirect('/login')->with('error', 'Anda harus login untuk mengedit tiket.');
+        }
+
+        // PENTING: Muat (eager load) SEMUA relasi yang akan diakses di tampilan dari objek user.
+        // Ini termasuk 'regional', 'sipdProvinsi', 'sipdKabkot', dan 'kabupaten'
+        // agar sesuai dengan penggunaan di form.
+        $user->load(['regional', 'sipdProvinsi', 'sipdKabkot']);
+
+
+        // Data lain yang dibutuhkan untuk form
         $priorities = Priority::all();
         $statuses = Status::all();
         $categories = Category::all();
 
-        // Ambil hanya data sesuai user
-        $regionals = Regional::where('id', $user->regional_id)
-            ->with(['provinsi' => function ($query) use ($user) {
-                $query->where('id', $user->provinsi_id)
-                    ->with(['kabupaten' => function ($q) use ($user) {
-                        $q->where('id', $user->kabupaten_id);
-                    }]);
-            }])
-            ->get();
+        // Variabel $regionals tidak lagi dibutuhkan, karena data regional
+        // akan diakses langsung melalui $user->regional di view.
+        // HAPUS BAGIAN INI:
+        // $regionals = Regional::where('id', $user->regional_id)
+        //     ->with(['provinsi' => function ($query) use ($user) {
+        //         $query->where('id', $user->provinsi_id)
+        //             ->with(['kabupaten' => function ($q) use ($user) {
+        //                 $q->where('id', $user->kabupaten_id);
+        //             }]);
+        //     }])
+        //     ->get();
+
 
         // Status ID untuk pengecekan logika
         $selesaiStatusId = Status::where('status_name', 'Selesai')->value('id');
@@ -524,10 +547,11 @@ class TicketHelpdeskController extends Controller
 
         return view('dashboard.helpdesk.ticket.edit', compact(
             'ticket',
+            'user', // <-- Teruskan objek user yang sudah dimuat relasinya
             'priorities',
             'statuses',
             'categories',
-            'regionals',
+            // 'regionals', // <-- Hapus ini karena tidak lagi digunakan
             'selesaiStatusId',
             'tertundaStatusId',
             'diterimaStatusId',
@@ -543,6 +567,7 @@ class TicketHelpdeskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         DB::beginTransaction();
         try {
             $ticket = Ticket::findOrFail($id);
@@ -553,7 +578,7 @@ class TicketHelpdeskController extends Controller
                 'priority_id' => 'required',
                 'description' => 'nullable',
                 'no_hp' => 'nullable',
-                'pic' => 'nullable',
+                // 'pic' => 'nullable',
                 'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf'
             ], [
                 'attachments.*.mimes' => 'File yang diunggah harus berupa gambar dengan format JPG, JPEG, PNG, atau PDF.',
@@ -564,11 +589,11 @@ class TicketHelpdeskController extends Controller
             // Ambil user dan set ulang regional/prov/kab sesuai user login (mengikuti pola store)
             $user = auth()->user();
             $data['regional_id'] = $user->regional_id;
-            $data['provinsi_id'] = $user->provinsi_id;
-            $data['kabupaten_id'] = $user->kabupaten_id;
+            $data['sipd_provinsi_id'] = $user->sipd_provinsi_id;
+            $data['sipd_kabupaten_id'] = $user->sipd_kabupaten_id;
+            $data['nip'] = $user->nip;
 
             $data['level1'] = $request->input('level1');
-            $data['pic'] = $request->input('pic ticket');
 
             // File lama
             $existingAttachments = json_decode($ticket->attachments, true) ?? [];
@@ -593,8 +618,8 @@ class TicketHelpdeskController extends Controller
             DB::table('history_tickets')->insert([
                 'h_no_ticket' => $ticket->no_ticket,
                 'h_regional_id' => $ticket->regional_id,
-                'h_provinsi_id' => $ticket->provinsi_id,
-                'h_kabupaten_id' => $ticket->kabupaten_id,
+                'h_provinsi_id' => $ticket->sipd_provinsi_id,
+                'h_kabupaten_id' => $ticket->sipd_kabupaten_id,
                 'h_level1' => $ticket->level1,
                 'h_level2' => $ticket->level2,
                 'h_level3' => $ticket->level3,
@@ -605,7 +630,7 @@ class TicketHelpdeskController extends Controller
                 'h_category_id' => $ticket->category_id,
                 'h_description' => $ticket->description,
                 'h_attachments' => $ticket->attachments,
-                'h_pic' => $ticket->pic,
+                'h_pic' => $ticket->nip,
                 'h_jabatan' => $ticket->jabatan,
                 'h_no_hp' => $ticket->no_hp,
                 'created_at' => now(),
@@ -652,11 +677,11 @@ class TicketHelpdeskController extends Controller
                 $http->post('http://82.25.108.179:50000/api/v1/update', [
                     'category_id'   => $data['category_id'] ?? '',
                     'regional_id'   => $data['regional_id'] ?? '',
-                    'provinsi_id'   => $data['provinsi_id'] ?? '',
-                    'kabupaten_id'  => $data['kabupaten_id'] ?? '',
+                    'provinsi_id'   => $data['sipd_provinsi_id'] ?? '',
+                    'kabupaten_id'  => $data['sipd_kabupaten_id'] ?? '',
                     'status_id'     => $data['status_id'] ?? '',
                     'priority_id'   => $data['priority_id'] ?? '',
-                    'pic'           => $data['pic'] ?? '',
+                    'pic'           => $data['nip'] ?? '',
                     'no_hp'         => $data['no_hp'] ?? '',
                     'description'   => $data['description'] ?? '',
                     'no_ticket'     => $data['no_ticket'] ?? '',
@@ -664,7 +689,7 @@ class TicketHelpdeskController extends Controller
                     'id'            => $user->id ?? '',
                 ]);
             } catch (\Exception $e) {
-                \Log::error('Gagal kirim ke endpoint eksternal: ' . $e->getMessage());
+                Log::error('Gagal kirim ke endpoint eksternal: ' . $e->getMessage());
             }
 
             DB::commit();
@@ -821,8 +846,8 @@ class TicketHelpdeskController extends Controller
         DB::table('history_tickets')->insert([
             'h_no_ticket' => $ticket->no_ticket,
             'h_regional_id' => $ticket->regional_id,
-            'h_provinsi_id' => $ticket->provinsi_id,
-            'h_kabupaten_id' => $ticket->kabupaten_id,
+            'h_provinsi_id' => $ticket->sipd_provinsi_id,
+            'h_kabupaten_id' => $ticket->sipd_kabupaten_id,
             'h_level1' => $ticket->level1,
             'h_level2' => $ticket->level2,
             'h_level3' => $ticket->level3,
@@ -833,7 +858,7 @@ class TicketHelpdeskController extends Controller
             'h_category_id' => $ticket->category_id,
             'h_description' => $ticket->description,
             'h_attachments' => $ticket->attachments,
-            'h_pic' => $ticket->pic,
+            'h_pic' => $ticket->nip,
             'h_jabatan' => $ticket->jabatan,
             'h_no_hp' => $ticket->no_hp,
             'h_completion_notes' => $request->status_id == 4 ? $ticket->completion_notes : null,

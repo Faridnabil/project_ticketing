@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('no_ticket')->unique();
-            // $table->foreignId('regional_id')->nullable()->constrained('regionals');
+            $table->foreignId('regional_id')->nullable()->constrained('regionals');
+            // $table->foreignId('provinsi_id')->nullable()->constrained('provinsi');
             $table->foreignId('sipd_provinsi_id')->nullable()->constrained('sipd_provinsis');
             $table->foreignId('sipd_kabkot_id')->nullable()->constrained('sipd_kabkots');
             // $table->foreignId('kecamatan_id')->nullable()->constrained('kecamatans')->cascadeOnDelete();
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('completion_notes')->nullable();
             $table->json('attachments')->nullable();
-            $table->string('pic')->nullable();
+            $table->string('nip')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('no_hp')->nullable();
             $table->timestamps();
