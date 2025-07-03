@@ -10,7 +10,8 @@
         <div class="col-md-6">
             <div class="card h-100 d-flex justify-content-center align-items-center">
                 <div class="text-center">
-                    <img src="{{ asset('template/dist/assets/media/logos/logo.svg') }}" class="card-img-top logo-center" alt="Card image cap" style="width: 300px">
+                    <img src="{{ asset('template/dist/assets/media/logos/logo.svg') }}" class="card-img-top logo-center"
+                        alt="Card image cap" style="width: 300px">
                     <div class="card-body">
                         <h5 class="card-title">Welcome to Ticketing</h5>
                         <p class="card-text">Experience seamless ticket booking and management.</p>
@@ -39,7 +40,7 @@
                                     <li>
                                         @if ($error == 'These credentials do not match our records.')
                                             The email or password you entered is incorrect.
-                                        {{-- @if ($error == 'The nip field is required.')
+                                            {{-- @if ($error == 'The nip field is required.')
                                             The nip field is required. --}}
                                         @elseif ($error == 'The password field is required.')
                                             The password field is required.
@@ -61,15 +62,18 @@
                         @csrf
                         <div class="mb-4">
                             <label class="form-label">Email</label>
-                            <input class="form-control form-control-lg" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email">
+                            <input class="form-control form-control-lg" type="email" name="email"
+                                value="{{ old('email') }}" required autofocus autocomplete="email">
                         </div>
 
-                        <div class="mb-4 position-relative">
+                        <div class="mb-4">
                             <label class="form-label">Password</label>
-                            <div class="input-group">
-                                <input class="form-control form-control-lg" type="password" name="password" id="password" required autocomplete="current-password">
-                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-                                    <i class="fas fa-eye"></i>
+                            <div class="input-group password-group">
+                                <input class="form-control form-control-lg border-end-0" type="password" name="password" id="password"
+                                    required autocomplete="current-password" placeholder="Enter your password" />
+                                <span class="input-group-text bg-white border-start-0" id="togglePassword" style="cursor: pointer;">
+                                    <i class="fas fa-eye" id="icon-eye-show" style="display: block;"></i>
+                                    <i class="fas fa-eye-slash" id="icon-eye-hide" style="display: none;"></i>
                                 </span>
                             </div>
                         </div>
@@ -172,35 +176,59 @@
             padding: 20px;
         }
 
-        .input-group-text {
-            background-color: transparent;
-            border-left: none;
-            cursor: pointer;
+        .input-group.password-group {
+            position: relative;
+        }
+        .input-group.password-group .form-control {
+            border-right: 0;
+        }
+        .input-group.password-group .input-group-text {
+            background: #fff;
+            border-left: 0;
+            border-radius: 0 5px 5px 0;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+        .input-group.password-group .input-group-text i {
+            font-size: 1.2rem;
         }
     </style>
 @endsection
 
 @section('scripts')
     <script>
-        // Toggle show/hide password
-        document.getElementById('togglePassword').addEventListener('click', function () {
+        // Toggle show/hide password with two icons (ensure DOM is ready)
+        document.addEventListener('DOMContentLoaded', function() {
             const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
+            const togglePassword = document.getElementById('togglePassword');
+            const iconShow = document.getElementById('icon-eye-show');
+            const iconHide = document.getElementById('icon-eye-hide');
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+            if (togglePassword && passwordInput && iconShow && iconHide) {
+                togglePassword.addEventListener('mousedown', function(e) {
+                    e.preventDefault(); // Prevent input focus loss
+                });
+                togglePassword.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (passwordInput.type === 'password') {
+                        passwordInput.setAttribute('type', 'text');
+                        iconShow.style.display = 'none';
+                        iconHide.style.display = 'block';
+                    } else {
+                        passwordInput.setAttribute('type', 'password');
+                        iconShow.style.display = 'block';
+                        iconHide.style.display = 'none';
+                    }
+                });
             }
         });
     </script>
 
     <script>
-        document.getElementById('reloadCaptcha').addEventListener('click', function () {
+        document.getElementById('reloadCaptcha').addEventListener('click', function() {
             fetch("{{ route('reload.captcha') }}")
                 .then(response => response.json())
                 .then(data => {
@@ -208,5 +236,4 @@
                 });
         });
     </script>
-
 @endsection
