@@ -121,9 +121,12 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
 Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.')->group(function () {
     Route::get('/helpdesk/dashboard', [HomeHelpdeskController::class, 'index'])->name('dashboard.index');
     Route::get('/helpdesk/dashboardAll', [HomeHelpdeskController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/helpdesk/dashboardProblem', [HomeHelpdeskController::class, 'indexProblem'])->name(name: 'dashboard.indexProblem');
     Route::get('/helpdesk/tickets/chart', [HomeHelpdeskController::class, 'getTicketChartData']);
     Route::get('/helpdesk/tickets/dailyChart', [HomeHelpdeskController::class, 'getDailyTicketChartData']);
     Route::get('/helpdesk/tickets/todaydailychart', [HomeHelpdeskController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
+    Route::get('/helpdesk/tickets/cities/{province}', [HomeHelpdeskController::class, 'getCities'])
+        ->name('tickets.getCitiesProblems');
     Route::resources([
         '/helpdesk/ticket' => TicketHelpdeskController::class,
         '/helpdesk/attendance' => AttendanceHelpdeskController::class,

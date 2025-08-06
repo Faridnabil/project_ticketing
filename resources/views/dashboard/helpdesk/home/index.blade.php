@@ -59,7 +59,7 @@
         }
     </style>
 
-    {{-- Riwayat Tiket  --}}
+    {{-- Riwayat Tiket --}}
     <style>
         .timeline {
             list-style: none;
@@ -113,7 +113,7 @@
     </style>
 
     <!--begin::Toolbar-->
-    {{--  card title  --}}
+    {{-- card title --}}
     <div class="toolbar" id="kt_toolbar">
         <!--begin::Container-->
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -137,7 +137,7 @@
         <!--end::Container-->
     </div>
     <!--end::Toolbar-->
-    {{--  card main  --}}
+    {{-- card main --}}
     <div class="post" id="kt_post">
         <div id="kt_content_container" class="container">
             <div class="row">
@@ -158,6 +158,12 @@
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexProblem') ? 'active' : '' }}"
+                                    href="{{ route('helpdesk.dashboard.indexProblem') }}">
+                                    <strong>Data Permasalahan Tiket</strong>
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
@@ -171,7 +177,8 @@
                                     <link
                                         href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
                                         rel="stylesheet">
-                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+                                    <script
+                                        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
                                     <div class="card card-xxl-stretch mt-3 mb-4" style="border-radius: 10px">
                                         <!-- Header -->
@@ -207,8 +214,8 @@
                                                 <div class="input-field col s3">
                                                     <div class="input-wrapper">
                                                         <span class="icon"><b>Waktu Selesai</b></span>
-                                                        <input type="text" name="endTime" id="endTime"
-                                                            class="timepicker" placeholder="Jam Selesai"
+                                                        <input type="text" name="endTime" id="endTime" class="timepicker"
+                                                            placeholder="Jam Selesai"
                                                             value="{{ request('endTime', '23:59') }}">
                                                     </div>
                                                 </div>
@@ -230,7 +237,7 @@
 
                                         <script>
                                             // Initialize timepickers if not already initialized
-                                            document.addEventListener('DOMContentLoaded', function() {
+                                            document.addEventListener('DOMContentLoaded', function () {
                                                 var elems = document.querySelectorAll('.timepicker');
                                                 M.Timepicker.init(elems, {
                                                     twelveHour: false
@@ -401,7 +408,8 @@
                                                 <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perhari
                                                     -
                                                     {{ $month ? \Carbon\Carbon::create()->month($month)->format('F') : 'Mingguan' }}
-                                                    {{ $year ?? now()->year }}</h3>
+                                                    {{ $year ?? now()->year }}
+                                                </h3>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="TodaydailyDataChart" width="80%" height="20px"></canvas>
@@ -423,10 +431,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const selectedDate = urlParams.get('selectedDate') || new Date().toISOString().split('T')[
-            0]; // Default ke hari ini
+                0]; // Default ke hari ini
             const startTime = urlParams.get('startTime') || '00:00';
             const endTime = urlParams.get('endTime') || '23:59';
 
@@ -434,8 +442,8 @@
 
             function fetchAndRenderChart(selectedDate, startTime, endTime) {
                 fetch(
-                        `{{ route('helpdesk.tickets.todaydailychart') }}?selectedDate=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`
-                    )
+                    `{{ route('helpdesk.tickets.todaydailychart') }}?selectedDate=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`
+                )
                     .then(response => response.json())
                     .then(data => {
                         const ctx = document.getElementById('TodaydailyDataChart').getContext('2d');
@@ -453,19 +461,19 @@
                                     'Shift 3 (23:00-07:00)'
                                 ],
                                 datasets: [{
-                                        label: 'Tiket Masuk',
-                                        data: data.ticketsCreated,
-                                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                        borderColor: 'rgba(255, 99, 132, 1)',
-                                        borderWidth: 1,
-                                    },
-                                    {
-                                        label: 'Tiket Selesai',
-                                        data: data.ticketsClosed,
-                                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1,
-                                    },
+                                    label: 'Tiket Masuk',
+                                    data: data.ticketsCreated,
+                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1,
+                                },
+                                {
+                                    label: 'Tiket Selesai',
+                                    data: data.ticketsClosed,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                },
                                 ],
                             },
                             options: {
@@ -476,7 +484,7 @@
                                     },
                                     tooltip: {
                                         callbacks: {
-                                            label: function(tooltipItem) {
+                                            label: function (tooltipItem) {
                                                 return tooltipItem.dataset.label + ': ' +
                                                     tooltipItem.raw;
                                             },
@@ -515,7 +523,7 @@
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         // Inisialisasi Timepicker di Shadow Root
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const timepickers = shadowRoot.querySelectorAll('.timepicker');
             M.Timepicker.init(timepickers, {
                 defaultTime: 'now',

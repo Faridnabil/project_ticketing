@@ -91,13 +91,13 @@
                             <strong>Data Perbulan</strong>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="btn-custom font-regular nav-link {{ request('active_tab', 'absen') == 'lupa_absen' ? 'active' : '' }}"
                             data-bs-toggle="tab" href="#lupa_absen" role="tab"
                             aria-selected="{{ request('active_tab', 'absen') == 'lupa_absen' ? 'true' : 'false' }}">
                             <strong>Lupa Absen</strong>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
 

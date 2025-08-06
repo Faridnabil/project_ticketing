@@ -158,6 +158,12 @@
                                     <strong>Data Keseluruhan</strong>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexProblem') ? 'active' : '' }}"
+                                    href="{{ route('helpdesk.dashboard.indexProblem') }}">
+                                    <strong>Data Permasalahan Tiket</strong>
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
