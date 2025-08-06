@@ -391,6 +391,7 @@
                                         <td>${data.province}</td>
                                         <td>${data.city}</td>
                                         <td>${data.category}</td>
+                                        <td>${data.description}</td>
                                         <td>${data.total}</td>
                                     </tr>
                                 `;
