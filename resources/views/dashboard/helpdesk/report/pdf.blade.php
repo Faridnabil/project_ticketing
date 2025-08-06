@@ -118,7 +118,8 @@
                 <th>Nama Provinsi</th>
                 <th>No Kabupaten</th>
                 <th>Nama Kabupaten</th>
-                <th>Keterangan Permasalahan</th>
+                <th>Permasalahan</th>
+                <th>Solusi</th>
                 <th>Kategori</th>
                 <th>Disposisi</th>
                 <th>Prioritas</th>
@@ -171,6 +172,9 @@
                     <td>{{ $ticket->cityOrRegency->city_or_regency_name ?? '-' }}</td>
                     <td>
                         {!! nl2br(wordwrap(strip_tags(html_entity_decode($ticket->description)), 30, "\n", true)) ?? '-' !!}
+                    </td>
+                    <td>
+                        {!! nl2br(wordwrap(strip_tags(html_entity_decode($ticket->completion_notes)), 30, "\n", true)) ?? '-' !!}
                     </td>
                     <td>{{ $ticket->category->category_name ?? '-' }}</td>
                     <td>{{ $disposisi }}</td>

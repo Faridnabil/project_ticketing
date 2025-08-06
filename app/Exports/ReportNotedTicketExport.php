@@ -22,7 +22,7 @@ class ReportNotedTicketExport implements FromCollection, WithHeadings
                 'No' => $index + 1,
                 'Nomor Tiket' => $ticket->no_ticket,
                 'Kategori' => $ticket->category->category_name,
-                'Keterangan Permasalahan' => strip_tags(html_entity_decode($ticket->description)),
+                'Permasalahan' => strip_tags(html_entity_decode($ticket->description)),
                 'Solusi' => strip_tags(html_entity_decode($ticket->completion_notes)),
                 'Diselesaikan Tanggal' => Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y'),
             ];
@@ -35,7 +35,7 @@ class ReportNotedTicketExport implements FromCollection, WithHeadings
             'No',
             'Nomor Tiket',
             'Kategori',
-            'Keterangan Permasalahan',
+            'Permasalahan',
             'Solusi',
             'Diselesaikan Tanggal',
         ];

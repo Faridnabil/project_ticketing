@@ -225,7 +225,8 @@
                                     <th lass="min-w-70px">Nama Provinsi</th>
                                     <th lass="min-w-70px">No Kabupaten</th>
                                     <th lass="min-w-70px">Nama Kabupaten</th>
-                                    <th lass="min-w-70px">Keterangan Permasalahan</th>
+                                    <th lass="min-w-70px">Permasalahan</th>
+                                    <th lass="min-w-70px">Solusi</th>
                                     <th lass="min-w-70px">Kategori</th>
                                     <th lass="min-w-70px">Disposisi</th>
                                     <th lass="min-w-70px">Prioritas</th>
@@ -283,6 +284,7 @@
                                             <td>{{ $ticket->cityOrRegency->no_city_or_regency ?? '-' }}</td>
                                             <td>{{ $ticket->cityOrRegency->city_or_regency_name ?? '-' }}</td>
                                             <td>{{ strip_tags(html_entity_decode($ticket->description)) ?? '-' }}</td>
+                                            <td>{{ strip_tags(html_entity_decode($ticket->completion_notes)) ?? '-' }}</td>
                                             <td>{{ $ticket->category->category_name ?? '-' }}</td>
                                             <td>{{ $disposisi }}</td>
                                             <td>{{ $priority }}</td>

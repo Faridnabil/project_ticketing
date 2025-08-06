@@ -273,7 +273,7 @@
                                         <!--begin::Card body-->
                                         <div class="card-body pt-0">
                                             <!--begin::Table-->
-                                            <table class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+                                            <table class="table table-row-bordered gy-5 gs-7 border rounded">
                                                 <!--begin::Table head-->
                                                 <thead>
                                                     <!--begin::Table row-->
