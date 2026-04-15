@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\RequestAssignmentController;
 use App\Http\Controllers\Admin\RequestApprovalTicketController;
+use App\Http\Controllers\ActivityLogController;
 
 use App\Http\Controllers\Helpdesk\AttendanceHelpdeskController;
 use App\Http\Controllers\Helpdesk\HomeHelpdeskController;
@@ -115,6 +116,9 @@ Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(fun
     Route::get('/admin/approve-assignment', [RequestAssignmentController::class, 'index'])->name('requestAssignment.index');
     Route::post('/admin/approve-assignment/{requestAssignment}', [TicketController::class, 'approve_assignment'])->name('ticket.approveAssignment');
     Route::put('/ticket/{id}/update-approval', [RequestApprovalTicketController::class, 'update_ticket_approval'])->name('ticket.update_approval');
+
+    Route::get('/admin/activity-log', [ActivityLogController::class, 'index'])->name('activityLog.index');
+    Route::get('/admin/activity-log/shift', [ActivityLogController::class, 'shiftMonitoring'])->name('activityLog.shift');
 });
 
 // HELPDESK

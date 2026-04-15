@@ -600,6 +600,41 @@
                             <span class="menu-title">Semua Tiket</span>
                         </a>
                     </div>
+
+                    <div class="menu-item">
+                        <a class="{{ request()->routeIs('admin.activityLog.index') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('admin.activityLog.index') }}">
+                            <span class="menu-icon">
+                                <span class="svg-icon svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm0 8H3V9h18v6z"
+                                            fill="#000000" opacity="0.3" />
+                                        <rect fill="#000000" x="5" y="11" width="8" height="2" rx="1" />
+                                        <rect fill="#000000" opacity="0.5" x="15" y="11" width="4" height="2" rx="1" />
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="menu-title">Activity Log</span>
+                        </a>
+                    </div>
+
+                    <!-- <div class="menu-item">
+                        <a class="{{ request()->routeIs('admin.activityLog.shift') ? 'menu-link active' : 'menu-link' }}"
+                            href="{{ route('admin.activityLog.shift') }}">
+                            <span class="menu-icon">
+                                <span class="svg-icon svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                        <path d="M12 7v5l3 3" stroke="#000000" stroke-width="2"
+                                            stroke-linecap="round" fill="none" />
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="menu-title">Monitoring Shift</span>
+                        </a>
+                    </div> -->
                 @endrole
 
                 @role('Koordinator')

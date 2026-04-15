@@ -13,6 +13,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Notifications\CommentCustomer;
 use App\Notifications\NotificationCustomer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -71,15 +72,20 @@ class TicketCustomerController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Generate ticket_id baru
-            $lastTicket = Ticket::orderBy('id', 'desc')->first();
-            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->ticket_id, 5)) + 1 : 1;
-            $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            // Generate nomor tiket berdasarkan tanggal: TICK-YYYYMMDD-XXX
+            $today = Carbon::now()->format('Ymd');
+            $prefix = 'TICK-' . $today . '-';
+            $lastTicket = Ticket::where('no_ticket', 'LIKE', $prefix . '%')
+                ->orderByRaw('CAST(SUBSTR(no_ticket, ' . (strlen($prefix) + 1) . ') AS UNSIGNED) DESC')
+                ->first();
 
-            // Pastikan ticket_id unik
+            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->no_ticket, strlen($prefix))) + 1 : 1;
+            $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
+
+            // Pastikan nomor tiket unik
             while (Ticket::where('no_ticket', $newTicketId)->exists()) {
                 $newTicketIdNumber++;
-                $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+                $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
             }
 
             $validate = $request->all();

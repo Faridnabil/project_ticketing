@@ -38,6 +38,17 @@ class Ticket extends Model
     {
         parent::boot();
 
+        static::created(function ($model) {
+            ActivityLog::create([
+                'model_type' => get_class($model),
+                'model_id'   => $model->id,
+                'attribute'  => 'CREATE_TICKET',
+                'old_value'  => null,
+                'new_value'  => $model->no_ticket,
+                'user_id'    => auth()->id(),
+            ]);
+        });
+
         static::updating(function ($model) {
             $changes = $model->getDirty();
             foreach ($changes as $attribute => $newValue) {
@@ -45,11 +56,11 @@ class Ticket extends Model
 
                 ActivityLog::create([
                     'model_type' => get_class($model),
-                    'model_id' => $model->id,
-                    'attribute' => $attribute,
-                    'old_value' => $oldValue,
-                    'new_value' => $newValue,
-                    'user_id' => auth()->id(),
+                    'model_id'   => $model->id,
+                    'attribute'  => $attribute,
+                    'old_value'  => $oldValue,
+                    'new_value'  => $newValue,
+                    'user_id'    => auth()->id(),
                 ]);
             }
         });

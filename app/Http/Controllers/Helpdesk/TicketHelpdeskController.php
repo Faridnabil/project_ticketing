@@ -256,19 +256,20 @@ class TicketHelpdeskController extends Controller
 
         DB::beginTransaction();
         try {
-            // Ambil nomor tiket terakhir
-            $lastTicket = Ticket::where('no_ticket', 'LIKE', 'TICK-%')
-                ->orderByRaw('CAST(SUBSTR(no_ticket, 6) AS UNSIGNED) DESC')
+            // Generate nomor tiket berdasarkan tanggal: TICK-YYYYMMDD-XXX
+            $today = Carbon::now()->format('Ymd');
+            $prefix = 'TICK-' . $today . '-';
+            $lastTicket = Ticket::where('no_ticket', 'LIKE', $prefix . '%')
+                ->orderByRaw('CAST(SUBSTR(no_ticket, ' . (strlen($prefix) + 1) . ') AS UNSIGNED) DESC')
                 ->first();
 
-            // Generate nomor tiket baru
-            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->no_ticket, 5)) + 1 : 1;
-            $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+            $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->no_ticket, strlen($prefix))) + 1 : 1;
+            $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
 
             // Pastikan nomor tiket unik
             while (Ticket::where('no_ticket', $newTicketId)->exists()) {
                 $newTicketIdNumber++;
-                $newTicketId = 'TICK-' . str_pad($newTicketIdNumber, 6, '0', STR_PAD_LEFT);
+                $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
             }
 
             // Ambil semua input yang sudah divalidasi
