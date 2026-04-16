@@ -143,20 +143,20 @@
                                         } elseif ($attr === 'attachments') {
                                             $oldArr = is_string($oldVal) ? json_decode($oldVal, true) : [];
                                             $newArr = is_string($newVal) ? json_decode($newVal, true) : [];
-                                            
+
                                             $oldArr = is_array($oldArr) ? $oldArr : [];
                                             $newArr = is_array($newArr) ? $newArr : [];
 
                                             $oldCount = count($oldArr);
                                             $newCount = count($newArr);
-                                            
+
                                             $added = count(array_diff($newArr, $oldArr));
                                             $removed = count(array_diff($oldArr, $newArr));
-                                            
+
                                             $details = [];
                                             if ($added > 0) $details[] = "<span class='text-success'>+{$added}</span>";
                                             if ($removed > 0) $details[] = "<span class='text-danger'>-{$removed}</span>";
-                                            
+
                                             $oldVal = "{$oldCount} lampiran";
                                             $newVal = "{$newCount} lampiran" . (!empty($details) ? " (" . implode(', ', $details) . ")" : "");
                                         }

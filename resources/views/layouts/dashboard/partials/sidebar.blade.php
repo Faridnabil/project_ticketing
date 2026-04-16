@@ -601,7 +601,7 @@
                         </a>
                     </div>
 
-                    <div class="menu-item">
+                    <!-- <div class="menu-item">
                         <a class="{{ request()->routeIs('admin.activityLog.index') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('admin.activityLog.index') }}">
                             <span class="menu-icon">
@@ -617,9 +617,9 @@
                             </span>
                             <span class="menu-title">Activity Log</span>
                         </a>
-                    </div>
+                    </div> -->
 
-                    <!-- <div class="menu-item">
+                    <div class="menu-item">
                         <a class="{{ request()->routeIs('admin.activityLog.shift') ? 'menu-link active' : 'menu-link' }}"
                             href="{{ route('admin.activityLog.shift') }}">
                             <span class="menu-icon">
@@ -634,7 +634,7 @@
                             </span>
                             <span class="menu-title">Monitoring Shift</span>
                         </a>
-                    </div> -->
+                    </div>
                 @endrole
 
                 @role('Koordinator')
