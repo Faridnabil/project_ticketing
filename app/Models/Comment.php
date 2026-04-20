@@ -21,14 +21,25 @@ class Comment extends Model
         parent::boot();
 
         static::created(function ($model) {
-            ActivityLog::create([
-                'model_type' => Ticket::class,
-                'model_id'   => $model->ticket_id,
-                'attribute'  => 'ADD_COMMENT',
-                'old_value'  => null,
-                'new_value'  => $model->message,
-                'user_id'    => $model->user_id ?? auth()->id(),
-            ]);
+            // Prevent duplicate logs (Literal duplicates within 2 seconds)
+            $exists = ActivityLog::where('model_type', Ticket::class)
+                ->where('model_id', $model->ticket_id)
+                ->where('attribute', 'ADD_COMMENT')
+                ->where('new_value', (string)$model->message)
+                ->where('user_id', $model->user_id ?? auth()->id())
+                ->where('created_at', '>=', now()->subSeconds(2))
+                ->exists();
+
+            if (!$exists) {
+                ActivityLog::create([
+                    'model_type' => Ticket::class,
+                    'model_id'   => $model->ticket_id,
+                    'attribute'  => 'ADD_COMMENT',
+                    'old_value'  => null,
+                    'new_value'  => $model->message,
+                    'user_id'    => $model->user_id ?? auth()->id(),
+                ]);
+            }
         });
     }
 

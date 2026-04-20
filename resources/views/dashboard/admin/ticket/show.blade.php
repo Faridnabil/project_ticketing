@@ -439,92 +439,162 @@
                         <div class="col-xl-12">
                             <div class="card card-xl-stretch mb-5 mb-xl-8 scrollable-card activity-log"
                                 style="max-height: 756px; overflow-y: auto;">
-                                <div class="card-body p-12">
-                                    <h2 class="text-dark fw-bolder mb-11">Riwayat Aktivitas</h2>
-                                    <ul class="timeline">
-                                        @foreach ($logs as $log)
-                                            <li class="timeline-item {{ $loop->first ? 'current-status' : '' }}">
-                                                <span class="timeline-date">
-                                                    {{ \Carbon\Carbon::parse($log->created_at)->format('d M Y, H:i') }}
-                                                </span>
-                                                <div class="timeline-content">
-                                                    <h5 class="timeline-title mb-3">{{ $log->h_title }}</h5>
-                                                    <p class="timeline-text">
-                                                        <strong>Nomor Tiket :</strong> {{ $log->h_no_ticket }}<br>
-                                                        <strong>Kategori :</strong>
-                                                        {{ $log->category->category_name }}<br>
-                                                        <strong>Prioritas :</strong>
-                                                        {{ $log->priority->priority_name ?? 'N/A' }}<br>
-                                                        <strong>Status :</strong>
-                                                        {{ $log->status->status_name ?? 'N/A' }}<br>
+                                <div class="card-body p-9">
+                                    <h2 class="text-dark fw-bolder mb-8">Riwayat Aktivitas</h2>
 
-                                                        @if ($log->h_level1)
-                                                            <strong>Disposisi :</strong>
-                                                            {{ $log->helpdesk->name ?? 'N/A' }}<br>
-                                                        @elseif ($log->h_level2)
-                                                            <strong>Disposisi :</strong>
-                                                            {{ $log->koordinator->name ?? 'N/A' }}<br>
-                                                        @elseif ($log->h_level3)
-                                                            <strong>Disposisi :</strong>
-                                                            {{ $log->staffSubdit->name ?? 'N/A' }}<br>
-                                                        @elseif ($log->h_level4)
-                                                            <strong>Disposisi :</strong>
-                                                            {{ $log->siakDev->name ?? 'N/A' }}<br>
-                                                        @elseif ($log->h_level5)
-                                                            <strong>Disposisi :</strong>
-                                                            {{ $log->pejabat->name ?? 'N/A' }}<br>
-                                                        @endif
+                                    <div class="timeline-label">
+                                            $groupedLogs = $activityLogs->groupBy(function($item) {
+                                                return $item->created_at->format('Y-m-d H:i:s');
+                                            });
 
-                                                        <strong>Lampiran :</strong>
-                                                        @if (is_array(json_decode($log->h_attachments, true)) && count(json_decode($log->h_attachments, true)) > 0)
-                                                            <div class="row row-cols-auto g-2 mt-3">
-                                                                @foreach (json_decode($log->h_attachments, true) as $index => $attachment)
-                                                                    <div class="col">
-                                                                        <img src="{{ asset('storage/' . $attachment) }}"
-                                                                            alt="{{ basename($attachment) }}"
-                                                                            class="rounded shadow-sm img-thumbnail"
-                                                                            style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#riwayat_modal_{{ $log->id }}_{{ $index }}" />
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                        @else
-                                                            <p class="text-muted">Tidak ada lampiran.</p>
-                                                        @endif
+                                            $mapLabel = function($attribute) {
+                                                $labels = [
+                                                    'priority_id' => 'Prioritas',
+                                                    'status_id' => 'Status',
+                                                    'category_id' => 'Kategori',
+                                                    'description' => 'Deskripsi',
+                                                    'pic' => 'PIC',
+                                                    'jabatan' => 'Jabatan',
+                                                    'province_id' => 'Provinsi',
+                                                    'city_or_regency_id' => 'Kota/Kabupaten',
+                                                    'level1' => 'Helpdesk',
+                                                    'level2' => 'Koordinator',
+                                                    'level3' => 'Staff Subdit',
+                                                    'level4' => 'Siak Dev',
+                                                    'level5' => 'Pejabat',
+                                                    'attachments' => 'Lampiran',
+                                                    'h_status_id' => 'Status',
+                                                    'h_priority_id' => 'Prioritas',
+                                                    'h_category_id' => 'Kategori',
+                                                ];
+                                                return $labels[$attribute] ?? str_replace('_', ' ', $attribute);
+                                            };
 
-                                                    <br>
-                                                    <strong>Status Diubah Oleh :</strong>
-                                                    {{ $log->statusChangedBy->name ?? 'N/A' }}<br>
-                                                    <strong>Tiket Dibuat Oleh :</strong>
-                                                    {{ $log->h_created_by ?? 'N/A' }}
-                                                    </p>
+                                            $mapValue = function($attribute, $value) use ($priorities, $statuses, $categories) {
+                                                if (is_null($value) || $value === '') return 'kosong';
+                                                
+                                                $cleanValue = strip_tags($value);
+
+                                                switch ($attribute) {
+                                                    case 'priority_id':
+                                                    case 'h_priority_id':
+                                                        return $priorities->firstWhere('id', $value)?->priority_name ?? $cleanValue;
+                                                    case 'status_id':
+                                                    case 'h_status_id':
+                                                        return $statuses->firstWhere('id', $value)?->status_name ?? $cleanValue;
+                                                    case 'category_id':
+                                                    case 'h_category_id':
+                                                        return $categories->firstWhere('id', $value)?->category_name ?? $cleanValue;
+                                                    default:
+                                                        return $cleanValue;
+                                                }
+                                            };
+                                        @endphp
+
+                                        @foreach ($groupedLogs as $timestamp => $logsAtTime)
+                                            @php
+                                                $firstLog = $logsAtTime->first();
+                                                $user = $firstLog->user;
+                                                $actionType = $firstLog->attribute;
+                                                
+                                                // Determine Icon and Color
+                                                $color = 'primary';
+                                                
+                                                if ($actionType == 'CREATE_TICKET') {
+                                                    $color = 'success';
+                                                } elseif ($actionType == 'DELETE_TICKET') {
+                                                    $color = 'danger';
+                                                } elseif ($actionType == 'ADD_COMMENT') {
+                                                    $color = 'info';
+                                                } elseif (in_array($actionType, ['status_id', 'h_status_id'])) {
+                                                    $color = 'warning';
+                                                }
+                                            @endphp
+
+                                            <!--begin::Item-->
+                                            <div class="timeline-item">
+                                                <!--begin::Label-->
+                                                <div class="timeline-label fw-bold text-gray-800 fs-6" style="width: 100px">
+                                                    {{ \Carbon\Carbon::parse($timestamp)->format('H:i') }}
+                                                    <div class="text-muted fs-8">{{ \Carbon\Carbon::parse($timestamp)->format('d M Y') }}</div>
                                                 </div>
-                                            </li>
+                                                <!--end::Label-->
 
-                                            <!-- Modal Riwayat -->
-                                            @if (is_array(json_decode($log->h_attachments, true)) && count(json_decode($log->h_attachments, true)) > 0)
-                                                @foreach (json_decode($log->h_attachments, true) as $index => $attachment)
-                                                    <div class="modal fade" id="riwayat_modal_{{ $log->id }}_{{ $index }}" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h6 class="modal-title">Foto</h6>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body text-center">
-                                                                    <img src="{{ asset('storage/' . $attachment) }}"
-                                                                        alt="{{ basename($attachment) }}" class="img-fluid rounded" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <!--begin::Badge-->
+                                                <div class="timeline-badge">
+                                                    <i class="fa fa-genderless text-{{ $color }} fs-1"></i>
+                                                </div>
+                                                <!--end::Badge-->
+
+                                                <!--begin::Text-->
+                                                <div class="fw-normal timeline-content text-muted ps-3">
+                                                    <div class="mb-2">
+                                                        <span class="text-dark fw-bolder">{{ $user->name ?? 'Sistem' }}</span>
+                                                        @if($actionType == 'CREATE_TICKET')
+                                                            membuat tiket baru.
+                                                        @elseif($actionType == 'DELETE_TICKET')
+                                                            menghapus tiket.
+                                                        @elseif($actionType == 'ADD_COMMENT')
+                                                            menambahkan komentar.
+                                                        @else
+                                                            memperbarui tiket:
+                                                        @endif
                                                     </div>
-                                                @endforeach
-                                            @endif
+
+                                                    <div class="bg-light p-3 rounded">
+                                                        @foreach($logsAtTime as $log)
+                                                            <div class="fs-7">
+                                                                @if($log->attribute == 'attachments')
+                                                                    <strong>Lampiran diubah:</strong>
+                                                                    <div class="row row-cols-auto g-2 mt-2">
+                                                                        @php $attachments = json_decode($log->new_value, true) ?? []; @endphp
+                                                                        @foreach ($attachments as $index => $attachment)
+                                                                            <div class="col">
+                                                                                <img src="{{ asset('storage/' . $attachment) }}"
+                                                                                    class="rounded shadow-sm img-thumbnail"
+                                                                                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#activity_modal_{{ $log->id }}_{{ $index }}" />
+                                                                            </div>
+                                                                            
+                                                                            <div class="modal fade" id="activity_modal_{{ $log->id }}_{{ $index }}" tabindex="-1" aria-hidden="true">
+                                                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h6 class="modal-title">Lampiran</h6>
+                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                        </div>
+                                                                                        <div class="modal-body text-center">
+                                                                                            <img src="{{ asset('storage/' . $attachment) }}" class="img-fluid rounded" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @elseif($log->attribute == 'ADD_COMMENT')
+                                                                    <div class="text-italic">"{!! $log->new_value !!}"</div>
+                                                                @elseif(!in_array($log->attribute, ['CREATE_TICKET', 'DELETE_TICKET']))
+                                                                    <span class="badge badge-light-dark me-1">{{ $mapLabel($log->attribute) }}</span>
+                                                                    dari <span class="text-danger">"{{ $mapValue($log->attribute, $log->old_value) }}"</span>
+                                                                    ke <span class="text-success">"{{ $mapValue($log->attribute, $log->new_value) }}"</span>
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                <!--end::Text-->
+                                            </div>
+                                            <!--end::Item-->
                                         @endforeach
-                                    </ul>
+                                    </div>
+
+                                    @if($activityLogs->isEmpty())
+                                        <div class="text-center py-10">
+                                            <i class="ki-outline ki-information-2 fs-3x text-muted mb-3"></i>
+                                            <p class="text-muted">Belum ada riwayat aktivitas.</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

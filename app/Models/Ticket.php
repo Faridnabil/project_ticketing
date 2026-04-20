@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\ActivityLog;
 
 class Ticket extends Model
 {
@@ -47,22 +48,60 @@ class Ticket extends Model
                 'new_value'  => $model->no_ticket,
                 'user_id'    => auth()->id(),
             ]);
+
+            // Log initial attachments if any
+            if ($model->attachments) {
+                ActivityLog::create([
+                    'model_type' => get_class($model),
+                    'model_id'   => $model->id,
+                    'attribute'  => 'attachments',
+                    'old_value'  => null,
+                    'new_value'  => $model->attachments,
+                    'user_id'    => auth()->id(),
+                ]);
+            }
         });
 
         static::updating(function ($model) {
             $changes = $model->getDirty();
             foreach ($changes as $attribute => $newValue) {
+                // Skip timestamp updates
+                if (in_array($attribute, ['updated_at', 'created_at'])) continue;
+
                 $oldValue = $model->getOriginal($attribute);
 
-                ActivityLog::create([
-                    'model_type' => get_class($model),
-                    'model_id'   => $model->id,
-                    'attribute'  => $attribute,
-                    'old_value'  => $oldValue,
-                    'new_value'  => $newValue,
-                    'user_id'    => auth()->id(),
-                ]);
+                // Prevent duplicate logs (Literal duplicates within 2 seconds)
+                $exists = ActivityLog::where('model_type', get_class($model))
+                    ->where('model_id', $model->id)
+                    ->where('attribute', $attribute)
+                    ->where('old_value', (string)$oldValue)
+                    ->where('new_value', (string)$newValue)
+                    ->where('user_id', auth()->id())
+                    ->where('created_at', '>=', now()->subSeconds(2))
+                    ->exists();
+
+                if (!$exists) {
+                    ActivityLog::create([
+                        'model_type' => get_class($model),
+                        'model_id'   => $model->id,
+                        'attribute'  => $attribute,
+                        'old_value'  => $oldValue,
+                        'new_value'  => $newValue,
+                        'user_id'    => auth()->id(),
+                    ]);
+                }
             }
+        });
+
+        static::deleted(function ($model) {
+            ActivityLog::create([
+                'model_type' => get_class($model),
+                'model_id'   => $model->id,
+                'attribute'  => 'DELETE_TICKET',
+                'old_value'  => $model->no_ticket,
+                'new_value'  => null,
+                'user_id'    => auth()->id(),
+            ]);
         });
     }
 

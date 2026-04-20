@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
+use App\Models\ActivityLog;
 use Carbon\Carbon;
 
 class TicketHelpdeskController extends Controller
@@ -320,6 +321,20 @@ class TicketHelpdeskController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Add ActivityLog for a more granular timeline (CRUD actions)
+        $activityLogs = ActivityLog::with('user')
+            ->where(function($q) use ($ticket) {
+                $q->where(function($sq) use ($ticket) {
+                    $sq->where('model_type', Ticket::class)
+                       ->where('model_id', $ticket->id);
+                })->orWhere(function($sq) use ($ticket) {
+                    $sq->where('model_type', Comment::class)
+                       ->whereIn('model_id', Comment::where('ticket_id', $ticket->id)->pluck('id'));
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
 
         $comments = Comment::where('ticket_id', $id)
             ->with('user')
@@ -330,6 +345,7 @@ class TicketHelpdeskController extends Controller
             compact(
                 'ticket',
                 'logs',
+                'activityLogs',
                 'priorities',
                 'statuses',
                 'categories',
@@ -525,9 +541,6 @@ class TicketHelpdeskController extends Controller
                     Notification::send($users, new NotificationKoordinator($notificationData));
                 }
             }
-
-            // Update data tiket dengan data baru
-            $ticket->update($data);
 
             DB::commit();
             return redirect(session('first_url', route('helpdesk.ticket.index')))
