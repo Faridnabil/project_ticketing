@@ -24,23 +24,37 @@ class SolutionTechnicalController extends Controller
 {
     public function index(Request $request, Ticket $ticket)
     {
+        // Cek apakah ada filter aktif
+        $hasFilter = $request->filled('category_id') || $request->filled('start_date') || $request->filled('end_date');
+
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
         ->whereNotNull('completion_notes')
         ->where('completion_notes', '!=', '')
-        ->orderBy('created_at', 'desc'); // Urutkan berdasarkan created_at terbaru
+        ->orderBy('created_at', 'desc');
 
-        // Other filters
-        if ($request->filled('category_id')) {
+        // Filter kategori
+        if ($request->filled('category_id') && $request->category_id !== 'all') {
             $query->where('category_id', $request->category_id);
         }
+
+        // Filter tanggal start
+        if ($request->filled('start_date')) {
+            $query->whereDate('updated_at', '>=', $request->start_date);
+        }
+
+        // Filter tanggal end
+        if ($request->filled('end_date')) {
+            $query->whereDate('updated_at', '<=', $request->end_date);
+        }
+
+        // Hanya ambil data jika ada filter
+        $tickets = $hasFilter ? $query->get() : [];
 
         // Retrieve filter data
         $categories = Category::all();
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
-
-        $tickets = $query->get();
 
         // Ambil user dengan role Koordinator
         $koordinatorUsers = Role::where('name', 'Koordinator')
@@ -57,7 +71,8 @@ class SolutionTechnicalController extends Controller
             'statuses' => $statuses,
             'levels' => $levels,
             'koordinatorUsers' => $koordinatorUsers,
-            'filter' => $request->all() // Kirim filter saat ini ke view
+            'filter' => $request->all(), // Kirim filter saat ini ke view
+            'hasFilter' => $hasFilter // Status apakah ada filter aktif
         ]);
     }
 

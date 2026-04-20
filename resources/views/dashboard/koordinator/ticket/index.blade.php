@@ -98,6 +98,8 @@
                                 {{-- <th class="min-w-70px">Pemilik</th> --}}
                                 <th class="min-w-70px">Disposisi</th>
                                 <th class="min-w-70px">Prioritas</th>
+                                <th class="min-w-70px">Permasalahan</th>
+                                <th class="min-w-70px">Solusi</th>
                                 <th class="min-w-70px">Dibuat Tanggal</th>
                                 <th class="min-w-70px">Status</th>
                                 {{-- <th class="min-w-70px">Keterangan</th> --}}
@@ -151,26 +153,37 @@
                                         </td>
 
                                         <!--end::Assign To=-->
-                                        <!--begin::Priority=-->
                                         <td>
                                             @if ($ticket->priority_id == '4')
                                                 <span class="badge"
-                                                    style="background-color:red ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                                    style="background-color:red; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
                                             @elseif($ticket->priority_id == '3')
                                                 <span class="badge"
-                                                    style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                                    style="background-color:#FF7F3E; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
                                             @elseif($ticket->priority_id == '2')
                                                 <span class="badge"
-                                                    style="background-color:blue ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                                    style="background-color:blue; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
                                             @elseif($ticket->priority_id == '1')
                                                 <span class="badge"
-                                                    style="background-color:green ; color: white; font-weight:bold">{{ $ticket->priority->priority_name }}</span>
+                                                    style="background-color:green; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
                                             @else
                                                 <span class="badge"
-                                                    style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
+                                                    style="background-color:rgb(77, 75, 75); color:white; font-weight:bold;">
+                                                    -
+                                                </span>
                                             @endif
                                         </td>
                                         <!--end::Priority=-->
+                                        <td>{!! Str::limit($ticket->description, 150) !!}</td>
+                                        <td>{!! Str::limit($ticket->completion_notes, 150) !!}</td>
                                         <!--begin::Payment method=-->
                                         <td>
                                             {{ \Carbon\Carbon::parse($ticket->created_at)->locale('id')->translatedFormat('d F Y') }}

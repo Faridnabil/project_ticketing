@@ -278,17 +278,23 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="card shadow-sm p-7 col-md-6 mb-4 mt-3">
-                                            <h1>Permasalahan</h1>
-                                            <p class="fs-5 fw-normal text-gray-800">
-                                                {!! old('description', $ticket->description) !!}
-                                            </p>
-                                        </div>
-                                        <div class="card shadow-sm p-7 col-md-6 mb-4 mt-3">
-                                            <h1>Solusi</h1>
-                                            <p class="fs-5 fw-normal text-gray-800">
-                                                {!! old('completion_notes', $ticket->completion_notes) !!}
-                                            </p>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card shadow-sm p-7 h-100">
+                                                    <h1>Permasalahan</h1>
+                                                    <p class="fs-5 fw-normal text-gray-800">
+                                                        {!! old('description', $ticket->description) !!}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="card shadow-sm p-7 h-100">
+                                                    <h1>Solusi</h1>
+                                                    <p class="fs-5 fw-normal text-gray-800">
+                                                        {!! old('completion_notes', $ticket->completion_notes) !!}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- Attachments Card -->

@@ -155,7 +155,7 @@
                     <!-- Detail Keluhan -->
                     <div class="tab-pane fade show active" id="keluhan" role="tabpanel">
                         <div class="row g-xl-12">
-                            <div class="col-xl-7">
+                            <div class="col-xl-12">
                                 <div class="card-body">
                                     <div>
                                         <!-- Ticket Header -->
@@ -287,115 +287,93 @@
                                             </div>
                                         </div>
 
-                                        <!-- Ticket Description -->
-                                        <div class="card shadow-sm p-4">
-                                            <h1 class="text fw-bold mb-2">Deskripsi Tiket</h1>
-                                            <p class="fs-5 text-dark">
-                                                {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-5">
-                                <!--begin::Messenger-->
-                                <div class="card mt-4" id="kt_chat_messenger"
-                                    style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
-                                    <!--begin::Card header-->
-                                    <div class="card-header" id="kt_chat_messenger_header">
-                                        <!--begin::Title-->
-                                        <div class="card-title">
-                                            <!--begin::User-->
-                                            <div class="d-flex justify-content-center flex-column me-3">
-                                                <a href="#"
-                                                    class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 mb-2 lh-1">Chat
-                                                    Komentar</a>
-                                            </div>
-                                            <!--end::User-->
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Card header-->
-                                    <!--begin::Card body-->
-                                    <div class="card-body" id="kt_chat_messenger_body">
-                                        <!--begin::Messages-->
-                                        <div class="scroll-y me-n5 pe-5 h-300px h-lg-auto scrollable-card"
-                                            style="max-height: 300px; overflow-y:auto;">
-                                            @foreach ($comments as $comment)
-                                                <div class="d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-10"
-                                                    id="comment-{{ $comment->id }}">
-                                                    <div
-                                                        class="d-flex flex-column align-items-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">
-                                                        <div class="d-flex align-items-center mb-2">
-                                                            <div class="symbol symbol-35px symbol-circle">
-                                                                <div
-                                                                    class="symbol-label fs-1 fw-bolder bg-light-success text-success">
-                                                                    {{ substr($comment->user->name, 0, 1) }}
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                class="{{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }}">
-                                                                <a href="#"
-                                                                    class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{{ $comment->user->name }}</a>
-                                                                <span
-                                                                    class="text-muted fs-7 mb-1">{{ $comment->created_at->locale('id')->diffForHumans() }}</span>
-                                                                @if ($comment->user_id == $comment->ticket->customer)
-                                                                    <span class="badge badge-light-danger">Pemilik</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="p-5 rounded bg-light-{{ $comment->user_id == auth()->user()->id ? 'primary' : 'info' }} text-dark fw-bold mw-lg-400px text-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}"
-                                                            data-kt-element="message-text">
-                                                            <p class="fw-normal fs-5 text-gray-700 m-0"
-                                                                id="message-display-{{ $comment->id }}">
-                                                                {!! $comment->message !!}
-                                                            </p>
-                                                            <form action="{{ route('staffSubdit.tickets.update', $comment->id) }}"
-                                                                method="POST" class="comment-form"
-                                                                data-comment-id="{{ $comment->id }}">
-                                                                @method('PUT')
-                                                                @csrf
-                                                                <textarea name="message" class="form-control"
-                                                                    id="message-{{ $comment->id }}"
-                                                                    style="display: none">{{ $comment->message }}</textarea>
-                                                            </form>
-                                                        </div>
-                                                        @if ($comment->updated_at)
-                                                            <span class="badge badge-light-success">Dirubah</span>
-                                                        @endif
+                                        <!-- Problem and Solution Section -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card shadow-sm p-4 h-100">
+                                                    <h1 class="text fw-bold mb-2">Permasalahan</h1>
+                                                    <div class="fs-5 text-dark">
+                                                        {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
                                                     </div>
                                                 </div>
-                                            @endforeach
-                                        </div>
-                                        <!--end::Messages-->
-                                    </div>
-                                    <!--end::Card body-->
-                                    <!--begin::Card footer-->
-                                    <div class="card-footer pt-4" id="kt_chat_messenger_footer">
-                                        <form class="row g-3 mt-2 needs-validation" method="POST"
-                                            action="{{ route('staffSubdit.tickets.store') }}" enctype="multipart/form-data"
-                                            novalidate>
-                                            @csrf
-                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                                            <textarea name="message"
-                                                class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror"
-                                                id="message" cols="10" rows="1"></textarea>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('message')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                            <div class="d-flex flex-stack">
-                                                <button class="btn btn-primary" type="submit" data-kt-element="send"
-                                                    disabled>Kirim</button>
                                             </div>
-                                        </form>
+                                            <div class="col-md-6">
+                                                <div class="card shadow-sm p-4 h-100">
+                                                    <h1 class="text fw-bold mb-2">Solusi</h1>
+                                                    <div class="fs-5 text-dark">
+                                                        {!! $ticket->completion_notes ?? '<span class="text-muted italic">Belum ada solusi.</span>' !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Collapsible Comments Section -->
+                                        <div class="accordion accordion-icon-toggle mt-4" id="kt_accordion_comments">
+                                            <div class="mb-5">
+                                                <div class="accordion-header py-3 d-flex" data-bs-toggle="collapse" data-bs-target="#kt_accordion_comments_item_1">
+                                                    <span class="accordion-icon"><i class="bi bi-chat-dots fs-3 text-primary"></i></span>
+                                                    <h3 class="fs-4 fw-bold mb-0 ms-4 text-primary">Chat Komentar</h3>
+                                                </div>
+                                                <div id="kt_accordion_comments_item_1" class="collapse fs-6 ps-10" data-bs-parent="#kt_accordion_comments">
+                                                    <div class="card shadow-sm">
+                                                        <div class="card-body" id="kt_chat_messenger_body">
+                                                            <div class="scroll-y me-n5 pe-5 h-300px h-lg-auto scrollable-card" style="max-height: 400px; overflow-y:auto;">
+                                                                @foreach ($comments as $comment)
+                                                                    <div class="d-flex justify-content-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }} mb-10" id="comment-{{ $comment->id }}">
+                                                                        <div class="d-flex flex-column align-items-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}">
+                                                                            <div class="d-flex align-items-center mb-2">
+                                                                                <div class="symbol symbol-35px symbol-circle">
+                                                                                    <div class="symbol-label fs-1 fw-bolder bg-light-success text-success">
+                                                                                        {{ substr($comment->user->name, 0, 1) }}
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="{{ $comment->user_id == auth()->user()->id ? 'me-3' : 'ms-3' }}">
+                                                                                    <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{{ $comment->user->name }}</a>
+                                                                                    <span class="text-muted fs-7 mb-1">{{ $comment->created_at->locale('id')->diffForHumans() }}</span>
+                                                                                    @if ($comment->user_id == $comment->ticket->customer)
+                                                                                        <span class="badge badge-light-danger">Pemilik</span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="p-5 rounded bg-light-{{ $comment->user_id == auth()->user()->id ? 'primary' : 'info' }} text-dark fw-bold mw-lg-600px text-{{ $comment->user_id == auth()->user()->id ? 'end' : 'start' }}" data-kt-element="message-text">
+                                                                                <div class="fw-normal fs-5 text-gray-700 m-0" id="message-display-{{ $comment->id }}">
+                                                                                    {!! $comment->message !!}
+                                                                                </div>
+                                                                                <form action="{{ route('staffSubdit.tickets.update', $comment->id) }}" method="POST" class="comment-form" data-comment-id="{{ $comment->id }}">
+                                                                                    @method('PUT')
+                                                                                    @csrf
+                                                                                    <textarea name="message" class="form-control" id="message-{{ $comment->id }}" style="display: none">{{ $comment->message }}</textarea>
+                                                                                </form>
+                                                                            </div>
+                                                                            @if ($comment->updated_at && $comment->updated_at != $comment->created_at)
+                                                                                <span class="badge badge-light-success">Dirubah</span>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer pt-4" id="kt_chat_messenger_footer">
+                                                            <form class="row g-3 mt-2 needs-validation" method="POST" action="{{ route('staffSubdit.tickets.store') }}" enctype="multipart/form-data" novalidate>
+                                                                @csrf
+                                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                                                                <textarea name="message" class="form-control form-control-flush mb-3 @error('message') is-invalid @enderror" id="message" cols="10" rows="1"></textarea>
+                                                                @error('message')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                                <div class="d-flex flex-stack">
+                                                                    <button class="btn btn-primary" type="submit" data-kt-element="send" disabled>Kirim</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <!--end::Card footer-->
                                 </div>
-                                <!--end::Messenger-->
                             </div>
                         </div>
                         <br>

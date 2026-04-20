@@ -73,6 +73,7 @@
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Judul</th>
+                                <th class="min-w-70px">Prioritas</th>
                                 <th class="min-w-70px">Pemilik</th>
                                 <th class="min-w-70px">Tetapkan Ke</th>
                                 <th class="min-w-70px">Tanggal Dibuat</th>
@@ -98,6 +99,36 @@
                                             {{ $ticket->title }}
                                         </td>
                                         <!--end::Title=-->
+                                        <!--begin::Priority=-->
+                                        <td>
+                                            @if ($ticket->priority_id == '4')
+                                                <span class="badge"
+                                                    style="background-color:red; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
+                                            @elseif($ticket->priority_id == '3')
+                                                <span class="badge"
+                                                    style="background-color:#FF7F3E; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
+                                            @elseif($ticket->priority_id == '2')
+                                                <span class="badge"
+                                                    style="background-color:blue; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
+                                            @elseif($ticket->priority_id == '1')
+                                                <span class="badge"
+                                                    style="background-color:green; color:white; font-weight:bold;">
+                                                    {{ $ticket->priority->priority_name }}
+                                                </span>
+                                            @else
+                                                <span class="badge"
+                                                    style="background-color:rgb(77, 75, 75); color:white; font-weight:bold;">
+                                                    -
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <!--end::Priority=-->
                                         <!--begin::Customer Name=-->
                                         <td>
                                             {{ $ticket->customers->name }}

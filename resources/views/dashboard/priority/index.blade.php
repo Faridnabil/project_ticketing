@@ -87,21 +87,12 @@
                                         <tr>
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
                                             <td>
-                                                @if ($priority->id == '4')
+                                                @if ($priority->color)
                                                     <span class="badge"
-                                                        style="background-color:red ; color: white; font-weight:bold">{{ $priority->priority_name }}</span>
-                                                @elseif($priority->id == '3')
-                                                    <span class="badge"
-                                                        style="background-color:#FF7F3E ; color: white; font-weight:bold">{{ $priority->priority_name }}</span>
-                                                @elseif($priority->id == '2')
-                                                    <span class="badge"
-                                                        style="background-color:blue ; color: white; font-weight:bold">{{ $priority->priority_name }}</span>
-                                                @elseif($priority->id == '1')
-                                                    <span class="badge"
-                                                        style="background-color:green ; color: white; font-weight:bold">{{ $priority->priority_name }}</span>
+                                                        style="background-color:{{ $priority->color }} ; color: white; font-weight:bold">{{ $priority->priority_name }}</span>
                                                 @else
                                                     <span class="badge"
-                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">-</span>
+                                                        style="background-color:rgb(77, 75, 75) ; color: white; font-weight:bold">{{ $priority->priority_name ?? '-' }}</span>
                                                 @endif
                                             </td>
                                             <!--end::Name=-->

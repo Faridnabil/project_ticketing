@@ -38,29 +38,48 @@
                 <!--begin::Card header-->
                 <div class="card-header border-0 pt-6">
                     <!--begin::Card title-->
-                    <div class="d-flex align-items-center gap-3">
-                        <!-- Form Filter -->
+                    <!--begin::Card title-->
+                    <div class="card-title">
+                        <!--begin::Form-->
                         <form method="GET" action="{{ route('helpdesk.solution.index') }}"
-                            class="d-flex align-items-center gap-2">
-                            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                            class="d-flex align-items-center flex-wrap gap-3">
 
-                            <select name="category_id" id="kategori" class="form-select" data-control="select2"
-                                data-placeholder="Pilih Kategori">
-                                <option></option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
-                                        {{ $category->category_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <!-- Filter Tanggal Mulai -->
+                            <div class="position-relative">
+                                <input type="date" id="start_date" name="start_date" class="form-control w-150px"
+                                    style="border: 1px solid #28a745;"
+                                    value="{{ old('start_date', request('start_date')) }}"
+                                    placeholder="Tanggal Mulai">
+                            </div>
 
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                            <a href="{{ route('helpdesk.solution.index') }}" class="btn btn-danger" style="width: 80%"F>Atur
-                                ulang</a>
-                        </form>
+                            <!-- Filter Tanggal Akhir -->
+                            <div class="position-relative">
+                                <input type="date" id="end_date" name="end_date" class="form-control w-150px"
+                                    style="border: 1px solid #dc3545;"
+                                    value="{{ old('end_date', request('end_date')) }}"
+                                    placeholder="Tanggal Akhir">
+                            </div>
 
-                        <!-- Form Export (Pisah dari Form Filter) -->
+                            <!-- Filter Kategori -->
+                            <div class="w-200px">
+                                <select name="category_id" id="category_id" class="form-select" data-control="select2"
+                                    data-placeholder="Pilih Kategori">
+                                    <option></option>
+                                    <option value="all" {{ request('category_id') == 'all' ? 'selected' : '' }}>Semua Kategori</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <button type="button" id="resetBtn" class="btn btn-danger">Atur ulang</button>
+                                <!-- Export Button -->
                         <form action="{{ route('helpdesk.reportNoted.export') }}" method="GET">
                             <button type="submit" class="btn btn-success d-flex align-items-center">
                                 <img src="{{ asset('template/dist/assets/media/illustrations/office365.png') }}"
@@ -68,13 +87,17 @@
                                 Export
                             </button>
                         </form>
+                            </div>
+                        </form>
+                        <!--end::Form-->
                     </div>
+                    <!--end::Card title-->
 
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
+                     <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -82,17 +105,15 @@
                                 <th class="min-w-70px">No</th>
                                 <th class="min-w-70px">Nomor Tiket</th>
                                 <th class="min-w-70px">Kategori</th>
-                                <th class="min-w-70px">Permasalahan</th>
-                                <th class="min-w-70px">Solusi</th>
+                                <th class="min-w-70px">Prioritas</th>
+                                <!-- <th class="min-w-70px">Solusi</th> -->
                                 <th class="min-w-70px">Diselesaikan Tanggal</th>
                                 <th class="min-w-100px">Aksi</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
                         <!--end::Table head-->
-                        <!--begin::Table body-->
                         <tbody class="text-black-600 fw-bold">
-                            {{-- @if (request('tanggal_mulai') || request('tanggal_selesai') || request('level') || request('category_id') || request('priority_id') || request('status_id') || request('city_or_regency_id') || request('province_id')) --}}
                             @foreach ($tickets as $ticket)
                                 <!--begin::Table row-->
                                 <tr>
@@ -104,8 +125,35 @@
                                         {{ $ticket->category->category_name }}
                                     </td>
 
-                                    <td>{!! Str::limit($ticket->description, 150) !!}</td>
-                                    <td>{!! Str::limit($ticket->completion_notes, 150) !!}</td>
+                                    <td>
+                                        @if ($ticket->priority_id == '4')
+                                            <span class="badge"
+                                                style="background-color:red; color:white; font-weight:bold;">
+                                                {{ $ticket->priority->priority_name }}
+                                            </span>
+                                        @elseif($ticket->priority_id == '3')
+                                            <span class="badge"
+                                                style="background-color:#FF7F3E; color:white; font-weight:bold;">
+                                                {{ $ticket->priority->priority_name }}
+                                            </span>
+                                        @elseif($ticket->priority_id == '2')
+                                            <span class="badge"
+                                                style="background-color:blue; color:white; font-weight:bold;">
+                                                {{ $ticket->priority->priority_name }}
+                                            </span>
+                                        @elseif($ticket->priority_id == '1')
+                                            <span class="badge"
+                                                style="background-color:green; color:white; font-weight:bold;">
+                                                {{ $ticket->priority->priority_name }}
+                                            </span>
+                                        @else
+                                            <span class="badge"
+                                                style="background-color:rgb(77, 75, 75); color:white; font-weight:bold;">
+                                                -
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <!-- <td>{!! Str::limit($ticket->completion_notes, 150) !!}</td> -->
                                     <td>
                                         {{ \Carbon\Carbon::parse($ticket->updated_at)->locale('id')->translatedFormat('d F Y') }}
                                     </td>
@@ -205,4 +253,25 @@
             </div>
         </div>
     @endforeach
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resetBtn = document.getElementById('resetBtn');
+
+            resetBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Reset semua input field
+                document.getElementById('category_id').value = '';
+                document.getElementById('start_date').value = '';
+                document.getElementById('end_date').value = '';
+
+                // Reset Select2 jika ada
+                const categorySelect = $('[name="category_id"]');
+                if (categorySelect.length && categorySelect.data('select2')) {
+                    categorySelect.val('').trigger('change');
+                }
+            });
+        });
+    </script>
 @endsection
