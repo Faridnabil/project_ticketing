@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'nik',
         'email',
+        'assigned_device',
         'password',
         'gender',
         'photo',

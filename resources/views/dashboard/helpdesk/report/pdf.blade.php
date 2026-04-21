@@ -176,7 +176,18 @@
                     <td>
                         {!! nl2br(wordwrap(strip_tags(html_entity_decode($ticket->completion_notes)), 30, "\n", true)) ?? '-' !!}
                     </td>
-                    <td>{{ $ticket->category->category_name ?? '-' }}</td>
+                    <td>
+                        @if ($ticket->category)
+                            @php
+                                $catColor = $ticket->category->color ?? '#6c757d'; // default gray
+                            @endphp
+                            <span style="background-color: {{ $catColor }}; color: #ffffff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; display: inline-block; white-space: nowrap;">
+                                {{ $ticket->category->category_name }}
+                            </span>
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td>{{ $disposisi }}</td>
                     <td>{{ $priority }}</td>
                     <td>{{ $status }}</td>

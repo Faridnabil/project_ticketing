@@ -36,13 +36,14 @@ class AttendanceHelpdeskController extends Controller
         $attendances = $query->orderBy('created_at', 'desc')->get();
 
         $attendanceToday = Attendance::where('user_id', Auth::user()->id)
-            ->whereDate('date_check_in', now())
+            ->whereDate('date_check_in', now('Asia/Jakarta'))
             ->get();
 
         // Retrieve all unique check-ins for the form dropdowns
         $allCheckIns = Attendance::select('check_in')->distinct()->pluck('check_in');
 
-        $today = Carbon::now()->format('Y-m-d');
+        // Menggunakan timezone akurat Asia/Jakarta agar tidak cutoff jam 11 malam
+        $today = Carbon::now('Asia/Jakarta')->format('Y-m-d');
 
         $absen = Attendance::where('user_id', Auth::user()->id)
             ->where(function ($query) {
@@ -78,17 +79,64 @@ class AttendanceHelpdeskController extends Controller
     {
         DB::beginTransaction();
         try {
+            $user = Auth::user();
+            
+            // Ambil identifier device browser melalui cookie
+            $deviceCookie = $request->cookie('helpdesk_device_id');
+            $cookieToSet = null;
 
-            $validate = $request->all();
-            $validate['date_check_in'] = now();
+            // Validasi 1: Jika User belum mengunci laptop (baru pertama kali absen di sistem yg baru ini)
+            if (!$user->assigned_device) {
+                // Cek apakah browser ini sudah pernah terikat ke AKUN LAIN
+                if ($deviceCookie) {
+                    $userOwner = \App\Models\User::where('assigned_device', $deviceCookie)->first();
+                    if ($userOwner && $userOwner->id !== $user->id) {
+                        return back()->with("error", "Perangkat ini sudah terikat dengan akun rekan anda ({$userOwner->name}). Anda tidak bisa menggunakan laptop ini untuk absen.");
+                    }
+                }
+                
+                // Daftarkan browser ini ke akun $user dengan menanam UUID baru
+                $newDeviceId = (string) \Illuminate\Support\Str::uuid();
+                
+                $user->assigned_device = $newDeviceId;
+                $user->save(); // Simpan ke tabel users
+                
+                // Setup cookie permanen 5 tahun di browser
+                $cookieToSet = cookie('helpdesk_device_id', $newDeviceId, 60 * 24 * 365 * 5); // 5 tahun
+                $deviceCookie = $newDeviceId;
+                
+            } else {
+                // Validasi 2: User sudah mengunci perangkatnya di database.
+                // WAJIB menggunakan browser yang menyimpan cookie yang cocok.
+                if (!$deviceCookie || $deviceCookie !== $user->assigned_device) {
+                    return back()->with("error", "Perangkat/Browser Tidak Valid! Anda hanya dapat melakukan absen menggunakan laptop yang pertama kali Anda daftarkan.");
+                }
+            }
+
+            // Simpan Data Absen
+            $validate = [
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'check_in' => $request->check_in,
+                'date_check_in' => now('Asia/Jakarta'),
+            ];
 
             Attendance::create($validate);
 
             DB::commit();
-            return redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
+            
+            $response = redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
+            
+            // Jika ada pendaftaran device baru, kirim instruksi penyimpanan cookie ke Browser client
+            if ($cookieToSet) {
+                $response = $response->cookie($cookieToSet);
+            }
+            
+            return $response;
+
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with("error", "Check In Gagal, Data Tidak Boleh Kosong");
+            return back()->with("error", "Check In Gagal: " . $th->getMessage());
         }
     }
 

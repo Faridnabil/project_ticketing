@@ -118,9 +118,9 @@
                             </div>
                             <div class="col-md-3 d-flex gap-2">
                                 <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-search me-1"></i> Filter
+                                    <i class="bi bi-search me-1"></i> Tampilkan
                                 </button>
-                                <a href="{{ route('admin.activityLog.shift') }}" class="btn btn-light w-100">Reset</a>
+                                <button type="button" id="btnResetFilter" class="btn btn-light w-100">Atur Ulang</button>
                             </div>
                         </div>
                     </form>
@@ -136,13 +136,29 @@
                     </div>
                 </div>
             @else
-            {{-- Table Card --}}
-            <div class="card">
-                <div class="card-header border-0 pt-6">
-                    <div class="card-title"></div>
-                </div>
-                <div class="card-body pt-0">
-                    <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
+            {{-- Tabs Navigation --}}
+            <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6 border-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-bolder fs-5 active" data-bs-toggle="tab" href="#kt_tab_pane_1">
+                        <i class="bi bi-clock-history me-2"></i> Log Aktivitas Shift
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-bolder fs-5" data-bs-toggle="tab" href="#kt_tab_pane_2">
+                        <i class="bi bi-bar-chart-fill me-2"></i> Rekap Kehadiran
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                {{-- TAB 1: Log Aktivitas Shift --}}
+                <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header border-0 pt-6">
+                            <div class="card-title"></div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
                         <thead>
                             <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-30px">No</th>
@@ -265,6 +281,75 @@
                     </table>
                 </div>
             </div>
+            </div> {{-- end tab pane 1 --}}
+
+            {{-- TAB 2: Rekap Kehadiran --}}
+            <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
+                <div class="card">
+                    <div class="card-header border-0 pt-6">
+                        <div class="card-title">
+                            <h3 class="fw-bolder">Rekap Keterlambatan & Kehadiran</h3>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <table class="table table-row-bordered gy-5 table-striped align-middle">
+                            <thead class="bg-light">
+                                <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="ps-4 min-w-30px">No</th>
+                                    <th class="min-w-200px">Pengguna</th>
+                                    <th class="text-center min-w-100px">Total Shift</th>
+                                    <th class="text-center min-w-100px text-success">Tepat Waktu</th>
+                                    <th class="text-center min-w-100px text-danger">Telat</th>
+                                    <th class="text-center min-w-125px">Total Telat</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-black-600 fw-bold">
+                                @forelse($rekapAbsen ?? [] as $rekap)
+                                    <tr>
+                                        <td class="ps-4">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex flex-column">
+                                                    <span class="text-dark fw-bold fs-6">{{ $rekap->user->name ?? '-' }}</span>
+                                                    <span class="text-muted fw-semibold fs-7">{{ $rekap->user?->getRoleNames()->first() ?? '-' }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge badge-light-primary fw-bolder px-3 py-2 fs-6">{{ $rekap->total_shift }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge badge-light-success fw-bolder fs-6 px-3 py-2">{{ $rekap->on_time }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if($rekap->late > 0)
+                                                <span class="badge badge-light-danger fw-bolder fs-6 px-3 py-2">{{ $rekap->late }}</span>
+                                            @else
+                                                <span class="badge badge-light-secondary fw-bolder fs-6 px-3 py-2">0</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @php
+                                                $hours = floor($rekap->total_minutes_late / 60);
+                                                $minutes = $rekap->total_minutes_late % 60;
+                                                $timeStr = '';
+                                                if ($hours > 0) $timeStr .= $hours . ' Jam ';
+                                                if ($minutes > 0 || $hours == 0) $timeStr .= $minutes . ' Menit';
+                                            @endphp
+                                            <span class="text-muted fw-bold">{{ trim($timeStr) }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-10">Data rekap tidak tersedia.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> {{-- end tab pane 2 --}}
+            </div> {{-- end tab content --}}
             @endif
 
         </div>
@@ -287,3 +372,37 @@
         transform: translateY(-1px);
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve last active tab from localStorage
+        var activeTab = localStorage.getItem('shift_monitoring_tab');
+        if (activeTab) {
+            var tabToActivate = document.querySelector('a[href="' + activeTab + '"]');
+            if (tabToActivate) {
+                var tab = new bootstrap.Tab(tabToActivate);
+                tab.show();
+            }
+        }
+        
+        // Save tab on click
+        var tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"]');
+        tabLinks.forEach(function(link) {
+            link.addEventListener('shown.bs.tab', function(e) {
+                var targetId = e.target.getAttribute("href");
+                localStorage.setItem('shift_monitoring_tab', targetId);
+            });
+        });
+
+        // Handle Reset Button to only clear inputs
+        var btnReset = document.getElementById('btnResetFilter');
+        if (btnReset) {
+            btnReset.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector('select[name="user_id"]').value = "";
+                document.querySelector('input[name="tanggal_mulai"]').value = "";
+                document.querySelector('input[name="tanggal_selesai"]').value = "";
+            });
+        }
+    });
+</script>

@@ -172,6 +172,10 @@ class UserController extends Controller
             $input['photo'] = $pathPublic1;
             $input['surat_tugas'] = $pathPublic2;
 
+            if ($request->has('reset_device') && $request->reset_device == '1') {
+                $input['assigned_device'] = null;
+            }
+
             if (!empty($input['password'])) {
                 $input['password'] = Hash::make($input['password']);
             } else {

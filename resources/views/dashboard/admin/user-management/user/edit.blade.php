@@ -42,7 +42,7 @@
                             <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" novalidate>
                                 @method('PUT')
                                 @csrf
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="name" class="form-label">Full Name</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                                     @error('name')
@@ -50,7 +50,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="nik" class="form-label">NIK</label>
                                     <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik', $user->nik) }}" required>
                                     @error('nik')
@@ -58,26 +58,12 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}" required>
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
-                                    <div class="valid-feedback">Looks good!</div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -93,6 +79,19 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Kosongkan jika tidak ingin merubah">
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi password">
+                                </div>
+
+                                <div class="col-md-6">
                                     <label for="gender" class="form-label">Jenis Kelamin</label>
                                     <select class="form-select @error('gender') is-invalid @enderror" name="gender" id="gender" data-control="select2" data-placeholder="Pilih Jenis Kelamin" required>
                                         <option value="Pria" {{ $user->gender == 'Pria' ? 'selected' : '' }}>Pria</option>
@@ -104,9 +103,28 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <label class="form-label">Status Perangkat (Khusus Helpdesk)</label>
+                                    <div class="mt-2 border rounded p-3 bg-light">
+                                        @if($user->assigned_device)
+                                            <span class="badge badge-success mb-2">Terkunci ke Perangkat</span>
+                                            <div class="form-check form-check-custom form-check-solid mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="reset_device" name="reset_device"/>
+                                                <label class="form-check-label fw-bold text-danger" for="reset_device">
+                                                    Reset Kunci Perangkat
+                                                </label>
+                                            </div>
+                                            <div class="text-muted fs-7 mt-2">Centang jika user ganti laptop untuk mengizinkan login di perangkat baru.</div>
+                                        @else
+                                            <span class="badge badge-warning mb-2">Belum Terkunci</span>
+                                            <div class="text-muted fs-7">Sistem akan mengunci otomatis saat absen pertama kali.</div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
                                     <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(assets/media/avatars/blank.png)">
-                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ asset($user->photo) }});"></div>
+                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url('{{ asset($user->photo) }}');"></div>
                                         <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
                                             <i class="bi bi-pencil-fill fs-7"></i>
                                             <input type="file" name="photo" accept=".png, .jpg, .jpeg" />
@@ -125,20 +143,18 @@
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Upload Surat Tugas</label>
-                                    <div class="custom-file-upload"
-                                        style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
-                                        <label for="fileInput" class="upload-label"
-                                            style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
-                                            <span class="upload-button"
-                                                style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
-                                                file</span>
-                                            <span id="fileName" style="margin-left: 10px">Tidak ada
-                                                file dipilih</span>
+                                    <div class="custom-file-upload border p-3 rounded bg-light" style="display: flex; align-items: center; gap: 10px;">
+                                        <label for="fileInput" class="upload-label mb-0" style="display: flex;align-items: center; font-weight: bold;cursor: pointer;">
+                                            <span class="btn btn-sm btn-primary">Pilih File Baru</span>
+                                            <span id="fileName" class="text-muted ms-3">Tidak ada file dipilih</span>
                                         </label>
-                                        <input id="fileInput" type="file" name="surat_tugas" style="display: none;"
-                                            accept=".pdf">
+                                        <input id="fileInput" type="file" name="surat_tugas" style="display: none;" accept=".pdf">
                                     </div>
-
+                                    @if($user->surat_tugas)
+                                        <div class="mt-3">
+                                            <a href="{{ asset($user->surat_tugas) }}" target="_blank" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary">Lihat Surat Tugas Saat Ini</a>
+                                        </div>
+                                    @endif
                                     <script>
                                         document.getElementById('fileInput').addEventListener('change', function(event) {
                                             const fileName = event.target.files[0]?.name || 'Tidak ada file dipilih';

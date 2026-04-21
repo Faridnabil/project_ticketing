@@ -231,17 +231,19 @@
                                                 <div class="col-md-6">
                                                     <label for="validationCustom01" class="form-label">Nama Lengkap</label>
                                                     <input type="text"
-                                                        class="form-control @error('name') is-invalid @enderror"
-                                                        id="name" name="name" required autofocus>
+                                                        class="form-control"
+                                                        id="name" name="name" value="{{ Auth::user()->name }}" readonly>
+                                                    <div class="text-muted fs-7 mt-1">Nama otomatis diambil dari akun anda.</div>
+                                                </div>
 
-                                                    <div class="valid-feedback">
-                                                        Looks good!
-                                                    </div>
-                                                    @error('name')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
+                                                <div class="col-md-3">
+                                                    <label for="current_device" class="form-label">Status Perangkat</label>
+                                                    <input type="text" class="form-control" value="{{ Auth::user()->assigned_device ? 'Terdaftar & Terkunci' : 'Belum Terdaftar' }}" readonly>
+                                                    @if(Auth::user()->assigned_device)
+                                                        <div class="text-success fs-7 mt-1">Browser ini akan selalu digunakan untuk Anda.</div>
+                                                    @else
+                                                        <div class="text-warning fs-7 mt-1">Sistem akan mendaftarkan browser ini otomatis saat absen.</div>
+                                                    @endif
                                                 </div>
 
                                                 <div class="col-md-2">
@@ -522,12 +524,9 @@
                                     <div class="row mb-3">
                                         <div class="col-md-12">
                                             <label for="name" class="form-label">Nama Helpdesk</label>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                id="name" name="name" required autofocus>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            @error('name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            <input type="text" class="form-control"
+                                                id="name" name="name" value="{{ Auth::user()->name }}" readonly>
+                                            <div class="text-muted fs-7 mt-1">Nama otomatis diambil dari akun anda.</div>
                                         </div>
                                     </div>
 

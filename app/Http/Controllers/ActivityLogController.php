@@ -141,8 +141,9 @@ class ActivityLogController extends Controller
         // Jika tidak ada attendance, return empty
         if ($attendances->isEmpty()) {
             $users = User::orderBy('name')->get();
+            $rekapAbsen = collect();
             return view('dashboard.admin.activity-log.shift_monitoring', compact(
-                'attendances', 'users', 'tanggalMulai', 'tanggalSelesai'
+                'attendances', 'users', 'tanggalMulai', 'tanggalSelesai', 'rekapAbsen'
             ));
         }
 
@@ -183,8 +184,52 @@ class ActivityLogController extends Controller
 
         $users = User::orderBy('name')->get();
 
+        // REKAP ABSEN LATE/ON-TIME CALCULATION
+        $rekapAbsen = collect();
+        foreach ($attendances->groupBy('user_id') as $userId => $userAtts) {
+            $onTime = 0;
+            $late = 0;
+            $totalMinutesLate = 0;
+            $user = $userAtts->first()->user;
+
+            foreach ($userAtts as $att) {
+                // Determine target check-in time based on shift
+                $checkInTime = \Carbon\Carbon::parse($att->date_check_in);
+                $targetTime = clone $checkInTime;
+
+                if ($att->check_in === 'Shift 1') {
+                    $targetTime->setTime(7, 0, 0); // 07:00
+                } elseif ($att->check_in === 'Shift 2') {
+                    $targetTime->setTime(15, 0, 0); // 15:00
+                } elseif ($att->check_in === 'Shift 3') {
+                    $targetTime->setTime(23, 0, 0); // 23:00
+                } else {
+                    continue; // Jika bukan shift standar
+                }
+
+                $diffMinutes = $checkInTime->diffInMinutes($targetTime, false);
+                // diffMinutes bernilai negatif jika checkInTime MELEBIHI targetTime (alias telat)
+                if ($diffMinutes < 0) {
+                    $late++;
+                    $totalMinutesLate += abs($diffMinutes);
+                } else {
+                    $onTime++;
+                }
+            }
+
+            $rekapAbsen->push((object)[
+                'user' => $user,
+                'total_shift' => $userAtts->count(),
+                'on_time' => $onTime,
+                'late' => $late,
+                'total_minutes_late' => $totalMinutesLate
+            ]);
+        }
+        
+        $rekapAbsen = $rekapAbsen->sortByDesc('late'); // Sort showing worst late records first
+
         return view('dashboard.admin.activity-log.shift_monitoring', compact(
-            'attendances', 'users', 'tanggalMulai', 'tanggalSelesai'
+            'attendances', 'users', 'tanggalMulai', 'tanggalSelesai', 'rekapAbsen'
         ));
     }
 }

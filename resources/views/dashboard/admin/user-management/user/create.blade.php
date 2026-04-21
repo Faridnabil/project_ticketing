@@ -42,7 +42,7 @@
                             <form class="row g-3 needs-validation" method="POST" action="{{ route('admin.user.store') }}"
                                 enctype="multipart/form-data" novalidate>
                                 @csrf
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Full Name</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
                                         id="name" name="name" value="{{ old('name') }}" autofocus required>
@@ -52,7 +52,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">NIK</label>
                                     <input type="text" class="form-control @error('nik') is-invalid @enderror"
                                         id="nik" name="nik" value="{{ old('nik') }}" autofocus required>
@@ -62,7 +62,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom02" class="form-label">Email</label>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                                         id="email" name="email" value="{{ old('email') }}" autofocus required>
@@ -70,23 +70,6 @@
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="validationCustom02" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        id="password" name="password" autofocus required>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="validationCustom02" class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation"
-                                        id="password_confirmation" autofocus required>
-                                    <div class="valid-feedback">Looks good!</div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -105,6 +88,23 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <label for="validationCustom02" class="form-label">Password</label>
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                        id="password" name="password" autofocus required placeholder="Minimal 8 Karakter">
+                                    <div class="valid-feedback">Looks good!</div>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="validationCustom02" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" name="password_confirmation"
+                                        id="password_confirmation" autofocus required placeholder="Konfirmasi password">
+                                    <div class="valid-feedback">Looks good!</div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <label for="validationCustom04" class="form-label">Jenis Kelamin</label>
                                     <select class="form-select @error('gender') is-invalid @enderror" name="gender"
                                         data-control="select2" id="select-field2" data-placeholder="Pilih Jenis Kelamin"
@@ -115,6 +115,14 @@
                                     @error('gender')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Status Perangkat (Khusus Helpdesk)</label>
+                                    <div class="mt-2 border rounded p-3 bg-light">
+                                        <span class="badge badge-warning mb-2">Menunggu Pendaftaran</span>
+                                        <div class="text-muted fs-7">Sistem secara otomatis akan mengunci perangkat pertama yang digunakan user saat melakukan absen.</div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -148,15 +156,11 @@
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Upload Surat Tugas</label>
-                                    <div class="custom-file-upload"
-                                        style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
-                                        <label for="fileInput" class="upload-label"
-                                            style="display: flex;align-items: center;   font-weight: bold;cursor: pointer;">
-                                            <span class="upload-button"
-                                                style="background-color: #0069d9;font-size: 14px; color: #fff;  white-space: nowrap;  padding: 6px 12px;border-radius: 4px;">Unggah
-                                                file</span>
-                                            <span id="fileName" style="margin-left: 10px">Tidak ada
-                                                file dipilih</span>
+                                    <div class="custom-file-upload border p-3 rounded bg-light" style="display: flex; align-items: center; gap: 10px;">
+                                        <label for="fileInput" class="upload-label mb-0"
+                                            style="display: flex;align-items: center; font-weight: bold;cursor: pointer;">
+                                            <span class="btn btn-sm btn-primary">Pilih File</span>
+                                            <span id="fileName" class="text-muted ms-3">Tidak ada file dipilih</span>
                                         </label>
                                         <input id="fileInput" type="file" name="surat_tugas" style="display: none;"
                                             accept=".pdf">
