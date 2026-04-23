@@ -42,20 +42,42 @@
         }
 
         .btn-custom {
-            margin-right: 10px;
-            border: none;
+            margin-right: 12px;
+            border: 1px solid #e4e6ef;
+            background-color: #ffffff;
+            color: #7e8299;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            cursor: pointer;
+            border-bottom: 3px solid #e4e6ef;
+        }
+
+        .btn-custom:hover {
             background-color: #f8f9fa;
-            padding: 10px 50px;
-            border-radius: 5px;
+            color: #009ef7;
+            border-bottom-color: #009ef7;
+            transform: translateY(-1px);
         }
 
         .btn-custom.active {
-            background-color: #007bff;
-            color: white;
+            background-color: #009ef7;
+            color: white !important;
+            border-color: #009ef7;
+            border-bottom: 3px solid #006eb3;
+            box-shadow: 0 4px 10px rgba(0, 158, 247, 0.3);
+        }
+
+        .btn-custom.active strong {
+            color: white !important;
         }
 
         .font-regular {
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
     </style>
 
@@ -91,24 +113,24 @@
                 <!--begin::Col-->
                 <div class="col-xxl-12 ">
 
-                    <div class="Header" style="margin-bottom: 30px">
+                    <div class="Header" style="margin-bottom: 25px; padding-left: 5px;">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
+                                <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    Data Harian Ini
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    Data Keseluruhan
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('helpdesk.dashboard.indexProblem') ? 'active' : '' }}"
                                     href="{{ route('helpdesk.dashboard.indexProblem') }}">
-                                    <strong>Laporan Permasalahan Tiket</strong>
+                                    Laporan Permasalahan Tiket
                                 </a>
                             </li>
                         </ul>
@@ -131,9 +153,9 @@
                                                 <div class="card mb-4">
                                                     <div class="card-body">
                                                         <form id="filterForm">
-                                                            <div class="row">
+                                                            <div class="row g-3 p-5">
                                                                 <div class="col-md-2">
-                                                                    <label for="year">Tahun</label>
+                                                                    <label for="year" class="form-label fw-bold">Tahun</label>
                                                                     <select class="form-select" id="year" name="year">
                                                                         <option value="all">Semua Tahun</option>
                                                                         @foreach($years as $y)
@@ -142,7 +164,7 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <label for="month">Bulan</label>
+                                                                    <label for="month" class="form-label fw-bold">Bulan</label>
                                                                     <select class="form-select" id="month" name="month">
                                                                         <option value="all">Semua Bulan</option>
                                                                         @for($i = 1; $i <= 12; $i++)
@@ -152,8 +174,19 @@
                                                                         @endfor
                                                                     </select>
                                                                 </div>
-                                                                <div class="col-md-3">
-                                                                    <label for="province_id">Provinsi</label>
+                                                                <div class="col-md-2">
+                                                                    <label for="category_id" class="form-label fw-bold">Kategori</label>
+                                                                    <select class="form-select" id="category_id" name="category_id">
+                                                                        <option value="all">Semua Kategori</option>
+                                                                        @foreach($categories as $cat)
+                                                                            <option value="{{ $cat->id }}" {{ $categoryId == $cat->id ? 'selected' : '' }}>
+                                                                                {{ $cat->category_name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label for="province_id" class="form-label fw-bold">Provinsi</label>
                                                                     <select class="form-select" id="province_id"
                                                                         name="province_id">
                                                                         <option value="all">Semua Provinsi</option>
@@ -164,8 +197,8 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
-                                                                <div class="col-md-3">
-                                                                    <label for="city_id">Kota/Kabupaten</label>
+                                                                <div class="col-md-2">
+                                                                    <label for="city_id" class="form-label fw-bold">Kota/Kabupaten</label>
                                                                     <select class="form-select" id="city_id" name="city_id"
                                                                         {{ !$provinceId || $provinceId == 'all' ? 'disabled' : '' }}>
                                                                         <option value="all">Semua Kota/Kabupaten</option>
@@ -179,9 +212,10 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-2 d-flex align-items-end">
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">Filter</button>
-                                                                        <button id="resetFilter" class="btn btn-danger ms-2">Segarkan</button>
+                                                                    <div class="d-flex w-100">
+                                                                        <button type="submit" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
+                                                                        <button id="resetFilter" type="button" class="btn btn-danger">Segarkan</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -193,8 +227,8 @@
                                                         <div class="card">
 
                                                             <div class="card-header">
-                                                                <h2 class="card-title fw-bolder text-black">10 Daerah dengan Permasalahan Terbanyak</h2>
-                                                            </div>
+                                                                 <h2 class="card-title fw-bolder text-black">10 Daerah dengan Permasalahan Terbanyak</h2>
+                                                             </div>
                                                             <div class="card-body">
                                                                 <canvas id="problemChart" height="300"></canvas>
                                                             </div>
@@ -209,29 +243,32 @@
                                                                 <div class="table-responsive">
                                                                     <table class="table table-row-bordered gy-5">
                                                                         <thead>
-                                                                            <tr>
-                                                                                <th style="font-weight: bold">Provinsi</th>
-                                                                                <th style="font-weight: bold">Kota/Kabupaten</th>
-                                                                                <th style="font-weight: bold">Kategori Permasalahan</th>
-                                                                                <th style="font-weight: bold">Deskripsi</th>
-                                                                                <th style="font-weight: bold">Jumlah Tiket</th>
-                                                                            </tr>
+                                                                             <tr>
+                                                                                 <th style="font-weight: bold">Provinsi</th>
+                                                                                 <th style="font-weight: bold">Kota/Kabupaten</th>
+                                                                                 <th style="font-weight: bold">Kategori</th>
+                                                                                 <th style="font-weight: bold">Jumlah Tiket</th>
+                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            @forelse($tableData as $data)
-                                                                                <tr>
-                                                                                    <td>{{ $data['province'] }}</td>
-                                                                                    <td>{{ $data['city'] }}</td>
-                                                                                    <td>{{ $data['category'] }}</td>
-                                                                                    <td>{{ $data['description'] }}</td>
-                                                                                    <td>{{ $data['total'] }}</td>
-                                                                                </tr>
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td colspan="4" class="text-center">Tidak
-                                                                                        ada data</td>
-                                                                                </tr>
-                                                                            @endforelse
+                                                                             @forelse($tableData as $data)
+                                                                                 <tr>
+                                                                                     <td>{{ $data['province'] }}</td>
+                                                                                     <td>{{ $data['city'] }}</td>
+                                                                                     <td>
+                                                                                         <span class="badge"
+                                                                                             style="background-color: {{ $data['color'] }}; color: white; font-weight:bold">
+                                                                                             {{ $data['category'] }}
+                                                                                         </span>
+                                                                                     </td>
+                                                                                     <td>{{ $data['total'] }}</td>
+                                                                                 </tr>
+                                                                             @empty
+                                                                                 <tr>
+                                                                                     <td colspan="4" class="text-center">Tidak
+                                                                                         ada data</td>
+                                                                                 </tr>
+                                                                             @endforelse
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -258,17 +295,18 @@
 
             // Function to initialize or update chart
             function initChart(chartData) {
-                const ctx = document.getElementById('problemChart');
-                if (!ctx) {
+                const canvas = document.getElementById('problemChart');
+                if (!canvas) {
                     console.error('Canvas element not found!');
                     return;
                 }
+                const ctx = canvas.getContext('2d');
 
                 // Prepare data for Chart.js
-                const labels = chartData.map(item => item.region);
+                const labels = chartData.map(item => item.label);
                 const data = chartData.map(item => item.total);
                 const backgroundColors = chartData.map(item => item.color);
-                const categories = chartData.map(item => item.category);
+                const categoryNames = chartData.map(item => item.category_name);
 
                 // Destroy previous chart if exists
                 if (problemChart) {
@@ -277,55 +315,76 @@
 
                 // Create new chart
                 problemChart = new Chart(ctx, {
-                    type: 'pie',
+                    type: 'bar',
                     data: {
                         labels: labels,
                         datasets: [{
                             label: 'Jumlah Tiket',
                             data: data,
                             backgroundColor: backgroundColors,
-                            borderColor: '#fff',
-                            borderWidth: 1
+                            borderColor: backgroundColors,
+                            borderWidth: 1,
+                            barThickness: 25,
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                position: 'right',
-                                labels: {
-                                    boxWidth: 20,
-                                    padding: 15,
-                                    generateLabels: function(chart) {
-                                        const data = chart.data;
-                                        if (data.labels.length && data.datasets.length) {
-                                            return data.labels.map(function(label, i) {
-                                                return {
-                                                    text: label + ' (' + data.datasets[0].data[i] + ')',
-                                                    fillStyle: data.datasets[0].backgroundColor[i],
-                                                    hidden: false,
-                                                    index: i
-                                                };
-                                            });
-                                        }
-                                        return [];
-                                    }
-                                }
+                                display: false
                             },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        const label = context.label || '';
                                         const value = context.raw || 0;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = Math.round((value / total) * 100);
-                                        return `${label}: ${value} tiket (${percentage}%)`;
+                                        const categoryName = categoryNames[context.dataIndex];
+                                        return `${categoryName}: ${value} tiket`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11,
+                                        weight: 'bold'
                                     }
                                 }
                             }
                         }
-                    }
+                    },
+                    plugins: [{
+                        id: 'absolute-labels',
+                        afterDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            chart.data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+                                meta.data.forEach((bar, index) => {
+                                    const val = dataset.data[index];
+                                    ctx.fillStyle = '#111';
+                                    ctx.font = 'bold 12px Arial';
+                                    ctx.textAlign = 'left';
+                                    ctx.textBaseline = 'middle';
+                                    ctx.fillText(val, bar.x + 8, bar.y);
+                                });
+                            });
+                        }
+                    }]
                 });
             }
 
@@ -359,6 +418,7 @@
                 // Reset all filter fields
                 $('#year').val('all');
                 $('#month').val('all');
+                $('#category_id').val('all');
                 $('#province_id').val('all');
                 $('#city_id').val('all').prop('disabled', true).html('<option value="all">Semua Kota/Kabupaten</option>');
 
@@ -390,8 +450,12 @@
                                     <tr>
                                         <td>${data.province}</td>
                                         <td>${data.city}</td>
-                                        <td>${data.category}</td>
-                                        <td>${data.description}</td>
+                                        <td>
+                                            <span class="badge"
+                                                style="background-color: ${data.color}; color: white; font-weight:bold">
+                                                ${data.code} - ${data.category}
+                                            </span>
+                                        </td>
                                         <td>${data.total}</td>
                                     </tr>
                                 `;

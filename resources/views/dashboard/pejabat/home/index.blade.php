@@ -42,20 +42,42 @@
         }
 
         .btn-custom {
-            margin-right: 10px;
-            border: none;
+            margin-right: 12px;
+            border: 1px solid #e4e6ef;
+            background-color: #ffffff;
+            color: #7e8299;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            cursor: pointer;
+            border-bottom: 3px solid #e4e6ef;
+        }
+
+        .btn-custom:hover {
             background-color: #f8f9fa;
-            padding: 10px 50px;
-            border-radius: 5px;
+            color: #009ef7;
+            border-bottom-color: #009ef7;
+            transform: translateY(-1px);
         }
 
         .btn-custom.active {
-            background-color: #007bff;
-            color: white;
+            background-color: #009ef7;
+            color: white !important;
+            border-color: #009ef7;
+            border-bottom: 3px solid #006eb3;
+            box-shadow: 0 4px 10px rgba(0, 158, 247, 0.3);
+        }
+
+        .btn-custom.active strong {
+            color: white !important;
         }
 
         .font-regular {
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
     </style>
 
@@ -144,18 +166,24 @@
                 <!--begin::Col-->
                 <div class="col-xxl-12 ">
 
-                    <div class="Header" style="margin-bottom: 30px">
+                    <div class="Header" style="margin-bottom: 25px; padding-left: 5px;">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('pejabat.dashboard.index') ? 'active' : '' }}"
+                                <a class="btn-custom font-regular {{ request()->routeIs('pejabat.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('pejabat.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    Data Harian Ini
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('pejabat.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('pejabat.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    Data Keseluruhan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn-custom font-regular {{ request()->routeIs('pejabat.dashboard.indexProblem') ? 'active' : '' }}"
+                                    href="{{ route('pejabat.dashboard.indexProblem') }}">
+                                    Laporan Permasalahan Tiket
                                 </a>
                             </li>
                         </ul>
@@ -185,44 +213,35 @@
 
                                         <!-- Filter Form -->
                                         <form method="get" action="{{ route('pejabat.dashboard.index') }}">
-                                            <div class="row" style="margin-left:20px">
+                                            <div class="row" style="margin: 20px; display: flex; align-items: flex-end;">
                                                 <!-- Input Field for Date -->
-                                                <div class="input-field col s3">
-                                                    <div class="input-wrapper">
-                                                        <span class="icon"><b>Tanggal</b></span>
-                                                        <input type="date" name="selectedDate" id="selectedDate"
-                                                            value="{{ request('selectedDate', now()->toDateString()) }}">
-                                                    </div>
+                                                <div class="input-field col s2">
+                                                    <span class="icon" style="font-size: 0.9rem; color: #444;"><b>Tanggal</b></span>
+                                                    <input type="date" name="selectedDate" id="selectedDate"
+                                                        value="{{ request('selectedDate', now()->toDateString()) }}" style="margin-top: 5px;">
                                                 </div>
 
                                                 <!-- Input Fields for Time -->
-                                                <div class="input-field col s3">
-                                                    <div class="input-wrapper">
-                                                        <span class="icon"><b>Waktu Mulai</b></span>
-                                                        <input type="text" name="startTime" id="startTime"
-                                                            class="timepicker" placeholder="Jam Mulai"
-                                                            value="{{ request('startTime', '00:00') }}">
-                                                    </div>
+                                                <div class="input-field col s2">
+                                                    <span class="icon" style="font-size: 0.9rem; color: #444;"><b>Waktu Mulai</b></span>
+                                                    <input type="text" name="startTime" id="startTime"
+                                                        class="timepicker" placeholder="Jam Mulai"
+                                                        value="{{ request('startTime', '00:00') }}" style="margin-top: 5px;">
                                                 </div>
-                                                <div class="input-field col s3">
-                                                    <div class="input-wrapper">
-                                                        <span class="icon"><b>Waktu Selesai</b></span>
-                                                        <input type="text" name="endTime" id="endTime"
-                                                            class="timepicker" placeholder="Jam Selesai"
-                                                            value="{{ request('endTime', '23:59') }}">
-                                                    </div>
+                                                <div class="input-field col s2">
+                                                    <span class="icon" style="font-size: 0.9rem; color: #444;"><b>Waktu Selesai</b></span>
+                                                    <input type="text" name="endTime" id="endTime"
+                                                        class="timepicker" placeholder="Jam Selesai"
+                                                        value="{{ request('endTime', '23:59') }}" style="margin-top: 5px;">
                                                 </div>
                                                 <!-- Submit and Refresh Buttons -->
-                                                <div class="input-field col s1" style="margin-top: 28px">
+                                                <div class="input-field col s6 d-flex" style="margin-bottom: 20px;">
                                                     <button type="submit" class="btn waves-effect waves-light"
                                                         id="submitFilter"
-                                                        style="background-color: #19bb52;border-radius:10px"><b>Filter
-                                                            Data</b></button>
-                                                </div>
-                                                <div class="input-field col s1" style="margin-top: 28px">
-                                                    <a href="{{ route('helpdesk.dashboard.index') }}"
+                                                        style="background-color: #19bb52; border-radius: 8px; margin-right: 10px; flex: 1;"><b>Tampilkan</b></button>
+                                                    <a href="{{ route('pejabat.dashboard.index') }}"
                                                         class="btn waves-effect waves-light"
-                                                        style="background-color: #009EF7;border-radius:10px"><b>Penyegaran</b></a>
+                                                        style="background-color: #f1416c; border-radius: 8px; flex: 1;"><b>Segarkan</b></a>
                                                 </div>
                                             </div>
                                         </form>

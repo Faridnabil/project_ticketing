@@ -165,6 +165,7 @@ class HomeHelpdeskController extends Controller
         $year = $request->query('year');
         $provinceId = $request->query('province_id');
         $cityId = $request->query('city_id');
+        $categoryId = $request->query('category_id');
 
         $query = Ticket::with(['province', 'cityOrRegency', 'category'])
             ->select(
@@ -204,54 +205,31 @@ class HomeHelpdeskController extends Controller
             }
         });
 
+        // Filter kategori
+        $query->when($categoryId, function ($query) use ($categoryId) {
+            if ($categoryId !== "all") {
+                $query->where('category_id', $categoryId);
+            }
+        });
+
         $topProblems = $query->limit(10)->get();
-
-        // Format data untuk chart Random Soft
-        // function generatePastelColor()
-        // {
-        //     $r = mt_rand(100, 255);
-        //     $g = mt_rand(100, 255);
-        //     $b = mt_rand(100, 255);
-        //     return sprintf("#%02X%02X%02X", $r, $g, $b);
-        // }
-
-        // $chartData = $topProblems->map(function ($item) {
-        //     return [
-        //         'region' => $item->province->province_name .
-        //             ($item->cityOrRegency ? ' - ' . $item->cityOrRegency->city_or_regency_name : ''),
-        //         'total' => $item->total,
-        //         'category' => $item->category->category_name ?? 'Unknown',
-        //         'color' => generatePastelColor(),
-        //     ];
-        // });
 
         // Define color palette
         $colorPalette = [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#4BC0C0',
-            '#9966FF',
-            '#FF9F40',
-            '#8AC24A',
-            '#FF5722',
-            '#607D8B',
-            '#9C27B0',
-            '#E91E63',
-            '#00BCD4',
-            '#CDDC39',
-            '#795548',
-            '#3F51B5'
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
         ];
 
         $chartData = $topProblems->map(function ($item, $index) use ($colorPalette) {
+            $provinceName = $item->province->province_name ?? '-';
+            $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+            $categoryCode = $item->category->code ?? $item->category->category_name ?? 'Unknown';
+            
             return [
-                'region' => $item->province->province_name .
-                    ($item->cityOrRegency ? ' - ' . $item->cityOrRegency->city_or_regency_name : ''),
+                'label' => $provinceName . ' - ' . $cityName . ' (' . $categoryCode . ')',
+                'category_name' => $item->category->category_name ?? 'Unknown',
                 'total' => $item->total,
-                'category' => $item->category->category_name ?? 'Unknown',
-                'description' => $item->category->description ?? 'Unknown',
-                'color' => $colorPalette[$index % count($colorPalette)], // Warna dari palette
+                'color' => $colorPalette[$index % count($colorPalette)],
             ];
         });
 
@@ -259,16 +237,18 @@ class HomeHelpdeskController extends Controller
         // Format data untuk tabel
         $tableData = $topProblems->map(function ($item) {
             return [
-                'province' => $item->province->province_name,
+                'province' => $item->province->province_name ?? '-',
                 'city' => $item->cityOrRegency->city_or_regency_name ?? '-',
                 'category' => $item->category->category_name ?? 'Unknown',
-                'description' => $item->category->description ?? 'Unknown',
+                'code' => $item->category->code ?? '-',
+                'color' => $item->category->color ?? '#6c757d',
                 'total' => $item->total
             ];
         });
 
         // Data untuk dropdown filter
         $provinces = Province::orderBy('province_name')->get();
+        $categories = \App\Models\Category::orderBy('category_name')->get();
         $years = Ticket::select(DB::raw('YEAR(created_at) as year'))
             ->distinct()
             ->orderBy('year', 'desc')
@@ -279,11 +259,13 @@ class HomeHelpdeskController extends Controller
                 'chartData' => $chartData,
                 'tableData' => $tableData,
                 'provinces' => $provinces,
+                'categories' => $categories,
                 'years' => $years,
                 'month' => $month,
                 'year' => $year,
                 'provinceId' => $provinceId,
-                'cityId' => $cityId
+                'cityId' => $cityId,
+                'categoryId' => $categoryId
             ]);
         }
 
@@ -291,11 +273,13 @@ class HomeHelpdeskController extends Controller
             'chartData',
             'tableData',
             'provinces',
+            'categories',
             'years',
             'month',
             'year',
             'provinceId',
-            'cityId'
+            'cityId',
+            'categoryId'
         ));
     }
 

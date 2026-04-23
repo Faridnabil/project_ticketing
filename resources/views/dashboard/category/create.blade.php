@@ -58,6 +58,21 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
+                                    <label for="code" class="form-label">Kode Singkatan</label>
+                                    <input type="text" class="form-control @error('code') is-invalid @enderror"
+                                        id="code" name="code" placeholder="Misal: DT" required>
+
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
+                                    @error('code')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Warna Label</label>
                                     <input type="color" class="form-control @error('color') is-invalid @enderror"
                                         id="color" name="color" value="#ff0000" autofocus required>

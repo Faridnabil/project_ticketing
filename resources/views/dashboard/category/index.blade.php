@@ -74,6 +74,7 @@
                                 <!--begin::Table row-->
                                 <tr class="text-start text-black-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-10px">No</th>
+                                    <th class="min-w-10px">Kode Singkatan</th>
                                     <th class="min-w-10px">Kategori</th>
                                     <th class="min-w-10px">Keterangan</th>
                                     <th class="min-w-10px">Fitur</th>
@@ -87,6 +88,9 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td class="min-w-10px">{{ $loop->iteration }}</td>
+                                            <td>
+                                                <span class="badge badge-light-dark fw-bolder">{{ $category->code ?? '-' }}</span>
+                                            </td>
                                             <!--begin::Name=-->
                                             <td>
                                                 <span class="badge"

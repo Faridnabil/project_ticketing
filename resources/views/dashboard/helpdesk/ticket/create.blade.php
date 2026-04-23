@@ -60,7 +60,8 @@
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                {{ $category->category_name }}</option>
+                                                {{ $category->code ? $category->code . ' - ' : '' }}{{ $category->category_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">

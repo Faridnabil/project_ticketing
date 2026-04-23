@@ -42,20 +42,42 @@
         }
 
         .btn-custom {
-            margin-right: 10px;
-            border: none;
+            margin-right: 12px;
+            border: 1px solid #e4e6ef;
+            background-color: #ffffff;
+            color: #7e8299;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            cursor: pointer;
+            border-bottom: 3px solid #e4e6ef;
+        }
+
+        .btn-custom:hover {
             background-color: #f8f9fa;
-            padding: 10px 50px;
-            border-radius: 5px;
+            color: #009ef7;
+            border-bottom-color: #009ef7;
+            transform: translateY(-1px);
         }
 
         .btn-custom.active {
-            background-color: #007bff;
-            color: white;
+            background-color: #009ef7;
+            color: white !important;
+            border-color: #009ef7;
+            border-bottom: 3px solid #006eb3;
+            box-shadow: 0 4px 10px rgba(0, 158, 247, 0.3);
+        }
+
+        .btn-custom.active strong {
+            color: white !important;
         }
 
         .font-regular {
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
     </style>
 
@@ -144,18 +166,24 @@
                 <!--begin::Col-->
                 <div class="col-xxl-12 ">
 
-                    <div class="Header" style="margin-bottom: 30px">
+                    <div class="Header" style="margin-bottom: 25px; padding-left: 5px;">
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="btn-custom font-regular mt-4 {{ request()->routeIs('koordinator.dashboard.index') ? 'active' : '' }}"
+                                <a class="btn-custom font-regular {{ request()->routeIs('koordinator.dashboard.index') ? 'active' : '' }}"
                                     href="{{ route('koordinator.dashboard.index') }}">
-                                    <strong>Data Harian ini</strong>
+                                    Data Harian Ini
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn-custom font-regular {{ request()->routeIs('koordinator.dashboard.indexAll') ? 'active' : '' }}"
                                     href="{{ route('koordinator.dashboard.indexAll') }}">
-                                    <strong>Data Keseluruhan</strong>
+                                    Data Keseluruhan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn-custom font-regular {{ request()->routeIs('koordinator.dashboard.indexProblem') ? 'active' : '' }}"
+                                    href="{{ route('koordinator.dashboard.indexProblem') }}">
+                                    Laporan Permasalahan Tiket
                                 </a>
                             </li>
                         </ul>
@@ -164,11 +192,12 @@
 
                     <div class="tab-content">
                         <div class="card card-xxl-stretch mt-3 mb-4">
-                            <div class="row mb-6 ms-6 d-flex align-items-center" style="margin-top: 20px">
+                            <div class="row g-3 p-5 align-items-end">
                                 <div class="col-md-2">
-                                    <h4 class="card-title text-black">Filter Grafik</h4>
+                                    <h4 class="card-title text-black mb-3">Filter Grafik</h4>
                                 </div>
                                 <div class="col-md-2">
+                                    <label class="form-label fw-bold small text-muted">Tahun</label>
                                     <select id="filterYear" class="form-select">
                                         <option value="all" selected>Semua Tahun</option>
                                         @foreach (range(now()->year - 5, now()->year + 1) as $y)
@@ -177,6 +206,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
+                                    <label class="form-label fw-bold small text-muted">Bulan</label>
                                     <select id="filterMonth" class="form-select" disabled>
                                         <option value="all" selected>Semua Bulan</option>
                                         @foreach (range(1, 12) as $m)
@@ -186,9 +216,11 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <button id="applyFilter" class="btn btn-primary">Filter</button>
-                                    <button id="resetFilter" class="btn btn-danger">Segarkan</button>
+                                <div class="col-md-3">
+                                    <div class="d-flex w-100">
+                                        <button id="applyFilter" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
+                                        <button id="resetFilter" class="btn btn-danger flex-grow-1">Segarkan</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

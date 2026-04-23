@@ -95,6 +95,7 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
 Route::middleware(['verified', 'auth', 'role:Admin'])->name('admin.')->group(function () {
     Route::get('/admin/dashboard', [HomeAdminController::class, 'index'])->name('dashboard.index');
     Route::get('/admin/dashboardAll', [HomeAdminController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/admin/dashboardProblem', [HomeAdminController::class, 'indexProblem'])->name('dashboard.indexProblem');
     Route::get('/admin/tickets/chart', [HomeAdminController::class, 'getTicketChartData']);
     Route::get('/admin/tickets/dailyChart', [HomeAdminController::class, 'getDailyTicketChartData']);
     Route::get('/admin/tickets/todaydailychart', [HomeAdminController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
@@ -173,6 +174,7 @@ Route::middleware(['verified', 'auth', 'role:Helpdesk|Admin'])->name('helpdesk.'
 Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.')->group(function () {
     Route::get('/koordinator/dashboard', [HomeKoordinatorController::class, 'index'])->name('dashboard.index');
     Route::get('/koordinator/dashboardAll', [HomeKoordinatorController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/koordinator/dashboardProblem', [HomeKoordinatorController::class, 'indexProblem'])->name('dashboard.indexProblem');
     Route::get('/koordinator/tickets/chart', [HomeKoordinatorController::class, 'getTicketChartData']);
     Route::get('/koordinator/tickets/dailyChart', [HomeKoordinatorController::class, 'getDailyTicketChartData']);
     Route::get('/koordinator/tickets/todaydailychart', [HomekoordinatorController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
@@ -195,6 +197,7 @@ Route::middleware(['verified', 'auth', 'role:Koordinator'])->name('koordinator.'
 Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.')->group(function () {
     Route::get('/staff-subdit/dashboard', [HomeStaffSubditController::class, 'index'])->name('dashboard.index');
     Route::get('/staff-subdit/dashboardAll', [HomeStaffSubditController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/staff-subdit/dashboardProblem', [HomeStaffSubditController::class, 'indexProblem'])->name('dashboard.indexProblem');
     Route::get('/staff-subdit/tickets/chart', [HomeStaffSubditController::class, 'getTicketChartData']);
     Route::get('/staff-subdit/tickets/dailyChart', [HomeStaffSubditController::class, 'getDailyTicketChartData']);
     Route::get('/staff-subdit/tickets/todaydailychart', [HomeStaffSubditController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
@@ -216,6 +219,7 @@ Route::middleware(['verified', 'auth', 'role:Staff Subdit'])->name('staffSubdit.
 Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->group(function () {
     Route::get('/siak-dev/dashboard', [HomeSiakDevController::class, 'index'])->name('dashboard.index');
     Route::get('/siak-dev/dashboardAll', [HomeSiakDevController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/siak-dev/dashboardProblem', [HomeSiakDevController::class, 'indexProblem'])->name('dashboard.indexProblem');
     Route::get('/siak-dev/tickets/chart', [HomeSiakDevController::class, 'getTicketChartData']);
     Route::get('/siak-dev/tickets/dailyChart', [HomeSiakDevController::class, 'getDailyTicketChartData']);
     Route::get('/siak-dev/tickets/todaydailychart', [HomeSiakDevController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');
@@ -236,6 +240,7 @@ Route::middleware(['verified', 'auth', 'role:SIAK Dev'])->name('siakDev.')->grou
 Route::middleware(['verified', 'auth', 'role:Pejabat'])->name('pejabat.')->group(function () {
     Route::get('/pejabat/dashboard', [HomePejabatController::class, 'index'])->name('dashboard.index');
     Route::get('/pejabat/dashboardAll', [HomePejabatController::class, 'indexAll'])->name('dashboard.indexAll');
+    Route::get('/pejabat/dashboardProblem', [HomePejabatController::class, 'indexProblem'])->name('dashboard.indexProblem');
     Route::get('/pejabat/tickets/chart', [HomePejabatController::class, 'getTicketChartData']);
     Route::get('/pejabat/tickets/dailyChart', [HomePejabatController::class, 'getDailyTicketChartData']);
     Route::get('/pejabat/tickets/todaydailychart', [HomePejabatController::class, 'todaygetTicketChartData'])->name('tickets.todaydailychart');

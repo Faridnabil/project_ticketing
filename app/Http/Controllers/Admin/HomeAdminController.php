@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\Province;
+use App\Models\CityOrRegency;
+use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeAdminController extends Controller
 {
@@ -231,5 +235,128 @@ class HomeAdminController extends Controller
         }
 
         return response()->json($chartData);
+    }
+    public function indexProblem(Request $request)
+    {
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $provinceId = $request->query('province_id');
+        $cityId = $request->query('city_id');
+        $categoryId = $request->query('category_id');
+
+        $query = Ticket::with(['province', 'cityOrRegency', 'category'])
+            ->select(
+                'province_id',
+                'city_or_regency_id',
+                'category_id',
+                DB::raw('count(*) as total')
+            )
+            ->groupBy('province_id', 'city_or_regency_id', 'category_id')
+            ->orderByDesc('total');
+
+        // Filter tahun
+        $query->when($year, function ($query) use ($year) {
+            if ($year !== "all" && $year) {
+                $query->whereYear('created_at', $year);
+            }
+        });
+
+        // Filter bulan
+        $query->when($month, function ($query) use ($month) {
+            if ($month !== "all" && $month) {
+                $query->whereMonth('created_at', $month);
+            }
+        });
+
+        // Filter provinsi
+        $query->when($provinceId, function ($query) use ($provinceId) {
+            if ($provinceId !== "all" && $provinceId) {
+                $query->where('province_id', $provinceId);
+            }
+        });
+
+        // Filter kota
+        $query->when($cityId, function ($query) use ($cityId) {
+            if ($cityId !== "all" && $cityId) {
+                $query->where('city_or_regency_id', $cityId);
+            }
+        });
+
+        // Filter kategori
+        $query->when($categoryId, function ($query) use ($categoryId) {
+            if ($categoryId !== "all" && $categoryId) {
+                $query->where('category_id', $categoryId);
+            }
+        });
+
+        $topProblems = $query->limit(10)->get();
+
+        // Define color palette
+        $colorPalette = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
+        ];
+
+        $chartData = $topProblems->map(function ($item, $index) use ($colorPalette) {
+            $provinceName = $item->province->province_name ?? '-';
+            $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+            $categoryCode = $item->category->code ?? $item->category->category_name ?? 'Unknown';
+            
+            return [
+                'label' => $provinceName . ' - ' . $cityName . ' (' . $categoryCode . ')',
+                'category_name' => $item->category->category_name ?? 'Unknown',
+                'total' => $item->total,
+                'color' => $colorPalette[$index % count($colorPalette)],
+            ];
+        });
+
+
+        // Format data untuk tabel
+        $tableData = $topProblems->map(function ($item) {
+            return [
+                'province' => $item->province->province_name ?? '-',
+                'city' => $item->cityOrRegency->city_or_regency_name ?? '-',
+                'category' => $item->category->category_name ?? 'Unknown',
+                'code' => $item->category->code ?? '-',
+                'color' => $item->category->color ?? '#6c757d',
+                'total' => $item->total
+            ];
+        });
+
+        // Data untuk dropdown filter
+        $provinces = Province::orderBy('province_name')->get();
+        $categories = Category::orderBy('category_name')->get();
+        $years = Ticket::select(DB::raw('YEAR(created_at) as year'))
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        if ($request->ajax()) {
+            return response()->json([
+                'chartData' => $chartData,
+                'tableData' => $tableData,
+                'provinces' => $provinces,
+                'categories' => $categories,
+                'years' => $years,
+                'month' => $month,
+                'year' => $year,
+                'provinceId' => $provinceId,
+                'cityId' => $cityId,
+                'categoryId' => $categoryId
+            ]);
+        }
+
+        return view('dashboard.admin.home.indexProblem', compact(
+            'chartData',
+            'tableData',
+            'provinces',
+            'categories',
+            'years',
+            'month',
+            'year',
+            'provinceId',
+            'cityId',
+            'categoryId'
+        ));
     }
 }
