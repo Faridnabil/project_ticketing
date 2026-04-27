@@ -72,9 +72,12 @@ class TicketCustomerController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Generate nomor tiket berdasarkan tanggal: TICK-YYYYMMDD-XXX
+            // Generate nomor tiket berdasarkan kategori dan tanggal: CODE-YYYYMMDD-XXX
+            $category = Category::find($request->category_id);
+            $code = $category ? ($category->code ?? 'TICK') : 'TICK';
             $today = Carbon::now()->format('Ymd');
-            $prefix = 'TICK-' . $today . '-';
+            $prefix = $code . '-' . $today . '-';
+
             $lastTicket = Ticket::where('no_ticket', 'LIKE', $prefix . '%')
                 ->orderByRaw('CAST(SUBSTR(no_ticket, ' . (strlen($prefix) + 1) . ') AS UNSIGNED) DESC')
                 ->first();
