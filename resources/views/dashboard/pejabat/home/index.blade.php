@@ -238,10 +238,10 @@
                                                 <div class="input-field col s6 d-flex" style="margin-bottom: 20px;">
                                                     <button type="submit" class="btn waves-effect waves-light"
                                                         id="submitFilter"
-                                                        style="background-color: #19bb52; border-radius: 8px; margin-right: 10px; flex: 1;"><b>Tampilkan</b></button>
+                                                        style="background-color: #009ef7; border-radius: 8px; margin-right: 10px; flex: 1;"><b>Tampilkan</b></button>
                                                     <a href="{{ route('pejabat.dashboard.index') }}"
                                                         class="btn waves-effect waves-light"
-                                                        style="background-color: #f1416c; border-radius: 8px; flex: 1;"><b>Segarkan</b></a>
+                                                        style="background-color: #f1416c; border-radius: 8px; flex: 1;"><b>Atur Ulang</b></a>
                                                 </div>
                                             </div>
                                         </form>

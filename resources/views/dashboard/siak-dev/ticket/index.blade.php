@@ -40,45 +40,41 @@
                     <!--begin::Card title-->
                     <div class="card-title">
                         <!--begin::Form-->
-                        <form method="GET" action="{{ route('siakDev.ticket.index') }}" class="d-flex">
+                        <form method="GET" action="{{ route('siakDev.ticket.index') }}" id="filterForm" class="d-flex align-items-center gap-2">
                             <select name="level" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Disposisi">
-                                <option></option>
+                                <option value="all" {{ request('level') == 'all' ? 'selected' : '' }}>Semua Disposisi</option>
                                 @foreach ($levels as $level)
-                                    <option value="{{ $level->id }}">{{ $level->name }}</option>
+                                    <option value="{{ $level->id }}" {{ request('level') == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;&nbsp;
 
                             <select name="category_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Kategori">
-                                <option></option>
+                                <option value="all" {{ request('category_id') == 'all' ? 'selected' : '' }}>Semua Kategori</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;&nbsp;
 
                             <select name="priority_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Prioritas">
-                                <option></option>
+                                <option value="all" {{ request('priority_id') == 'all' ? 'selected' : '' }}>Semua Prioritas</option>
                                 @foreach ($priorities as $priority)
-                                    <option value="{{ $priority->id }}">{{ $priority->priority_name }}</option>
+                                    <option value="{{ $priority->id }}" {{ request('priority_id') == $priority->id ? 'selected' : '' }}>{{ $priority->priority_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;&nbsp;
 
                             <select name="status_id" class="form-select me-2" data-control="select2"
                                 data-placeholder="Pilih Status">
-                                <option></option>
+                                <option value="all" {{ request('status_id') == 'all' ? 'selected' : '' }}>Semua Status</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                                    <option value="{{ $status->id }}" {{ request('status_id') == $status->id ? 'selected' : '' }}>{{ $status->status_name }}</option>
                                 @endforeach
                             </select>
-                            &nbsp;&nbsp;
 
-                            <button type="submit" class="btn btn-primary me-1">Filter</button>
-                            <a href="{{ route('siakDev.ticket.index') }}" class="btn btn-danger">Reset</a>
+                            <button type="submit" class="btn btn-primary me-1">Tampilkan</button>
+                            <button type="button" id="resetButton" class="btn btn-danger">Atur Ulang</button>
                         </form>
                         <!--end::Form-->
                     </div>
@@ -254,17 +250,12 @@
                                                         href="{{ route('siakDev.ticket.edit', $ticket->id) }}" type="button"
                                                         title="Ubah Tiket">
                                                         <span class="menu-icon" style="fill: #bd6710">
-                                                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
-                                                                    <path
-                                                                        d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.47403C21.7817 5.85581 21.9962 6.37355 21.9962 6.91353C21.9962 7.4535 21.7817 7.97125 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="currentColor" />
+                                                                    <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.7737 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="currentColor" />
                                                                 </svg>
                                                             </span>
-                                                            <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
                                                 @endcan
@@ -274,17 +265,13 @@
                                                         data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
                                                         title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
-                                                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M23,3H18V2.5A2.5,2.5,0,0,0,15.5,0h-7A2.5,2.5,0,0,0,6,2.5V3H1V6H3V21a3,3,0,0,0,3,3H18a3,3,0,0,0,3-3V6h2ZM18,21H6V6H18Z" />
-                                                                    <rect x="8" y="9" width="3" height="9" />
-                                                                    <rect x="13" y="9" width="3" height="9" />
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+                                                                    <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+                                                                    <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
                                                                 </svg>
                                                             </span>
-                                                            <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
                                                 @endcan
@@ -293,16 +280,12 @@
                                                         href="{{ route('siakDev.ticket.show', $ticket->id) }}" type="button"
                                                         title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
-                                                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="512"
-                                                                    height="512" viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
-                                                                    <circle cx="12" cy="12" r="4" />
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM12.5 18C15.5 18 18 15.5 18 12.5C18 9.5 15.5 7 12.5 7C9.5 7 7 9.5 7 12.5C7 15.5 9.5 18 12.5 18Z" fill="currentColor" />
+                                                                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8ZM12.5 15.5C14.1569 15.5 15.5 14.1569 15.5 12.5C15.5 10.8431 14.1569 9.5 12.5 9.5C10.8431 9.5 9.5 10.8431 9.5 12.5C9.5 14.1569 10.8431 15.5 12.5 15.5Z" fill="currentColor" />
                                                                 </svg>
                                                             </span>
-                                                            <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
                                                 @endcan
@@ -314,15 +297,15 @@
                                                             data-bs-target="#kt_modal_ticket2_{{ $ticket->id }}"
                                                             title="Pengajuan Tiket">
                                                             <span class="menu-icon" style="fill: #0d8987">
-                                                                <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                                 <span class="svg-icon svg-icon-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="512"
-                                                                        height="512" viewBox="0 0 24 24" version="1.1">
-                                                                        <path
-                                                                            d="M23.017,8.785c-.595-.542-1.364-.816-2.168-.782-.804,.038-1.544,.387-2.086,.981l-3.216,3.534c-.551-.909-1.55-1.519-2.689-1.519H3c-1.654,0-3,1.346-3,3v7c0,1.654,1.346,3,3,3H13.448l9.788-10.985c1.093-1.227,.994-3.124-.219-4.229Zm-1.274,2.899l-9.191,10.315H3c-.551,0-1-.448-1-1v-7c0-.552,.449-1,1-1H12.858c.63,0,1.142,.513,1.142,1.143,0,.564-.421,1.051-.981,1.13l-5.161,.737,.283,1.98,5.16-.737c1.175-.168,2.13-.987,2.515-2.059l4.426-4.864c.182-.199,.43-.316,.7-.329,.274-.016,.528,.081,.728,.263,.407,.371,.44,1.009,.073,1.421ZM15,2.5c0-1.379-1.122-2.5-2.5-2.5H5.5c-1.378,0-2.5,1.121-2.5,2.5v6.5H15V2.5Zm-2,4.5H5V2.5c0-.275,.224-.5,.5-.5h7c.276,0,.5,.225,.5,.5V7ZM7,3h4v2H7V3Z" />
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24" version="1.1">
+                                                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V3C2 2.4 2.4 2 3 2H21C21.6 2 22 2.4 22 3V21C22 21.6 21.6 22 21 22Z" fill="currentColor" />
+                                                                        <path d="M17.4 11V13C17.4 13.6 17 14 16.4 14H15.4C14.8 14 14.4 13.6 14.4 13V11C14.4 10.4 14.8 10 15.4 10H16.4C17 10 17.4 10.4 17.4 11Z" fill="currentColor" />
+                                                                        <path d="M12.4 11V13C12.4 13.6 12 14 11.4 14H10.4C9.8 14 9.4 13.6 9.4 13V11C9.4 10.4 9.8 10 10.4 10H11.4C12 10 12.4 10.4 12.4 11Z" fill="currentColor" />
+                                                                        <path d="M7.4 11V13C7.4 13.6 7 14 6.4 14H5.4C4.8 14 4.4 13.6 4.4 13V11C4.4 10.4 4.8 10 5.4 10H6.4C7 10 7.4 10.4 7.4 11Z" fill="currentColor" />
                                                                     </svg>
                                                                 </span>
-                                                                <!--end::Svg Icon-->
                                                             </span>
                                                         </a>
                                                     @endif
@@ -333,16 +316,12 @@
                                                         href="{{ route('siakDev.ticket.show', $ticket->id) }}" type="button"
                                                         title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
-                                                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="512"
-                                                                    height="512" viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,18a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,18Z" />
-                                                                    <circle cx="12" cy="12" r="4" />
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM12.5 18C15.5 18 18 15.5 18 12.5C18 9.5 15.5 7 12.5 7C9.5 7 7 9.5 7 12.5C7 15.5 9.5 18 12.5 18Z" fill="currentColor" />
+                                                                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8ZM12.5 15.5C14.1569 15.5 15.5 14.1569 15.5 12.5C15.5 10.8431 14.1569 9.5 12.5 9.5C10.8431 9.5 9.5 10.8431 9.5 12.5C9.5 14.1569 10.8431 15.5 12.5 15.5Z" fill="currentColor" />
                                                                 </svg>
                                                             </span>
-                                                            <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
                                                 @endcan
@@ -527,6 +506,14 @@
         </div>
 
         <script>
+            document.getElementById('resetButton').addEventListener('click', function() {
+                const form = document.getElementById('filterForm');
+                const selects = form.querySelectorAll('select');
+                selects.forEach(select => {
+                    $(select).val('all').trigger('change');
+                });
+            });
+
             document.getElementById('statusSelect_{{ $ticket->id }}').addEventListener('change', function() {
                 let selectedOption = this.options[this.selectedIndex];
                 let statusName = selectedOption.text;

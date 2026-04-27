@@ -32,7 +32,7 @@ class TicketSiakDevController extends Controller
         $query = Ticket::with('status', 'category', 'priority', 'siakDev')
             ->where('level4', '!=', null);
 
-        if ($request->has('level') && $request->level) {
+        if ($request->filled('level') && $request->level !== 'all') {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
                     ->orWhere('level2', $request->level)
@@ -46,19 +46,18 @@ class TicketSiakDevController extends Controller
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
 
 
-
         $categories = Category::all();
-        if ($request->has('category_id') && $request->category_id) {
+        if ($request->filled('category_id') && $request->category_id !== 'all') {
             $query->where('category_id', $request->category_id);
         }
 
         $priorities = Priority::all();
-        if ($request->has('priority_id') && $request->priority_id) {
+        if ($request->filled('priority_id') && $request->priority_id !== 'all') {
             $query->where('priority_id', $request->priority_id);
         }
 
         $statuses = Status::all();
-        if ($request->has('status_id') && $request->status_id) {
+        if ($request->filled('status_id') && $request->status_id !== 'all') {
             $query->where('status_id', $request->status_id);
         }
 

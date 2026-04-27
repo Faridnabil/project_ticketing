@@ -148,81 +148,76 @@
                                           <div class="card-header border-0 bg-primary py-5">
                                                 <h2 class="card-title fw-bolder text-white">Laporan Permasalahan Tiket per Daerah</h2>
                                             </div>
-                                            <div class="card-body">
-
-                                                <div class="card mb-4">
-                                                    <div class="card-body">
-                                                        <form id="filterForm">
-                                                            <div class="row g-3 p-5">
-                                                                <div class="col-md-2">
-                                                                    <label for="year" class="form-label fw-bold">Tahun</label>
-                                                                    <select class="form-select" id="year" name="year">
-                                                                        <option value="all">Semua Tahun</option>
-                                                                        @foreach($years as $y)
-                                                                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label for="month" class="form-label fw-bold">Bulan</label>
-                                                                    <select class="form-select" id="month" name="month">
-                                                                        <option value="all">Semua Bulan</option>
-                                                                        @for($i = 1; $i <= 12; $i++)
-                                                                            <option value="{{ $i }}" {{ $month == $i ? 'selected' : '' }}>
-                                                                                {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label for="category_id" class="form-label fw-bold">Kategori</label>
-                                                                    <select class="form-select" id="category_id" name="category_id">
-                                                                        <option value="all">Semua Kategori</option>
-                                                                        @foreach($categories as $cat)
-                                                                            <option value="{{ $cat->id }}" {{ $categoryId == $cat->id ? 'selected' : '' }}>
-                                                                                {{ $cat->category_name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label for="province_id" class="form-label fw-bold">Provinsi</label>
-                                                                    <select class="form-select" id="province_id"
-                                                                        name="province_id">
-                                                                        <option value="all">Semua Provinsi</option>
-                                                                        @foreach($provinces as $province)
-                                                                            <option value="{{ $province->id }}" {{ $provinceId == $province->id ? 'selected' : '' }}>
-                                                                                {{ $province->province_name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label for="city_id" class="form-label fw-bold">Kota/Kabupaten</label>
-                                                                    <select class="form-select" id="city_id" name="city_id"
-                                                                        {{ !$provinceId || $provinceId == 'all' ? 'disabled' : '' }}>
-                                                                        <option value="all">Semua Kota/Kabupaten</option>
-                                                                        @if($provinceId && $provinceId != 'all')
-                                                                            @foreach(\App\Models\CityOrRegency::where('province_id', $provinceId)->get() as $city)
-                                                                                <option value="{{ $city->id }}" {{ $cityId == $city->id ? 'selected' : '' }}>
-                                                                                    {{ $city->city_or_regency_name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2 d-flex align-items-end">
-                                                                    <div class="d-flex w-100">
-                                                                        <button type="submit" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
-                                                                        <button id="resetFilter" type="button" class="btn btn-danger">Segarkan</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
+                                                      <div class="card-body">
+                                                                                                    <form id="filterForm">
+                                                                                                        <div class="row g-3 p-5">
+                                                                                                            <div class="col-md-2">
+                                                                                                                <label for="year" class="form-label fw-bold">Tahun</label>
+                                                                                                                <select class="form-select" id="year" name="year">
+                                                                                                                    <option value="all">Semua Tahun</option>
+                                                                                                                    @foreach($years as $y)
+                                                                                                                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                                                                                                    @endforeach
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-2">
+                                                                                                                <label for="month" class="form-label fw-bold">Bulan</label>
+                                                                                                                <select class="form-select" id="month" name="month">
+                                                                                                                    <option value="all">Semua Bulan</option>
+                                                                                                                    @for($i = 1; $i <= 12; $i++)
+                                                                                                                        <option value="{{ $i }}" {{ $month == $i ? 'selected' : '' }}>
+                                                                                                                            {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                                                                                                                        </option>
+                                                                                                                    @endfor
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-2">
+                                                                                                                <label for="category_id" class="form-label fw-bold">Kategori</label>
+                                                                                                                <select class="form-select" id="category_id" name="category_id">
+                                                                                                                    <option value="all">Semua Kategori</option>
+                                                                                                                    @foreach($categories as $cat)
+                                                                                                                        <option value="{{ $cat->id }}" {{ $categoryId == $cat->id ? 'selected' : '' }}>
+                                                                                                                            {{ $cat->category_name }}
+                                                                                                                        </option>
+                                                                                                                    @endforeach
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-2">
+                                                                                                                <label for="province_id" class="form-label fw-bold">Provinsi</label>
+                                                                                                                <select class="form-select" id="province_id"
+                                                                                                                    name="province_id">
+                                                                                                                    <option value="all">Semua Provinsi</option>
+                                                                                                                    @foreach($provinces as $province)
+                                                                                                                        <option value="{{ $province->id }}" {{ $provinceId == $province->id ? 'selected' : '' }}>
+                                                                                                                            {{ $province->province_name }}
+                                                                                                                        </option>
+                                                                                                                    @endforeach
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-2">
+                                                                                                                <label for="city_id" class="form-label fw-bold">Kota/Kabupaten</label>
+                                                                                                                <select class="form-select" id="city_id" name="city_id"
+                                                                                                                    {{ !$provinceId || $provinceId == 'all' ? 'disabled' : '' }}>
+                                                                                                                    <option value="all">Semua Kota/Kabupaten</option>
+                                                                                                                    @if($provinceId && $provinceId != 'all')
+                                                                                                                        @foreach(\App\Models\CityOrRegency::where('province_id', $provinceId)->get() as $city)
+                                                                                                                            <option value="{{ $city->id }}" {{ $cityId == $city->id ? 'selected' : '' }}>
+                                                                                                                                {{ $city->city_or_regency_name }}
+                                                                                                                            </option>
+                                                                                                                        @endforeach
+                                                                                                                    @endif
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                             <div class="col-md-2 d-flex align-items-end">
+                                                                                                                <div class="d-flex w-100 gap-2">
+                                                                                                                    <button type="submit" class="btn btn-primary flex-grow-1">Tampilkan</button>
+                                                                                                                    <button id="resetFilter" type="button" class="btn btn-danger flex-grow-1">Atur Ulang</button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </form>
+                                                                                                </div>
+                                               <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="card">
 
@@ -271,7 +266,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -408,13 +402,13 @@
             // Reset filter button functionality
             $('#resetFilter').on('click', function () {
                 // Reset all filter fields
-                $('#year').val('all');
-                $('#month').val('all');
-                $('#category_id').val('all');
-                $('#province_id').val('all');
-                $('#city_id').val('all').prop('disabled', true).html('<option value="all">Semua Kota/Kabupaten</option>');
+                $('#year').val('all').trigger('change');
+                $('#month').val('all').trigger('change');
+                $('#category_id').val('all').trigger('change');
+                $('#province_id').val('all').trigger('change');
+                $('#city_id').val('all').prop('disabled', true).trigger('change');
 
-                // Trigger form submit to reload data
+                // Trigger AJAX search after reset
                 $('#filterForm').submit();
             });
 

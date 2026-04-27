@@ -164,7 +164,7 @@
                                                         <div class="col-md-2 d-flex align-items-end">
                                                             <div class="d-flex w-100">
                                                                 <button type="submit" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
-                                                                <button id="resetFilter" type="button" class="btn btn-danger">Segarkan</button>
+                                                                <button id="resetFilter" type="button" class="btn btn-danger">Atur Ulang</button>
                                                             </div>
                                                         </div>
                                                     </div>

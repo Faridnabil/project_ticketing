@@ -217,9 +217,9 @@
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="d-flex w-100">
-                                        <button id="applyFilter" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
-                                        <button id="resetFilter" class="btn btn-danger flex-grow-1">Segarkan</button>
+                                    <div class="d-flex w-100 gap-2">
+                                        <button id="applyFilter" class="btn btn-primary flex-grow-1">Tampilkan</button>
+                                        <button id="resetFilter" class="btn btn-danger flex-grow-1">Atur Ulang</button>
                                     </div>
                                 </div>
                             </div>
