@@ -72,7 +72,7 @@
                                 {{-- <label for="disposisi" class="form-label mb-2">Disposisi</label> --}}
                                 <select name="level" id="disposisi" class="form-select" data-control="select2"
                                     data-placeholder="Pilih Disposisi">
-                                    <option></option>
+                                    <option value="all">Semua Disposisi</option>
                                     @foreach ($levels as $level)
                                         <option value="{{ $level->id }}"
                                             {{ old('level', request('level')) == $level->id ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
                                 {{-- <label for="kategori" class="form-label mb-2">Kategori</label> --}}
                                 <select name="category_id" id="kategori" class="form-select" data-control="select2"
                                     data-placeholder="Pilih Kategori">
-                                    <option></option>
+                                    <option value="all">Semua Kategori</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
                                             {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
@@ -100,7 +100,7 @@
                                 {{-- <label for="prioritas" class="form-label mb-2">Prioritas</label> --}}
                                 <select name="priority_id" id="prioritas" class="form-select" data-control="select2"
                                     data-placeholder="Pilih Prioritas">
-                                    <option></option>
+                                    <option value="all">Semua Prioritas</option>
                                     @foreach ($priorities as $priority)
                                         <option value="{{ $priority->id }}"
                                             {{ old('priority_id', request('priority_id')) == $priority->id ? 'selected' : '' }}>
@@ -114,7 +114,7 @@
                                 {{-- <label for="status" class="form-label mb-2">Status</label> --}}
                                 <select name="status_id" id="status" class="form-select" data-control="select2"
                                     data-placeholder="Pilih Status">
-                                    <option></option>
+                                    <option value="all">Semua Status</option>
                                     @foreach ($statuses as $status)
                                         <option value="{{ $status->id }}"
                                             {{ old('status_id', request('status_id')) == $status->id ? 'selected' : '' }}>
@@ -128,7 +128,7 @@
                             <div class="col-md-2">
                                 <select id="province_id" name="province_id" class="form-select" data-control="select2"
                                     onchange="fetchCityOrRegency(this.value)">
-                                    <option value="" selected disabled>Pilih Propinsi</option>
+                                    <option value="all">Semua Propinsi</option>
                                     @foreach ($provinces as $province)
                                         <option value="{{ $province->id }}"
                                             {{ request('province_id') == $province->id ? 'selected' : '' }}>
@@ -142,7 +142,7 @@
                             <div class="col-md-2">
                                 <select id="city_or_regency_id" name="city_or_regency_id" class="form-select"
                                     data-control="select2">
-                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                    <option value="all">Semua Kabupaten/Kota</option>
                                     @if (request('province_id'))
                                         @foreach ($city_or_regencies as $city)
                                             @if ($city->province_id == request('province_id'))
@@ -159,9 +159,9 @@
                             <script>
                                 function fetchCityOrRegency(provinceId) {
                                     const citySelect = document.getElementById('city_or_regency_id');
-                                    if (provinceId) {
+                                    if (provinceId && provinceId !== 'all') {
                                         // Tampilkan placeholder loading
-                                        citySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+                                        citySelect.innerHTML = '<option value="all" selected disabled>Loading...</option>';
                                         fetch(`/get-cities/${provinceId}`)
                                             .then(response => {
                                                 if (!response.ok) throw new Error('Failed to fetch cities');
@@ -169,7 +169,7 @@
                                             })
                                             .then(data => {
                                                 // Perbarui dropdown kabupaten/kota
-                                                citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                                citySelect.innerHTML = '<option value="all">Semua Kabupaten/Kota</option>';
                                                 data.forEach(city => {
                                                     citySelect.innerHTML +=
                                                         `<option value="${city.id}">${city.no_city_or_regency} - ${city.city_or_regency_name}</option>`;
@@ -186,8 +186,9 @@
                                                 alert('Gagal mengambil data kabupaten/kota. Silakan coba lagi.');
                                             });
                                     } else {
-                                        // Kosongkan dropdown jika provinsi tidak dipilih
-                                        citySelect.innerHTML = '<option value="" selected disabled>Pilih Kabupaten/Kota</option>';
+                                        // Set ke semua jika provinsi tidak dipilih atau 'all'
+                                        citySelect.innerHTML = '<option value="all">Semua Kabupaten/Kota</option>';
+                                        $(citySelect).val('all').trigger('change');
                                     }
                                 }
 
@@ -212,9 +213,25 @@
                             </script>
 
                             <div class="col-md-3  d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <a href="{{ route('helpdesk.ticket.index') }}" class="btn btn-danger">Atur ulang</a>
+                                <button type="submit" class="btn btn-primary me-2">Tampilkan</button>
+                                <button type="button" id="reset_filter_all" class="btn btn-danger">Atur ulang</button>
                             </div>
+
+                            <script>
+                                document.getElementById('reset_filter_all').addEventListener('click', function() {
+                                    // Reset input tanggal
+                                    document.getElementById('tanggal_mulai').value = '';
+                                    document.getElementById('tanggal_selesai').value = '';
+
+                                    // Reset Select2 dropdowns
+                                    $('#disposisi').val('all').trigger('change');
+                                    $('#kategori').val('all').trigger('change');
+                                    $('#prioritas').val('all').trigger('change');
+                                    $('#status').val('all').trigger('change');
+                                    $('#province_id').val('all').trigger('change');
+                                    $('#city_or_regency_id').val('all').trigger('change');
+                                });
+                            </script>
                         </form>
                         <!--end::Form-->
                     </div>

@@ -60,12 +60,12 @@ class TicketHelpdeskController extends Controller
             }
 
             // Filter berdasarkan kategori
-            if ($request->filled('category_id')) {
+            if ($request->filled('category_id') && $request->category_id !== 'all') {
                 $query->where('category_id', $request->category_id);
             }
 
             // Filter berdasarkan level
-            if ($request->filled('level')) {
+            if ($request->filled('level') && $request->level !== 'all') {
                 $query->where(function ($q) use ($request) {
                     $q->where('level1', $request->level)
                         ->orWhere('level2', $request->level)
@@ -76,7 +76,7 @@ class TicketHelpdeskController extends Controller
             }
 
             // Filter berdasarkan prioritas
-            if ($request->filled('priority_id')) {
+            if ($request->filled('priority_id') && $request->priority_id !== 'all') {
                 $query->where('priority_id', $request->priority_id);
             }
 
@@ -111,18 +111,18 @@ class TicketHelpdeskController extends Controller
                 }
             }
 
-            // Filter berdasarkan provinsi
-            if ($request->filled('status_id')) {
+            // Filter berdasarkan status
+            if ($request->filled('status_id') && $request->status_id !== 'all') {
                 $query->where('status_id', $request->status_id);
             }
 
             // Filter berdasarkan provinsi
-            if ($request->filled('province_id')) {
+            if ($request->filled('province_id') && $request->province_id !== 'all') {
                 $query->where('province_id', $request->province_id);
             }
 
             // Filter berdasarkan kota/kabupaten
-            if ($request->filled('city_or_regency_id')) {
+            if ($request->filled('city_or_regency_id') && $request->city_or_regency_id !== 'all') {
                 $query->where('city_or_regency_id', $request->city_or_regency_id);
             }
         }

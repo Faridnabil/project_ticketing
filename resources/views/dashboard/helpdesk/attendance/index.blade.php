@@ -233,17 +233,11 @@
                                                     <input type="text"
                                                         class="form-control"
                                                         id="name" name="name" value="{{ Auth::user()->name }}" readonly>
-                                                    <div class="text-muted fs-7 mt-1">Nama otomatis diambil dari akun anda.</div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label for="current_device" class="form-label">Status Perangkat</label>
                                                     <input type="text" class="form-control" value="{{ Auth::user()->assigned_device ? 'Terdaftar' : 'Belum Terdaftar' }}" readonly>
-                                                    @if(Auth::user()->assigned_device)
-                                                        <div class="text-success fs-7 mt-1">Browser ini akan selalu digunakan untuk Anda.</div>
-                                                    @else
-                                                        <div class="text-warning fs-7 mt-1">Sistem akan mendaftarkan browser ini otomatis saat absen.</div>
-                                                    @endif
                                                 </div>
 
                                                 <div class="col-md-2">
@@ -362,9 +356,9 @@
                         <div class="card-title mb-4">
                             <!--begin::Form-->
                             <form method="GET" action="{{ route('helpdesk.attendance.index') }}" class="d-flex">
-                                <select name="check_in" class="form-select me-2" data-control="select2"
+                                <select name="check_in" id="shift_filter" class="form-select me-2" data-control="select2"
                                     data-placeholder="Pilih Shift">
-                                    <option></option>
+                                    <option value="all">Semua Shift</option>
                                     @foreach ($allCheckIns as $checkIn)
                                         <option value="{{ $checkIn }}"
                                             {{ request('check_in') == $checkIn ? 'selected' : '' }}>
@@ -375,11 +369,11 @@
 
                                 &nbsp;
 
-                                <input type="date" name="start_date" class="form-control me-2"
+                                <input type="date" id="attendance_start_date" name="start_date" class="form-control me-2"
                                     style="border: 2px solid #28a745;" value="{{ request('start_date') }}"
                                     placeholder="Start Date">
                                 &nbsp;
-                                <input type="date" name="end_date" class="form-control me-2"
+                                <input type="date" id="attendance_end_date" name="end_date" class="form-control me-2"
                                     style="border: 2px solid #dc3545;" value="{{ request('end_date') }}"
                                     placeholder="End Date">
                                 &nbsp;
@@ -747,11 +741,13 @@
             if (clearButton) {
                 clearButton.addEventListener('click', (event) => {
                     event.preventDefault();
-                    const clearUrl = new URL(window.location.href);
-                    ['check_in', 'start_date', 'end_date'].forEach(param => clearUrl.searchParams.delete(
-                        param));
-                    clearUrl.searchParams.set('active_tab', activeTab);
-                    window.location.href = clearUrl.toString();
+                    
+                    // Reset inputs
+                    document.getElementById('attendance_start_date').value = '';
+                    document.getElementById('attendance_end_date').value = '';
+                    
+                    // Reset Select2
+                    $('#shift_filter').val('all').trigger('change');
                 });
             }
 

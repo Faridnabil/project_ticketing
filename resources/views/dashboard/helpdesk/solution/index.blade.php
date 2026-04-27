@@ -77,7 +77,7 @@
 
                             <!-- Buttons -->
                             <div class="d-flex align-items-center gap-2">
-                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <button type="submit" class="btn btn-primary">Tampilkan</button>
                                 <button type="button" id="resetBtn" class="btn btn-danger">Atur ulang</button>
                                 <!-- Export Button -->
                         <form action="{{ route('helpdesk.reportNoted.export') }}" method="GET">
@@ -262,15 +262,11 @@
                 e.preventDefault();
 
                 // Reset semua input field
-                document.getElementById('category_id').value = '';
                 document.getElementById('start_date').value = '';
                 document.getElementById('end_date').value = '';
 
                 // Reset Select2 jika ada
-                const categorySelect = $('[name="category_id"]');
-                if (categorySelect.length && categorySelect.data('select2')) {
-                    categorySelect.val('').trigger('change');
-                }
+                $('#category_id').val('all').trigger('change');
             });
         });
     </script>

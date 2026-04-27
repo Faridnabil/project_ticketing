@@ -19,7 +19,7 @@ class AttendanceHelpdeskController extends Controller
         $query = Attendance::query();
 
         // Filter
-        if ($request->has('check_in') && $request->check_in) {
+        if ($request->has('check_in') && $request->check_in && $request->check_in !== 'all') {
             $query->where('check_in', $request->check_in);
         }
 

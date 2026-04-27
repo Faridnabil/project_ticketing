@@ -363,7 +363,7 @@
                                     </div>
 
                                     <div class="col-md-3 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-primary me-1">Filter</button>
+                                        <button type="submit" class="btn btn-primary me-1">Tampilkan</button>
                                         <button type="button" id="reset_filter" class="btn btn-danger">Atur ulang</button>
                                     </div>
                                 </form>

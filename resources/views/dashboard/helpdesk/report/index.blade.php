@@ -35,7 +35,7 @@
                             diinginkan.</p>
                         <p class="mb-1">2. Masukkan <strong>Tanggal Akhir</strong> untuk mengakhiri periode pelaporan yang
                             diinginkan.</p>
-                        <p class="mb-1">3. Klik tombol <strong>"Masukan Data"</strong> untuk menampilkan laporan
+                        <p class="mb-1">3. Klik tombol <strong>"Tampilkan"</strong> untuk menampilkan laporan
                             berdasarkan rentang tanggal yang dipilih.</p>
                         <p class="mb-0">4. Jika data ditemukan, Anda dapat mengklik tombol <strong>"Export"</strong> untuk
                             mengunduh laporan.</p>
@@ -67,7 +67,7 @@
                                 <div class="d-flex align-items-center">
                                     <select name="category_id" id="category_id" class="form-select" data-control="select2"
                                         data-placeholder="Pilih Kategori">
-                                        <option value="">Tidak Jadi Memilih</option>
+                                        <option value="all">Semua Kategori</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ old('category_id', request('category_id')) == $category->id ? 'selected' : '' }}>
@@ -84,7 +84,7 @@
                                 <div class="d-flex align-items-center">
                                     <select name="priority_id" id="priority_id" class="form-select" data-control="select2"
                                         data-placeholder="Pilih Prioritas">
-                                        <option value="">Tidak Jadi Memilih</option>
+                                        <option value="all">Semua Prioritas</option>
                                         @foreach ($priorities as $priority)
                                             <option value="{{ $priority->id }}"
                                                 {{ old('priority_id', request('priority_id')) == $priority->id ? 'selected' : '' }}>
@@ -101,7 +101,7 @@
                                 <div class="d-flex align-items-center">
                                     <select name="status_id" id="status_id" class="form-select" data-control="select2"
                                         data-placeholder="Pilih Status">
-                                        <option value="">Tidak Jadi Memilih</option>
+                                        <option value="all">Semua Status</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}"
                                                 {{ old('status_id', request('status_id')) == $status->id ? 'selected' : '' }}>
@@ -118,7 +118,7 @@
                                 <div class="d-flex align-items-center">
                                     <select name="level" id="level" class="form-select" data-control="select2"
                                         data-placeholder="Pilih Disposisi">
-                                        <option value="">Tidak Jadi Memilih</option>
+                                        <option value="all">Semua Disposisi</option>
                                         @foreach ($levels as $level)
                                             <option value="{{ $level->id }}"
                                                 {{ old('level', request('level')) == $level->id ? 'selected' : '' }}>
@@ -133,10 +133,23 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <input type="submit" class="btn btn-primary me-2" value="Masukan Data">
-                            <a href="{{ route('helpdesk.report.index') }}" type="button"
-                                class="btn btn-secondary">Atur ulang</a>
+                            <input type="submit" class="btn btn-primary me-2" value="Tampilkan">
+                            <button type="button" id="reset_report_filter" class="btn btn-secondary">Atur ulang</button>
                         </div>
+
+                        <script>
+                            document.getElementById('reset_report_filter').addEventListener('click', function() {
+                                // Reset tanggal
+                                document.getElementById('tanggal_awal').value = '';
+                                document.getElementById('tanggal_akhir').value = '';
+
+                                // Reset Select2
+                                $('#category_id').val('all').trigger('change');
+                                $('#priority_id').val('all').trigger('change');
+                                $('#status_id').val('all').trigger('change');
+                                $('#level').val('all').trigger('change');
+                            });
+                        </script>
                     </form>
                 </div>
             </div>

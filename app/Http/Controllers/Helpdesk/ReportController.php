@@ -24,6 +24,10 @@ class ReportController extends Controller
         // Retrieve filter inputs
         $req1 = $request->awal ?? null;
         $req2 = $request->akhir ?? null;
+        $category_id = $request->category_id;
+        $level = $request->level;
+        $priority_id = $request->priority_id;
+        $status_id = $request->status_id;
 
         // Apply filters if any filter inputs are present
         if ($req1 && $req2) {
@@ -32,32 +36,32 @@ class ReportController extends Controller
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
-        if ($request->has('category_id') && $request->category_id) {
-            $query->where('category_id', $request->category_id);
+        if ($request->filled('category_id') && $category_id !== 'all') {
+            $query->where('category_id', $category_id);
         }
 
-        if ($request->has('level') && $request->level) {
-            $query->where(function ($q) use ($request) {
-                $q->where('level1', $request->level)
-                    ->orWhere('level2', $request->level)
-                    ->orWhere('level3', $request->level)
-                    ->orWhere('level4', $request->level)
-                    ->orWhere('level5', $request->level);
+        if ($request->filled('level') && $level !== 'all') {
+            $query->where(function ($q) use ($level) {
+                $q->where('level1', $level)
+                    ->orWhere('level2', $level)
+                    ->orWhere('level3', $level)
+                    ->orWhere('level4', $level)
+                    ->orWhere('level5', $level);
             });
         }
 
-        if ($request->has('priority_id') && $request->priority_id) {
-            $query->where('priority_id', $request->priority_id);
+        if ($request->filled('priority_id') && $priority_id !== 'all') {
+            $query->where('priority_id', $priority_id);
         }
 
-        if ($request->has('status_id') && $request->status_id) {
-            $query->where('status_id', $request->status_id);
+        if ($request->filled('status_id') && $status_id !== 'all') {
+            $query->where('status_id', $status_id);
         }
 
         // Get tickets only if any filters are applied
         $tickets = null;
-        if ($req1 || $req2 || $request->category_id || $request->level || $request->priority_id || $request->status_id) {
-            $tickets = $query->orderBy('id', 'desc')->get();
+        if ($req1 || $req2 || ($category_id && $category_id !== 'all') || ($level && $level !== 'all') || ($priority_id && $priority_id !== 'all') || ($status_id && $status_id !== 'all')) {
+            $tickets = $query->orderBy('id', 'asc')->get();
         }
 
         // Retrieve filter data
@@ -65,18 +69,6 @@ class ReportController extends Controller
         $levels = Role::whereIn('name', ['Helpdesk', 'Koordinator', 'Staff Subdit', 'SIAK Dev', 'Pejabat'])->get();
         $priorities = Priority::all();
         $statuses = Status::all();
-
-        $req1 = $request->awal ?? null;
-        $req2 = $request->akhir ?? null;
-        $tickets = null;
-
-        if ($req1 && $req2) {
-            $startDate = Carbon::createFromFormat('Y-m-d', $req1)->startOfDay();
-            $endDate = Carbon::createFromFormat('Y-m-d', $req2)->endOfDay();
-
-            $query->whereBetween('created_at', [$startDate, $endDate]);
-            $tickets = $query->orderBy('id', 'asc')->get();
-        }
 
         return view('dashboard.helpdesk.report.index', compact('tickets', 'categories', 'priorities', 'statuses', 'levels', 'req1', 'req2'));
     }
@@ -106,19 +98,19 @@ class ReportController extends Controller
         $query = Ticket::with('status', 'category', 'priority', 'helpdesk', 'koordinator', 'staffSubdit', 'siakDev', 'pejabat')
             ->whereBetween('created_at', [$startDate, $endDate]);
 
-        if ($request->filled('category_id')) {
+        if ($request->filled('category_id') && $request->category_id !== 'all') {
             $query->where('category_id', $request->category_id);
         }
 
-        if ($request->filled('priority_id')) {
+        if ($request->filled('priority_id') && $request->priority_id !== 'all') {
             $query->where('priority_id', $request->priority_id);
         }
 
-        if ($request->filled('status_id')) {
+        if ($request->filled('status_id') && $request->status_id !== 'all') {
             $query->where('status_id', $request->status_id);
         }
 
-        if ($request->filled('level')) {
+        if ($request->filled('level') && $request->level !== 'all') {
             $query->where(function ($q) use ($request) {
                 $q->where('level1', $request->level)
                     ->orWhere('level2', $request->level)
