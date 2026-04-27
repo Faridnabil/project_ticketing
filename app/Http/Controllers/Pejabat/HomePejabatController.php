@@ -169,52 +169,65 @@ class HomePejabatController extends Controller
         $cityId = $request->query('city_id');
         $categoryId = $request->query('category_id');
 
-        $query = Ticket::with(['province', 'cityOrRegency', 'category'])
+        $applyFilters = function ($query) use ($year, $month, $provinceId, $cityId, $categoryId) {
+            $query->when($year, function ($q) use ($year) {
+                if ($year !== "all" && $year) {
+                    $q->whereYear('created_at', $year);
+                }
+            })
+            ->when($month, function ($q) use ($month) {
+                if ($month !== "all" && $month) {
+                    $q->whereMonth('created_at', $month);
+                }
+            })
+            ->when($provinceId, function ($q) use ($provinceId) {
+                if ($provinceId !== "all" && $provinceId) {
+                    $q->where('province_id', $provinceId);
+                }
+            })
+            ->when($cityId, function ($q) use ($cityId) {
+                if ($cityId !== "all" && $cityId) {
+                    $q->where('city_or_regency_id', $cityId);
+                }
+            })
+            ->when($categoryId, function ($q) use ($categoryId) {
+                if ($categoryId !== "all" && $categoryId) {
+                    $q->where('category_id', $categoryId);
+                }
+            });
+        };
+
+        // Query untuk Chart (Grouping hanya berdasarkan Provinsi dan Kota)
+        $chartQuery = Ticket::with(['province', 'cityOrRegency'])
+            ->select(
+                'province_id',
+                'city_or_regency_id',
+                DB::raw('count(*) as total')
+            )
+            ->groupBy('province_id', 'city_or_regency_id')
+            ->orderByDesc('total');
+
+        $applyFilters($chartQuery);
+        $topRegions = $chartQuery->limit(10)->get();
+
+        // Query untuk Tabel (Mengambil rincian kategori untuk top regions)
+        $tableQuery = Ticket::with(['province', 'cityOrRegency', 'category'])
             ->select(
                 'province_id',
                 'city_or_regency_id',
                 'category_id',
                 DB::raw('count(*) as total')
             )
-            ->groupBy('province_id', 'city_or_regency_id', 'category_id')
-            ->orderByDesc('total');
+            ->groupBy('province_id', 'city_or_regency_id', 'category_id');
 
-        // Filter tahun
-        $query->when($year, function ($query) use ($year) {
-            if ($year !== "all") {
-                $query->whereYear('created_at', $year);
-            }
-        });
-
-        // Filter bulan
-        $query->when($month, function ($query) use ($month) {
-            if ($month !== "all") {
-                $query->whereMonth('created_at', $month);
-            }
-        });
-
-        // Filter provinsi
-        $query->when($provinceId, function ($query) use ($provinceId) {
-            if ($provinceId !== "all") {
-                $query->where('province_id', $provinceId);
-            }
-        });
-
-        // Filter kota
-        $query->when($cityId, function ($query) use ($cityId) {
-            if ($cityId !== "all") {
-                $query->where('city_or_regency_id', $cityId);
-            }
-        });
-
-        // Filter kategori
-        $query->when($categoryId, function ($query) use ($categoryId) {
-            if ($categoryId !== "all") {
-                $query->where('category_id', $categoryId);
-            }
-        });
-
-        $topProblems = $query->limit(10)->get();
+        $applyFilters($tableQuery);
+        
+        $topProvinceIds = $topRegions->pluck('province_id')->unique();
+        $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
+        if ($topProvinceIds->isNotEmpty() && $topCityIds->isNotEmpty()) {
+            $tableQuery->whereIn('province_id', $topProvinceIds)->whereIn('city_or_regency_id', $topCityIds);
+        }
+        $allProblems = $tableQuery->get();
 
         // Define color palette
         $colorPalette = [
@@ -222,29 +235,34 @@ class HomePejabatController extends Controller
             '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
         ];
 
-        $chartData = $topProblems->map(function ($item, $index) use ($colorPalette) {
+        $chartData = $topRegions->map(function ($item, $index) use ($colorPalette) {
             $provinceName = $item->province->province_name ?? '-';
             $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
-            $categoryCode = $item->category->code ?? $item->category->category_name ?? 'Unknown';
             
             return [
-                'label' => $provinceName . ' - ' . $cityName . ' (' . $categoryCode . ')',
-                'category_name' => $item->category->category_name ?? 'Unknown',
+                'label' => $provinceName . ' - ' . $cityName,
                 'total' => $item->total,
                 'color' => $colorPalette[$index % count($colorPalette)],
             ];
         });
 
-
         // Format data untuk tabel
-        $tableData = $topProblems->map(function ($item) {
+        $tableData = $topRegions->map(function ($region) use ($allProblems) {
+            $regionProblems = $allProblems->where('province_id', $region->province_id)
+                                          ->where('city_or_regency_id', $region->city_or_regency_id)
+                                          ->sortByDesc('total');
+
+            $categoriesHtml = $regionProblems->map(function ($item) {
+                $catName = $item->category->code ?? $item->category->category_name ?? 'Unknown';
+                $color = $item->category->color ?? '#6c757d';
+                return "<span class=\"badge\" style=\"background-color: {$color}; color: white; font-weight:bold; margin-right: 4px; margin-bottom: 4px;\">{$catName}: {$item->total}</span>";
+            })->implode(' ');
+
             return [
-                'province' => $item->province->province_name ?? '-',
-                'city' => $item->cityOrRegency->city_or_regency_name ?? '-',
-                'category' => $item->category->category_name ?? 'Unknown',
-                'code' => $item->category->code ?? '-',
-                'color' => $item->category->color ?? '#6c757d',
-                'total' => $item->total
+                'province' => $region->province->province_name ?? '-',
+                'city' => $region->cityOrRegency->city_or_regency_name ?? '-',
+                'total' => $region->total,
+                'categories_html' => $categoriesHtml
             ];
         });
 

@@ -204,11 +204,7 @@
                                                                         <tr>
                                                                             <td>{{ $data['province'] }}</td>
                                                                             <td>{{ $data['city'] }}</td>
-                                                                            <td>
-                                                                                <span class="badge" style="background-color: {{ $data['color'] }}; color: white; font-weight:bold">
-                                                                                    {{ $data['category'] }}
-                                                                                </span>
-                                                                            </td>
+                                                                            <td>{!! $data['categories_html'] !!}</td>
                                                                             <td>{{ $data['total'] }}</td>
                                                                         </tr>
                                                                     @empty
@@ -245,7 +241,6 @@
                 const labels = chartData.map(item => item.label);
                 const data = chartData.map(item => item.total);
                 const backgroundColors = chartData.map(item => item.color);
-                const categoryNames = chartData.map(item => item.category_name);
 
                 if (problemChart) problemChart.destroy();
 
@@ -271,7 +266,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        return `${categoryNames[context.dataIndex]}: ${context.raw} tiket`;
+                                        return `Total: ${context.raw} tiket`;
                                     }
                                 }
                             }
@@ -341,11 +336,7 @@
                                     <tr>
                                         <td>${data.province}</td>
                                         <td>${data.city}</td>
-                                        <td>
-                                            <span class="badge" style="background-color: ${data.color}; color: white; font-weight:bold">
-                                                ${data.category}
-                                            </span>
-                                        </td>
+                                        <td>${data.categories_html}</td>
                                         <td>${data.total}</td>
                                     </tr>`;
                             });

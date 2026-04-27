@@ -238,7 +238,7 @@
 
                                                 <div class="col-md-3">
                                                     <label for="current_device" class="form-label">Status Perangkat</label>
-                                                    <input type="text" class="form-control" value="{{ Auth::user()->assigned_device ? 'Terdaftar & Terkunci' : 'Belum Terdaftar' }}" readonly>
+                                                    <input type="text" class="form-control" value="{{ Auth::user()->assigned_device ? 'Terdaftar' : 'Belum Terdaftar' }}" readonly>
                                                     @if(Auth::user()->assigned_device)
                                                         <div class="text-success fs-7 mt-1">Browser ini akan selalu digunakan untuk Anda.</div>
                                                     @else

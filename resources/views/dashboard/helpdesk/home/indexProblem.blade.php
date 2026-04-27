@@ -255,12 +255,7 @@
                                                                                  <tr>
                                                                                      <td>{{ $data['province'] }}</td>
                                                                                      <td>{{ $data['city'] }}</td>
-                                                                                     <td>
-                                                                                         <span class="badge"
-                                                                                             style="background-color: {{ $data['color'] }}; color: white; font-weight:bold">
-                                                                                             {{ $data['category'] }}
-                                                                                         </span>
-                                                                                     </td>
+                                                                                     <td>{!! $data['categories_html'] !!}</td>
                                                                                      <td>{{ $data['total'] }}</td>
                                                                                  </tr>
                                                                              @empty
@@ -306,7 +301,6 @@
                 const labels = chartData.map(item => item.label);
                 const data = chartData.map(item => item.total);
                 const backgroundColors = chartData.map(item => item.color);
-                const categoryNames = chartData.map(item => item.category_name);
 
                 // Destroy previous chart if exists
                 if (problemChart) {
@@ -338,9 +332,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        const value = context.raw || 0;
-                                        const categoryName = categoryNames[context.dataIndex];
-                                        return `${categoryName}: ${value} tiket`;
+                                        return `Total: ${context.raw} tiket`;
                                     }
                                 }
                             }
@@ -450,12 +442,7 @@
                                     <tr>
                                         <td>${data.province}</td>
                                         <td>${data.city}</td>
-                                        <td>
-                                            <span class="badge"
-                                                style="background-color: ${data.color}; color: white; font-weight:bold">
-                                                ${data.code} - ${data.category}
-                                            </span>
-                                        </td>
+                                        <td>${data.categories_html}</td>
                                         <td>${data.total}</td>
                                     </tr>
                                 `;
