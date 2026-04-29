@@ -401,8 +401,8 @@
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
-                                                        <span class="menu-icon" style="fill: #bd6710" title="Ubah Tiket">
+                                                        type="button" title="Ubah Tiket">
+                                                        <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px"
@@ -423,17 +423,13 @@
                                                         data-bs-target="#kt_modal_ticket_{{ $ticket->id }}"
                                                         title="Hapus Tiket">
                                                         <span class="menu-icon" style="fill: #e21414">
-                                                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <path
-                                                                        d="M23,3H18V2.5A2.5,2.5,0,0,0,15.5,0h-7A2.5,2.5,0,0,0,6,2.5V3H1V6H3V21a3,3,0,0,0,3,3H18a3,3,0,0,0,3-3V6h2ZM18,21H6V6H18Z" />
-                                                                    <rect x="8" y="9" width="3" height="9" />
-                                                                    <rect x="13" y="9" width="3" height="9" />
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+                                                                    <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+                                                                    <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
                                                                 </svg>
                                                             </span>
-                                                            <!--end::Svg Icon-->
                                                         </span>
                                                     </a>
                                                 @endcan
@@ -480,7 +476,7 @@
                                                 @can('Edit Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('admin.ticket.edit', $ticket->id) }}"
-                                                        type="button">
+                                                        type="button" title="Ubah Tiket">
                                                         <span class="menu-icon" style="fill: #bd6710">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
@@ -499,7 +495,7 @@
                                                 @can('Show Ticket')
                                                     <a class="menu-link ms-3"
                                                         href="{{ route('admin.ticket.show', $ticket->id) }}"
-                                                        type="button">
+                                                        type="button" title="Lihat Tiket">
                                                         <span class="menu-icon" style="fill: #1218ca">
                                                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                                                             <span class="svg-icon svg-icon-2">
