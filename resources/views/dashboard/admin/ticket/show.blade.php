@@ -288,20 +288,30 @@
                                         </div>
 
                                         <!-- Problem and Solution Section -->
-                                        <div class="row">
+                                        <div class="row g-5">
                                             <div class="col-md-6">
-                                                <div class="card shadow-sm p-4 h-100">
-                                                    <h1 class="text fw-bold mb-2">Permasalahan</h1>
-                                                    <p class="fs-5 text-dark">
-                                                        {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
-                                                    </p>
+                                                <div class="card shadow-sm h-100 border-start border-primary border-4">
+                                                    <div class="card-body p-6">
+                                                        <div class="d-flex align-items-center mb-4">
+                                                            <i class="fas fa-exclamation-circle fs-2 text-primary me-3"></i>
+                                                            <h3 class="fw-bold text-dark mb-0">Permasalahan</h3>
+                                                        </div>
+                                                        <div class="fs-6 text-gray-800 lh-lg">
+                                                            {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="card shadow-sm p-4 h-100">
-                                                    <h1 class="text fw-bold mb-2">Solusi</h1>
-                                                    <div class="fs-5 text-dark">
-                                                        {!! $ticket->completion_notes ?? '<span class="text-muted italic">Belum ada solusi.</span>' !!}
+                                                <div class="card shadow-sm h-100 border-start border-success border-4">
+                                                    <div class="card-body p-6">
+                                                        <div class="d-flex align-items-center mb-4">
+                                                            <i class="fas fa-check-circle fs-2 text-success me-3"></i>
+                                                            <h3 class="fw-bold text-dark mb-0">Solusi</h3>
+                                                        </div>
+                                                        <div class="fs-6 text-gray-800 lh-lg">
+                                                            {!! $ticket->completion_notes ?? '<span class="text-muted italic">Belum ada solusi.</span>' !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -514,9 +524,9 @@
                                             <!--begin::Item-->
                                             <div class="timeline-item">
                                                 <!--begin::Label-->
-                                                <div class="timeline-label fw-bold text-gray-800 fs-6" style="width: 100px">
+                                                <div class="timeline-label fw-bold text-gray-800 fs-6" style="width: 125px">
                                                     {{ \Carbon\Carbon::parse($timestamp)->format('H:i') }}
-                                                    <div class="text-muted fs-8">{{ \Carbon\Carbon::parse($timestamp)->format('d M Y') }}</div>
+                                                    <div class="text-muted fs-8">{{ \Carbon\Carbon::parse($timestamp)->translatedFormat('d M Y') }}</div>
                                                 </div>
                                                 <!--end::Label-->
 
@@ -541,46 +551,152 @@
                                                         @endif
                                                     </div>
 
-                                                    <div class="bg-light p-3 rounded">
-                                                        @foreach($logsAtTime as $log)
+                                                    <div class="bg-light p-4 rounded border border-secondary border-opacity-10">
+                                                        @php
+                                                            $isUpdate = !in_array($actionType, ['CREATE_TICKET', 'DELETE_TICKET', 'ADD_COMMENT']);
+                                                            $currentAtTime = null;
+                                                            if ($isUpdate) {
+                                                                // Find matching history snapshot
+                                                                $currentAtTime = $logs->first(function($h) use ($timestamp) {
+                                                                    return $h->created_at->format('Y-m-d H:i:s') == $timestamp;
+                                                                });
+                                                            }
+                                                            
+                                                            // Helper to check if attribute changed in this group
+                                                            $hasChange = function($attr) use ($logsAtTime) {
+                                                                return $logsAtTime->firstWhere('attribute', $attr);
+                                                            };
+                                                        @endphp
+
+                                                        @if($actionType == 'CREATE_TICKET')
                                                             <div class="fs-7">
-                                                                @if($log->attribute == 'attachments')
-                                                                    <strong>Lampiran diubah:</strong>
-                                                                    <div class="row row-cols-auto g-2 mt-2">
-                                                                        @php $attachments = json_decode($log->new_value, true) ?? []; @endphp
-                                                                        @foreach ($attachments as $index => $attachment)
-                                                                            <div class="col">
-                                                                                <img src="{{ asset('storage/' . $attachment) }}"
-                                                                                    class="rounded shadow-sm img-thumbnail"
-                                                                                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#activity_modal_{{ $log->id }}_{{ $index }}" />
-                                                                            </div>
-                                                                            
-                                                                            <div class="modal fade" id="activity_modal_{{ $log->id }}_{{ $index }}" tabindex="-1" aria-hidden="true">
-                                                                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                                                    <div class="modal-content">
-                                                                                        <div class="modal-header">
-                                                                                            <h6 class="modal-title">Lampiran</h6>
-                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                        </div>
-                                                                                        <div class="modal-body text-center">
-                                                                                            <img src="{{ asset('storage/' . $attachment) }}" class="img-fluid rounded" />
+                                                                <div class="mb-1"><strong>Nomor Tiket :</strong> {{ $ticket->no_ticket }}</div>
+                                                                <div class="mb-1"><strong>Kategori :</strong> {{ $ticket->category->category_name }}</div>
+                                                                <div class="mb-1"><strong>Prioritas :</strong> {{ $ticket->priority->priority_name }}</div>
+                                                                <div class="mb-1"><strong>Status :</strong> {{ $ticket->status->status_name }}</div>
+                                                                <div class="mb-1"><strong>Permasalahan :</strong> {!! $ticket->description !!}</div>
+                                                                <div class="mb-1"><strong>Dibuat Oleh :</strong> {{ $user->name ?? 'Sistem' }}</div>
+                                                            </div>
+                                                        @elseif($actionType == 'ADD_COMMENT')
+                                                            <div class="fs-7 text-italic">"{!! $firstLog->new_value !!}"</div>
+                                                        @elseif($isUpdate)
+                                                            <div class="fs-7">
+                                                                {{-- Nomor Tiket --}}
+                                                                <div class="mb-1">
+                                                                    <strong>Nomor Tiket :</strong> 
+                                                                    {{ $ticket->no_ticket }}
+                                                                </div>
+
+                                                                {{-- Kategori --}}
+                                                                @php $logCat = $hasChange('category_id'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Kategori :</strong> 
+                                                                    @if($logCat)
+                                                                        <span class="text-danger decoration-line-through">"{{ $mapValue('category_id', $logCat->old_value) }}"</span>
+                                                                        <span class="text-success ms-1">➔ "{{ $mapValue('category_id', $logCat->new_value) }}"</span>
+                                                                    @else
+                                                                        {{ $currentAtTime ? ($currentAtTime->category->category_name ?? '-') : $ticket->category->category_name }}
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Prioritas --}}
+                                                                @php $logPrio = $hasChange('priority_id'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Prioritas :</strong> 
+                                                                    @if($logPrio)
+                                                                        <span class="text-danger decoration-line-through">"{{ $mapValue('priority_id', $logPrio->old_value) }}"</span>
+                                                                        <span class="text-success ms-1">➔ "{{ $mapValue('priority_id', $logPrio->new_value) }}"</span>
+                                                                    @else
+                                                                        {{ $currentAtTime ? ($currentAtTime->priority->priority_name ?? '-') : $ticket->priority->priority_name }}
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Status --}}
+                                                                @php $logStatus = $hasChange('status_id') ?: $hasChange('h_status_id'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Status :</strong> 
+                                                                    @if($logStatus)
+                                                                        <span class="text-danger decoration-line-through">"{{ $mapValue('status_id', $logStatus->old_value) }}"</span>
+                                                                        <span class="text-success ms-1">➔ "{{ $mapValue('status_id', $logStatus->new_value) }}"</span>
+                                                                    @else
+                                                                        {{ $currentAtTime ? ($currentAtTime->status->status_name ?? '-') : $ticket->status->status_name }}
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Permasalahan --}}
+                                                                @php $logDesc = $hasChange('description'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Permasalahan :</strong> 
+                                                                    @if($logDesc)
+                                                                        <div class="text-danger decoration-line-through fs-8">{!! $logDesc->old_value !!}</div>
+                                                                        <div class="text-success fs-7">➔ {!! $logDesc->new_value !!}</div>
+                                                                    @else
+                                                                        <div class="fs-7 text-dark">{!! $currentAtTime ? ($currentAtTime->h_description ?? '-') : $ticket->description !!}</div>
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Solusi --}}
+                                                                @php $logSol = $hasChange('completion_notes'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Solusi :</strong> 
+                                                                    @if($logSol)
+                                                                        <div class="text-danger decoration-line-through fs-8">{!! $logSol->old_value !!}</div>
+                                                                        <div class="text-success fs-7">➔ {!! $logSol->new_value !!}</div>
+                                                                    @else
+                                                                        <div class="fs-7 text-dark">{!! $currentAtTime ? ($currentAtTime->h_completion_notes ?? '-') : $ticket->completion_notes !!}</div>
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Lampiran --}}
+                                                                @php $logAttach = $hasChange('attachments'); @endphp
+                                                                <div class="mb-1">
+                                                                    <strong>Lampiran :</strong>
+                                                                    @php 
+                                                                        $attachments = [];
+                                                                        if($logAttach) {
+                                                                            $attachments = json_decode($logAttach->new_value, true) ?? [];
+                                                                        } elseif($currentAtTime) {
+                                                                            $attachments = json_decode($currentAtTime->h_attachments, true) ?? [];
+                                                                        }
+                                                                    @endphp
+                                                                    
+                                                                    @if(count($attachments) > 0)
+                                                                        <div class="row row-cols-auto g-2 mt-1">
+                                                                            @foreach ($attachments as $index => $attachment)
+                                                                                <div class="col">
+                                                                                    <img src="{{ asset('storage/' . $attachment) }}"
+                                                                                        class="rounded shadow-sm img-thumbnail"
+                                                                                        style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#activity_modal_{{ md5($timestamp) }}_{{ $index }}" />
+                                                                                </div>
+                                                                                
+                                                                                <div class="modal fade" id="activity_modal_{{ md5($timestamp) }}_{{ $index }}" tabindex="-1" aria-hidden="true">
+                                                                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                                <h6 class="modal-title">Lampiran</h6>
+                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                            </div>
+                                                                                            <div class="modal-body text-center">
+                                                                                                <img src="{{ asset('storage/' . $attachment) }}" class="img-fluid rounded" />
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @elseif($log->attribute == 'ADD_COMMENT')
-                                                                    <div class="text-italic">"{!! $log->new_value !!}"</div>
-                                                                @elseif(!in_array($log->attribute, ['CREATE_TICKET', 'DELETE_TICKET']))
-                                                                    <span class="badge badge-light-dark me-1">{{ $mapLabel($log->attribute) }}</span>
-                                                                    dari <span class="text-danger">"{{ $mapValue($log->attribute, $log->old_value) }}"</span>
-                                                                    ke <span class="text-success">"{{ $mapValue($log->attribute, $log->new_value) }}"</span>
-                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                    @else
+                                                                        <span class="text-muted">Tidak ada lampiran.</span>
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- Diubah Oleh --}}
+                                                                <div class="mt-2 pt-2 border-top">
+                                                                    <div class="mb-1"><strong>Diubah Oleh :</strong> {{ $user->name ?? 'Sistem' }}</div>
+                                                                </div>
                                                             </div>
-                                                        @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <!--end::Text-->

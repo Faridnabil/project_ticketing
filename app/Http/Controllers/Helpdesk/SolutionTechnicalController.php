@@ -244,10 +244,25 @@ class SolutionTechnicalController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
 
+        // Add ActivityLog for a more granular timeline (CRUD actions)
+        $activityLogs = \App\Models\ActivityLog::with('user')
+            ->where(function($q) use ($ticket) {
+                $q->where(function($sq) use ($ticket) {
+                    $sq->where('model_type', \App\Models\Ticket::class)
+                       ->where('model_id', $ticket->id);
+                })->orWhere(function($sq) use ($ticket) {
+                    $sq->where('model_type', \App\Models\Comment::class)
+                       ->whereIn('model_id', \App\Models\Comment::where('ticket_id', $ticket->id)->pluck('id'));
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view(
             'dashboard.helpdesk.solution.show',
             compact(
                 'logs',
+                'activityLogs',
                 'ticket',
                 'priorities',
                 'statuses',

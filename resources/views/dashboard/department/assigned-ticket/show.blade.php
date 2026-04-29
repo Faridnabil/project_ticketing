@@ -258,20 +258,30 @@
                                         </div>
 
                                         <!-- Problem and Solution Section -->
-                                        <div class="row">
-                                            <div class="col-md-6 mb-4">
-                                                <div class="card shadow-sm p-4 h-100">
-                                                    <h1 class="text fw-bold mb-2">Permasalahan</h1>
-                                                    <div class="fs-5 text-dark">
-                                                        {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
+                                        <div class="row g-5">
+                                            <div class="col-md-6">
+                                                <div class="card shadow-sm h-100 border-start border-primary border-4">
+                                                    <div class="card-body p-6">
+                                                        <div class="d-flex align-items-center mb-4">
+                                                            <i class="fas fa-exclamation-circle fs-2 text-primary me-3"></i>
+                                                            <h3 class="fw-bold text-dark mb-0">Permasalahan</h3>
+                                                        </div>
+                                                        <div class="fs-6 text-gray-800 lh-lg">
+                                                            {!! $ticket->description ?? 'Tidak ada deskripsi tersedia.' !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 mb-4">
-                                                <div class="card shadow-sm p-4 h-100">
-                                                    <h1 class="text fw-bold mb-2">Solusi</h1>
-                                                    <div class="fs-5 text-dark">
-                                                        {!! $ticket->completion_notes ?? '<span class="text-muted italic">Belum ada solusi.</span>' !!}
+                                            <div class="col-md-6">
+                                                <div class="card shadow-sm h-100 border-start border-success border-4">
+                                                    <div class="card-body p-6">
+                                                        <div class="d-flex align-items-center mb-4">
+                                                            <i class="fas fa-check-circle fs-2 text-success me-3"></i>
+                                                            <h3 class="fw-bold text-dark mb-0">Solusi</h3>
+                                                        </div>
+                                                        <div class="fs-6 text-gray-800 lh-lg">
+                                                            {!! $ticket->completion_notes ?? '<span class="text-muted italic">Belum ada solusi.</span>' !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

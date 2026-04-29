@@ -33,6 +33,12 @@ class AttendanceHelpdeskController extends Controller
             $query->where('date_check_out', '<=', $endDate);
         }
 
+        // Default to current month if no date range is provided
+        if (!$request->filled('start_date') && !$request->filled('end_date')) {
+            $query->whereMonth('date_check_in', Carbon::now()->month)
+                  ->whereYear('date_check_in', Carbon::now()->year);
+        }
+
         $attendances = $query->orderBy('created_at', 'desc')->get();
 
         $attendanceToday = Attendance::where('user_id', Auth::user()->id)

@@ -741,13 +741,7 @@
             if (clearButton) {
                 clearButton.addEventListener('click', (event) => {
                     event.preventDefault();
-                    
-                    // Reset inputs
-                    document.getElementById('attendance_start_date').value = '';
-                    document.getElementById('attendance_end_date').value = '';
-                    
-                    // Reset Select2
-                    $('#shift_filter').val('all').trigger('change');
+                    window.location.href = "{{ route('helpdesk.attendance.index') }}?active_tab=absen_bulanan";
                 });
             }
 
