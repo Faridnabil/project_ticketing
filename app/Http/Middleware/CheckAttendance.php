@@ -25,7 +25,12 @@ class CheckAttendance
                 ->whereIn('check_in', ['Shift 1', 'Shift 2', 'Shift 3'])
                 ->exists();
 
-            if (!$hasAbsen && !$request->routeIs('helpdesk.attendance.*') && !$request->is('logout')) {
+            if (!$hasAbsen && 
+                !$request->routeIs('helpdesk.attendance.*') && 
+                !$request->is('logout') &&
+                !$request->ajax() &&
+                !$request->expectsJson()
+            ) {
                 return redirect()->route('helpdesk.attendance.index')
                     ->with('error', 'Anda belum absen hari ini. Silakan masuk terlebih dahulu.');
             }

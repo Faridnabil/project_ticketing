@@ -102,6 +102,7 @@
             </div>
 
             <div class="card-body">
+
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <!-- Detail Absen -->
@@ -118,7 +119,7 @@
                                             use App\Models\Attendance;
                                             use Illuminate\Support\Facades\Auth;
 
-                                            $today = Carbon::now()->format('Y-m-d');
+                                            $today = Carbon::now('Asia/Jakarta')->format('Y-m-d');
 
                                             $absen = Attendance::where('user_id', Auth::user()->id)
                                                 ->where(function ($query) {
@@ -204,7 +205,7 @@
                                                     <div class="col-md-6">
                                                         <div id="checkOutSection">
                                                             <button type="submit" class="btn btn-secondary"
-                                                                id="checkOutBtn">
+                                                                id="submitCheckOut">
                                                                 Pulang
                                                             </button>
                                                         </div>
@@ -212,7 +213,7 @@
                                                 @endif
                                             </form>
                                             <script>
-                                                document.getElementById('checkOutBtn').addEventListener('click', function() {
+                                                document.getElementById('submitCheckOut').addEventListener('click', function() {
                                                     const now = new Date();
                                                     const formattedDate = now.getFullYear() + '-' +
                                                         String(now.getMonth() + 1).padStart(2, '0') + '-' +
@@ -256,7 +257,7 @@
                                                 <div class="col-md-2 mt-11">
                                                     <div id="checkInSection">
                                                         <button type="submit" class="btn btn-primary"
-                                                            id="checkInBtn">Masuk</button>
+                                                            id="submitCheckIn">Masuk</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -491,23 +492,8 @@
                         </table>
                     </div>
 
-                    <!-- Form Lupa Absen -->
                     <div class="tab-pane fade {{ request('active_tab', 'absen') == 'lupa_absen' ? 'show active' : '' }}" id="lupa_absen" role="tabpanel">
                         <div class="container mt-3">
-
-                            @if (session('success'))
-                                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            @endif
-
-                            @if (session('error'))
-                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                                    {{ session('error') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            @endif
 
 
                             <form class="row g-3 needs-validation" method="POST"
@@ -585,7 +571,7 @@
 
                                     <div id="checkInSection">
                                         <button type="submit" class="btn btn-primary"
-                                            id="checkInBtn">Simpan</button>
+                                            id="submitForgot">Simpan</button>
                                     </div>
 
                                 </div>
@@ -756,6 +742,17 @@
                     const newUrl = new URL(window.location.href);
                     newUrl.searchParams.set('active_tab', newTab);
                     history.replaceState(null, '', newUrl.toString());
+                });
+            });
+
+            // Prevent multiple form submissions
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    if (submitBtn && !submitBtn.disabled) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...';
+                    }
                 });
             });
         });

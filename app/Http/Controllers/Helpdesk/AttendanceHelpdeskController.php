@@ -127,10 +127,23 @@ class AttendanceHelpdeskController extends Controller
                 'date_check_in' => now('Asia/Jakarta'),
             ];
 
+            // Cek apakah sudah absen hari ini untuk mencegah duplikasi (race condition)
+            $today = now('Asia/Jakarta')->format('Y-m-d');
+            $existingAttendance = Attendance::where('user_id', $user->id)
+                ->whereDate('date_check_in', $today)
+                ->whereIn('check_in', ['Shift 1', 'Shift 2', 'Shift 3'])
+                ->first();
+
+            if ($existingAttendance) {
+                DB::rollBack();
+                return redirect()->route("helpdesk.attendance.index")->with("error", "Anda sudah melakukan absen hari ini.");
+            }
+
             Attendance::create($validate);
 
             DB::commit();
             
+            $request->session()->forget('error');
             $response = redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
             
             // Jika ada pendaftaran device baru, kirim instruksi penyimpanan cookie ke Browser client
@@ -249,11 +262,25 @@ class AttendanceHelpdeskController extends Controller
                 $data['attachment'] = str_replace('public/', '', $filePath); // path relatif
             }
 
+            // Cek apakah sudah absen untuk tanggal tersebut
+            $checkDate = date('Y-m-d', strtotime($request->date_check_in));
+            $existingForgot = Attendance::where('user_id', $data['user_id'])
+                ->whereDate('date_check_in', $checkDate)
+                ->whereIn('check_in', ['Shift 1', 'Shift 2', 'Shift 3'])
+                ->first();
+
+            if ($existingForgot) {
+                DB::rollBack();
+                return redirect()->route("helpdesk.attendance.index", ['active_tab' => 'lupa_absen'])
+                    ->with("error", "Data absen untuk tanggal tersebut sudah ada.");
+            }
+
             // Insert data ke tabel attendance
             Attendance::insert($data); // gunakan insert agar created_at dan updated_at tidak di-override otomatis
 
             DB::commit();
 
+            $request->session()->forget('error');
             return redirect()->route("helpdesk.attendance.index", ['active_tab' => 'lupa_absen'])
                 ->with("success", "Check In berhasil.");
         } catch (\Throwable $th) {
