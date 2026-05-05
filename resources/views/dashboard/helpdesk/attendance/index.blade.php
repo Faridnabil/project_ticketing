@@ -155,7 +155,7 @@
                                                 </div>
                                                 @if ($absen->check_out == null)
                                                     <div class="col-md-6">
-                                                        <label for="validationCustom01" class="form-label">File</label>
+                                                        <label for="validationCustom01" class="form-label">File <span class="text-danger">*</span></label>
                                                         <div class="custom-file-upload"
                                                             style="display: flex; align-items: center; gap: 10px;   border: 1px solid #ccc; border-radius: 5px;background-color: #f9f9f9;">
                                                             <label for="fileInput" class="upload-label"

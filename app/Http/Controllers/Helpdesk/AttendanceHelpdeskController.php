@@ -183,12 +183,16 @@ class AttendanceHelpdeskController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,docx',
+            ], [
+                'attachment.required' => 'File/Foto harus diisi.',
+                'attachment.max' => 'Ukuran file/foto tidak boleh lebih dari 2MB.',
+                'attachment.mimes' => 'Format file harus berupa jpg, jpeg, png, pdf, atau docx.',
             ]);
 
-            // Update date_check_out with the provided value
-            $attendance->date_check_out = $request->input('date_check_out');
-            $attendance->check_out = $request->input('check_out');
+            // Update date_check_out with the provided value, fallback to current time
+            $attendance->date_check_out = $request->input('date_check_out') ?? now('Asia/Jakarta');
+            $attendance->check_out = $request->input('check_out') ?? $attendance->check_in;
             $attendance->activity = $request->input('activity');
 
             // Handle file upload
@@ -209,8 +213,11 @@ class AttendanceHelpdeskController extends Controller
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check Out berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
-            //    dd($th->getMessage()); // Menampilkan pesan error untuk debugging
-            return back()->with("error", 'Check Out Gagal!.');
+            $errorMessage = $th->getMessage();
+            if ($th instanceof \Illuminate\Validation\ValidationException) {
+                $errorMessage = implode(' ', $th->validator->errors()->all());
+            }
+            return back()->with("error", 'Check Out Gagal: ' . $errorMessage);
         }
     }
 
@@ -236,7 +243,12 @@ class AttendanceHelpdeskController extends Controller
                 'date_check_out' => 'required|date',
                 'activity' => 'nullable|string',
                 'user_id' => 'required|integer|exists:users,id',
-                'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,docx|max:2048',
+            ], [
+                'attachment.required' => 'File/Foto harus diisi.',
+                'attachment.max' => 'Ukuran file tidak boleh lebih dari 2MB.',
+                'attachment.mimes' => 'Format file harus berupa jpg, jpeg, png, pdf, atau docx.',
+                'required' => ':attribute wajib diisi.',
             ]);
 
             // Ambil data dari request
