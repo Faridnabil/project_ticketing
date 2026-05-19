@@ -120,6 +120,7 @@
                                             use Illuminate\Support\Facades\Auth;
 
                                             $today = Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                                            $yesterday = Carbon::now('Asia/Jakarta')->subDay()->format('Y-m-d');
 
                                             $absen = Attendance::where('user_id', Auth::user()->id)
                                                 ->where(function ($query) {
@@ -128,7 +129,15 @@
                                                         ->orWhere('check_in', 'Shift 2')
                                                         ->orWhere('check_in', 'Shift 3');
                                                 })
-                                                ->whereDate('date_check_in', $today)
+                                                ->where(function ($query) use ($today, $yesterday) {
+                                                    $query->whereDate('date_check_in', $today)
+                                                          ->orWhere(function ($q) use ($yesterday) {
+                                                              $q->whereDate('date_check_in', $yesterday)
+                                                                ->where('check_in', 'Shift 3')
+                                                                ->whereNull('check_out');
+                                                          });
+                                                })
+                                                ->orderBy('date_check_in', 'desc')
                                                 ->first();
                                         @endphp
 

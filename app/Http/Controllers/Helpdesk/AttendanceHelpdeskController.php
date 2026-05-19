@@ -50,6 +50,7 @@ class AttendanceHelpdeskController extends Controller
 
         // Menggunakan timezone akurat Asia/Jakarta agar tidak cutoff jam 11 malam
         $today = Carbon::now('Asia/Jakarta')->format('Y-m-d');
+        $yesterday = Carbon::now('Asia/Jakarta')->subDay()->format('Y-m-d');
 
         $absen = Attendance::where('user_id', Auth::user()->id)
             ->where(function ($query) {
@@ -58,7 +59,15 @@ class AttendanceHelpdeskController extends Controller
                     ->orWhere('check_in', 'Shift 2')
                     ->orWhere('check_in', 'Shift 3');
             })
-            ->whereDate('date_check_in', $today)
+            ->where(function ($query) use ($today, $yesterday) {
+                $query->whereDate('date_check_in', $today)
+                      ->orWhere(function ($q) use ($yesterday) {
+                          $q->whereDate('date_check_in', $yesterday)
+                            ->where('check_in', 'Shift 3')
+                            ->whereNull('check_out');
+                      });
+            })
+            ->orderBy('date_check_in', 'desc')
             ->first();
 
         return view('dashboard.helpdesk.attendance.index', compact(
