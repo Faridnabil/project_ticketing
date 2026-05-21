@@ -129,15 +129,8 @@
                                                         ->orWhere('check_in', 'Shift 2')
                                                         ->orWhere('check_in', 'Shift 3');
                                                 })
-                                                ->where(function ($query) use ($today, $yesterday) {
-                                                    $query->whereDate('date_check_in', $today)
-                                                          ->orWhere(function ($q) use ($yesterday) {
-                                                              $q->whereDate('date_check_in', $yesterday)
-                                                                ->where('check_in', 'Shift 3')
-                                                                ->whereNull('check_out');
-                                                          });
-                                                })
-                                                ->orderBy('date_check_in', 'desc')
+                                                ->whereNull('check_out')
+                                                ->orderBy('created_at', 'desc')
                                                 ->first();
                                         @endphp
 

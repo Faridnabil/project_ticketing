@@ -17,20 +17,13 @@ class CheckAttendance
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->hasRole('Helpdesk')) {
-            $today     = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
-            $yesterday = \Carbon\Carbon::now('Asia/Jakarta')->subDay()->format('Y-m-d');
-
-            // Cek apakah sudah ada absen masuk (Shift 1, 2, atau 3) hari ini
+            $today = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
+            
+            // Cek apakah sudah ada absen masuk (Shift 1, 2, atau 3) hari ini ATAU punya absen yang belum check-out
             $hasAbsen = \App\Models\Attendance::where('user_id', Auth::id())
-                ->where(function ($q) use ($today, $yesterday) {
-                    // Absen biasa hari ini
-                    $q->whereDate('date_check_in', $today)
-                      // ATAU: Shift 3 dari kemarin yang belum clock-out (masih aktif)
-                      ->orWhere(function ($q2) use ($yesterday) {
-                          $q2->whereDate('date_check_in', $yesterday)
-                             ->where('check_in', 'Shift 3')
-                             ->whereNull('check_out');
-                      });
+                ->where(function ($query) use ($today) {
+                    $query->whereDate('date_check_in', $today)
+                          ->orWhereNull('check_out');
                 })
                 ->whereIn('check_in', ['Shift 1', 'Shift 2', 'Shift 3'])
                 ->exists();
