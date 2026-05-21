@@ -295,7 +295,14 @@
                                         <!--end::Nomor Ticket=-->
                                         <!--begin::Title=-->
                                         <td>
-                                            {{ $ticket->category->category_name }}
+                                            @if($ticket->category)
+                                                <span class="badge fw-bold"
+                                                    style="background-color: {{ $ticket->category->color ?? '#6c757d' }}; color: #fff;">
+                                                    {{ $ticket->category->category_name }}
+                                                </span>
+                                            @else
+                                                -
+                                            @endif
                                         </td>
                                         <!--begin::Assign To=-->
                                         <td>

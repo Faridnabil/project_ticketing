@@ -152,7 +152,9 @@ class AttendanceHelpdeskController extends Controller
 
             DB::commit();
             
-            $request->session()->forget('error');
+            // Bersihkan flash error dari middleware redirect secara menyeluruh
+            $this->clearErrorFlash($request);
+
             $response = redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
             
             // Jika ada pendaftaran device baru, kirim instruksi penyimpanan cookie ke Browser client
@@ -219,6 +221,10 @@ class AttendanceHelpdeskController extends Controller
             $attendance->save();
 
             DB::commit();
+
+            // Bersihkan flash error dari middleware redirect secara menyeluruh
+            $this->clearErrorFlash($request);
+
             return redirect()->route("helpdesk.attendance.index")->with("success", "Check Out berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -311,5 +317,24 @@ class AttendanceHelpdeskController extends Controller
     }
 
 
+
+    /**
+     * Bersihkan flash error dari session secara menyeluruh.
+     * session()->forget('error') saja tidak cukup karena Laravel menyimpan
+     * antrian flash di '_flash.new' dan '_flash.old'.
+     */
+    private function clearErrorFlash(Request $request): void
+    {
+        $session = $request->session();
+        $session->forget('error');
+
+        // Hapus 'error' dari antrian flash baru
+        $flashNew = $session->get('_flash.new', []);
+        $session->put('_flash.new', array_values(array_diff($flashNew, ['error'])));
+
+        // Hapus 'error' dari antrian flash lama (sudah di-age)
+        $flashOld = $session->get('_flash.old', []);
+        $session->put('_flash.old', array_values(array_diff($flashOld, ['error'])));
+    }
 
 }

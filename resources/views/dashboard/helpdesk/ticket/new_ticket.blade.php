@@ -49,6 +49,46 @@
             cursor: pointer;
             background-color: #f1faff;
         }
+
+        /* Preview Lampiran */
+        .preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+        .preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 110px;
+            word-break: break-word;
+            text-align: center;
+        }
+        .preview-img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #009ef7;
+            box-shadow: 0 2px 8px rgba(0,158,247,0.2);
+        }
+        .preview-icon {
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .preview-name {
+            font-size: 0.72rem;
+            color: #5e6278;
+            margin-top: 5px;
+            max-width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+        }
     </style>
 
     <!--begin::Toolbar-->
@@ -398,7 +438,16 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $ticket->no_ticket }}</td>
-                                            <td>{{ $ticket->category->category_name }}</td>
+                                            <td>
+                                                @if($ticket->category)
+                                                    <span class="badge fw-bold"
+                                                        style="background-color: {{ $ticket->category->color ?? '#6c757d' }}; color: #fff;">
+                                                        {{ $ticket->category->category_name }}
+                                                    </span>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($ticket->level1 != null)
                                                     {{ $ticket->helpdesk->name ?? '-' }}
@@ -745,6 +794,51 @@
         const initialProvinceFilter = $('#province_id_filter').val();
         if (initialProvinceFilter && initialProvinceFilter !== 'all') {
             loadCitiesFilter(initialProvinceFilter, "{{ request('city_or_regency_id') }}");
+        }
+
+        // ── File Upload Preview (Lampiran - Buat Tiket) ──
+        const attachmentInput = document.getElementById('attachments_create');
+        const previewContainer = document.getElementById('preview_create');
+
+        if (attachmentInput && previewContainer) {
+            attachmentInput.addEventListener('change', function () {
+                previewContainer.innerHTML = ''; // Reset setiap ada perubahan
+
+                const maxFiles = 5;
+                const files = Array.from(this.files).slice(0, maxFiles);
+                if (files.length === 0) return;
+
+                files.forEach(function (file) {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('preview-item');
+
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            wrapper.innerHTML =
+                                '<img src="' + e.target.result + '" class="preview-img" title="' + file.name + '">' +
+                                '<span class="preview-name">' + file.name + '</span>';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const ext = file.name.split('.').pop().toLowerCase();
+                        const iconMap = { pdf: '📄', doc: '📝', docx: '📝', xls: '📊', xlsx: '📊', zip: '🗜️', txt: '📃' };
+                        const icon = iconMap[ext] || '📁';
+                        wrapper.innerHTML =
+                            '<div class="preview-icon">' + icon + '</div>' +
+                            '<span class="preview-name">' + file.name + '</span>';
+                    }
+
+                    previewContainer.appendChild(wrapper);
+                });
+
+                if (this.files.length > maxFiles) {
+                    const warning = document.createElement('p');
+                    warning.className = 'text-warning mt-2 mb-0 fs-7 fw-bold';
+                    warning.textContent = 'Hanya ' + maxFiles + ' file pertama yang akan diunggah.';
+                    previewContainer.appendChild(warning);
+                }
+            });
         }
     });
 </script>
