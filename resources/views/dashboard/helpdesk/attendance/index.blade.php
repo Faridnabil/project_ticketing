@@ -129,7 +129,11 @@
                                                         ->orWhere('check_in', 'Shift 2')
                                                         ->orWhere('check_in', 'Shift 3');
                                                 })
-                                                ->whereNull('check_out')
+                                                ->where(function ($query) {
+                                                    $query->whereNull('check_out')
+                                                          ->orWhere('check_out', '');
+                                                })
+                                                ->whereDate('date_check_in', '>=', $yesterday)
                                                 ->orderBy('created_at', 'desc')
                                                 ->first();
                                         @endphp
@@ -155,7 +159,7 @@
                                                     <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
                                                     <input type="hidden" name="date_check_out" id="dateCheckOut">
                                                 </div>
-                                                @if ($absen->check_out == null)
+                                                @if (empty($absen->check_out))
                                                     <div class="col-md-6">
                                                         <label for="validationCustom01" class="form-label">File <span class="text-danger">*</span></label>
                                                         <div class="custom-file-upload"
@@ -247,7 +251,7 @@
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>
                                                     <select class="form-select" id="shiftSelect" name="check_in" required
                                                         autofocus>
-                                                        <option selected disabled>Opsi</option>
+                                                        <option value="" selected disabled>Opsi</option>
                                                         <option value="Shift 1">Shift 1</option>
                                                         <option value="Shift 2">Shift 2</option>
                                                         <option value="Shift 3">Shift 3</option>
@@ -263,6 +267,17 @@
                                                     </div>
                                                 </div>
                                             </form>
+
+                                            <script>
+                                                document.getElementById('submitCheckIn')?.addEventListener('click', function(e) {
+                                                    var shiftSelect = document.getElementById('shiftSelect');
+                                                    if (!shiftSelect.value) {
+                                                        e.preventDefault();
+                                                        alert('Shift wajib dipilih sebelum absen.');
+                                                        shiftSelect.focus();
+                                                    }
+                                                });
+                                            </script>
                                         @endif
                                         <!--end form-->
                                     </div>
@@ -424,15 +439,13 @@
                                             <td>
                                                 {{ date('d F Y', strtotime($attendance->date_check_in)) }}
                                             </td>
-                                            @if ($attendance->check_in)
-                                                <td>
-                                                    {{ $attendance->check_out }}
-                                                </td>
-                                            @else
-                                                <td>
+                                            <td>
+                                                @if ($attendance->check_in)
                                                     {{ $attendance->check_in }}
-                                                </td>
-                                            @endif
+                                                @else
+                                                    {{ $attendance->check_out }}
+                                                @endif
+                                            </td>
                                             @if ($attendance->check_in)
                                                 <td>
                                                     {{ date('H:i', strtotime($attendance->date_check_in)) }}

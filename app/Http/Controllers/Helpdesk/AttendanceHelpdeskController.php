@@ -59,7 +59,11 @@ class AttendanceHelpdeskController extends Controller
                     ->orWhere('check_in', 'Shift 2')
                     ->orWhere('check_in', 'Shift 3');
             })
-            ->whereNull('check_out')
+            ->where(function ($query) {
+                $query->whereNull('check_out')
+                      ->orWhere('check_out', '');
+            })
+            ->whereDate('date_check_in', '>=', $yesterday)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -120,6 +124,14 @@ class AttendanceHelpdeskController extends Controller
                     return back()->with("error", "Perangkat/Browser Tidak Valid! Anda hanya dapat melakukan absen menggunakan laptop yang pertama kali Anda daftarkan.");
                 }
             }
+
+            // Validasi input shift wajib dipilih
+            $request->validate([
+                'check_in' => 'required|in:Shift 1,Shift 2,Shift 3',
+            ], [
+                'check_in.required' => 'Shift wajib dipilih sebelum absen.',
+                'check_in.in' => 'Shift yang dipilih tidak valid.',
+            ]);
 
             // Simpan Data Absen
             $validate = [
