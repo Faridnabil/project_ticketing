@@ -197,35 +197,64 @@ class HomeStaffSubditController extends Controller
             });
         };
 
-        // Query untuk Chart (Grouping hanya berdasarkan Provinsi dan Kota)
-        $chartQuery = Ticket::with(['province', 'cityOrRegency'])
-            ->select(
-                'province_id',
-                'city_or_regency_id',
-                DB::raw('count(*) as total')
-            )
-            ->groupBy('province_id', 'city_or_regency_id')
-            ->orderByDesc('total');
+        $isProvinceSelected = ($provinceId && $provinceId !== "all");
+
+        if ($isProvinceSelected) {
+            // Query untuk Chart (Grouping berdasarkan Provinsi dan Kota)
+            $chartQuery = Ticket::with(['province', 'cityOrRegency'])
+                ->select(
+                    'province_id',
+                    'city_or_regency_id',
+                    DB::raw('count(*) as total')
+                )
+                ->groupBy('province_id', 'city_or_regency_id')
+                ->orderByDesc('total');
+        } else {
+            // Query untuk Chart (Grouping berdasarkan Provinsi saja)
+            $chartQuery = Ticket::with(['province'])
+                ->select(
+                    'province_id',
+                    DB::raw('count(*) as total')
+                )
+                ->groupBy('province_id')
+                ->orderByDesc('total');
+        }
 
         $applyFilters($chartQuery);
         $topRegions = $chartQuery->limit(10)->get();
 
-        // Query untuk Tabel (Mengambil rincian kategori untuk top regions)
-        $tableQuery = Ticket::with(['province', 'cityOrRegency', 'category'])
-            ->select(
-                'province_id',
-                'city_or_regency_id',
-                'category_id',
-                DB::raw('count(*) as total')
-            )
-            ->groupBy('province_id', 'city_or_regency_id', 'category_id');
+        if ($isProvinceSelected) {
+            // Query untuk Tabel (Mengambil rincian kategori untuk top regions)
+            $tableQuery = Ticket::with(['province', 'cityOrRegency', 'category'])
+                ->select(
+                    'province_id',
+                    'city_or_regency_id',
+                    'category_id',
+                    DB::raw('count(*) as total')
+                )
+                ->groupBy('province_id', 'city_or_regency_id', 'category_id');
+        } else {
+            $tableQuery = Ticket::with(['province', 'category'])
+                ->select(
+                    'province_id',
+                    'category_id',
+                    DB::raw('count(*) as total')
+                )
+                ->groupBy('province_id', 'category_id');
+        }
 
         $applyFilters($tableQuery);
         
         $topProvinceIds = $topRegions->pluck('province_id')->unique();
-        $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
-        if ($topProvinceIds->isNotEmpty() && $topCityIds->isNotEmpty()) {
-            $tableQuery->whereIn('province_id', $topProvinceIds)->whereIn('city_or_regency_id', $topCityIds);
+        if ($isProvinceSelected) {
+            $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
+            if ($topProvinceIds->isNotEmpty() && $topCityIds->isNotEmpty()) {
+                $tableQuery->whereIn('province_id', $topProvinceIds)->whereIn('city_or_regency_id', $topCityIds);
+            }
+        } else {
+            if ($topProvinceIds->isNotEmpty()) {
+                $tableQuery->whereIn('province_id', $topProvinceIds);
+            }
         }
         $allProblems = $tableQuery->get();
 
@@ -235,22 +264,35 @@ class HomeStaffSubditController extends Controller
             '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
         ];
 
-        $chartData = $topRegions->map(function ($item, $index) use ($colorPalette) {
+        $chartData = $topRegions->map(function ($item, $index) use ($colorPalette, $isProvinceSelected) {
             $provinceName = $item->province->province_name ?? '-';
-            $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+            
+            if ($isProvinceSelected) {
+                $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+                $label = $provinceName . ' - ' . $cityName;
+            } else {
+                $label = $provinceName;
+            }
             
             return [
-                'label' => $provinceName . ' - ' . $cityName,
+                'label' => $label,
                 'total' => $item->total,
                 'color' => $colorPalette[$index % count($colorPalette)],
             ];
         });
 
         // Format data untuk tabel
-        $tableData = $topRegions->map(function ($region) use ($allProblems) {
-            $regionProblems = $allProblems->where('province_id', $region->province_id)
-                                          ->where('city_or_regency_id', $region->city_or_regency_id)
-                                          ->sortByDesc('total');
+        $tableData = $topRegions->map(function ($region) use ($allProblems, $isProvinceSelected) {
+            if ($isProvinceSelected) {
+                $regionProblems = $allProblems->where('province_id', $region->province_id)
+                                              ->where('city_or_regency_id', $region->city_or_regency_id)
+                                              ->sortByDesc('total');
+                $city = $region->cityOrRegency->city_or_regency_name ?? '-';
+            } else {
+                $regionProblems = $allProblems->where('province_id', $region->province_id)
+                                              ->sortByDesc('total');
+                $city = 'Semua Kota/Kabupaten';
+            }
 
             $categoriesHtml = $regionProblems->map(function ($item) {
                 $catName = $item->category->code ?? $item->category->category_name ?? 'Unknown';
@@ -260,7 +302,7 @@ class HomeStaffSubditController extends Controller
 
             return [
                 'province' => $region->province->province_name ?? '-',
-                'city' => $region->cityOrRegency->city_or_regency_name ?? '-',
+                'city' => $city,
                 'total' => $region->total,
                 'categories_html' => $categoriesHtml
             ];

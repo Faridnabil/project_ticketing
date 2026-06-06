@@ -147,21 +147,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <label for="city_id" class="form-label fw-bold small text-muted">Kota/Kabupaten</label>
-                                                            <select class="form-select" id="city_id" name="city_id"
-                                                                {{ !$provinceId || $provinceId == 'all' ? 'disabled' : '' }}>
-                                                                <option value="all">Semua Kota/Kabupaten</option>
-                                                                @if($provinceId && $provinceId != 'all')
-                                                                    @foreach(\App\Models\CityOrRegency::where('province_id', $provinceId)->get() as $city)
-                                                                        <option value="{{ $city->id }}" {{ $cityId == $city->id ? 'selected' : '' }}>
-                                                                            {{ $city->city_or_regency_name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-2 d-flex align-items-end">
+                                                        <div class="col-md-4 d-flex align-items-end">
                                                             <div class="d-flex w-100">
                                                                 <button type="submit" class="btn btn-primary flex-grow-1 me-2">Tampilkan</button>
                                                                 <button id="resetFilter" type="button" class="btn btn-danger">Segarkan</button>
@@ -297,27 +283,14 @@
 
             initChart(@json($chartData));
 
-            $('#province_id').change(function() {
-                const provinceId = $(this).val();
-                if (provinceId && provinceId !== "all") {
-                    $('#city_id').prop('disabled', false);
-                    $.get("{{ url('get-cities') }}/" + provinceId, function(cities) {
-                        $('#city_id').empty().append('<option value="all">Semua Kota/Kabupaten</option>');
-                        cities.forEach(city => {
-                            $('#city_id').append(`<option value="${city.id}">${city.city_or_regency_name}</option>`);
-                        });
-                    });
-                } else {
-                    $('#city_id').prop('disabled', true).empty().append('<option value="all">Semua Kota/Kabupaten</option>');
-                }
-            });
+
 
             $('#resetFilter').on('click', function () {
                 $('#year').val('all');
                 $('#month').val('all');
                 $('#category_id').val('all');
                 $('#province_id').val('all');
-                $('#city_id').val('all').prop('disabled', true).html('<option value="all">Semua Kota/Kabupaten</option>');
+
                 $('#filterForm').submit();
             });
 
