@@ -305,6 +305,11 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                right: 100
+                            }
+                        },
                         plugins: {
                             legend: {
                                 display: false
@@ -325,7 +330,8 @@
                                 },
                                 ticks: {
                                     stepSize: 1
-                                }
+                                },
+                                grace: '20%'
                             },
                             y: {
                                 grid: {

@@ -247,6 +247,11 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                right: 100
+                            }
+                        },
                         plugins: {
                             legend: { display: false },
                             tooltip: {
@@ -258,7 +263,7 @@
                             }
                         },
                         scales: {
-                            x: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } },
+                            x: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 }, grace: '20%' },
                             y: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
                         }
                     },
