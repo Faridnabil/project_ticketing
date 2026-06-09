@@ -188,7 +188,14 @@ class DashboardController extends Controller
         $cityId = $request->query('city_id');
         $categoryId = $request->query('category_id');
 
-        $applyFilters = function ($query) use ($year, $month, $provinceId, $cityId, $categoryId) {
+        // Convert no_province to province_id by looking up in Province table
+        $actualProvinceId = null;
+        if ($provinceId && $provinceId !== "all") {
+            $province = Province::where('no_province', $provinceId)->first();
+            $actualProvinceId = $province ? $province->id : null;
+        }
+
+        $applyFilters = function ($query) use ($year, $month, $actualProvinceId, $cityId, $categoryId) {
             $query->when($year, function ($q) use ($year) {
                 if ($year !== "all" && $year) {
                     $q->whereYear('created_at', $year);
@@ -199,9 +206,9 @@ class DashboardController extends Controller
                     $q->whereMonth('created_at', $month);
                 }
             })
-            ->when($provinceId, function ($q) use ($provinceId) {
-                if ($provinceId !== "all" && $provinceId) {
-                    $q->where('province_id', $provinceId);
+            ->when($actualProvinceId, function ($q) use ($actualProvinceId) {
+                if ($actualProvinceId) {
+                    $q->where('province_id', $actualProvinceId);
                 }
             })
             ->when($cityId, function ($q) use ($cityId) {
@@ -216,7 +223,7 @@ class DashboardController extends Controller
             });
         };
 
-        $isProvinceSelected = ($provinceId && $provinceId !== "all");
+        $isProvinceSelected = ($actualProvinceId && $actualProvinceId !== null);
 
         if ($isProvinceSelected) {
             $chartQuery = Ticket::with(['province', 'cityOrRegency'])
@@ -244,7 +251,7 @@ class DashboardController extends Controller
         }
 
         $applyFilters($tableQuery);
-        
+
         $topProvinceIds = $topRegions->pluck('province_id')->unique();
         if ($isProvinceSelected) {
             $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
@@ -265,15 +272,21 @@ class DashboardController extends Controller
 
         $chartData = $topRegions->map(function ($item, $index) use ($colorPalette, $isProvinceSelected) {
             $provinceName = $item->province->province_name ?? '-';
+            $noProvince = $item->province->no_province ?? '-';
+
             if ($isProvinceSelected) {
                 $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+                $noCityOrRegency = $item->cityOrRegency->no_city_or_regency ?? '-';
                 $label = $provinceName . ' - ' . $cityName;
             } else {
                 $label = $provinceName;
+                $noCityOrRegency = null;
             }
-            
+
             return [
                 'label' => $label,
+                'kode_provinsi' => $noProvince,
+                'kode_kota' => $noCityOrRegency,
                 'total' => $item->total,
                 'color' => $colorPalette[$index % count($colorPalette)],
             ];
