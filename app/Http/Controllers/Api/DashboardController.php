@@ -180,152 +180,277 @@ class DashboardController extends Controller
     /**
      * Get Problem Report (Chart & Table)
      */
-    public function getProblemReport(Request $request)
+    // public function getProblemReport(Request $request)
+    // {
+    //     $month = $request->query('month');
+    //     $year = $request->query('year');
+    //     $provinceId = $request->query('province_id');
+    //     $cityId = $request->query('city_id');
+    //     $categoryId = $request->query('category_id');
+    //     $kodeDaerah = $request->query('kode_daerah');
+
+    //     $actualProvinceId = null;
+    //     $actualCityId = null;
+
+    //     // Parse region code (kode_daerah) if provided
+    //     if ($kodeDaerah && $kodeDaerah !== "all") {
+    //         if (strlen($kodeDaerah) <= 2) {
+    //             $province = Province::where('no_province', $kodeDaerah)->first();
+    //             $actualProvinceId = $province ? $province->id : null;
+    //         } else {
+    //             $city = CityOrRegency::where('no_city_or_regency', $kodeDaerah)->first();
+    //             if ($city) {
+    //                 $actualCityId = $city->id;
+    //                 $actualProvinceId = $city->province_id;
+    //             }
+    //         }
+    //     } else {
+    //         // Fallback to existing province_id / city_id
+    //         if ($provinceId && $provinceId !== "all") {
+    //             if (is_numeric($provinceId)) {
+    //                 $actualProvinceId = $provinceId;
+    //             } else {
+    //                 $province = Province::where('no_province', $provinceId)->first();
+    //                 $actualProvinceId = $province ? $province->id : null;
+    //             }
+    //         }
+    //         if ($cityId && $cityId !== "all") {
+    //             if (is_numeric($cityId)) {
+    //                 $actualCityId = $cityId;
+    //             } else {
+    //                 $city = CityOrRegency::where('no_city_or_regency', $cityId)->first();
+    //                 $actualCityId = $city ? $city->id : null;
+    //             }
+    //         }
+    //     }
+
+    //     $applyFilters = function ($query) use ($year, $month, $actualProvinceId, $actualCityId, $categoryId) {
+    //         $query->when($year, function ($q) use ($year) {
+    //             if ($year !== "all" && $year) {
+    //                 $q->whereYear('created_at', $year);
+    //             }
+    //         })
+    //         ->when($month, function ($q) use ($month) {
+    //             if ($month !== "all" && $month) {
+    //                 $q->whereMonth('created_at', $month);
+    //             }
+    //         })
+    //         ->when($actualProvinceId, function ($q) use ($actualProvinceId) {
+    //             $q->where('province_id', $actualProvinceId);
+    //         })
+    //         ->when($actualCityId, function ($q) use ($actualCityId) {
+    //             $q->where('city_or_regency_id', $actualCityId);
+    //         })
+    //         ->when($categoryId, function ($q) use ($categoryId) {
+    //             if ($categoryId !== "all" && $categoryId) {
+    //                 $q->where('category_id', $categoryId);
+    //             }
+    //         });
+    //     };
+
+    //     $isProvinceSelected = ($actualProvinceId !== null || $actualCityId !== null);
+
+    //     if ($isProvinceSelected) {
+    //         $chartQuery = Ticket::with(['province', 'cityOrRegency'])
+    //             ->select('province_id', 'city_or_regency_id', DB::raw('count(*) as total'))
+    //             ->groupBy('province_id', 'city_or_regency_id')
+    //             ->orderByDesc('total');
+    //     } else {
+    //         $chartQuery = Ticket::with(['province'])
+    //             ->select('province_id', DB::raw('count(*) as total'))
+    //             ->groupBy('province_id')
+    //             ->orderByDesc('total');
+    //     }
+
+    //     $applyFilters($chartQuery);
+    //     $topRegions = $chartQuery->limit(10)->get();
+
+    //     if ($isProvinceSelected) {
+    //         $tableQuery = Ticket::with(['province', 'cityOrRegency', 'category'])
+    //             ->select('province_id', 'city_or_regency_id', 'category_id', DB::raw('count(*) as total'))
+    //             ->groupBy('province_id', 'city_or_regency_id', 'category_id');
+    //     } else {
+    //         $tableQuery = Ticket::with(['province', 'category'])
+    //             ->select('province_id', 'category_id', DB::raw('count(*) as total'))
+    //             ->groupBy('province_id', 'category_id');
+    //     }
+
+    //     $applyFilters($tableQuery);
+
+    //     $topProvinceIds = $topRegions->pluck('province_id')->unique();
+    //     if ($isProvinceSelected) {
+    //         $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
+    //         if ($topProvinceIds->isNotEmpty() && $topCityIds->isNotEmpty()) {
+    //             $tableQuery->whereIn('province_id', $topProvinceIds)->whereIn('city_or_regency_id', $topCityIds);
+    //         }
+    //     } else {
+    //         if ($topProvinceIds->isNotEmpty()) {
+    //             $tableQuery->whereIn('province_id', $topProvinceIds);
+    //         }
+    //     }
+    //     $allProblems = $tableQuery->get();
+
+    //     $colorPalette = [
+    //         '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+    //         '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
+    //     ];
+
+    //     $chartData = $topRegions->map(function ($item, $index) use ($colorPalette, $isProvinceSelected) {
+    //         $provinceName = $item->province->province_name ?? '-';
+    //         $noProvince = $item->province->no_province ?? '-';
+
+    //         if ($isProvinceSelected) {
+    //             $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
+    //             $noCityOrRegency = $item->cityOrRegency->no_city_or_regency ?? '-';
+    //             $label = $provinceName . ' - ' . $cityName;
+    //         } else {
+    //             $label = $provinceName;
+    //             $noCityOrRegency = null;
+    //         }
+
+    //         return [
+    //             'label' => $label,
+    //             'kode_provinsi' => $noProvince,
+    //             'kode_kota' => $noCityOrRegency,
+    //             'total' => $item->total,
+    //             'color' => $colorPalette[$index % count($colorPalette)],
+    //         ];
+    //     });
+
+    //     $tableData = $topRegions->map(function ($region) use ($allProblems, $isProvinceSelected) {
+    //         if ($isProvinceSelected) {
+    //             $regionProblems = $allProblems->where('province_id', $region->province_id)
+    //                                           ->where('city_or_regency_id', $region->city_or_regency_id)
+    //                                           ->sortByDesc('total');
+    //             $city = $region->cityOrRegency->city_or_regency_name ?? '-';
+    //         } else {
+    //             $regionProblems = $allProblems->where('province_id', $region->province_id)
+    //                                           ->sortByDesc('total');
+    //             $city = 'Semua Kota/Kabupaten';
+    //         }
+
+    //         $categoriesList = $regionProblems->map(function ($item) {
+    //             return [
+    //                 'category_name' => $item->category->code ?? $item->category->category_name ?? 'Unknown',
+    //                 'color' => $item->category->color ?? '#6c757d',
+    //                 'total' => $item->total
+    //             ];
+    //         })->values();
+
+    //         return [
+    //             'province' => $region->province->province_name ?? '-',
+    //             'city' => $city,
+    //             'total' => $region->total,
+    //             'categories' => $categoriesList
+    //         ];
+    //     });
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'data' => [
+    //             'chartData' => $chartData,
+    //             'tableData' => $tableData,
+    //         ]
+    //     ]);
+    // }
+
+    /**
+     * Get the most tickets grouped by province
+     */
+    public function getTicketsByProvince(Request $request)
     {
         $month = $request->query('month');
         $year = $request->query('year');
-        $provinceId = $request->query('province_id');
-        $cityId = $request->query('city_id');
         $categoryId = $request->query('category_id');
 
-        // Convert no_province to province_id by looking up in Province table
-        $actualProvinceId = null;
-        if ($provinceId && $provinceId !== "all") {
-            $province = Province::where('no_province', $provinceId)->first();
-            $actualProvinceId = $province ? $province->id : null;
+        $query = Ticket::select('province_id', DB::raw('count(*) as total'))
+            ->groupBy('province_id')
+            ->orderByDesc('total');
+
+        if ($year && $year !== 'all') {
+            $query->whereYear('created_at', $year);
+        }
+        if ($month && $month !== 'all') {
+            $query->whereMonth('created_at', $month);
+        }
+        if ($categoryId && $categoryId !== 'all') {
+            $query->where('category_id', $categoryId);
         }
 
-        $applyFilters = function ($query) use ($year, $month, $actualProvinceId, $cityId, $categoryId) {
-            $query->when($year, function ($q) use ($year) {
-                if ($year !== "all" && $year) {
-                    $q->whereYear('created_at', $year);
-                }
-            })
-            ->when($month, function ($q) use ($month) {
-                if ($month !== "all" && $month) {
-                    $q->whereMonth('created_at', $month);
-                }
-            })
-            ->when($actualProvinceId, function ($q) use ($actualProvinceId) {
-                if ($actualProvinceId) {
-                    $q->where('province_id', $actualProvinceId);
-                }
-            })
-            ->when($cityId, function ($q) use ($cityId) {
-                if ($cityId !== "all" && $cityId) {
-                    $q->where('city_or_regency_id', $cityId);
-                }
-            })
-            ->when($categoryId, function ($q) use ($categoryId) {
-                if ($categoryId !== "all" && $categoryId) {
-                    $q->where('category_id', $categoryId);
-                }
-            });
-        };
-
-        $isProvinceSelected = ($actualProvinceId && $actualProvinceId !== null);
-
-        if ($isProvinceSelected) {
-            $chartQuery = Ticket::with(['province', 'cityOrRegency'])
-                ->select('province_id', 'city_or_regency_id', DB::raw('count(*) as total'))
-                ->groupBy('province_id', 'city_or_regency_id')
-                ->orderByDesc('total');
-        } else {
-            $chartQuery = Ticket::with(['province'])
-                ->select('province_id', DB::raw('count(*) as total'))
-                ->groupBy('province_id')
-                ->orderByDesc('total');
-        }
-
-        $applyFilters($chartQuery);
-        $topRegions = $chartQuery->limit(10)->get();
-
-        if ($isProvinceSelected) {
-            $tableQuery = Ticket::with(['province', 'cityOrRegency', 'category'])
-                ->select('province_id', 'city_or_regency_id', 'category_id', DB::raw('count(*) as total'))
-                ->groupBy('province_id', 'city_or_regency_id', 'category_id');
-        } else {
-            $tableQuery = Ticket::with(['province', 'category'])
-                ->select('province_id', 'category_id', DB::raw('count(*) as total'))
-                ->groupBy('province_id', 'category_id');
-        }
-
-        $applyFilters($tableQuery);
-
-        $topProvinceIds = $topRegions->pluck('province_id')->unique();
-        if ($isProvinceSelected) {
-            $topCityIds = $topRegions->pluck('city_or_regency_id')->unique();
-            if ($topProvinceIds->isNotEmpty() && $topCityIds->isNotEmpty()) {
-                $tableQuery->whereIn('province_id', $topProvinceIds)->whereIn('city_or_regency_id', $topCityIds);
-            }
-        } else {
-            if ($topProvinceIds->isNotEmpty()) {
-                $tableQuery->whereIn('province_id', $topProvinceIds);
-            }
-        }
-        $allProblems = $tableQuery->get();
-
-        $colorPalette = [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
-            '#FF9F40', '#8AC24A', '#FF5722', '#607D8B', '#9C27B0'
-        ];
-
-        $chartData = $topRegions->map(function ($item, $index) use ($colorPalette, $isProvinceSelected) {
-            $provinceName = $item->province->province_name ?? '-';
-            $noProvince = $item->province->no_province ?? '-';
-
-            if ($isProvinceSelected) {
-                $cityName = $item->cityOrRegency->city_or_regency_name ?? '-';
-                $noCityOrRegency = $item->cityOrRegency->no_city_or_regency ?? '-';
-                $label = $provinceName . ' - ' . $cityName;
-            } else {
-                $label = $provinceName;
-                $noCityOrRegency = null;
-            }
-
+        $data = $query->with('province')->get()->map(function ($ticket) {
             return [
-                'label' => $label,
-                'kode_provinsi' => $noProvince,
-                'kode_kota' => $noCityOrRegency,
-                'total' => $item->total,
-                'color' => $colorPalette[$index % count($colorPalette)],
-            ];
-        });
-
-        $tableData = $topRegions->map(function ($region) use ($allProblems, $isProvinceSelected) {
-            if ($isProvinceSelected) {
-                $regionProblems = $allProblems->where('province_id', $region->province_id)
-                                              ->where('city_or_regency_id', $region->city_or_regency_id)
-                                              ->sortByDesc('total');
-                $city = $region->cityOrRegency->city_or_regency_name ?? '-';
-            } else {
-                $regionProblems = $allProblems->where('province_id', $region->province_id)
-                                              ->sortByDesc('total');
-                $city = 'Semua Kota/Kabupaten';
-            }
-
-            $categoriesList = $regionProblems->map(function ($item) {
-                return [
-                    'category_name' => $item->category->code ?? $item->category->category_name ?? 'Unknown',
-                    'color' => $item->category->color ?? '#6c757d',
-                    'total' => $item->total
-                ];
-            })->values();
-
-            return [
-                'province' => $region->province->province_name ?? '-',
-                'city' => $city,
-                'total' => $region->total,
-                'categories' => $categoriesList
+                'no_province' => $ticket->province->no_province ?? '-',
+                'province_name' => $ticket->province->province_name ?? 'Unknown',
+                'total' => $ticket->total
             ];
         });
 
         return response()->json([
             'status' => 'success',
-            'data' => [
-                'chartData' => $chartData,
-                'tableData' => $tableData,
-            ]
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * Get the most tickets grouped by city/regency
+     */
+    public function getTicketsByCity(Request $request)
+    {
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $provinceId = $request->query('province_id');
+        $kodeDaerah = $request->query('kode_daerah');
+        $noProvince = $request->query('no_province');
+        $categoryId = $request->query('category_id');
+
+        $actualProvinceId = null;
+        if ($noProvince && $noProvince !== "all") {
+            $province = Province::where('no_province', $noProvince)->first();
+            $actualProvinceId = $province ? $province->id : null;
+        } elseif ($kodeDaerah && $kodeDaerah !== "all") {
+            if (strlen($kodeDaerah) <= 2) {
+                $province = Province::where('no_province', $kodeDaerah)->first();
+                $actualProvinceId = $province ? $province->id : null;
+            }
+        } elseif ($provinceId && $provinceId !== "all") {
+            if (is_numeric($provinceId)) {
+                $actualProvinceId = $provinceId;
+            } else {
+                $province = Province::where('no_province', $provinceId)->first();
+                $actualProvinceId = $province ? $province->id : null;
+            }
+        }
+
+        $query = Ticket::select('city_or_regency_id', 'province_id', DB::raw('count(*) as total'))
+            ->groupBy('city_or_regency_id', 'province_id')
+            ->orderByDesc('total');
+
+        if ($year && $year !== 'all') {
+            $query->whereYear('created_at', $year);
+        }
+        if ($month && $month !== 'all') {
+            $query->whereMonth('created_at', $month);
+        }
+        if ($actualProvinceId) {
+            $query->where('province_id', $actualProvinceId);
+        }
+        if ($categoryId && $categoryId !== 'all') {
+            $query->where('category_id', $categoryId);
+        }
+
+        $data = $query->with(['cityOrRegency', 'province'])->get()->map(function ($ticket) {
+            return [
+                'no_city' => $ticket->cityOrRegency->no_city_or_regency ?? '-',
+                'city_name' => $ticket->cityOrRegency->city_or_regency_name ?? 'Unknown',
+                'no_province' => $ticket->province->no_province ?? '-',
+                'province_name' => $ticket->province->province_name ?? 'Unknown',
+                'total' => $ticket->total
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
         ]);
     }
 }

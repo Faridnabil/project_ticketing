@@ -23,5 +23,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/summary', [DashboardController::class, 'getSummary']);
     Route::get('/chart/monthly', [DashboardController::class, 'getMonthlyChart']);
     Route::get('/chart/daily', [DashboardController::class, 'getDailyChart']);
-    Route::get('/problems', [DashboardController::class, 'getProblemReport']);
+    // Route::get('/problems', [DashboardController::class, 'getProblemReport']);
+    Route::get('/tickets-by-province', [DashboardController::class, 'getTicketsByProvince']);
+    Route::get('/tickets-by-city', [DashboardController::class, 'getTicketsByCity']);
 });
