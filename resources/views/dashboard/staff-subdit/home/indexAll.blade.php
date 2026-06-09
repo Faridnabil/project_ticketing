@@ -429,39 +429,7 @@
                                 $selectedMonth = request('month'); // Ambil nilai bulan dari request
                             @endphp
 
-                            @if(($selectedYear && $selectedYear !== 'all') || ($selectedMonth && $selectedMonth !== 'all'))
-                                <div class="row">
-                                    <div class="col-xxl-12">
-                                        <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
-                                                <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
-                                                    {{ $selectedMonth ? \Carbon\Carbon::create()->month($selectedMonth)->format('F') : 'Semua Bulan' }}
-                                                    {{ $selectedYear ?? now()->year }}
-                                                </h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <!-- Left Column -->
-                                    <div class="col-xxl-12">
-                                        <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
-                                                <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
-                                                    {{ $selectedYear ?? now()->year }}
-                                                </h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <canvas id="ticketChart" width="80%" height="20px"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
+                            @if(!$selectedYear || $selectedYear === 'all')
                                 <!-- Default Yearly Summary -->
                                 <div class="row" id="yearlySummaryContainer">
                                     <div class="col-xxl-12">
@@ -471,6 +439,40 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="yearlySummaryChart" width="80%" height="20px"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                @if($selectedMonth && $selectedMonth !== 'all')
+                                    <div class="row">
+                                        <div class="col-xxl-12">
+                                            <div class="card card-xxl-stretch">
+                                                <div class="card-header border-0 bg-primary py-5">
+                                                    <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
+                                                        {{ \Carbon\Carbon::create()->month($selectedMonth)->format('F') }}
+                                                        {{ $selectedYear }}
+                                                    </h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="row">
+                                    <!-- Left Column -->
+                                    <div class="col-xxl-12">
+                                        <div class="card card-xxl-stretch">
+                                            <div class="card-header border-0 bg-primary py-5">
+                                                <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
+                                                    {{ $selectedYear }}
+                                                </h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="ticketChart" width="80%" height="20px"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -493,8 +495,8 @@
             const filterMonth = document.getElementById('filterMonth');
             const applyFilter = document.getElementById('applyFilter');
             const resetFilter = document.getElementById('resetFilter');
-            const ctxDaily = document.getElementById('dailyDataChart').getContext('2d');
-            const ctxYearly = document.getElementById('ticketChart').getContext('2d');
+            const dailyChartEl = document.getElementById('dailyDataChart');
+            const yearlyChartEl = document.getElementById('ticketChart');
 
             let dailyDataChart, ticketChart;
 
@@ -526,72 +528,80 @@
                     }
                 }
 
-                fetch(urlDaily)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (dailyDataChart) dailyDataChart.destroy();
+                // Hanya fetch & render grafik harian jika canvas-nya ada di DOM
+                if (dailyChartEl) {
+                    const ctxDaily = dailyChartEl.getContext('2d');
+                    fetch(urlDaily)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (dailyDataChart) dailyDataChart.destroy();
 
-                        const selectedYear = savedFilters.year !== 'all' ? parseInt(savedFilters.year) : new Date().getFullYear();
-                        const selectedMonth = savedFilters.month !== 'all' ? parseInt(savedFilters.month) - 1 : new Date().getMonth();
+                            const selectedYear = savedFilters.year !== 'all' ? parseInt(savedFilters.year) : new Date().getFullYear();
+                            const selectedMonth = savedFilters.month !== 'all' ? parseInt(savedFilters.month) - 1 : new Date().getMonth();
 
-                        const hariIndonesia = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                            const hariIndonesia = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
-                        const labelsWithDay = data.days.map(day => {
-                            const date = new Date(selectedYear, selectedMonth, day);
-                            return `${hariIndonesia[date.getDay()]}, ${day}`;
+                            const labelsWithDay = data.days.map(day => {
+                                const date = new Date(selectedYear, selectedMonth, day);
+                                return `${hariIndonesia[date.getDay()]}, ${day}`;
+                            });
+
+                            dailyDataChart = new Chart(ctxDaily, {
+                                type: 'line',
+                                data: {
+                                    labels: labelsWithDay,
+                                    datasets: [
+                                        {
+                                            label: 'Total Tiket',
+                                            data: data.ticketsCreated,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1,
+                                            fill: true
+                                        },
+                                        {
+                                            label: 'Tiket Selesai Harian',
+                                            data: data.ticketsClosed,
+                                            backgroundColor: 'rgba(75, 192, 75, 0.2)',
+                                            borderColor: 'rgba(75, 192, 75, 1)',
+                                            borderWidth: 1,
+                                            fill: true
+                                        }
+                                    ]
+                                }
+                            });
                         });
+                }
 
-                        dailyDataChart = new Chart(ctxDaily, {
-                            type: 'line',
-                            data: {
-                                labels: labelsWithDay,
-                                datasets: [
-                                    {
-                                        label: 'Total Tiket',
-                                        data: data.ticketsCreated,
-                                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Biru
-                                        borderColor: 'rgba(54, 162, 235, 1)', // Biru
-                                        borderWidth: 1,
-                                        fill: true
-                                    },
-                                    {
-                                        label: 'Tiket Selesai Harian',
-                                        data: data.ticketsClosed,
-                                        backgroundColor: 'rgba(75, 192, 75, 0.2)', // Hijau
-                                        borderColor: 'rgba(75, 192, 75, 1)', // Hijau
-                                        borderWidth: 1,
-                                        fill: true
-                                    }
-                                ]
-                            }
+                // Hanya fetch & render grafik bulanan/tahunan jika canvas-nya ada di DOM
+                if (yearlyChartEl) {
+                    const ctxYearly = yearlyChartEl.getContext('2d');
+                    fetch(urlYearly)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (ticketChart) ticketChart.destroy();
+                            ticketChart = new Chart(ctxYearly, {
+                                type: 'bar',
+                                data: {
+                                    labels: data.months,
+                                    datasets: [
+                                        {
+                                            label: 'Total Tiket',
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            data: data.tickets
+                                        },
+                                        {
+                                            label: 'Tiket Selesai',
+                                            backgroundColor: 'rgba(75, 192, 75, 0.2)',
+                                            borderColor: 'rgba(75, 192, 75, 1)',
+                                            data: data.ticketsClosed
+                                        }
+                                    ]
+                                }
+                            });
                         });
-                    });
-
-                fetch(urlYearly)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (ticketChart) ticketChart.destroy();
-                        ticketChart = new Chart(ctxYearly, {
-                            type: 'bar',
-                            data: {
-                                labels: data.months,
-                                datasets: [
-                                    {
-                                        label: 'Total Tiket',
-                                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Biru
-                                        borderColor: 'rgba(54, 162, 235, 1)', // Biru
-                                        data: data.tickets
-                                    },
-                                    {
-                                        label: 'Tiket Selesai',
-                                        backgroundColor: 'rgba(75, 192, 75, 0.2)', // Hijau
-                                        borderColor: 'rgba(75, 192, 75, 1)', // Hijau
-                                        data: data.ticketsClosed
-                                    }
-                                ]
-                            }
-                        });
-                    });
+                }
             }
 
             const savedFilters = getSavedFilters();

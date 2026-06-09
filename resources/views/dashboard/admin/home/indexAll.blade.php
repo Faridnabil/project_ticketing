@@ -429,39 +429,7 @@
                                 $selectedMonth = request('month'); // Ambil nilai bulan dari request
                             @endphp
 
-                            @if(($selectedYear && $selectedYear !== 'all') || ($selectedMonth && $selectedMonth !== 'all'))
-                                <div class="row">
-                                    <div class="col-xxl-12">
-                                        <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
-                                                <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
-                                                    {{ $selectedMonth ? \Carbon\Carbon::create()->month($selectedMonth)->format('F') : 'Semua Bulan' }}
-                                                    {{ $selectedYear ?? now()->year }}
-                                                </h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <!-- Left Column -->
-                                    <div class="col-xxl-12">
-                                        <div class="card card-xxl-stretch">
-                                            <div class="card-header border-0 bg-primary py-5">
-                                                <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
-                                                    {{ $selectedYear ?? now()->year }}
-                                                </h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <canvas id="ticketChart" width="80%" height="20px"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
+                            @if(!$selectedYear || $selectedYear === 'all')
                                 <!-- Default Yearly Summary -->
                                 <div class="row" id="yearlySummaryContainer">
                                     <div class="col-xxl-12">
@@ -471,6 +439,40 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="yearlySummaryChart" width="80%" height="20px"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                @if($selectedMonth && $selectedMonth !== 'all')
+                                    <div class="row">
+                                        <div class="col-xxl-12">
+                                            <div class="card card-xxl-stretch">
+                                                <div class="card-header border-0 bg-primary py-5">
+                                                    <h3 id="cardTitle" class="card-title fw-bolder text-white">Tiket Perbulan -
+                                                        {{ \Carbon\Carbon::create()->month($selectedMonth)->format('F') }}
+                                                        {{ $selectedYear }}
+                                                    </h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <canvas id="dailyDataChart" width="80%" height="20px"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="row">
+                                    <!-- Left Column -->
+                                    <div class="col-xxl-12">
+                                        <div class="card card-xxl-stretch">
+                                            <div class="card-header border-0 bg-primary py-5">
+                                                <h3 id="cardTitle2" class="card-title fw-bolder text-white"> Tiket Pertahun -
+                                                    {{ $selectedYear }}
+                                                </h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="ticketChart" width="80%" height="20px"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -493,8 +495,8 @@
             const filterMonth = document.getElementById('filterMonth');
             const applyFilter = document.getElementById('applyFilter');
             const resetFilter = document.getElementById('resetFilter');
-            const ctxDaily = document.getElementById('dailyDataChart').getContext('2d');
-            const ctxYearly = document.getElementById('ticketChart').getContext('2d');
+            const dailyChartEl = document.getElementById('dailyDataChart');
+            const yearlyChartEl = document.getElementById('ticketChart');
 
             let dailyDataChart, ticketChart;
 
@@ -514,8 +516,8 @@
             }
 
             function updateCharts(year, month) {
-                let urlDaily = `/helpdesk/tickets/dailyChart`;
-                let urlYearly = `/helpdesk/tickets/chart`;
+                let urlDaily = `/admin/tickets/dailyChart`;
+                let urlYearly = `/admin/tickets/chart`;
 
                 if (year !== "all") {
                     urlDaily += `?year=${year}`;
