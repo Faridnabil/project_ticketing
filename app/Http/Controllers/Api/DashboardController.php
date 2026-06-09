@@ -59,7 +59,11 @@ class DashboardController extends Controller
      */
     public function getTicketsByProvince(Request $request)
     {
-        $query = Ticket::select('province_id', DB::raw('count(*) as total'))
+        $query = Ticket::select(
+                'province_id', 
+                DB::raw('count(*) as total'),
+                DB::raw('SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as completed')
+            )
             ->groupBy('province_id')
             ->orderByDesc('total');
 
@@ -67,7 +71,8 @@ class DashboardController extends Controller
             return [
                 'no_prov' => $ticket->province->no_province ?? '-',
                 'province_name' => $ticket->province->province_name ?? 'Unknown',
-                'total' => $ticket->total
+                'total' => $ticket->total,
+                'completed' => (int) $ticket->completed
             ];
         });
 
@@ -82,7 +87,12 @@ class DashboardController extends Controller
      */
     public function getTicketsByCity(Request $request)
     {
-        $query = Ticket::select('city_or_regency_id', 'province_id', DB::raw('count(*) as total'))
+        $query = Ticket::select(
+                'city_or_regency_id', 
+                'province_id', 
+                DB::raw('count(*) as total'),
+                DB::raw('SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as completed')
+            )
             ->groupBy('city_or_regency_id', 'province_id')
             ->orderByDesc('total');
 
@@ -92,7 +102,8 @@ class DashboardController extends Controller
                 'city_name' => $ticket->cityOrRegency->city_or_regency_name ?? 'Unknown',
                 'no_prov' => $ticket->province->no_province ?? '-',
                 'province_name' => $ticket->province->province_name ?? 'Unknown',
-                'total' => $ticket->total
+                'total' => $ticket->total,
+                'completed' => (int) $ticket->completed
             ];
         });
 
