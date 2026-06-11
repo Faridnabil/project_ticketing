@@ -72,7 +72,8 @@ class DashboardController extends Controller
                 'no_prov' => $ticket->province->no_province ?? '-',
                 'province_name' => $ticket->province->province_name ?? 'Unknown',
                 'total' => $ticket->total,
-                'completed' => (int) $ticket->completed
+                'completed' => (int) $ticket->completed,
+                'not_completed' => $ticket->total - (int) $ticket->completed
             ];
         });
 
@@ -103,7 +104,8 @@ class DashboardController extends Controller
                 'no_prov' => $ticket->province->no_province ?? '-',
                 'province_name' => $ticket->province->province_name ?? 'Unknown',
                 'total' => $ticket->total,
-                'completed' => (int) $ticket->completed
+                'completed' => (int) $ticket->completed,
+                'not_completed' => $ticket->total - (int) $ticket->completed
             ];
         });
 
