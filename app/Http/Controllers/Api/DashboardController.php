@@ -116,6 +116,74 @@ class DashboardController extends Controller
     }
 
     /**
+     * Get the top 10 uncompleted tickets grouped by province
+     */
+    public function getTopUncompletedTicketsByProvince(Request $request)
+    {
+        $query = Ticket::select(
+                'province_id', 
+                DB::raw('count(*) as total'),
+                DB::raw('SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as completed'),
+                DB::raw('SUM(CASE WHEN status_id != 4 OR status_id IS NULL THEN 1 ELSE 0 END) as not_completed')
+            )
+            ->groupBy('province_id')
+            ->having('not_completed', '>', 0)
+            ->orderByDesc('not_completed')
+            ->limit(10);
+
+        $data = $query->with('province')->get()->map(function ($ticket) {
+            return [
+                'no_prov' => $ticket->province->no_province ?? '-',
+                'province_name' => $ticket->province->province_name ?? 'Unknown',
+                'total' => $ticket->total,
+                'completed' => (int) $ticket->completed,
+                'not_completed' => (int) $ticket->not_completed
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * Get the top 10 uncompleted tickets grouped by city/regency
+     */
+    public function getTopUncompletedTicketsByCity(Request $request)
+    {
+        $query = Ticket::select(
+                'city_or_regency_id', 
+                'province_id', 
+                DB::raw('count(*) as total'),
+                DB::raw('SUM(CASE WHEN status_id = 4 THEN 1 ELSE 0 END) as completed'),
+                DB::raw('SUM(CASE WHEN status_id != 4 OR status_id IS NULL THEN 1 ELSE 0 END) as not_completed')
+            )
+            ->groupBy('city_or_regency_id', 'province_id')
+            ->having('not_completed', '>', 0)
+            ->orderByDesc('not_completed')
+            ->limit(10);
+
+        $data = $query->with(['cityOrRegency', 'province'])->get()->map(function ($ticket) {
+            return [
+                'no_kab' => $ticket->cityOrRegency->no_city_or_regency ?? '-',
+                'city_name' => $ticket->cityOrRegency->city_or_regency_name ?? 'Unknown',
+                'no_prov' => $ticket->province->no_province ?? '-',
+                'province_name' => $ticket->province->province_name ?? 'Unknown',
+                'total' => $ticket->total,
+                'completed' => (int) $ticket->completed,
+                'not_completed' => (int) $ticket->not_completed
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
+
+    /**
      * Get the count of incoming and completed tickets for today
      */
     public function getTodayTickets(Request $request)
@@ -133,8 +201,10 @@ class DashboardController extends Controller
             'data' => [
                 'date' => $date,
                 'incoming' => $incoming,
-                'completed' => $completed
+                'completed' => $completed,
+                'not_completed' => $incoming - $completed 
             ]
         ]);
     }
+
 }

@@ -23,5 +23,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/summary', [DashboardController::class, 'getSummary']);
     Route::get('/tickets-by-province', [DashboardController::class, 'getTicketsByProvince']);
     Route::get('/tickets-by-city', [DashboardController::class, 'getTicketsByCity']);
+    Route::get('/progress-tickets-by-province', [DashboardController::class, 'getTopUncompletedTicketsByProvince']);
+    Route::get('/progress-tickets-by-city', [DashboardController::class, 'getTopUncompletedTicketsByCity']);
     Route::get('/tickets/today', [DashboardController::class, 'getTodayTickets']);
 });
