@@ -413,7 +413,36 @@ class TicketController extends Controller
             // Gabungkan lampiran yang tersisa dan yang baru diunggah
             $data['attachments'] = json_encode(array_merge($remainingAttachments, $newAttachments));
 
+            $oldNoTicket = $ticket->no_ticket;
+
+            if ($ticket->category_id != $request->category_id) {
+                $category = \App\Models\Category::find($request->category_id);
+                $code = $category ? ($category->code ?? 'TICK') : 'TICK';
+                
+                $ticketDate = $ticket->created_at ? $ticket->created_at->format('Ymd') : \Carbon\Carbon::now()->format('Ymd');
+                $prefix = $code . '-' . $ticketDate . '-';
+
+                $lastTicket = Ticket::where('no_ticket', 'LIKE', $prefix . '%')
+                    ->orderByRaw('CAST(SUBSTR(no_ticket, ' . (strlen($prefix) + 1) . ') AS UNSIGNED) DESC')
+                    ->first();
+
+                $newTicketIdNumber = $lastTicket ? intval(substr($lastTicket->no_ticket, strlen($prefix))) + 1 : 1;
+                $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
+
+                while (Ticket::where('no_ticket', $newTicketId)->exists()) {
+                    $newTicketIdNumber++;
+                    $newTicketId = $prefix . str_pad($newTicketIdNumber, 3, '0', STR_PAD_LEFT);
+                }
+
+                $data['no_ticket'] = $newTicketId;
+            }
+
             $ticket->update($data);
+
+            if (isset($data['no_ticket']) && $data['no_ticket'] != $oldNoTicket) {
+                // Update history agar histori yang lama tetap terkait dengan tiket ini
+                DB::table('history_tickets')->where('h_no_ticket', $oldNoTicket)->update(['h_no_ticket' => $data['no_ticket']]);
+            }
 
             // Simpan data tiket sebelum diupdate ke tabel history_ticket
             DB::table('history_tickets')->insert([
