@@ -41,8 +41,14 @@ class AttendanceHelpdeskController extends Controller
 
         $attendances = $query->orderBy('created_at', 'desc')->get();
 
+        // Menggunakan konsep hari logis, di mana pergantian hari adalah jam 01:15 pagi
+        $logicalNow = now('Asia/Jakarta')->subMinutes(75); // Kurangi 1 jam 15 menit
+        $logicalDate = $logicalNow->format('Y-m-d');
+        $startOfLogicalDay = Carbon::parse($logicalDate . ' 01:15:00', 'Asia/Jakarta');
+        $endOfLogicalDay = $startOfLogicalDay->copy()->addDay()->subSecond();
+
         $attendanceToday = Attendance::where('user_id', Auth::user()->id)
-            ->whereDate('date_check_in', now('Asia/Jakarta'))
+            ->whereBetween('date_check_in', [$startOfLogicalDay, $endOfLogicalDay])
             ->get();
 
         // Retrieve all unique check-ins for the form dropdowns
@@ -93,37 +99,7 @@ class AttendanceHelpdeskController extends Controller
         try {
             $user = Auth::user();
             
-            // Ambil identifier device browser melalui cookie
-            $deviceCookie = $request->cookie('helpdesk_device_id');
-            $cookieToSet = null;
 
-            // Validasi 1: Jika User belum mengunci laptop (baru pertama kali absen di sistem yg baru ini)
-            if (!$user->assigned_device) {
-                // Cek apakah browser ini sudah pernah terikat ke AKUN LAIN
-                if ($deviceCookie) {
-                    $userOwner = \App\Models\User::where('assigned_device', $deviceCookie)->first();
-                    if ($userOwner && $userOwner->id !== $user->id) {
-                        return back()->with("error", "Perangkat ini sudah terikat dengan akun rekan anda ({$userOwner->name}). Anda tidak bisa menggunakan laptop ini untuk absen.");
-                    }
-                }
-                
-                // Daftarkan browser ini ke akun $user dengan menanam UUID baru
-                $newDeviceId = (string) \Illuminate\Support\Str::uuid();
-                
-                $user->assigned_device = $newDeviceId;
-                $user->save(); // Simpan ke tabel users
-                
-                // Setup cookie permanen 5 tahun di browser
-                $cookieToSet = cookie('helpdesk_device_id', $newDeviceId, 60 * 24 * 365 * 5); // 5 tahun
-                $deviceCookie = $newDeviceId;
-                
-            } else {
-                // Validasi 2: User sudah mengunci perangkatnya di database.
-                // WAJIB menggunakan browser yang menyimpan cookie yang cocok.
-                if (!$deviceCookie || $deviceCookie !== $user->assigned_device) {
-                    return back()->with("error", "Perangkat/Browser Tidak Valid! Anda hanya dapat melakukan absen menggunakan laptop yang pertama kali Anda daftarkan.");
-                }
-            }
 
             // Validasi input shift wajib dipilih
             $request->validate([
@@ -141,10 +117,14 @@ class AttendanceHelpdeskController extends Controller
                 'date_check_in' => now('Asia/Jakarta'),
             ];
 
-            // Cek apakah sudah absen hari ini untuk mencegah duplikasi (race condition)
-            $today = now('Asia/Jakarta')->format('Y-m-d');
+            // Cek apakah sudah absen hari ini (menggunakan hari logis 01:15) untuk mencegah duplikasi
+            $logicalNow = now('Asia/Jakarta')->subMinutes(75);
+            $logicalDate = $logicalNow->format('Y-m-d');
+            $startOfLogicalDay = Carbon::parse($logicalDate . ' 01:15:00', 'Asia/Jakarta');
+            $endOfLogicalDay = $startOfLogicalDay->copy()->addDay()->subSecond();
+
             $existingAttendance = Attendance::where('user_id', $user->id)
-                ->whereDate('date_check_in', $today)
+                ->whereBetween('date_check_in', [$startOfLogicalDay, $endOfLogicalDay])
                 ->whereIn('check_in', ['Shift 1', 'Shift 2', 'Shift 3'])
                 ->first();
 
@@ -160,14 +140,7 @@ class AttendanceHelpdeskController extends Controller
             // Bersihkan flash error dari middleware redirect secara menyeluruh
             $this->clearErrorFlash($request);
 
-            $response = redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
-            
-            // Jika ada pendaftaran device baru, kirim instruksi penyimpanan cookie ke Browser client
-            if ($cookieToSet) {
-                $response = $response->cookie($cookieToSet);
-            }
-            
-            return $response;
+            return redirect()->route("helpdesk.attendance.index")->with("success", "Check In berhasil.");
 
         } catch (\Throwable $th) {
             DB::rollBack();

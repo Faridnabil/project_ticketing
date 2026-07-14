@@ -117,13 +117,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label class="form-label">Status Perangkat (Khusus Helpdesk)</label>
-                                    <div class="mt-2 border rounded p-3 bg-light">
-                                        <span class="badge badge-warning mb-2">Menunggu Pendaftaran</span>
-                                        <div class="text-muted fs-7">Sistem secara otomatis akan mengunci perangkat pertama yang digunakan user saat melakukan absen.</div>
-                                    </div>
-                                </div>
+
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>

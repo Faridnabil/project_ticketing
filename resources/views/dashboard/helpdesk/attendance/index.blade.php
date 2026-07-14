@@ -157,7 +157,9 @@
                                                     @enderror
 
                                                     <input type="hidden" name="check_out" value="{{ $absen->check_in }}">
-                                                    <input type="hidden" name="date_check_out" id="dateCheckOut">
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <input type="datetime-local" class="form-control" name="date_check_out" id="dateCheckOut" value="{{ now('Asia/Jakarta')->format('Y-m-d\TH:i') }}" required>
                                                 </div>
                                                 @if (empty($absen->check_out))
                                                     <div class="col-md-6">
@@ -218,18 +220,7 @@
                                                     </div>
                                                 @endif
                                             </form>
-                                            <script>
-                                                document.getElementById('submitCheckOut').addEventListener('click', function() {
-                                                    const now = new Date();
-                                                    const formattedDate = now.getFullYear() + '-' +
-                                                        String(now.getMonth() + 1).padStart(2, '0') + '-' +
-                                                        String(now.getDate()).padStart(2, '0') + ' ' +
-                                                        String(now.getHours()).padStart(2, '0') + ':' +
-                                                        String(now.getMinutes()).padStart(2, '0') + ':' +
-                                                        String(now.getSeconds()).padStart(2, '0');
-                                                    document.getElementById('dateCheckOut').value = formattedDate;
-                                                });
-                                            </script>
+                                            <!-- JS override removed so user can manually edit checkout time if late -->
                                         @else
                                             <form class="row g-3 needs-validation" method="POST"
                                                 action="{{ route('helpdesk.attendance.store') }}"
@@ -242,10 +233,7 @@
                                                         id="name" name="name" value="{{ Auth::user()->name }}" readonly>
                                                 </div>
 
-                                                <div class="col-md-3">
-                                                    <label for="current_device" class="form-label">Status Perangkat</label>
-                                                    <input type="text" class="form-control" value="{{ Auth::user()->assigned_device ? 'Terdaftar' : 'Belum Terdaftar' }}" readonly>
-                                                </div>
+
 
                                                 <div class="col-md-2">
                                                     <label for="shiftSelect" class="form-label">Pilih Shift</label>

@@ -102,24 +102,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label class="form-label">Status Perangkat (Khusus Helpdesk)</label>
-                                    <div class="mt-2 border rounded p-3 bg-light">
-                                        @if($user->assigned_device)
-                                            <span class="badge badge-success mb-2">Terkunci ke Perangkat</span>
-                                            <div class="form-check form-check-custom form-check-solid mt-2">
-                                                <input class="form-check-input" type="checkbox" value="1" id="reset_device" name="reset_device"/>
-                                                <label class="form-check-label fw-bold text-danger" for="reset_device">
-                                                    Reset Kunci Perangkat
-                                                </label>
-                                            </div>
-                                            <div class="text-muted fs-7 mt-2">Centang jika user ganti laptop untuk mengizinkan login di perangkat baru.</div>
-                                        @else
-                                            <span class="badge badge-warning mb-2">Belum Terkunci</span>
-                                            <div class="text-muted fs-7">Sistem akan mengunci otomatis saat absen pertama kali.</div>
-                                        @endif
-                                    </div>
-                                </div>
+
 
                                 <div class="col-md-6">
                                     <label class="d-block fw-bold fs-6 mb-5">Foto Profil</label>
