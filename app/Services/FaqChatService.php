@@ -6,7 +6,6 @@ use App\Models\Faq;
 use App\Models\FaqChatLog;
 use App\Models\FaqUnansweredQuestion;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class FaqChatService
@@ -403,36 +402,52 @@ class FaqChatService
             ],
         ];
 
-        // Iterate through fallback models using Laravel Http facade (compatible with both cURL and PHP Streams)
+        $jsonPayload = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        // Iterate through fallback models using native PHP cURL (fully compatible with web servers)
         foreach ($this->geminiModels as $model) {
             $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
 
-            try {
-                $response = Http::withoutVerifying()
-                    ->timeout(20)
-                    ->withHeaders([
-                        'Content-Type' => 'application/json; charset=utf-8',
-                    ])
-                    ->post($url, $payload);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json; charset=utf-8']);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 18);
 
-                if ($response->successful()) {
-                    $data = $response->json();
-                    $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-
-                    if (!empty($aiText)) {
-                        return [
-                            'success' => true,
-                            'text' => trim($aiText),
-                        ];
-                    }
-                }
-
-                $status = $response->status();
-                $errBody = mb_substr($response->body(), 0, 200);
-                Log::info("Gemini model {$model} returned HTTP {$status} ({$errBody}). Trying next model...");
-            } catch (\Throwable $e) {
-                Log::warning("Gemini model {$model} request exception: " . $e->getMessage());
+            // Optional Squid Forward Proxy for isolated production servers
+            $proxy = config('services.gemini.proxy') 
+                ?: env('GEMINI_PROXY') 
+                ?: env('https_proxy') 
+                ?: env('HTTPS_PROXY') 
+                ?: env('http_proxy') 
+                ?: env('HTTP_PROXY');
+            if (!empty($proxy)) {
+                curl_setopt($ch, CURLOPT_PROXY, $proxy);
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
             }
+
+            $output = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
+
+            if ($httpCode === 200 && !empty($output)) {
+                $data = json_decode($output, true);
+                $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+
+                if (!empty($aiText)) {
+                    return [
+                        'success' => true,
+                        'text' => trim($aiText),
+                    ];
+                }
+            }
+
+            Log::info("Gemini model {$model} returned HTTP {$httpCode} ({$curlError}). Trying next model...");
         }
 
         // Fallback message if all models hit rate limit

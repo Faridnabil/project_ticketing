@@ -352,6 +352,18 @@ class FaqAnalyticsController extends Controller
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_TIMEOUT, 12);
 
+            // Optional Squid Forward Proxy
+            $proxy = config('services.gemini.proxy') 
+                ?: env('GEMINI_PROXY') 
+                ?: env('https_proxy') 
+                ?: env('HTTPS_PROXY') 
+                ?: env('http_proxy') 
+                ?: env('HTTP_PROXY');
+            if (!empty($proxy)) {
+                curl_setopt($ch, CURLOPT_PROXY, $proxy);
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+            }
+
             $res = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlErr = curl_error($ch);
@@ -513,6 +525,18 @@ class FaqAnalyticsController extends Controller
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+            // Optional Squid Forward Proxy
+            $proxy = config('services.gemini.proxy') 
+                ?: env('GEMINI_PROXY') 
+                ?: env('https_proxy') 
+                ?: env('HTTPS_PROXY') 
+                ?: env('http_proxy') 
+                ?: env('HTTP_PROXY');
+            if (!empty($proxy)) {
+                curl_setopt($ch, CURLOPT_PROXY, $proxy);
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+            }
 
             $res = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

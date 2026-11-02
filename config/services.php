@@ -33,7 +33,8 @@ return [
 
     'gemini' => [
         'api_key' => env('GEMINI_API_KEY'),
-        'model' => env('GEMINI_MODEL', 'gemini-3.5-flash'),
+        'model' => env('GEMINI_MODEL', 'gemini-1.5-flash'),
+        'proxy' => env('GEMINI_PROXY', env('https_proxy', env('HTTPS_PROXY', env('http_proxy', env('HTTP_PROXY'))))),
     ],
 
 ];
