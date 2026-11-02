@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('session_id', 100)->index();
             $table->text('question');
+            $table->string('api_key_id')->nullable();
             $table->unsignedBigInteger('faq_id')->nullable();
             $table->enum('source', ['template', 'ai_search'])->default('template');
             $table->text('ai_response')->nullable();
