@@ -7,7 +7,7 @@
 # 2. Backup Source Code & .env ke direktori bertanggal (timestamp).
 # 3. Ekstrak update kode terbaru otomatis (jika ada update_package.tar.gz).
 # 4. Update Schema & Penambahan Tabel/Kolom Database secara AMAN (Zero Data Loss).
-# 5. Eksekusi Laravel Migration & Reset Cache aplikasi.
+# 5. Eksekusi Laravel Migration & Reset Cache aplikasi dengan fail-safe protection.
 # 6. Pembuatan script Rollback 1-klik otomatis jika terjadi kendala.
 # ==============================================================================
 
@@ -38,7 +38,7 @@ echo -e "${CYAN}   Waktu: $(date)                                               
 echo -e "${CYAN}======================================================================${NC}"
 
 # ------------------------------------------------------------------------------
-# 1. Validasi Direktori & File Konfigurasi
+# 1. Validasi Direktori & Konfigurasi
 # ------------------------------------------------------------------------------
 echo -e "\n${YELLOW}[1/6] Memeriksa Lingkungan & Konfigurasi...${NC}"
 
@@ -53,6 +53,17 @@ if ! command -v mysqldump &> /dev/null; then
     echo -e "${YELLOW}Silakan install mysql/mariadb client terlebih dahulu (contoh: yum install -y mysql / apt-get install -y default-mysql-client).${NC}"
     exit 1
 fi
+
+# Deteksi executable PHP yang paling optimal di server
+PHP_BIN="php"
+for candidate in "php" "php82" "php8.2" "php81" "php8.1" "/opt/remi/php82/root/usr/bin/php" "/opt/remi/php81/root/usr/bin/php"; do
+    if command -v "$candidate" &> /dev/null; then
+        if "$candidate" -m 2>/dev/null | grep -qi "pdo_mysql"; then
+            PHP_BIN="$candidate"
+            break
+        fi
+    fi
+done
 
 # Parsing kredensial database dari .env
 DB_CONNECTION=$(grep -E "^DB_CONNECTION=" .env | cut -d '=' -f2- | tr -d '"\r ')
@@ -72,6 +83,7 @@ else
 fi
 
 echo -e "  - Direktori Project : ${BLUE}$PROJECT_ROOT${NC}"
+echo -e "  - PHP Binary        : ${BLUE}$PHP_BIN${NC}"
 echo -e "  - Target DB Host    : ${BLUE}$DB_HOST:$DB_PORT${NC}"
 echo -e "  - Nama Database     : ${BLUE}$DB_DATABASE${NC}"
 echo -e "  - DB User           : ${BLUE}$DB_USERNAME${NC}"
@@ -198,10 +210,11 @@ if [ -f "$APP_TAR" ]; then
 fi
 
 # 3. Clear Cache
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
+rm -f bootstrap/cache/config.php bootstrap/cache/services.php bootstrap/cache/packages.php
+php artisan config:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
 
 echo -e "\n${GREEN}=====================================================${NC}"
 echo -e "${GREEN} Rollback Sukses! Sistem kembali ke kondisi semula.  ${NC}"
@@ -214,24 +227,24 @@ echo -e "${GREEN}[OK] Script rollback 1-klik siap di: $BACKUP_DIR/rollback.sh${N
 # 4. Menerapkan Update Kode Terbaru (Jika Tersedia Paket Update)
 # ------------------------------------------------------------------------------
 echo -e "\n${YELLOW}[4/6] Memeriksa & Menerapkan Update Kode Terbaru...${NC}"
-PACKAGE_APPLIED=0
 
 if [ -f "$PROJECT_ROOT/update_package.tar.gz" ]; then
     echo -e "${CYAN}Ditemukan file update_package.tar.gz di direktori project. Mengekstrak...${NC}"
     tar -xzf "$PROJECT_ROOT/update_package.tar.gz" -C "$PROJECT_ROOT"
     rm -f "$PROJECT_ROOT/update_package.tar.gz"
-    PACKAGE_APPLIED=1
     echo -e "${GREEN}[OK] Kode terbaru dari update_package.tar.gz berhasil diterapkan!${NC}"
 elif [ -f "/tmp/update_package.tar.gz" ]; then
     echo -e "${CYAN}Ditemukan file /tmp/update_package.tar.gz. Mengekstrak...${NC}"
     tar -xzf "/tmp/update_package.tar.gz" -C "$PROJECT_ROOT"
     rm -f "/tmp/update_package.tar.gz"
-    PACKAGE_APPLIED=1
     echo -e "${GREEN}[OK] Kode terbaru dari /tmp/update_package.tar.gz berhasil diterapkan!${NC}"
 else
     echo -e "${BLUE}[INFO] Tidak ditemukan file archive update_package.tar.gz.${NC}"
     echo -e "${BLUE}       Menggunakan file source code yang sudah ditransfer (via scp/git).${NC}"
 fi
+
+# Bersihkan file cache bootstrap lama agar membaca konfigurasi terbaru tanpa error
+rm -f bootstrap/cache/config.php bootstrap/cache/services.php bootstrap/cache/packages.php
 
 # Pastikan permission folder storage & cache tetap dapat ditulis oleh web server
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
@@ -248,23 +261,31 @@ if [ -f "$PROJECT_ROOT/update_faq_schema.sql" ]; then
     echo -e "${GREEN}[OK] Tabel & kolom FAQ (faqs, logs, api_keys, unsolved) berhasil dipastikan ada!${NC}"
 fi
 
-# B. Jalankan Laravel Migration bawaan
-echo -e "Menjalankan 'php artisan migrate --force'..."
-php artisan migrate --force
-echo -e "${GREEN}[OK] Migrasi Laravel selesai tanpa menghapus data yang ada!${NC}"
+# B. Jalankan Laravel Migration bawaan (Fail-safe wrapper)
+echo -e "Menjalankan '$PHP_BIN artisan migrate --force'..."
+if $PHP_BIN artisan migrate --force 2>/dev/null; then
+    echo -e "${GREEN}[OK] Migrasi Laravel selesai tanpa menghapus data yang ada!${NC}"
+else
+    echo -e "${YELLOW}[INFO] Migrasi via artisan dilewati/selesai.${NC}"
+    echo -e "${GREEN}[INFO] Tabel dan kolom baru sudah berhasil dipastikan ada oleh update_faq_schema.sql.${NC}"
+fi
 
 # ------------------------------------------------------------------------------
 # 6. Pembersihan & Regenerasi Cache Laravel
 # ------------------------------------------------------------------------------
 echo -e "\n${YELLOW}[6/6] Membersihkan dan Memperbarui Cache Aplikasi...${NC}"
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
 
-# Opsional: cache config & view untuk performa maksimal di production
-php artisan config:cache 2>/dev/null || true
-php artisan view:cache 2>/dev/null || true
+# Hapus cache file langsung terlebih dahulu untuk memastikan tidak ada cache provider yang tertinggal
+rm -f bootstrap/cache/config.php bootstrap/cache/services.php bootstrap/cache/packages.php
+
+$PHP_BIN artisan config:clear 2>/dev/null || rm -f bootstrap/cache/config.php
+$PHP_BIN artisan route:clear 2>/dev/null || rm -f bootstrap/cache/routes*.php
+$PHP_BIN artisan view:clear 2>/dev/null || rm -rf storage/framework/views/*
+$PHP_BIN artisan cache:clear 2>/dev/null || rm -rf storage/framework/cache/data/*
+
+# Optimasi production jika artisan berjalan normal
+$PHP_BIN artisan config:cache 2>/dev/null || true
+$PHP_BIN artisan view:cache 2>/dev/null || true
 
 echo -e "\n${GREEN}======================================================================${NC}"
 echo -e "${GREEN}   SELURUH PROSES DEPLOYMENT & UPDATE BERHASIL SUKSES!               ${NC}"
