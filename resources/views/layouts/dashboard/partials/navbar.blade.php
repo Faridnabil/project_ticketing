@@ -27,6 +27,8 @@
         <!--begin::Toolbar wrapper-->
         <div class="d-flex align-items-stretch flex-shrink-0">
 
+
+
             <!--begin::Notifications-->
             <div class="d-flex align-items-center ms-1 ms-lg-3">
                 <!--begin::Menu- wrapper-->
@@ -148,11 +150,11 @@
                                                     method="POST" class="notification-form">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <a href="{{ $notification->data['Url'] ?? '#' }}"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] ?? 'Notifikasi' }}</a>
+                                                    <a href="{{ $notification->data['Url'] }}"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
                                                 </form>
                                                 <div class="text-gray-400 fs-7">
-                                                    {{ ucwords($notification->data['body'] ?? '') }}
+                                                    {{ ucwords($notification->data['body']) }}
                                                 </div>
                                             </div>
 
@@ -233,11 +235,11 @@
                                                         method="POST" class="notification-form">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <a href="{{ $notification->data['Url'] ?? '#' }}"
-                                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] ?? 'Notifikasi' }}</a>
+                                                        <a href="{{ $notification->data['Url'] }}"
+                                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder notification-link">{{ $notification->data['name'] }}</a>
                                                     </form>
                                                     <div class="text-gray-400 fs-7">
-                                                        {{ ucwords($notification->data['body'] ?? '') }}
+                                                        {{ ucwords($notification->data['body']) }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -393,3 +395,5 @@
     <!--end::Topbar-->
 </div>
 <!--end::Wrapper-->
+
+

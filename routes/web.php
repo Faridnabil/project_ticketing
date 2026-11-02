@@ -32,6 +32,9 @@ use App\Http\Controllers\StaffSubdit\HomeStaffSubditController;
 use App\Http\Controllers\StaffSubdit\TicketStaffSubditController;
 use App\Http\Controllers\TeknisiHardware\DeviceAssetsController;
 use App\Http\Controllers\TeknisiHardware\HomeTeknisiHardwareController;
+use App\Http\Controllers\FaqChatController;
+use App\Http\Controllers\Admin\FaqManagementController;
+use App\Http\Controllers\Admin\FaqAnalyticsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -89,6 +92,52 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
     Route::post('/city-or-regency-import', [CityOrRegencyController::class, 'import'])->name('cityOrRegency.import');
 
     Route::get('/helpdesk/tickets/yearlySummary', [HomeHelpdeskController::class, 'yearlySummary'])->name('tickets.yearlySummary');
+
+    // Role-aware Ticket Create Redirect (Handles Admin, Helpdesk, Koordinator, etc.)
+    Route::get('/ticket-create', function() {
+        $user = auth()->user();
+        if ($user && $user->hasRole('Helpdesk')) {
+            return redirect()->route('helpdesk.ticket.create');
+        } elseif ($user && $user->hasRole('Koordinator')) {
+            return redirect()->route('koordinator.ticket.create');
+        } elseif ($user && $user->hasRole('Staff Subdit')) {
+            return redirect()->route('staffSubdit.ticket.create');
+        } elseif ($user && $user->hasRole('SIAK Dev')) {
+            return redirect()->route('siakDev.ticket.create');
+        } elseif ($user && $user->hasRole('Pejabat')) {
+            return redirect()->route('pejabat.ticket.create');
+        } else {
+            return redirect()->route('admin.ticket.create');
+        }
+    })->name('ticket.create.redirect');
+
+    // FAQ Chat Assistant (Accessible to all authenticated roles)
+    Route::get('/faq-chat', [FaqChatController::class, 'index'])->name('faq.chat.index');
+    Route::get('/faq-chat/history', [FaqChatController::class, 'history'])->name('faq.chat.history');
+    Route::post('/faq-chat/ask', [FaqChatController::class, 'ask'])->name('faq.chat.ask');
+    Route::post('/faq-chat/feedback', [FaqChatController::class, 'feedback'])->name('faq.chat.feedback');
+    Route::post('/faq-chat/action', [FaqChatController::class, 'action'])->name('faq.chat.action');
+    Route::post('/faq-chat/reset', [FaqChatController::class, 'reset'])->name('faq.chat.reset');
+    Route::get('/faq-chat/popular', [FaqChatController::class, 'popular'])->name('faq.chat.popular');
+    Route::get('/faq-chat/detail/{id}', [FaqChatController::class, 'show'])->name('faq.chat.detail');
+
+    // FAQ Management & Analytics (Admin & Helpdesk)
+    Route::get('/admin/faqs', [FaqManagementController::class, 'index'])->name('admin.faq.index');
+    Route::post('/admin/faqs', [FaqManagementController::class, 'store'])->name('admin.faq.store');
+    Route::put('/admin/faqs/{id}', [FaqManagementController::class, 'update'])->name('admin.faq.update');
+    Route::delete('/admin/faqs/{id}', [FaqManagementController::class, 'destroy'])->name('admin.faq.destroy');
+    Route::patch('/admin/faqs/{id}/toggle', [FaqManagementController::class, 'toggleActive'])->name('admin.faq.toggle');
+    Route::get('/admin/faqs/template', [FaqManagementController::class, 'downloadTemplate'])->name('admin.faq.template');
+    Route::post('/admin/faqs/import', [FaqManagementController::class, 'import'])->name('admin.faq.import');
+    Route::post('/admin/faqs/convert-unanswered', [FaqManagementController::class, 'convertUnanswered'])->name('admin.faq.convert');
+    Route::post('/admin/faqs/convert', [FaqManagementController::class, 'convertUnanswered'])->name('admin.faq.convert_unanswered');
+    Route::delete('/admin/faqs/unanswered/{id}', [FaqManagementController::class, 'deleteUnanswered'])->name('admin.faq.delete_unanswered');
+    Route::get('/admin/faqs/analytics', [FaqAnalyticsController::class, 'index'])->name('admin.faq.analytics');
+    Route::post('/admin/faqs/update-api-key', [FaqAnalyticsController::class, 'updateApiKey'])->name('admin.faq.update_api_key');
+    Route::post('/admin/faqs/switch-api-key', [FaqAnalyticsController::class, 'switchApiKey'])->name('admin.faq.switch_api_key');
+    Route::post('/admin/faqs/test-api-key', [FaqAnalyticsController::class, 'testApiKey'])->name('admin.faq.test_api_key');
+    Route::delete('/admin/faqs/delete-api-key/{id}', [FaqAnalyticsController::class, 'deleteApiKey'])->name('admin.faq.delete_api_key');
+    Route::post('/admin/faqs/evaluation/{id}/reviewed', [FaqAnalyticsController::class, 'markReviewed'])->name('admin.faq.mark_reviewed');
 });
 
 //ADMIN

@@ -252,6 +252,68 @@
                     </a>
                 </div>
             @endcan
+
+            {{-- AI Assistant (Semua Role & Admin/Helpdesk Submenu) --}}
+            @hasanyrole('Admin|Helpdesk')
+                @php
+                    $assistantMenuOpen = request()->routeIs('faq.chat.*') || request()->routeIs('admin.faq.index') || request()->routeIs('admin.faq.analytics');
+                @endphp
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ $assistantMenuOpen ? 'menu-active show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.3" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>
+                                    <path d="M19 10H18V7C18 4.79086 16.2091 3 14 3H10C7.79086 3 6 4.79086 6 7V10H5C4.44772 10 4 10.4477 4 11V15C4 15.5523 4.44772 16 5 16H6V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V16H19C19.5523 16 20 15.5523 20 15V11C20 10.4477 19.5523 10 19 10ZM10 11C9.44772 11 9 10.5523 9 10C9 9.44772 9.44772 9 10 9C10.5523 9 11 9.44772 11 10C11 10.5523 10.5523 11 10 11ZM14 11C13.4477 11 13 10.5523 13 10C13 9.44772 13.4477 9 14 9C14.5523 9 15 9.44772 15 10C15 10.5523 14.5523 11 14 11Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="menu-title" style="color: white">Chat Assistant</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ $assistantMenuOpen ? 'show' : '' }}">
+                        <div class="menu-item">
+                            <a class="menu-link mt-3 {{ request()->routeIs('faq.chat.*') ? 'active' : '' }}"
+                                href="{{ route('faq.chat.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Chat Assistant</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('admin.faq.index') ? 'active' : '' }}"
+                                href="{{ route('admin.faq.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Kelola FAQ</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link mb-3 {{ request()->routeIs('admin.faq.analytics') ? 'active' : '' }}"
+                                href="{{ route('admin.faq.analytics') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Monitoring FAQ</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="menu-item">
+                    <a class="{{ request()->routeIs('faq.chat.index') ? 'menu-link active' : 'menu-link' }}"
+                        href="{{ route('faq.chat.index') }}">
+                        <span class="menu-icon">
+                            <i class="bi bi-robot fs-2 text-warning"></i>
+                        </span>
+                        <span class="menu-title" style="color: white">Chat Assistant</span>
+                    </a>
+                </div>
+            @endhasanyrole
+
             @can('View User Management')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
@@ -406,6 +468,8 @@
                     </div>
                 </div>
             @endcan
+
+
 
             @can('View Category')
                 <div class="menu-item">
@@ -795,6 +859,7 @@
                     </a>
                 </div>
             @endhasrole
+
 
         </div>
         <!--end::Menu-->
