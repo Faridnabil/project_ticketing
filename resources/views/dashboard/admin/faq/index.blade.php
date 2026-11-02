@@ -303,7 +303,7 @@
 
 <!--begin::Modal Add FAQ-->
 <div class="modal fade" id="modalAddFaq" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered mw-950px" style="max-width: 950px;">
         <div class="modal-content">
             <form method="POST" action="{{ route('admin.faq.store') }}">
                 @csrf
@@ -318,7 +318,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="required form-label fw-bold fs-7">Jawaban Solusi:</label>
-                        <textarea name="answer" rows="5" class="form-control form-control-solid fs-7" placeholder="Tuliskan langkah-langkah solusi lengkap (dapat menggunakan format **teks tebal**)..." required></textarea>
+                        <textarea name="answer" rows="10" class="form-control form-control-solid fs-7" style="line-height: 1.6; resize: vertical; min-height: 220px;" placeholder="Tuliskan langkah-langkah solusi lengkap (dapat menggunakan format **teks tebal**)..." required></textarea>
                     </div>
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
@@ -356,7 +356,7 @@
 
 <!--begin::Modal Convert Unanswered to FAQ-->
 <div class="modal fade" id="modalConvertUnanswered" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered mw-950px" style="max-width: 950px;">
         <div class="modal-content">
             <form action="{{ route('admin.faq.convert') }}" method="POST">
                 @csrf
@@ -376,7 +376,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="required form-label fw-bold fs-7">Jawaban Solusi:</label>
-                        <textarea name="answer" id="convertAnswer" rows="6" class="form-control form-control-solid fs-7" required></textarea>
+                        <textarea name="answer" id="convertAnswer" rows="10" class="form-control form-control-solid fs-7" style="line-height: 1.6; resize: vertical; min-height: 220px;" required></textarea>
                     </div>
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
@@ -405,7 +405,7 @@
 
 <!--begin::Modal Edit FAQ-->
 <div class="modal fade" id="modalEditFaq" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered mw-950px" style="max-width: 950px;">
         <div class="modal-content">
             <form id="editFaqForm" method="POST">
                 @csrf
@@ -421,7 +421,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="required form-label fw-bold fs-7">Jawaban Solusi:</label>
-                        <textarea id="editAnswer" name="answer" rows="5" class="form-control form-control-solid fs-7" required></textarea>
+                        <textarea id="editAnswer" name="answer" rows="12" class="form-control form-control-solid fs-7" style="line-height: 1.6; resize: vertical; min-height: 250px;" required></textarea>
                     </div>
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
@@ -530,7 +530,7 @@
 </div>
 <!-- ==================== MODAL: SHOW DETAIL FAQ RESMI ==================== -->
 <div class="modal fade" id="modalShowFaqDetail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-750px">
+    <div class="modal-dialog modal-dialog-centered mw-900px" style="max-width: 900px;">
         <div class="modal-content border-0 shadow">
             <div class="modal-header py-4 px-6" style="background-color: #002147;">
                 <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">
@@ -602,7 +602,7 @@
 
 <!-- ==================== MODAL: SHOW DETAIL PERTANYAAN MENUNGGU ==================== -->
 <div class="modal fade" id="modalShowUnansweredDetail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-750px">
+    <div class="modal-dialog modal-dialog-centered mw-900px" style="max-width: 900px;">
         <div class="modal-content border-0 shadow">
             <div class="modal-header py-4 px-6" style="background-color: #002147;">
                 <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">

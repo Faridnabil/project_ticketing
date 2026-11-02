@@ -783,7 +783,7 @@
 
 <!-- ==================== MODAL: KONVERSI DRAFT JADI TEMPLATE FAQ RESMI ==================== -->
 <div class="modal fade" id="modalConvertFaq" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-650px">
+    <div class="modal-dialog modal-dialog-centered mw-950px" style="max-width: 950px;">
         <div class="modal-content">
             <div class="modal-header py-4 px-6" style="background-color: #002147;">
                 <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">
@@ -826,7 +826,7 @@
 
                     <div class="mb-4">
                         <label class="required form-label fw-bold fs-7">Jawaban Solusi Resmi</label>
-                        <textarea name="answer" id="convertAnswer" class="form-control form-control-solid fs-7" rows="5" required></textarea>
+                        <textarea name="answer" id="convertAnswer" class="form-control form-control-solid fs-7" rows="10" style="line-height: 1.6; resize: vertical; min-height: 220px;" required></textarea>
                     </div>
 
                     <div class="mb-3">
