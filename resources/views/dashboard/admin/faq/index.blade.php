@@ -138,7 +138,10 @@
                                                 </button>
                                             </form>
                                         </td>
-                                        <td class="text-end pe-3">
+                                        <td class="text-end pe-3 text-nowrap">
+                                            <button type="button" class="btn btn-icon btn-light-primary btn-sm me-1" onclick="openShowFaqModal({{ json_encode($faq) }})" title="Lihat Detail Solusi FAQ Lengkap">
+                                                <i class="bi bi-eye-fill fs-6"></i>
+                                            </button>
                                             <button type="button" class="btn btn-icon btn-light-warning btn-sm me-1" onclick="openEditModal({{ json_encode($faq) }})" title="Edit FAQ">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
@@ -209,13 +212,28 @@
                                 </thead>
                                 <tbody class="text-gray-700 fw-semibold" id="tbodyUnansweredQueue">
                                     @forelse($unansweredQuestions as $index => $item)
+                                        @php
+                                            $primaryUser = $item->last_user ?: ($item->related_users->first() ?? null);
+                                            $primaryUserName = $primaryUser ? $primaryUser->name : 'Pengguna Portal';
+                                            $allUserNames = ($item->related_users && count($item->related_users) > 0)
+                                                ? collect($item->related_users)->pluck('name')->implode(', ')
+                                                : $primaryUserName;
+                                        @endphp
                                         <tr class="unanswered-row"
                                             data-question="{{ strtolower(e($item->question)) }}"
                                             data-draft="{{ strtolower(e($item->ai_draft_answer ?? '')) }}"
+                                            data-user="{{ strtolower(e($allUserNames)) }}"
                                             data-freq="{{ (int) $item->occurrence_count }}">
                                             <td class="unanswered-row-num">{{ $index + 1 }}</td>
                                             <td>
                                                 <div class="text-dark fw-bold fs-7">{{ $item->question }}</div>
+                                                <div class="text-muted fs-8 mt-1 d-flex align-items-center gap-1">
+                                                    <i class="bi bi-person-circle text-primary fs-8"></i>
+                                                    <span>Penanya: <strong class="text-gray-800">{{ $primaryUserName }}</strong></span>
+                                                    @if(count($item->related_users ?? []) > 1)
+                                                        <span class="badge badge-light-secondary fs-9 py-0 px-1 cursor-pointer" title="{{ $allUserNames }}">+{{ count($item->related_users) - 1 }} lainnya</span>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td class="text-center">
                                                 <span class="badge badge-light-danger fw-bolder">{{ $item->occurrence_count }}x ditanyakan</span>
@@ -230,6 +248,9 @@
                                             </td>
                                             <td class="text-end text-nowrap pe-3">
                                                 <div class="d-inline-flex align-items-center justify-content-end gap-2">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-light-primary" onclick="openShowUnansweredModal({{ json_encode($item) }})" title="Lihat Detail Pertanyaan & Draft Solusi" style="width: 32px; height: 32px;">
+                                                        <i class="bi bi-eye-fill fs-6"></i>
+                                                    </button>
                                                     <button type="button" class="btn btn-sm btn-light-success fw-bold fs-8 d-inline-flex align-items-center gap-1 text-nowrap py-2 px-3" onclick="openConvertModal({{ json_encode($item) }})">
                                                         <i class="bi bi-plus-circle fs-7"></i>
                                                         <span>Jadikan FAQ</span>
@@ -507,7 +528,146 @@
         </div>
     </div>
 </div>
-<!--end::Modal Import Excel / CSV-->
+<!-- ==================== MODAL: SHOW DETAIL FAQ RESMI ==================== -->
+<div class="modal fade" id="modalShowFaqDetail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header py-4 px-6" style="background-color: #002147;">
+                <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-text-fill text-warning fs-3"></i> Detail Solusi FAQ Resmi
+                </h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary text-white" data-bs-dismiss="modal">
+                    <i class="bi bi-x fs-2"></i>
+                </div>
+            </div>
+
+            <div class="modal-body p-6">
+                <!-- Question Card -->
+                <div class="card bg-light-primary border border-primary border-opacity-25 rounded p-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-muted">Pertanyaan Resmi:</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-light-primary fw-bolder fs-8" id="showFaqCategoryBadge"></span>
+                            <span class="badge fs-8 fw-bold" id="showFaqStatusBadge"></span>
+                        </div>
+                    </div>
+                    <div class="fw-bolder text-dark fs-5" id="showFaqQuestion"></div>
+                </div>
+
+                <!-- Solution Card -->
+                <div class="card border border-gray-200 rounded p-4 mb-4 bg-white shadow-xs">
+                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-dark d-flex align-items-center gap-1">
+                            <i class="bi bi-patch-check-fill text-success fs-6"></i> Jawaban / Solusi Terverifikasi:
+                        </span>
+                        <span class="badge badge-success fs-9 fw-bold">● Terverifikasi Kedinasan</span>
+                    </div>
+                    <div class="text-gray-800 fs-7 lh-base" id="showFaqAnswer" style="white-space: pre-wrap; word-break: break-word;"></div>
+                </div>
+
+                <!-- Meta Info Grid -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-3 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-2">
+                                <i class="bi bi-tags-fill text-primary me-1"></i> Kata Kunci (Keywords):
+                            </span>
+                            <div id="showFaqKeywords" class="d-flex flex-wrap gap-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-3 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-2">
+                                <i class="bi bi-clock-history text-primary me-1"></i> Riwayat Pencatatan:
+                            </span>
+                            <div class="fs-8 text-gray-700 d-flex flex-column gap-1">
+                                <div>Dibuat Pada: <strong id="showFaqCreatedAt">-</strong></div>
+                                <div>Dibuat Oleh: <strong id="showFaqCreatedBy">-</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer py-3 px-6 bg-light d-flex justify-content-between">
+                <button type="button" class="btn btn-warning btn-sm fw-bold" id="btnEditFromShowModal">
+                    <i class="bi bi-pencil-square me-1"></i> Edit FAQ Ini
+                </button>
+                <button type="button" class="btn btn-light btn-sm fw-bold" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL: SHOW DETAIL PERTANYAAN MENUNGGU ==================== -->
+<div class="modal fade" id="modalShowUnansweredDetail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header py-4 px-6" style="background-color: #002147;">
+                <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">
+                    <i class="bi bi-chat-square-text-fill text-warning fs-3"></i> Detail Pertanyaan Menunggu & Draft Solusi AI
+                </h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary text-white" data-bs-dismiss="modal">
+                    <i class="bi bi-x fs-2"></i>
+                </div>
+            </div>
+
+            <div class="modal-body p-6">
+                <!-- Question Card -->
+                <div class="card bg-light-danger border border-danger border-opacity-25 rounded p-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-danger">Pertanyaan Pengguna:</span>
+                        <span class="badge badge-danger fw-bolder fs-8" id="showUnansweredFreqBadge"></span>
+                    </div>
+                    <div class="fw-bolder text-dark fs-5" id="showUnansweredQuestion"></div>
+                </div>
+
+                <!-- AI Draft Solution Card -->
+                <div class="card border border-gray-200 rounded p-4 mb-4 bg-white shadow-xs">
+                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-dark d-flex align-items-center gap-1">
+                            <i class="bi bi-robot text-info fs-6"></i> Draft Solusi Sistem (AI Gemini):
+                        </span>
+                        <span class="badge badge-light-info fs-9 fw-bold">Dihasilkan Otomatis oleh AI</span>
+                    </div>
+                    <div class="text-gray-800 fs-7 lh-base" id="showUnansweredDraft" style="white-space: pre-wrap; word-break: break-word;"></div>
+                </div>
+
+                <!-- User Penanya and Time -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-3 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-2">
+                                <i class="bi bi-person-circle text-primary me-1"></i> User yang Bertanya:
+                            </span>
+                            <div id="showUnansweredUser" class="d-flex align-items-center gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-3 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-2">
+                                <i class="bi bi-clock-history text-primary me-1"></i> Terakhir Ditanyakan:
+                            </span>
+                            <div class="fs-8 text-gray-700">
+                                <strong id="showUnansweredTime">-</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer py-3 px-6 bg-light d-flex justify-content-between">
+                <button type="button" class="btn btn-success btn-sm fw-bold" id="btnConvertFromShowModal">
+                    <i class="bi bi-plus-circle me-1"></i> Jadikan FAQ Resmi Sekarang
+                </button>
+                <button type="button" class="btn btn-light btn-sm fw-bold" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Show Detail-->
 @endsection
 
 @section('scripts')
@@ -560,6 +720,108 @@
         document.getElementById('convertKeywords').value = '';
 
         new bootstrap.Modal(document.getElementById('modalConvertUnanswered')).show();
+    }
+
+    // ==========================================
+    // SHOW DETAIL FAQ RESMI (TAB 1)
+    // ==========================================
+    let currentFaqForEdit = null;
+    function openShowFaqModal(faq) {
+        currentFaqForEdit = faq;
+        document.getElementById('showFaqQuestion').textContent = faq.question;
+        document.getElementById('showFaqAnswer').innerHTML = formatFaqTextToHtml(faq.answer);
+        document.getElementById('showFaqCategoryBadge').textContent = faq.category || 'Umum';
+        
+        const statusBadge = document.getElementById('showFaqStatusBadge');
+        if (faq.is_active) {
+            statusBadge.className = 'badge badge-success fw-bold fs-8';
+            statusBadge.textContent = '● Aktif';
+        } else {
+            statusBadge.className = 'badge badge-danger fw-bold fs-8';
+            statusBadge.textContent = '● Nonaktif';
+        }
+
+        // Keywords
+        const kwContainer = document.getElementById('showFaqKeywords');
+        if (faq.keywords) {
+            const list = faq.keywords.split(',').map(s => s.trim()).filter(Boolean);
+            kwContainer.innerHTML = list.map(kw => `<span class="badge badge-light-primary fs-8 px-2 py-1">${escapeFaqHtml(kw)}</span>`).join('');
+        } else {
+            kwContainer.innerHTML = '<span class="text-muted fs-8">Tidak ada kata kunci khusus</span>';
+        }
+
+        // Created Info
+        document.getElementById('showFaqCreatedAt').textContent = faq.created_at ? new Date(faq.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+        document.getElementById('showFaqCreatedBy').textContent = faq.creator ? faq.creator.name : 'Administrator';
+
+        const modalEl = document.getElementById('modalShowFaqDetail');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    document.getElementById('btnEditFromShowModal')?.addEventListener('click', function() {
+        const modalEl = document.getElementById('modalShowFaqDetail');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+        if (currentFaqForEdit) {
+            openEditModal(currentFaqForEdit);
+        }
+    });
+
+    // ==========================================
+    // SHOW DETAIL PERTANYAAN MENUNGGU (TAB 2)
+    // ==========================================
+    let currentUnansweredForConvert = null;
+    function openShowUnansweredModal(item) {
+        currentUnansweredForConvert = item;
+        document.getElementById('showUnansweredQuestion').textContent = item.question;
+        document.getElementById('showUnansweredDraft').innerHTML = formatFaqTextToHtml(item.ai_draft_answer || 'Belum ada draf solusi sistem.');
+        document.getElementById('showUnansweredFreqBadge').textContent = (item.occurrence_count || 1) + 'x Ditanyakan';
+
+        const primaryUser = item.last_user || (item.related_users && item.related_users[0] ? item.related_users[0] : null);
+        const primaryName = primaryUser ? primaryUser.name : 'Pengguna Portal';
+        const primaryEmail = primaryUser ? (primaryUser.email || primaryUser.nik || 'Pengguna Aplikasi') : 'Pengguna Portal Terdaftar';
+
+        document.getElementById('showUnansweredUser').innerHTML = `
+            <div class="symbol symbol-30px symbol-circle">
+                <span class="symbol-label bg-light-primary text-primary fw-bolder fs-7">
+                    ${escapeFaqHtml(primaryName.charAt(0).toUpperCase())}
+                </span>
+            </div>
+            <div class="d-flex flex-column">
+                <span class="text-dark fw-bold fs-7">${escapeFaqHtml(primaryName)}</span>
+                <span class="text-muted fs-8">${escapeFaqHtml(primaryEmail)}</span>
+            </div>
+        `;
+
+        document.getElementById('showUnansweredTime').textContent = item.updated_at ? new Date(item.updated_at).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB' : '-';
+
+        const modalEl = document.getElementById('modalShowUnansweredDetail');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    document.getElementById('btnConvertFromShowModal')?.addEventListener('click', function() {
+        const modalEl = document.getElementById('modalShowUnansweredDetail');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+        if (currentUnansweredForConvert) {
+            openConvertModal(currentUnansweredForConvert);
+        }
+    });
+
+    function escapeFaqHtml(text) {
+        if (!text) return '';
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+        return text.toString().replace(/[&<>"']/g, m => map[m]);
+    }
+
+    function formatFaqTextToHtml(text) {
+        if (!text) return '<span class="text-muted">Tidak ada catatan solusi tersimpan.</span>';
+        let safe = escapeFaqHtml(text);
+        safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dark">$1</strong>');
+        safe = safe.replace(/\n/g, '<br>');
+        return safe;
     }
 
     // ==========================================
@@ -694,6 +956,7 @@
                     const extraData = [
                         row.getAttribute('data-question') || '',
                         row.getAttribute('data-draft') || '',
+                        row.getAttribute('data-user') || '',
                         freqNum,
                         freqNum ? freqNum + 'x' : '',
                         freqNum ? freqNum + 'x ditanyakan' : ''

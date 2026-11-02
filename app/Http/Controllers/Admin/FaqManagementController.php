@@ -52,6 +52,21 @@ class FaqManagementController extends Controller
             ->latest('updated_at')
             ->get();
 
+        // Attach related users who asked each unanswered question
+        $unansweredQuestionTexts = $unansweredQuestions->pluck('question')->toArray();
+        $chatLogsForUnanswered = FaqChatLog::whereIn('question', $unansweredQuestionTexts)
+            ->with('user')
+            ->latest('id')
+            ->get()
+            ->groupBy('question');
+
+        foreach ($unansweredQuestions as $item) {
+            $relatedLogs = $chatLogsForUnanswered->get($item->question, collect());
+            $item->related_users = $relatedLogs->pluck('user')->filter()->unique('id')->values();
+            $item->last_user = $relatedLogs->first() ? $relatedLogs->first()->user : null;
+            $item->last_asked_at = $relatedLogs->first() ? $relatedLogs->first()->created_at : $item->updated_at;
+        }
+
         return view('dashboard.admin.faq.index', compact('faqs', 'categories', 'unansweredCount', 'unansweredQuestions', 'search', 'category'));
     }
 

@@ -195,7 +195,7 @@ class FaqAnalyticsController extends Controller
             $monthlyValues[] = $monthlyData[$m] ?? 0;
         }
 
-        // 5. Top Most Asked Questions (Detailed)
+        // 5. Top Most Asked Questions (Detailed with User Tracking)
         $topQuestions = FaqChatLog::select(
                 'question',
                 DB::raw('COUNT(*) as count'),
@@ -203,6 +203,8 @@ class FaqAnalyticsController extends Controller
                 DB::raw('MAX(faq_id) as faq_id'),
                 DB::raw('MAX(source) as source'),
                 DB::raw('MAX(ai_response) as sample_ai_response'),
+                DB::raw('MAX(user_id) as last_user_id'),
+                DB::raw("GROUP_CONCAT(DISTINCT user_id) as user_ids"),
                 DB::raw("SUM(CASE WHEN feedback_status = 'helped' THEN 1 ELSE 0 END) as helpful_count"),
                 DB::raw("SUM(CASE WHEN feedback_status = 'not_helped' THEN 1 ELSE 0 END) as unhelpful_count"),
                 DB::raw("SUM(CASE WHEN escalation_action = 'create_ticket' THEN 1 ELSE 0 END) as ticket_escalation_count")
@@ -216,8 +218,33 @@ class FaqAnalyticsController extends Controller
 
         $faqIds = $topQuestions->pluck('faq_id')->filter()->unique();
         $faqs = Faq::whereIn('id', $faqIds)->get()->keyBy('id');
+
+        // Fetch users who asked these top questions
+        $allUserIds = collect();
+        foreach ($topQuestions as $q) {
+            if (!empty($q->user_ids)) {
+                $ids = array_filter(explode(',', (string) $q->user_ids));
+                $allUserIds = $allUserIds->merge($ids);
+            }
+            if (!empty($q->last_user_id)) {
+                $allUserIds->push($q->last_user_id);
+            }
+        }
+        $usersMap = \App\Models\User::whereIn('id', $allUserIds->unique())->get()->keyBy('id');
+
         foreach ($topQuestions as $q) {
             $q->faq = $faqs->get($q->faq_id);
+            $q->last_user = (!empty($q->last_user_id) && $usersMap->has($q->last_user_id)) ? $usersMap->get($q->last_user_id) : null;
+
+            $qUserList = collect();
+            if (!empty($q->user_ids)) {
+                foreach (array_filter(explode(',', (string) $q->user_ids)) as $uid) {
+                    if ($usersMap->has($uid)) {
+                        $qUserList->push($usersMap->get($uid));
+                    }
+                }
+            }
+            $q->users = $qUserList;
         }
 
         // 7. Evaluasi Pertanyaan Perlu Tindak Lanjut (Respon Dislike & Eskalasi Tiket)

@@ -270,11 +270,13 @@
                                 <thead>
                                     <tr class="text-start text-muted fw-bolder fs-8 text-uppercase gs-0">
                                         <th style="width: 45px;">No</th>
-                                        <th style="min-width: 250px;">Pertanyaan / Kendala</th>
-                                        <th style="min-width: 280px;">Solusi / Jawaban Terkait</th>
-                                        <th class="text-center" style="width: 140px;">Frekuensi</th>
-                                        <th class="text-center" style="width: 150px;">Respon Pengguna</th>
-                                        <th class="text-center" style="width: 140px;">Terakhir Ditanyakan</th>
+                                        <th style="min-width: 220px;">Pertanyaan / Kendala</th>
+                                        <th style="min-width: 240px;">Solusi / Jawaban Terkait</th>
+                                        <th style="min-width: 140px;">User Penanya</th>
+                                        <th class="text-center" style="width: 120px;">Frekuensi</th>
+                                        <th class="text-center" style="width: 130px;">Respon Pengguna</th>
+                                        <th class="text-center" style="width: 130px;">Terakhir Ditanyakan</th>
+                                        <th class="text-center" style="width: 70px;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-gray-700 fw-semibold" id="tbodyTopQuestions">
@@ -284,16 +286,30 @@
                                             $sourceType = $q->faq ? 'template' : ($q->source === 'ai_search' ? 'ai' : 'other');
                                             $feedbackType = ($q->helpful_count > 0 && $q->unhelpful_count > 0) ? 'both' : ($q->helpful_count > 0 ? 'liked' : ($q->unhelpful_count > 0 ? 'disliked' : 'none'));
                                             $categoryText = $q->faq ? $q->faq->category : ($q->source === 'ai_search' ? 'Pencarian Sistem' : 'Umum');
+                                            $primaryUser = $q->last_user ?: ($q->users->first() ?? null);
+                                            $primaryUserName = $primaryUser ? $primaryUser->name : 'Pengguna Portal';
+                                            $allUserNames = $q->users && $q->users->count() > 0 ? $q->users->pluck('name')->implode(', ') : $primaryUserName;
+                                            $qUsersPayload = ($q->users && $q->users->count() > 0) 
+                                                ? $q->users->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email ?? $u->nik ?? ''])->toArray()
+                                                : [['id' => 0, 'name' => $primaryUserName, 'email' => 'Pengguna Portal']];
                                         @endphp
                                         <tr class="top-question-row"
                                             data-question="{{ strtolower(e($q->question)) }}"
                                             data-solution="{{ strtolower(e($solutionText)) }}"
                                             data-category="{{ strtolower(e($categoryText)) }}"
+                                            data-user="{{ strtolower(e($allUserNames)) }}"
                                             data-freq="{{ (int) $q->count }}"
                                             data-source="{{ $sourceType }}"
                                             data-feedback="{{ $feedbackType }}"
                                             data-has-like="{{ $q->helpful_count > 0 ? '1' : '0' }}"
-                                            data-has-dislike="{{ $q->unhelpful_count > 0 ? '1' : '0' }}">
+                                            data-has-dislike="{{ $q->unhelpful_count > 0 ? '1' : '0' }}"
+                                            data-full-question="{{ e($q->question) }}"
+                                            data-full-solution="{{ e($solutionText) }}"
+                                            data-source-label="{{ $q->faq ? 'Template Resmi' : ($q->source === 'ai_search' ? 'Pencarian Sistem AI' : 'Umum') }}"
+                                            data-likes="{{ (int) $q->helpful_count }}"
+                                            data-dislikes="{{ (int) $q->unhelpful_count }}"
+                                            data-last-asked="{{ $q->last_asked_at ? Carbon\Carbon::parse($q->last_asked_at)->format('d M Y, H:i') . ' WIB (' . Carbon\Carbon::parse($q->last_asked_at)->diffForHumans() . ')' : '-' }}"
+                                            data-users-json="{{ e(json_encode($qUsersPayload)) }}">
                                             <td class="top-row-num">{{ $index + 1 }}</td>
                                             <td>
                                                 <div class="text-dark fw-bold fs-7 mb-1">{{ $q->question }}</div>
@@ -312,8 +328,23 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="text-gray-600 fs-8 text-truncate" style="max-width: 360px;" title="{{ $solutionText }}">
-                                                    {{ Str::limit($solutionText, 110) }}
+                                                <div class="text-gray-600 fs-8 text-truncate" style="max-width: 300px;" title="{{ $solutionText }}">
+                                                    {{ Str::limit($solutionText, 95) }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="symbol symbol-25px symbol-circle">
+                                                        <span class="symbol-label bg-light-primary text-primary fw-bolder fs-8">
+                                                            {{ strtoupper(substr($primaryUserName, 0, 1)) }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="text-dark fw-bold fs-7 text-truncate" style="max-width: 110px;" title="{{ $allUserNames }}">{{ $primaryUserName }}</span>
+                                                        @if($q->users && $q->users->count() > 1)
+                                                            <span class="badge badge-light-secondary text-muted fs-9 px-1 py-0 cursor-pointer" title="{{ $allUserNames }}">+{{ $q->users->count() - 1 }} lainnya</span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="text-center text-nowrap">
@@ -342,17 +373,22 @@
                                             <td class="text-center text-nowrap text-muted fs-8">
                                                 {{ $q->last_asked_at ? Carbon\Carbon::parse($q->last_asked_at)->diffForHumans() : '-' }}
                                             </td>
+                                            <td class="text-center text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-icon btn-light-primary" onclick="openTopQuestionDetailModal(this)" title="Lihat Detail Pertanyaan & Solusi Lengkap" style="width: 32px; height: 32px;">
+                                                    <i class="bi bi-eye-fill fs-6"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr id="emptyTopQuestionsRow">
-                                            <td colspan="6" class="text-center py-6 text-muted fs-7">
+                                            <td colspan="8" class="text-center py-6 text-muted fs-7">
                                                 <i class="bi bi-inbox fs-2 d-block mb-2 text-muted"></i>
                                                 Belum ada data pertanyaan pengguna tercatat.
                                             </td>
                                         </tr>
                                     @endforelse
                                     <tr id="noMatchTopQuestionsRow" style="display: none;">
-                                        <td colspan="6" class="text-center py-8 text-muted fs-7">
+                                        <td colspan="8" class="text-center py-8 text-muted fs-7">
                                             <i class="bi bi-search fs-2 d-block mb-2 text-muted"></i>
                                             Tidak ditemukan pertanyaan yang cocok dengan filter pencarian.
                                         </td>
@@ -806,6 +842,84 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL: DETAIL TOP PERTANYAAN & SOLUSI ==================== -->
+<div class="modal fade" id="modalTopQuestionDetail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header py-4 px-6" style="background-color: #002147;">
+                <h3 class="modal-title text-white fw-bolder d-flex align-items-center gap-2">
+                    <i class="bi bi-info-circle-fill text-warning fs-3"></i> Detail Pertanyaan & Solusi Asisten
+                </h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary text-white" data-bs-dismiss="modal">
+                    <i class="bi bi-x fs-2"></i>
+                </div>
+            </div>
+
+            <div class="modal-body p-6">
+                <!-- Question Card -->
+                <div class="card bg-light-primary border border-primary border-opacity-25 rounded p-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-muted">Pertanyaan Pengguna:</span>
+                        <div class="d-flex align-items-center gap-2" id="modalTopQBadges"></div>
+                    </div>
+                    <div class="fw-bolder text-dark fs-5" id="modalTopQQuestion"></div>
+                </div>
+
+                <!-- Solution Card -->
+                <div class="card border border-gray-200 rounded p-4 mb-4 bg-white shadow-xs">
+                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                        <span class="fs-8 fw-bold text-uppercase text-dark d-flex align-items-center gap-1">
+                            <i class="bi bi-patch-check-fill text-success fs-6"></i> Solusi / Jawaban Terkait:
+                        </span>
+                        <span class="badge badge-light-success fs-9 fw-bold" id="modalTopQSourceLabel">Template Resmi</span>
+                    </div>
+                    <div class="text-gray-800 fs-7 lh-base" id="modalTopQSolution" style="white-space: pre-wrap; word-break: break-word;"></div>
+                </div>
+
+                <!-- Metadata Grid -->
+                <div class="row g-3">
+                    <!-- User Penanya -->
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-4 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-3">
+                                <i class="bi bi-person-circle text-primary me-1"></i> User yang Bertanya:
+                            </span>
+                            <div id="modalTopQUsersList" class="d-flex flex-column gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics & Time -->
+                    <div class="col-md-6">
+                        <div class="card border border-gray-200 rounded p-4 h-100 bg-light" style="background: #f8fafc;">
+                            <span class="fs-8 fw-bold text-uppercase text-muted d-block mb-3">
+                                <i class="bi bi-bar-chart-fill text-warning me-1"></i> Statistik Pertanyaan:
+                            </span>
+                            <div class="d-flex flex-column gap-2 fs-7">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted fs-8">Frekuensi:</span>
+                                    <span id="modalTopQFreq">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted fs-8">Respon Pengguna:</span>
+                                    <span id="modalTopQFeedback">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted fs-8">Terakhir Ditanyakan:</span>
+                                    <span class="fw-semibold text-gray-800 fs-8 text-end" id="modalTopQTime">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer py-3 px-6 bg-light">
+                <button type="button" class="btn btn-light btn-sm fw-bold" data-bs-dismiss="modal">Tutup</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1472,6 +1586,122 @@
         // Initial render
         renderPage();
     })();
+
+    // Helper functions for Top Question Detail Modal
+    function escapeHtml(text) {
+        if (!text) return '';
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.toString().replace(/[&<>"']/g, m => map[m]);
+    }
+
+    function formatTextToHtml(text) {
+        if (!text) return '<span class="text-muted">Tidak ada catatan solusi.</span>';
+        let safe = escapeHtml(text);
+        // Convert **bold** to <strong>bold</strong>
+        safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dark">$1</strong>');
+        // Convert newlines to <br>
+        safe = safe.replace(/\n/g, '<br>');
+        return safe;
+    }
+
+    window.openTopQuestionDetailModal = function(btn) {
+        const row = btn.closest('.top-question-row');
+        if (!row) return;
+
+        const question = row.getAttribute('data-full-question') || '';
+        const solution = row.getAttribute('data-full-solution') || '';
+        const category = row.getAttribute('data-category') || '';
+        const sourceLabel = row.getAttribute('data-source-label') || '';
+        const sourceType = row.getAttribute('data-source') || '';
+        const freq = row.getAttribute('data-freq') || '1';
+        const likes = parseInt(row.getAttribute('data-has-like') === '1' ? (row.getAttribute('data-likes') || '1') : '0');
+        const dislikes = parseInt(row.getAttribute('data-has-dislike') === '1' ? (row.getAttribute('data-dislikes') || '1') : '0');
+        const time = row.getAttribute('data-last-asked') || '-';
+
+        let usersData = [];
+        try {
+            usersData = JSON.parse(row.getAttribute('data-users-json') || '[]');
+        } catch(e) {
+            usersData = [];
+        }
+
+        document.getElementById('modalTopQQuestion').textContent = question;
+        document.getElementById('modalTopQSolution').innerHTML = formatTextToHtml(solution);
+        document.getElementById('modalTopQSourceLabel').textContent = sourceLabel;
+
+        // Badges
+        let badgesHtml = '';
+        if (sourceType === 'template') {
+            badgesHtml += `<span class="badge badge-light-primary fw-bolder fs-8"><i class="bi bi-tag-fill text-primary me-1"></i> ${escapeHtml(category)}</span>`;
+            badgesHtml += `<span class="badge badge-success fw-bolder fs-8">● Solusi Terverifikasi</span>`;
+        } else {
+            badgesHtml += `<span class="badge badge-light-info fw-bolder fs-8"><i class="bi bi-robot text-info me-1"></i> Chat Sistem AI</span>`;
+        }
+        document.getElementById('modalTopQBadges').innerHTML = badgesHtml;
+
+        // Users List
+        const usersContainer = document.getElementById('modalTopQUsersList');
+        if (usersData && usersData.length > 0) {
+            usersContainer.innerHTML = usersData.map(u => `
+                <div class="d-flex align-items-center gap-3 py-2 border-bottom border-gray-200">
+                    <div class="symbol symbol-30px symbol-circle">
+                        <span class="symbol-label bg-light-primary text-primary fw-bolder fs-7">
+                            ${escapeHtml((u.name || 'U').charAt(0).toUpperCase())}
+                        </span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="text-dark fw-bold fs-7">${escapeHtml(u.name || 'Pengguna Portal')}</span>
+                        <span class="text-muted fs-8">${escapeHtml(u.email || 'Pengguna Aplikasi')}</span>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            const fallbackName = row.getAttribute('data-user') || 'Pengguna Portal';
+            usersContainer.innerHTML = `
+                <div class="d-flex align-items-center gap-3 py-2">
+                    <div class="symbol symbol-30px symbol-circle">
+                        <span class="symbol-label bg-light-primary text-primary fw-bolder fs-7">
+                            ${escapeHtml(fallbackName.charAt(0).toUpperCase())}
+                        </span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="text-dark fw-bold fs-7">${escapeHtml(fallbackName)}</span>
+                        <span class="text-muted fs-8">Pengguna Portal Terdaftar</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Freq
+        document.getElementById('modalTopQFreq').innerHTML = `<span class="badge badge-light-primary fw-bolder fs-8 py-1 px-2">${freq}x Ditanyakan</span>`;
+
+        // Feedback
+        let feedbackHtml = '';
+        if (likes > 0 || dislikes > 0) {
+            if (likes > 0) {
+                feedbackHtml += `<span class="badge badge-light-success fw-bold fs-8 me-1 py-1 px-2"><i class="bi bi-hand-thumbs-up-fill text-success me-1"></i> ${likes} Suka</span>`;
+            }
+            if (dislikes > 0) {
+                feedbackHtml += `<span class="badge badge-light-danger fw-bold fs-8 py-1 px-2"><i class="bi bi-hand-thumbs-down-fill text-danger me-1"></i> ${dislikes} Kurang Suka</span>`;
+            }
+        } else {
+            feedbackHtml = '<span class="text-muted fs-8">Belum ada respon</span>';
+        }
+        document.getElementById('modalTopQFeedback').innerHTML = feedbackHtml;
+
+        // Time
+        document.getElementById('modalTopQTime').textContent = time;
+
+        const modalEl = document.getElementById('modalTopQuestionDetail');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    };
 
     // Inisialisasi kartu saat dokumen dimuat
     document.addEventListener('DOMContentLoaded', function() {
