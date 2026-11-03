@@ -471,24 +471,45 @@ class FaqAnalyticsController extends Controller
     }
 
     /**
-     * Delete an inactive API Key from saved keys.
+     * Delete an API Key from saved collection.
      */
     public function deleteApiKey($id): JsonResponse
     {
         $key = FaqApiKey::findOrFail($id);
-        if ($key->is_active) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Kunci yang sedang aktif tidak dapat dihapus! Silakan alihkan ke kunci lain terlebih dahulu.',
-            ], 422);
-        }
-
         $keyName = $key->name;
+        $wasActive = (bool) $key->is_active;
+
+        // Lepas relasi log chat jika ada
+        FaqChatLog::where('api_key_id', $id)->update(['api_key_id' => null]);
+
         $key->delete();
+
+        // Jika kunci yang dihapus adalah kunci aktif, alihkan ke kunci lain jika masih ada
+        if ($wasActive) {
+            $nextKey = FaqApiKey::latest()->first();
+            if ($nextKey) {
+                $nextKey->update(['is_active' => true]);
+                $this->updateEnvFile([
+                    'GEMINI_API_KEY' => $nextKey->api_key,
+                    'GEMINI_MODEL' => $nextKey->model ?: 'gemini-1.5-flash',
+                ]);
+            } else {
+                $this->updateEnvFile([
+                    'GEMINI_API_KEY' => '',
+                ]);
+            }
+
+            try {
+                Artisan::call('config:clear');
+            } catch (\Throwable $e) {
+                Log::warning('Config clear error after deleting active API key: ' . $e->getMessage());
+            }
+        }
 
         return response()->json([
             'success' => true,
-            'message' => "Kunci API '{$keyName}' berhasil dihapus dari daftar simpanan.",
+            'message' => "Kunci API '{$keyName}' berhasil dihapus." . ($wasActive ? ' Sistem dialihkan ke kunci cadangan.' : ''),
+            'was_active' => $wasActive,
         ]);
     }
 
@@ -584,25 +605,31 @@ class FaqAnalyticsController extends Controller
     }
 
     /**
-     * Update or append environment variables in .env file.
+     * Update or append environment variables in .env file (safely handles read-only .env).
      */
     protected function updateEnvFile(array $data): void
     {
         $envPath = base_path('.env');
-        if (!file_exists($envPath)) {
+        if (!file_exists($envPath) || !is_writable($envPath)) {
+            // Jika .env tidak dapat ditulis (standar permission server Linux),
+            // abaikan secara aman karena API Key aktif sudah tersimpan di tabel faq_api_keys
             return;
         }
 
-        $envContent = file_get_contents($envPath);
+        try {
+            $envContent = file_get_contents($envPath);
 
-        foreach ($data as $key => $value) {
-            if (preg_match("/^{$key}=.*/m", $envContent)) {
-                $envContent = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $envContent);
-            } else {
-                $envContent .= "\n{$key}={$value}";
+            foreach ($data as $key => $value) {
+                if (preg_match("/^{$key}=.*/m", $envContent)) {
+                    $envContent = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $envContent);
+                } else {
+                    $envContent .= "\n{$key}={$value}";
+                }
             }
-        }
 
-        file_put_contents($envPath, $envContent);
+            @file_put_contents($envPath, $envContent);
+        } catch (\Throwable $e) {
+            Log::warning('Gagal memperbarui file .env: ' . $e->getMessage());
+        }
     }
 }

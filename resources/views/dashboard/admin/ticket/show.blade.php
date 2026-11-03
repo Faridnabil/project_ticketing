@@ -453,6 +453,7 @@
                                     <h2 class="text-dark fw-bolder mb-8">Riwayat Aktivitas</h2>
 
                                     <div class="timeline-label">
+                                        @php
                                             $groupedLogs = $activityLogs->groupBy(function($item) {
                                                 return $item->created_at->format('Y-m-d H:i:s');
                                             });

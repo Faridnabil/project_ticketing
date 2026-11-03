@@ -663,9 +663,11 @@
                                 <small class="text-muted fs-9">
                                     *Pilih kunci di atas dan terapkan untuk mengaktifkannya ke asisten AI.
                                 </small>
-                                <button type="button" class="btn btn-primary btn-sm fw-bold px-4" id="btnSwitchApiKey">
-                                    <i class="bi bi-arrow-repeat me-1"></i> Terapkan Kunci Ini
-                                </button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-primary btn-sm fw-bold px-4" id="btnSwitchApiKey">
+                                        <i class="bi bi-arrow-repeat me-1"></i> Terapkan Kunci Ini
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -682,7 +684,8 @@
                                             <th>Nama Kunci</th>
                                             <th class="text-center">% Kuota Tersedia</th>
                                             <th class="text-center">Sisa Panggilan</th>
-                                            <th class="text-end">Status</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -710,12 +713,21 @@
                                                 <td class="text-center fw-semibold text-gray-700">
                                                     {{ number_format($k->remaining) }} / {{ number_format($k->daily_limit) }}
                                                 </td>
-                                                <td class="text-end">
+                                                <td class="text-center">
                                                     @if($k->is_active)
                                                         <span class="badge badge-success fw-bold fs-9">● Aktif</span>
                                                     @else
                                                         <span class="badge badge-light fw-bold fs-9 text-muted">Cadangan</span>
                                                     @endif
+                                                </td>
+                                                <td class="text-end">
+                                                    <button type="button" 
+                                                            class="btn btn-icon btn-sm btn-light-danger btn-delete-key" 
+                                                            data-id="{{ $k->id }}" 
+                                                            data-name="{{ $k->name }}"
+                                                            title="Hapus Kunci API Ini">
+                                                        <i class="bi bi-trash fs-7"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -1078,9 +1090,123 @@
                     }
                 } catch(e) {
                     btnSwitch.disabled = false;
-                    btnSwitch.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i> Aktifkan Kunci';
+                    btnSwitch.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i> Terapkan Kunci Ini';
                     alert('Gagal mengalihkan kunci.');
                 }
+            });
+        }
+
+        // 4b. Hapus Kunci API dengan Dialog Konfirmasi Modern (SweetAlert2)
+        const deleteApiKey = (keyId, keyName) => {
+            const doDelete = async () => {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Menghapus Kunci...',
+                        text: 'Mohon tunggu sebentar',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+
+                try {
+                    const res = await fetch(`{{ url('/admin/faqs/delete-api-key') }}/${keyId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const json = await res.json();
+
+                    if (json.success) {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                title: 'Berhasil Dihapus!',
+                                text: json.message || 'Kunci API berhasil dihapus.',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        }
+                        setTimeout(() => window.location.reload(), 1200);
+                    } else {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: json.message || 'Gagal menghapus kunci.',
+                                icon: 'error',
+                                confirmButtonText: 'Tutup',
+                                customClass: { confirmButton: 'btn btn-danger btn-sm fw-bold' },
+                                buttonsStyling: false
+                            });
+                        } else {
+                            alert(json.message || 'Gagal menghapus kunci.');
+                        }
+                    }
+                } catch (err) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi gangguan koneksi ke server saat menghapus kunci API.',
+                            icon: 'error',
+                            confirmButtonText: 'Tutup',
+                            customClass: { confirmButton: 'btn btn-danger btn-sm fw-bold' },
+                            buttonsStyling: false
+                        });
+                    } else {
+                        alert('Terjadi kesalahan saat menghapus kunci API.');
+                    }
+                }
+            };
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Hapus Kunci API?',
+                    html: `Apakah Anda yakin ingin menghapus token API Key <strong class="text-danger">${keyName}</strong>?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        confirmButton: 'btn btn-danger btn-sm fw-bold me-2',
+                        cancelButton: 'btn btn-light btn-sm fw-bold'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        doDelete();
+                    }
+                });
+            } else {
+                if (confirm(`Apakah Anda yakin ingin menghapus token API Key '${keyName}'?`)) {
+                    doDelete();
+                }
+            }
+        };
+
+        // Event listener tombol hapus di tabel ringkasan
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-delete-key');
+            if (btn) {
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name') || 'Kunci API';
+                deleteApiKey(id, name);
+            }
+        });
+
+        // Event listener tombol hapus kunci terpilih di dropdown
+        const btnDeleteSelected = document.getElementById('btnDeleteSelectedKey');
+        if (btnDeleteSelected && selectSavedKey) {
+            btnDeleteSelected.addEventListener('click', function() {
+                const id = selectSavedKey.value;
+                const opt = selectSavedKey.options[selectSavedKey.selectedIndex];
+                const name = opt ? (opt.getAttribute('data-name') || opt.text) : 'Kunci Terpilih';
+                if (!id) return;
+                deleteApiKey(id, name);
             });
         }
 

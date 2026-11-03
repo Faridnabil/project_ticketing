@@ -136,7 +136,7 @@ Route::middleware(['verified', 'auth', 'role:Admin|Helpdesk|Koordinator|Staff Su
     Route::post('/admin/faqs/update-api-key', [FaqAnalyticsController::class, 'updateApiKey'])->name('admin.faq.update_api_key');
     Route::post('/admin/faqs/switch-api-key', [FaqAnalyticsController::class, 'switchApiKey'])->name('admin.faq.switch_api_key');
     Route::post('/admin/faqs/test-api-key', [FaqAnalyticsController::class, 'testApiKey'])->name('admin.faq.test_api_key');
-    Route::delete('/admin/faqs/delete-api-key/{id}', [FaqAnalyticsController::class, 'deleteApiKey'])->name('admin.faq.delete_api_key');
+    Route::match(['DELETE', 'POST'], '/admin/faqs/delete-api-key/{id}', [FaqAnalyticsController::class, 'deleteApiKey'])->name('admin.faq.delete_api_key');
     Route::post('/admin/faqs/evaluation/{id}/reviewed', [FaqAnalyticsController::class, 'markReviewed'])->name('admin.faq.mark_reviewed');
 });
 
